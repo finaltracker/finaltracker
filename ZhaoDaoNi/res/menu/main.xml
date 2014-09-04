@@ -4,7 +4,8 @@
 
     <item
         android:id="@+id/action_example"
-        android:showAsAction="withText|ifRoom"
+        android:showAsAction="ifRoom"
+        android:icon="@drawable/ic_add_contact_holo_dark"
         android:title="@string/action_add"/>
     <item
         android:id="@+id/action_settings"
