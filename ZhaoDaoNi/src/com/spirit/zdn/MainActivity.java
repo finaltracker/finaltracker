@@ -1,22 +1,19 @@
 package com.spirit.zdn;
-
 import android.app.Activity;
 
 import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
-import android.view.Gravity;
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
 
 public class MainActivity extends Activity implements
 		NavigationDrawerFragment.NavigationDrawerCallbacks {
@@ -31,6 +28,8 @@ public class MainActivity extends Activity implements
 	 * Used to store the last screen title. For use in
 	 * {@link #restoreActionBar()}.
 	 */
+	MainControl control ;
+
 	private CharSequence mTitle;
 
 	@Override
@@ -45,6 +44,12 @@ public class MainActivity extends Activity implements
 		// Set up the drawer.
 		mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
 				(DrawerLayout) findViewById(R.id.drawer_layout));
+
+		control = new MainControl("MainControl" , this );
+		control.start();
+
+		
+		
 	}
 
 	@Override
@@ -142,5 +147,36 @@ public class MainActivity extends Activity implements
 					ARG_SECTION_NUMBER));
 		}
 	}
+	
+	
+	@Override
+	protected void onDestroy() {
+		
+		if(control!= null)
+		{
+			control.quit();
+		}
+		
+		super.onDestroy();
+	}
+	
+	HandlerThread uIhandlerThread = null ;
+
+	
+
+	// UI update handler
+	public Handler handler = new Handler() {
+		public void handleMessage(Message msg) {
+			if (msg.what == 1) {
+				// ¶¯Ì¬·Ö±æÂÊ
+			} else if (msg.what == 2) { 
+
+			} else if (msg.what == 3) {
+
+				
+
+			}
+		};
+	};
 
 }
