@@ -29,6 +29,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
+import org.apache.http.protocol.HTTP;
 
 import CommandParser.CommandE;
 import android.util.Log;
@@ -82,16 +83,15 @@ final public class Http {
         for( int i = 1 ; i < command.GetPropertyNum() ; i++ )
         {
         	params.add(new BasicNameValuePair(command.GetProperty(i).GetPropertyName(), command.GetProperty(i).GetPropertyContext()));
-
         }
         final HttpEntity entity;
         try {
-            entity = new UrlEncodedFormEntity(params);
+            entity = new UrlEncodedFormEntity(params,HTTP.UTF_8);
         } catch (final UnsupportedEncodingException e) {
             // this should never happen.
             throw new IllegalStateException(e);
         }
-        Log.i(TAG, "Authenticating to: " + url);
+        Log.i(TAG, "connect url = " + url);
         final HttpPost post = new HttpPost(url);
         post.addHeader(entity.getContentType());
         post.setEntity(entity);
@@ -106,9 +106,13 @@ final public class Http {
                     ResString = ireader.readLine().trim();
                 }
             }
+            else
+            {
+            	Log.e(TAG, "getStatusCode = " + resp.getStatusLine().getStatusCode() );
+            }
            
         } catch (final IOException e) {
-            Log.e(TAG, "IOException when getting authtoken", e);
+            Log.e(TAG, "getHttpClient().execute(post)", e);
             return null;
         } finally {
             Log.v(TAG, "getAuthtoken completing");

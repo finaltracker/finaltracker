@@ -9,8 +9,8 @@ import CommandParser.CommandE;
 import CommandParser.Property;
 
 public class InternetComponent implements ServerInterface{
-	String WEBSITE_ADDRESS_BASE	= "http://10.4.65.41/";
-	String WEBSITE_ADDRESS_QUERY = WEBSITE_ADDRESS_BASE + "/user/check";
+	String WEBSITE_ADDRESS_BASE	= "http://10.4.65.164/";
+	String WEBSITE_ADDRESS_QUERY = WEBSITE_ADDRESS_BASE + "user/check_register/";
 	public ThreadTaskHandler handler;
 	
 	int STATE_NULL    = 0;
@@ -33,7 +33,7 @@ public class InternetComponent implements ServerInterface{
         //将Message对象的arg1参数的值设置为i
 		CommandE e = new CommandE("SEND_MESSAGE_TO_SERVER");
 		e.AddAProperty(new Property("URL",WEBSITE_ADDRESS_QUERY ) );
-		e.AddAProperty(new Property("IMSI",imsi ) );
+		e.AddAProperty(new Property("imsi",imsi ) );
         msg.obj = e;   //用arg1、arg2这两个成员变量传递消息，优点是系统性能消耗较少  
         
         handler.sendMessage(msg);
