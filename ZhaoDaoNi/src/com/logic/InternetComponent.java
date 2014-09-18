@@ -1,6 +1,8 @@
 package com.logic;
 
 import com.channel.Http;
+import com.common.EventDefine;
+import com.spirit.zdn.MainControl;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -9,8 +11,13 @@ import CommandParser.CommandE;
 import CommandParser.Property;
 
 public class InternetComponent implements ServerInterface{
+	/* web site address define */
 	String WEBSITE_ADDRESS_BASE	= "http://10.4.65.164/";
 	String WEBSITE_ADDRESS_QUERY = WEBSITE_ADDRESS_BASE + "user/check_register/";
+	String WEBSITE_ADDRESS_ACCOUNT_REQ = WEBSITE_ADDRESS_BASE + "user/register/";
+	
+	
+	
 	public ThreadTaskHandler handler;
 	
 	int STATE_NULL    = 0;
@@ -21,8 +28,20 @@ public class InternetComponent implements ServerInterface{
 		handler = new ThreadTaskHandler(looper);
 	}
 	@Override
-	public int registReq(String phoneNumber, String nickName ) {
-		// TODO Auto-generated method stub
+	public int registReq(String phoneNumber, String passWord ,String imsi ) {
+		Message msg = handler.obtainMessage(); 
+		msg.what = ThreadTaskHandler.SEND_MESSAGE_TO_SERVER;
+        
+		CommandE e = new CommandE("SEND_MESSAGE_TO_SERVER");
+		e.AddAProperty(new Property("EventDefine" ,Integer.toString(EventDefine.IS_ACCOUNT_REQ ) ) );
+		e.AddAProperty(new Property("URL" ,WEBSITE_ADDRESS_ACCOUNT_REQ ) );
+		e.AddAProperty(new Property("mobile",phoneNumber ) );
+		e.AddAProperty(new Property("password",passWord ) );
+		e.AddAProperty(new Property("confirmpass",passWord ) );
+		e.AddAProperty(new Property("imsi",imsi ) );
+		
+		msg.obj = e;
+		handler.sendMessage(msg);
 		return 0;
 	}
 
@@ -30,11 +49,12 @@ public class InternetComponent implements ServerInterface{
 	public void isRegist(String imsi) {
 		Message msg = handler.obtainMessage(); 
 		msg.what = ThreadTaskHandler.SEND_MESSAGE_TO_SERVER;
-        //将Message对象的arg1参数的值设置为i
+        
 		CommandE e = new CommandE("SEND_MESSAGE_TO_SERVER");
-		e.AddAProperty(new Property("URL",WEBSITE_ADDRESS_QUERY ) );
+		e.AddAProperty(new Property("EventDefine" ,Integer.toString(EventDefine.IS_ACCOUNT_QUEUE_REQ ) ) );
+		e.AddAProperty(new Property("URL" ,WEBSITE_ADDRESS_QUERY ) );
 		e.AddAProperty(new Property("imsi",imsi ) );
-        msg.obj = e;   //用arg1、arg2这两个成员变量传递消息，优点是系统性能消耗较少  
+        msg.obj = e;   //
         
         handler.sendMessage(msg);
 
@@ -99,10 +119,24 @@ public class InternetComponent implements ServerInterface{
 			if(SEND_MESSAGE_TO_SERVER == msg.what )
 			{
 				CommandE e = (CommandE) msg.obj;
-				Http.httpReq( e );
+				String reponse = Http.httpReq( e );
+			
+			
+				Message msg_rsp = MainControl.getInstance().obtainMessage(); 
+				msg_rsp.what = MainControl.SEND_MESSAGE_TO_SERVER_RSP;
+		        //锟斤拷Message锟斤拷锟斤拷锟絘rg1锟斤拷锟斤拷锟街碉拷锟斤拷锟轿猧
+				CommandE e_r = new CommandE("SEND_MESSAGE_TO_SERVER_RSP");
+				e_r.AddAProperty( new Property("HTTP_REQ_RSP",reponse ) );
+				
+				int rsp_event =  Integer.parseInt(e.GetPropertyContext("EventDefine")) + 1;
+				e_r.AddAProperty( new Property("EventDefine", Integer.toString( rsp_event) ) );
+	
+				msg_rsp.obj = e_r;   
+		        
+				MainControl.getInstance().sendMessage(msg_rsp);
 			}
 			super.handleMessage(msg);
 		}
 
-		};
+	};
 }

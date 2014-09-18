@@ -78,12 +78,19 @@ final public class Http {
         final HttpResponse resp;
         String ResString = null;
         final ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
-        assert(command.GetPropertyNum() >= 1);
-        String url = command.GetProperty(0).GetPropertyContext();
-        for( int i = 1 ; i < command.GetPropertyNum() ; i++ )
+        assert(command.GetPropertyNum() >= 2);
+        String url = command.GetProperty(1).GetPropertyContext();
+    	Log.d("HTTP", "httpReq : " );
+        for( int i = 0 ; i < command.GetPropertyNum() ; i++ )
+        {
+        	Log.d("HTTP", command.GetProperty(i).GetPropertyName() +  command.GetProperty(i).GetPropertyContext() );
+        }
+        
+        for( int i = 2 ; i < command.GetPropertyNum() ; i++ )
         {
         	params.add(new BasicNameValuePair(command.GetProperty(i).GetPropertyName(), command.GetProperty(i).GetPropertyContext()));
         }
+        
         final HttpEntity entity;
         try {
             entity = new UrlEncodedFormEntity(params,HTTP.UTF_8);

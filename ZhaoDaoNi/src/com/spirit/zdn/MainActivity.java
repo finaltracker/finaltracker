@@ -1,4 +1,5 @@
 package com.spirit.zdn;
+import cn.jpush.android.api.JPushInterface;
 import android.app.Activity;
 
 import android.app.ActionBar;
@@ -28,6 +29,10 @@ public class MainActivity extends Activity implements
 	public static final String KEY_TITLE = "title";
 	public static final String KEY_MESSAGE = "message";
 	public static final String KEY_EXTRAS = "extras";
+	public static MainActivity me = null;
+	
+	public static final int EVENT_UI_LOG_IN_START		=	1;
+	public static final int EVENT_UI_REGIST_RESULT		=	EVENT_UI_LOG_IN_START+1;
 	
 	/**
 	 * Fragment managing the behaviors, interactions and presentation of the
@@ -51,7 +56,7 @@ public class MainActivity extends Activity implements
 		mNavigationDrawerFragment = (NavigationDrawerFragment) getFragmentManager()
 				.findFragmentById(R.id.navigation_drawer);
 		mTitle = getTitle();
-
+		me = this; // 
 		// Set up the drawer.
 		mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
 				(DrawerLayout) findViewById(R.id.drawer_layout));
@@ -62,7 +67,7 @@ public class MainActivity extends Activity implements
 		registerMessageReceiver();  // used for receive msg
 		
 	}
-
+	static public MainActivity getInstance() { return me; }
 	@Override
 	public void onNavigationDrawerItemSelected(int position) {
 		// update the main content by replacing fragments
@@ -178,10 +183,18 @@ public class MainActivity extends Activity implements
 	// UI update handler
 	public Handler handler = new Handler() {
 		public void handleMessage(Message msg) {
-			if (msg.what == 1) {
-				//
-			} else if (msg.what == 2) { 
-
+			if ( msg.what == EVENT_UI_LOG_IN_START ) {
+				//	
+				Intent intent = new Intent(me, Zhuce.class);
+				//activityVolues.isLoadOK = true;
+				me.startActivity(intent);
+			} 
+			else if (msg.what == EVENT_UI_REGIST_RESULT) 
+			{ 
+				if( Zhuce.getInstance() != null )
+				{ // 由注册界面处理
+					Zhuce.getInstance().registFeedback(msg.arg1 , (String)msg.obj );
+				}
 			} else if (msg.what == 3) {
 
 				
@@ -194,6 +207,7 @@ public class MainActivity extends Activity implements
 	protected void onResume() {
 		isForeground = true;
 		super.onResume();
+		JPushInterface.onResume(this);
 	}
 
 
@@ -201,6 +215,7 @@ public class MainActivity extends Activity implements
 	protected void onPause() {
 		isForeground = false;
 		super.onPause();
+		JPushInterface.onPause(this);
 	}
 	public void registerMessageReceiver() {
 		mMessageReceiver = new MessageReceiver();
@@ -219,11 +234,11 @@ public class MainActivity extends Activity implements
               String extras = intent.getStringExtra(KEY_EXTRAS);
               StringBuilder showMsg = new StringBuilder();
               showMsg.append(KEY_MESSAGE + " : " + messge + "\n");
-              /*
-              if (!ExampleUtil.isEmpty(extras)) {
+              
+              //if (!ExampleUtil.isEmpty(extras)) {
             	  showMsg.append(KEY_EXTRAS + " : " + extras + "\n");
-              }
-              */
+              //}
+              
               setCostomMsg(showMsg.toString());
 			}
 		}

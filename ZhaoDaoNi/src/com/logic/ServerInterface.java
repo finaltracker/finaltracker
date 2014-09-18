@@ -5,7 +5,7 @@ import CommandParser.CommandE;
 public interface ServerInterface {
 
 	/* 流程管理 */
-	public int registReq( String phoneNumber , String nickName  );
+	public int registReq( String phoneNumber ,  String passWord ,String imsi );
 	
 	//是否已经注册了
 	public void isRegist( String imsi );
