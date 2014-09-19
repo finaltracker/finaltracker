@@ -127,6 +127,19 @@ public class CommandE
 			return null;
 		}
 	}
+	public Property GetProperty( String ProtertyName)
+	{
+		for( int i = 0 ;i < PropertyList.size() ; i++ )
+		{
+			 if( PropertyList.get( i ).GetPropertyName().equals(ProtertyName) )
+			 {
+				 return PropertyList.get( i );				 
+			 }
+			
+		}
+		
+		return null;
+	}
 	public String GetPropertyContext(String ProtertyName )
 	{
 		for( int i = 0 ;i < PropertyList.size() ; i++ )
@@ -146,6 +159,27 @@ public class CommandE
 	{
 		PropertyList.add(CmdProperty);
 	}
+	
+	public void AddAProperty( int index ,Property CmdProperty)
+	{
+		if( PropertyList.size() > index )
+		{
+			PropertyList.set(index, CmdProperty );
+		}
+		else
+		{
+			PropertyList.add(CmdProperty);
+		}
+	}
+	
+	public void CopyPropertysTo( CommandE to )
+	{
+		for( int i = 0 ;i < PropertyList.size() ; i++ )
+		{
+			to.AddAProperty( new Property( this.GetProperty(i).PropertyName ,this.GetProperty(i).Context  ) );
+		}
+	}
+
 
 	
 }

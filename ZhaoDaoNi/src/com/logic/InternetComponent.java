@@ -15,6 +15,8 @@ public class InternetComponent implements ServerInterface{
 	String WEBSITE_ADDRESS_BASE	= "http://10.4.65.164/";
 	String WEBSITE_ADDRESS_QUERY = WEBSITE_ADDRESS_BASE + "user/check_register/";
 	String WEBSITE_ADDRESS_ACCOUNT_REQ = WEBSITE_ADDRESS_BASE + "user/register/";
+	String WEBSITE_ADDRESS_ADD_A_FRIEND_REQ = WEBSITE_ADDRESS_BASE + "user/register/";
+	String WEBSITE_ADDRESS_ADD_A_FRIEND_ANSWER_REQ = WEBSITE_ADDRESS_BASE + "user/register/";
 	
 	
 	
@@ -61,14 +63,26 @@ public class InternetComponent implements ServerInterface{
 	}
 
 	@Override
-	public int addA_Friend(String PhoneNumber, String comment) {
-		// TODO Auto-generated method stub
+	public int addA_Friend(CommandE e ) {
+		Message msg = handler.obtainMessage(); 
+		msg.what = ThreadTaskHandler.SEND_MESSAGE_TO_SERVER;
+        
+		e.GetProperty("URL").SetPropertyContext( WEBSITE_ADDRESS_ADD_A_FRIEND_REQ );
+		msg.obj = e;   //
+        
+        handler.sendMessage(msg);
 		return 0;
 	}
 
 	@Override
-	public void friendAddMeAnswer(int result) {
-		// TODO Auto-generated method stub
+	public void friendAddMeAnswer(CommandE e) {
+		Message msg = handler.obtainMessage(); 
+		msg.what = ThreadTaskHandler.SEND_MESSAGE_TO_SERVER;
+        
+		e.GetProperty("URL").SetPropertyContext( WEBSITE_ADDRESS_ADD_A_FRIEND_ANSWER_REQ );
+		msg.obj = e;   //
+        
+        handler.sendMessage(msg);
 		
 	}
 

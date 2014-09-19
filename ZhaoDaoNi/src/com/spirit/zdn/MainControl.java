@@ -172,7 +172,7 @@ public class MainControl extends HandlerThread {
 			
 			}
 			
-		case STATE_WAIT_SERVER_REGSIT_RESULT:  // waiting queue gegist result
+		case STATE_WAIT_SERVER_REGSIT_RESULT:  // waiting queue regist result
 			switch (RcvCommand)
 			{
 			case EventDefine.IS_ACCOUNT_RSP:
@@ -226,7 +226,18 @@ public class MainControl extends HandlerThread {
 			break;
 		case STATE_LOGIN_NORMAL:
 		{
-		
+			switch( RcvCommand )
+			{
+			case EventDefine.ADD_A_FRIEND:
+				mInternetCom.addA_Friend( e );
+				break;
+			case EventDefine.ADD_A_FRIEND_ANSWER:
+				mInternetCom.friendAddMeAnswer(e);
+				break;
+			
+			default:
+				break;
+			}
 			break;
 		}
 		default:

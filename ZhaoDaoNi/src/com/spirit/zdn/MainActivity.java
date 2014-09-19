@@ -1,5 +1,9 @@
 package com.spirit.zdn;
+import com.common.EventDefine;
+
 import cn.jpush.android.api.JPushInterface;
+import CommandParser.CommandE;
+import CommandParser.Property;
 import android.app.Activity;
 
 import android.app.ActionBar;
@@ -176,6 +180,32 @@ public class MainActivity extends Activity implements
 		super.onDestroy();
 	}
 	
+	/* add a friend */
+	private void addA_Friend( String phoneNumner ,String attachMentContext )
+	{
+		CommandE e = new  CommandE("ADD_A_FRIEND");
+		e.AddAProperty(new Property("EventDefine",Integer.toString( EventDefine.ADD_A_FRIEND ) ) );
+		e.AddAProperty(new Property("URL" ,"" ) );
+		e.AddAProperty(new Property("PHONE",phoneNumner ) );
+		e.AddAProperty(new Property("ATTACHMENT",attachMentContext ) );
+		Message m = MainControl.getInstance().handler.obtainMessage();
+		m.obj = e;
+		MainControl.getInstance().handler.sendMessage(m);
+	}
+	
+	//result 1 : agree
+	//result 0 :disagree
+	private void addA_FriendConfirm( String result )
+	{
+		CommandE e = new  CommandE("ADD_A_FRIEND_CONFIRM");
+		e.AddAProperty(new Property("EventDefine",Integer.toString( EventDefine.ADD_A_FRIEND_ANSWER ) ) );
+		e.AddAProperty(new Property("URL" ,"" ) );
+		e.AddAProperty(new Property("RESULT",result ) );
+		Message m = MainControl.getInstance().handler.obtainMessage();
+		m.obj = e;
+		MainControl.getInstance().handler.sendMessage(m);
+	}
+	
 	HandlerThread uIhandlerThread = null ;
 
 	
@@ -251,5 +281,7 @@ public class MainActivity extends Activity implements
         }
         */
 	}
+	
+	
 	
 }

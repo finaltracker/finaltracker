@@ -11,9 +11,9 @@ public interface ServerInterface {
 	public void isRegist( String imsi );
 	
 	//增加一个好友
-	public int addA_Friend( String PhoneNumber , String comment );
+	public int addA_Friend( CommandE e );
 	//好友加我的回复
-	public void friendAddMeAnswer( int result );
+	public void friendAddMeAnswer( CommandE e );
 	
 	public CommandE requestFriendList();
 	

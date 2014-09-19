@@ -32,6 +32,7 @@ public class Property
 		Context = Text;
 		
 	}
+	
 	public String GetPropertyContext()
 	{
 		return Context;		
