@@ -1,7 +1,14 @@
 package com.spirit.zdn;
+import java.util.LinkedHashSet;
+import java.util.Set;
+
+import jpush.ExampleUtil;
+import jpush.PushSetActivity;
+
 import com.common.EventDefine;
 
 import cn.jpush.android.api.JPushInterface;
+import cn.jpush.android.api.TagAliasCallback;
 import CommandParser.CommandE;
 import CommandParser.Property;
 import android.app.Activity;
@@ -17,12 +24,16 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.Toast;
 import android.support.v4.widget.DrawerLayout;
+import android.text.TextUtils;
 
 public class MainActivity extends Activity implements
 		NavigationDrawerFragment.NavigationDrawerCallbacks {
@@ -34,10 +45,10 @@ public class MainActivity extends Activity implements
 	public static final String KEY_MESSAGE = "message";
 	public static final String KEY_EXTRAS = "extras";
 	public static MainActivity me = null;
-	
+	public static final String TAG = "MainControl";
 	public static final int EVENT_UI_LOG_IN_START		=	1;
 	public static final int EVENT_UI_REGIST_RESULT		=	EVENT_UI_LOG_IN_START+1;
-	
+	public static final int MSG_SET_TAGS				=  EVENT_UI_REGIST_RESULT +1 ;
 	/**
 	 * Fragment managing the behaviors, interactions and presentation of the
 	 * navigation drawer.
@@ -66,6 +77,7 @@ public class MainActivity extends Activity implements
 				(DrawerLayout) findViewById(R.id.drawer_layout));
 
 		control = new MainControl("MainControl" , this );
+		this.setTag(MainControl.imsi);
 		control.start();
 
 		registerMessageReceiver();  // used for receive msg
@@ -209,7 +221,23 @@ public class MainActivity extends Activity implements
 	HandlerThread uIhandlerThread = null ;
 
 	
+	private void setTag( String tag ){
+       
+		// ","隔开的多个 转换成 Set
+		String[] sArray = tag.split(",");
+		Set<String> tagSet = new LinkedHashSet<String>();
+		for (String sTagItme : sArray) {
+			if (!ExampleUtil.isValidTagAndAlias(sTagItme)) {
+				Toast.makeText(MainActivity.this,R.string.error_tag_gs_empty, Toast.LENGTH_SHORT).show();
+				return;
+			}
+			tagSet.add(sTagItme);
+		}
+		
+		//调用JPush API设置Tag
+		handler.sendMessage(handler.obtainMessage(MSG_SET_TAGS, tagSet));
 
+	} 
 	// UI update handler
 	public Handler handler = new Handler() {
 		public void handleMessage(Message msg) {
@@ -225,11 +253,14 @@ public class MainActivity extends Activity implements
 				{ // 由注册界面处理
 					Zhuce.getInstance().registFeedback(msg.arg1 , (String)msg.obj );
 				}
-			} else if (msg.what == 3) {
+			} 
+			else if (msg.what == MSG_SET_TAGS )
+			 {
+	             Log.d("MainActivity", "Set tags in handler.");
+	             JPushInterface.setAliasAndTags(getApplicationContext(), null, (Set<String>) msg.obj, mTagsCallback);
 
-				
+			 }
 
-			}
 		};
 	};
 
@@ -282,6 +313,35 @@ public class MainActivity extends Activity implements
         */
 	}
 	
-	
+	private final TagAliasCallback mTagsCallback = new TagAliasCallback() {
+
+        @Override
+        public void gotResult(int code, String alias, Set<String> tags) {
+            String logs ;
+            switch (code) {
+            case 0:
+                logs = "Set tag and alias success";
+                Log.i(TAG, logs);
+                break;
+                
+            case 6002:
+                logs = "Failed to set alias and tags due to timeout. Try again after 60s.";
+                Log.i(TAG, logs);
+                if (ExampleUtil.isConnected(getApplicationContext())) {
+                	handler.sendMessageDelayed(handler.obtainMessage(MSG_SET_TAGS, tags), 1000 * 60);
+                } else {
+                	Log.i(TAG, "No network");
+                }
+                break;
+            
+            default:
+                logs = "Failed with errorCode = " + code;
+                Log.e(TAG, logs);
+            }
+            
+            ExampleUtil.showToast(logs, getApplicationContext());
+        }
+        
+    };
 	
 }

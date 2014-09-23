@@ -3,12 +3,17 @@ package jpush;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.common.EventDefine;
 import com.spirit.zdn.MainActivity;
+import com.spirit.zdn.MainControl;
 
+import CommandParser.CommandE;
+import CommandParser.Property;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Message;
 import android.util.Log;
 import cn.jpush.android.api.JPushInterface;
 
@@ -98,6 +103,32 @@ public class MyReceiver extends BroadcastReceiver {
 
 			}
 			context.sendBroadcast(msgIntent);
+		}
+		else
+		{
+			
+			String ExtraStr = "";
+			StringBuilder sb = new StringBuilder();
+			for (String key : bundle.keySet()) {
+			
+				if( key.equals(JPushInterface.EXTRA_EXTRA ))
+				{
+					ExtraStr =  bundle.getString(key);
+				}
+			}
+				
+			Message msg_cmd = MainControl.getInstance().obtainMessage(); 
+			msg_cmd.what = MainControl.JPUSH_SERVER_TO_UE_COMMAND;
+			
+			CommandE e_c = new CommandE("JPUSH_SERVER_COMMAND");
+			
+			e_c.AddAProperty( new Property("EventDefine", Integer.toString( EventDefine.JPUSH_SERVER_COMMAND ) ));
+			e_c.AddAProperty( new Property("Command",  bundle.getString(JPushInterface.EXTRA_MESSAGE) ));
+			e_c.AddAProperty( new Property("Extra",  ExtraStr  ));
+
+			msg_cmd.obj = e_c;   
+	        
+			MainControl.getInstance().sendMessage(msg_cmd);
 		}
 	}
 }

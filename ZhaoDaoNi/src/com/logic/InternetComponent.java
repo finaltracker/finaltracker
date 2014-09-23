@@ -15,7 +15,7 @@ public class InternetComponent implements ServerInterface{
 	String WEBSITE_ADDRESS_BASE	= "http://10.4.65.164/";
 	String WEBSITE_ADDRESS_QUERY = WEBSITE_ADDRESS_BASE + "user/check_register/";
 	String WEBSITE_ADDRESS_ACCOUNT_REQ = WEBSITE_ADDRESS_BASE + "user/register/";
-	String WEBSITE_ADDRESS_ADD_A_FRIEND_REQ = WEBSITE_ADDRESS_BASE + "user/register/";
+	String WEBSITE_ADDRESS_ADD_A_FRIEND_REQ = WEBSITE_ADDRESS_BASE + "friend/add_friend/";
 	String WEBSITE_ADDRESS_ADD_A_FRIEND_ANSWER_REQ = WEBSITE_ADDRESS_BASE + "user/register/";
 	
 	

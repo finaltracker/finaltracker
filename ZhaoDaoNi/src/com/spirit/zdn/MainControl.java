@@ -1,7 +1,13 @@
 package com.spirit.zdn;
 
+import java.util.Set;
+
+import jpush.ExampleUtil;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import cn.jpush.android.api.TagAliasCallback;
 
 import com.common.EventDefine;
 import com.logic.InternetComponent;
@@ -28,9 +34,11 @@ public class MainControl extends HandlerThread {
 	final public int   STATE_LOGIN_NORMAL			= STATE_WAIT_SERVER_REGSIT_RESULT + 1; // LOGIN_NORMAL
 
 	
+	String TAG = "MainControl";
 	final public int COMMAND_NULL	= 0;
 	
 	static public final int SEND_MESSAGE_TO_SERVER_RSP = 1;
+	static public final int JPUSH_SERVER_TO_UE_COMMAND = 2;
 	
 	public MainControl(String name ,MainActivity ma ) {
 		super(name);
@@ -117,19 +125,14 @@ public class MainControl extends HandlerThread {
 					break;
 				}
 				JSONObject  jason_obj = null;
+				int queueRsp = -1;
 				try {
 					jason_obj = new JSONObject(rep);
+					queueRsp = jason_obj.getInt("status");
 				} catch (JSONException e1) {
 
 					Log.d("MainControl" , "server response error: " + e1.getMessage() );
 					e1.printStackTrace();
-				}
-				int queueRsp = -1;
-				try {
-					queueRsp = jason_obj.getInt("status");
-				} catch (JSONException e2) {
-					// TODO Auto-generated catch block
-					e2.printStackTrace();
 				}
 				
 				if ( queueRsp == EventDefine.IS_REQIST_RSP_NO_REGIST )
@@ -140,10 +143,11 @@ public class MainControl extends HandlerThread {
 					MainActivity.getInstance().handler.sendMessage( m );
 					state = STATE_WAIT_UI_LOGIN;
 				}
-				else if( queueRsp == EventDefine.IS_REQIST_RSP_NO_REGIST )
+				else if( queueRsp == EventDefine.IS_REQIST_RSP_HAS_REGIST )
 				{// 
 					// 请求好友列表
 					mInternetCom.requestFriendList();
+					state = STATE_LOGIN_NORMAL;
 					//TODO
 				}
 				else
@@ -231,6 +235,56 @@ public class MainControl extends HandlerThread {
 			case EventDefine.ADD_A_FRIEND:
 				mInternetCom.addA_Friend( e );
 				break;
+			case EventDefine.ADD_A_FRIEND_RSP:
+			{
+				String rep = e.GetPropertyContext("HTTP_REQ_RSP");
+				JSONObject  jason_obj = null;
+				int queueRsp = -1;
+				try {
+					jason_obj = new JSONObject(rep);
+					queueRsp = jason_obj.getInt("status");
+				} catch (JSONException e1) {
+
+					Log.d("MainControl" , "server response error: " + e1.getMessage() );
+					e1.printStackTrace();
+				}
+				
+				if( queueRsp == 0 )
+				{
+					Log.d("MainControl" , "add a friend ，server accept!" );
+					//request OK , only need wait the friend feedback
+				}
+				else if (queueRsp == 34 )
+				{
+					Log.d("MainControl" , "add a friend ，server response: friend have not exist!" );
+					//TODO
+					//发送短信提醒
+				}
+				else
+				{
+					Log.d("MainControl" , "add a friend ，user do not exist" );
+				}
+				
+				break;
+			}
+			case EventDefine.JPUSH_SERVER_COMMAND:
+			{
+			
+				int cmd =  Integer.parseInt(e.GetPropertyContext("Command"));
+				
+				switch (cmd )
+				{
+				case 201:
+					
+					Log.d("MainControl" , "jpush server call me ,someone add me " );
+					//request OK , only need wait the friend feedback
+					break;
+				default:
+					Log.d("MainControl" , "jpush server call me  , but command undefine" );
+					break;
+				}
+				break;
+			}
 			case EventDefine.ADD_A_FRIEND_ANSWER:
 				mInternetCom.friendAddMeAnswer(e);
 				break;
@@ -245,6 +299,6 @@ public class MainControl extends HandlerThread {
 		}
 		
 	}
-
+	
 
 }

@@ -17,6 +17,11 @@ public class EventDefine {
 	public static final int ADD_A_FRIEND_CONFIRM_RSP	= ADD_A_FRIEND_ANSWER+1;
 	
 	
+	/*jpush*/
+	
+	public static final int JPUSH_SERVER_COMMAND			= 200;
+	
+	
 	
 	
 	
@@ -27,4 +32,5 @@ public class EventDefine {
 	
 	
 	public static final int IS_REQIST_RSP_NO_REGIST			= 503;
+	public static final int IS_REQIST_RSP_HAS_REGIST		= 0;
 }
