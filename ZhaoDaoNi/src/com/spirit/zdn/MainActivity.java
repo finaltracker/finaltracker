@@ -3,17 +3,11 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import jpush.ExampleUtil;
-import jpush.PushSetActivity;
-
-import com.common.EventDefine;
-
-import cn.jpush.android.api.JPushInterface;
-import cn.jpush.android.api.TagAliasCallback;
 import CommandParser.CommandE;
 import CommandParser.Property;
-import android.app.Activity;
-
 import android.app.ActionBar;
+import android.app.ActionBar.OnNavigationListener;
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.BroadcastReceiver;
@@ -24,18 +18,22 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
+import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
+import android.widget.ArrayAdapter;
+import android.widget.SpinnerAdapter;
 import android.widget.Toast;
-import android.support.v4.widget.DrawerLayout;
-import android.text.TextUtils;
+import cn.jpush.android.api.JPushInterface;
+import cn.jpush.android.api.TagAliasCallback;
 
-public class MainActivity extends Activity implements
+import com.common.EventDefine;
+
+public class MainActivity extends Activity implements ActionBar.OnNavigationListener,
 		NavigationDrawerFragment.NavigationDrawerCallbacks {
 
 	//for receive customer msg from jpush server
@@ -67,7 +65,13 @@ public class MainActivity extends Activity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
+		
+		getActionBar().setDisplayShowTitleEnabled(false);
+		getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+		SpinnerAdapter mSpinnerAdapter = ArrayAdapter.createFromResource(this, 
+				R.array.plannets_array, android.R.layout.simple_spinner_dropdown_item);
+		getActionBar().setListNavigationCallbacks(mSpinnerAdapter, this);
+		
 		mNavigationDrawerFragment = (NavigationDrawerFragment) getFragmentManager()
 				.findFragmentById(R.id.navigation_drawer);
 		mTitle = getTitle();
@@ -76,6 +80,7 @@ public class MainActivity extends Activity implements
 		mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
 				(DrawerLayout) findViewById(R.id.drawer_layout));
 
+		
 		control = new MainControl("MainControl" , this );
 		this.setTag(MainControl.imsi);
 		control.start();
@@ -109,10 +114,18 @@ public class MainActivity extends Activity implements
 	}
 
 	public void restoreActionBar() {
+		/*
 		ActionBar actionBar = getActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 		actionBar.setDisplayShowTitleEnabled(true);
 		actionBar.setTitle(mTitle);
+		*/
+		ActionBar actionBar = getActionBar();
+		actionBar.setDisplayShowTitleEnabled(false);
+		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+		SpinnerAdapter mSpinnerAdapter = ArrayAdapter.createFromResource(this, 
+				R.array.plannets_array, android.R.layout.simple_spinner_dropdown_item);
+		actionBar.setListNavigationCallbacks(mSpinnerAdapter, this);
 	}
 
 	@Override
@@ -343,5 +356,10 @@ public class MainActivity extends Activity implements
         }
         
     };
+	@Override
+	public boolean onNavigationItemSelected(int itemPosition, long itemId) {
+		Toast.makeText(this, "text", 10000).show();
+		return false;
+	}
 	
 }

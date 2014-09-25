@@ -20,4 +20,10 @@
     <string name="error_network">Failed to init due to network exception.</string>
     <string name="logining">Running in background. Please see log.</string>
     <string name="setting_su">Succeed to set</string>
+    
+    <string-array name="plannets_array">
+        <item>家庭圈</item>
+        <item>朋友圈</item>
+        <item>同学圈</item>
+    </string-array>
 </resources>
