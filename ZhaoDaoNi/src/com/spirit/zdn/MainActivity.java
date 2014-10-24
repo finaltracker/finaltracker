@@ -33,8 +33,7 @@ import cn.jpush.android.api.TagAliasCallback;
 
 import com.common.EventDefine;
 
-public class MainActivity extends Activity implements ActionBar.OnNavigationListener,
-		NavigationDrawerFragment.NavigationDrawerCallbacks {
+public class MainActivity extends Activity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
 	//for receive customer msg from jpush server
 	private MessageReceiver mMessageReceiver;
@@ -70,7 +69,7 @@ public class MainActivity extends Activity implements ActionBar.OnNavigationList
 		getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 		SpinnerAdapter mSpinnerAdapter = ArrayAdapter.createFromResource(this, 
 				R.array.plannets_array, android.R.layout.simple_spinner_dropdown_item);
-		getActionBar().setListNavigationCallbacks(mSpinnerAdapter, this);
+		getActionBar().setListNavigationCallbacks(mSpinnerAdapter, new DropDownListenser());
 		
 		mNavigationDrawerFragment = (NavigationDrawerFragment) getFragmentManager()
 				.findFragmentById(R.id.navigation_drawer);
@@ -125,7 +124,7 @@ public class MainActivity extends Activity implements ActionBar.OnNavigationList
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 		SpinnerAdapter mSpinnerAdapter = ArrayAdapter.createFromResource(this, 
 				R.array.plannets_array, android.R.layout.simple_spinner_dropdown_item);
-		actionBar.setListNavigationCallbacks(mSpinnerAdapter, this);
+		actionBar.setListNavigationCallbacks(mSpinnerAdapter, new DropDownListenser());
 	}
 
 	@Override
@@ -356,10 +355,33 @@ public class MainActivity extends Activity implements ActionBar.OnNavigationList
         }
         
     };
-	@Override
-	public boolean onNavigationItemSelected(int itemPosition, long itemId) {
-		Toast.makeText(this, "text", 10000).show();
-		return false;
-	}
+    
+    /**
+     * 实现 ActionBar.OnNavigationListener接口
+     */
+    class DropDownListenser implements OnNavigationListener
+    {
+        // 得到和SpinnerAdapter里一致的字符数组
+        String[] listNames = getResources().getStringArray(R.array.plannets_array);
+
+        /* 当选择下拉菜单项的时候，将Activity中的内容置换为对应的Fragment */
+        public boolean onNavigationItemSelected(int itemPosition, long itemId)
+        {
+            // 生成自定的Fragment
+        	/*
+            StudentInfo student = new StudentInfo();
+            FragmentManager manager = getFragmentManager();
+            FragmentTransaction transaction = manager.beginTransaction();
+            // 将Activity中的内容替换成对应选择的Fragment
+            transaction.replace(R.id.context, student, listNames[itemPosition]);
+            transaction.commit();
+            */
+        	if(itemPosition != 0) {
+        		startActivity(new Intent(MainActivity.this, CircleActivity.class));
+        	}
+            return true;
+        }
+    }
+    
 	
 }
