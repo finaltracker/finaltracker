@@ -2,6 +2,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.spirit.zdn.MainActivity" >
 
+    <item android:id="@+id/contact_friend"
+          android:icon="@drawable/contact_friend"
+          android:title="Contract"
+		  android:showAsAction="ifRoom|withText" />
     <item
         android:id="@+id/action_example"
         android:showAsAction="ifRoom"

@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.spirit.zdn"   
+    package="com.zdn"   
     android:versionCode="1"
     android:versionName="1.0"
     >
+     <supports-screens
+		android:smallScreens="false" android:largeScreens="true"
+		android:normalScreens="true" android:anyDensity="true" 
+		android:xlargeScreens="true" />
     <uses-sdk android:minSdkVersion="11" android:targetSdkVersion="19" />
     <permission
         android:name="com.spirit.zdn.permission.JPUSH_MESSAGE"
@@ -38,12 +42,12 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" 
-        android:name="com.spirit.zdn.ZhaoDaoNiApplication">
+        android:name="com.zdn.activity.ZhaoDaoNiApplication">
         
         
         <!-- 主程序-->
         <activity
-            android:name=".MainActivity"
+            android:name="com.zdn.activity.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -51,11 +55,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="Load" >
+        <activity android:name="com.zdn.activity.Load" >
         </activity>
-        <activity android:name="Zhuce" >
+        <activity android:name="com.zdn.activity.Zhuce" >
         </activity>
-		<activity android:name="CircleActivity"
+		<activity android:name="com.zdn.activity.CircleActivity"
 		    android:theme="@style/circle_bottom" >
         </activity>
         
@@ -64,7 +68,7 @@
         <!-- For test only 测试设置 -->
        <activity android:name="com.example.jpushdemo.SettingActivity" android:label="@string/app_name"></activity>
         <!-- For test only 测试状态通知栏，需要打开的Activity -->
-        <activity android:name="jpush.TestActivity" >
+        <activity android:name="com.zdn.jpush.TestActivity" >
             <intent-filter>
                 <action android:name="jpush.testAction" />
                 <category android:name="jpush.testCategory" />
@@ -131,7 +135,7 @@
         
         <!-- User defined.  For test only  用户自定义的广播接收器-->
         <receiver
-            android:name="jpush.MyReceiver"
+            android:name="com.zdn.jpush.MyReceiver"
             android:enabled="true">
             <intent-filter>
                 <action android:name="cn.jpush.android.intent.REGISTRATION" /> <!--Required  用户注册SDK的intent-->
