@@ -26,7 +26,7 @@
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>  
-
+	<uses-permission android:name="android.permission.READ_CONTACTS"/>
     
     
     <!-- Optional for location -->
@@ -61,6 +61,8 @@
         </activity>
 		<activity android:name="com.zdn.activity.CircleActivity"
 		    android:theme="@style/circle_bottom" >
+        </activity>
+        <activity android:name="com.zdn.activity.QQconstactActivity" >
         </activity>
         
        <!-- For test only 测试高级功能 -->

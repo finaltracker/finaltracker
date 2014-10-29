@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <!-- com.qq.view.CustomerScrollView
+    <!-- com.zdn.view.CustomerScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
@@ -25,19 +25,19 @@
                 android:paddingLeft="10dp"
                 android:text="@string/recentchat" />
 
-            <com.qq.view.CustomListView
+            <com.zdn.view.CustomListView
                 android:id="@+id/listview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@id/tv" />
 
-            <com.qq.view.LoadingView
+            <com.zdn.view.LoadingView
                 android:id="@+id/loading"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@id/tv"
                 android:visibility="gone" />
     <!--      </RelativeLayout>
-    </com.qq.view.CustomerScrollView> -->
+    </com.zdn.view.CustomerScrollView> -->
 
 </RelativeLayout>
