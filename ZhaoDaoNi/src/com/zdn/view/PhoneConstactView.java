@@ -1,4 +1,4 @@
-package com.zdn.fragment;
+package com.zdn.view;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,26 +16,24 @@ import com.zdn.sort.SideBar.OnTouchingLetterChangedListener;
 import com.zdn.sort.SortAdapter;
 import com.zdn.sort.SortModel;
 import com.zdn.util.ConstactUtil;
-import com.zdn.view.LoadingView;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
-public class PhoneConstactFragment extends Fragment {
+public class PhoneConstactView extends RelativeLayout {
 
+	
 	private Context mContext;
 	private View mBaseView;
 	private ListView sortListView;
@@ -47,25 +45,25 @@ public class PhoneConstactFragment extends Fragment {
 	private LoadingView mLoadingView;
 
 	/**
-	 * 汉字转换成拼音的
+	 * 姹夊瓧杞崲鎴愭嫾闊崇殑
 	 */
 	private CharacterParser characterParser;
 	private List<SortModel> SourceDateList;
 
 	/**
-	 * 根据拼音来排列ListView里面的数据类
+	 * 鏍规嵁鎷奸煶鏉ユ帓鍒桳istView閲岄潰鐨勬暟鎹被
 	 */
 	private PinyinComparator pinyinComparator;
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		mContext = getActivity();
-		mBaseView=inflater.inflate(R.layout.fragment_phone_constact, null);
+	public PhoneConstactView(Context context, AttributeSet attrs) {
+		super(context, attrs);
+		mContext = context;
+		
+		mBaseView= LayoutInflater.from(context).inflate(R.layout.fragment_phone_constact, this);
 		findView();
 		init();
-		return mBaseView;
 	}
+
 
 	private void findView() {
 		mLoadingView=(LoadingView) mBaseView.findViewById(R.id.loading);
@@ -77,20 +75,20 @@ public class PhoneConstactFragment extends Fragment {
 	}
 
 	private void init() {
-		// 实例化汉字转拼音�?
+		// 瀹炰緥鍖栨眽瀛楄浆鎷奸煶锟�
 		characterParser = CharacterParser.getInstance();
 
 		pinyinComparator = new PinyinComparator();
 
 		sideBar.setTextView(dialog);
 
-		// 设置右侧触摸监听
+		// 璁剧疆鍙充晶瑙︽懜鐩戝惉
 		sideBar.setOnTouchingLetterChangedListener(new OnTouchingLetterChangedListener() {
 
 			@SuppressLint("NewApi")
 			@Override
 			public void onTouchingLetterChanged(String s) {
-				// 该字母首次出现的位置
+				// 璇ュ瓧姣嶉娆″嚭鐜扮殑浣嶇疆
 				int position = adapter.getPositionForSection(s.charAt(0));
 				if (position != -1) {
 					sortListView.setSelection(position);
@@ -103,7 +101,7 @@ public class PhoneConstactFragment extends Fragment {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				// 这里要利用adapter.getItem(position)来获取当前position�?��应的对象
+				// 杩欓噷瑕佸埄鐢╝dapter.getItem(position)鏉ヨ幏鍙栧綋鍓峱osition锟�锟斤拷搴旂殑瀵硅薄
 				// Toast.makeText(getApplication(),
 				// ((SortModel)adapter.getItem(position)).getName(),
 				// Toast.LENGTH_SHORT).show();
@@ -144,7 +142,7 @@ public class PhoneConstactFragment extends Fragment {
 				names = constact.toArray(names);
 				SourceDateList = filledData(names);
 
-				// 根据a-z进行排序源数�?
+				// 鏍规嵁a-z杩涜鎺掑簭婧愭暟锟�
 				Collections.sort(SourceDateList, pinyinComparator);
 				adapter = new SortAdapter(mContext, SourceDateList);
 				sortListView.setAdapter(adapter);
@@ -152,13 +150,13 @@ public class PhoneConstactFragment extends Fragment {
 				mClearEditText = (ClearEditText) mBaseView
 						.findViewById(R.id.filter_edit);
 
-				// 根据输入框输入�?的改变来过滤搜索
+				// 鏍规嵁杈撳叆妗嗚緭鍏ワ拷?鐨勬敼鍙樻潵杩囨护鎼滅储
 				mClearEditText.addTextChangedListener(new TextWatcher() {
 
 					@Override
 					public void onTextChanged(CharSequence s, int start,
 							int before, int count) {
-						// 当输入框里面的�?为空，更新为原来的列表，否则为过滤数据列�?
+						// 褰撹緭鍏ユ閲岄潰鐨勶拷?涓虹┖锛屾洿鏂颁负鍘熸潵鐨勫垪琛紝鍚﹀垯涓鸿繃婊ゆ暟鎹垪锟�
 						filterData(s.toString());
 					}
 
@@ -183,7 +181,7 @@ public class PhoneConstactFragment extends Fragment {
 	}
 
 	/**
-	 * 为ListView填充数据
+	 * 涓篖istView濉厖鏁版嵁
 	 * 
 	 * @param date
 	 * @return
@@ -194,11 +192,11 @@ public class PhoneConstactFragment extends Fragment {
 		for (int i = 0; i < date.length; i++) {
 			SortModel sortModel = new SortModel();
 			sortModel.setName(date[i]);
-			// 汉字转换成拼�?
+			// 姹夊瓧杞崲鎴愭嫾锟�
 			String pinyin = characterParser.getSelling(date[i]);
 			String sortString = pinyin.substring(0, 1).toUpperCase();
 
-			// 正则表达式，判断首字母是否是英文字母
+			// 姝ｅ垯琛ㄨ揪寮忥紝鍒ゆ柇棣栧瓧姣嶆槸鍚︽槸鑻辨枃瀛楁瘝
 			if (sortString.matches("[A-Z]")) {
 				sortModel.setSortLetters(sortString.toUpperCase());
 			} else {
@@ -212,7 +210,7 @@ public class PhoneConstactFragment extends Fragment {
 	}
 
 	/**
-	 * 根据输入框中的�?来过滤数据并更新ListView
+	 * 鏍规嵁杈撳叆妗嗕腑鐨勶拷?鏉ヨ繃婊ゆ暟鎹苟鏇存柊ListView
 	 * 
 	 * @param filterStr
 	 */
@@ -233,7 +231,7 @@ public class PhoneConstactFragment extends Fragment {
 			}
 		}
 
-		// 根据a-z进行排序
+		// 鏍规嵁a-z杩涜鎺掑簭
 		Collections.sort(filterDateList, pinyinComparator);
 		adapter.updateListView(filterDateList);
 	}

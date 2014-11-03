@@ -6,11 +6,11 @@ import java.util.List;
 import com.zdn.AsyncTaskBase;
 import com.zdn.R;
 import com.zdn.test.TestData;
-import com.zdn.activity.QQconstactActivity;
 import com.zdn.adapter.ExpAdapter;
 import com.zdn.bean.RecentChat;
 import com.zdn.view.IphoneTreeView;
 import com.zdn.view.LoadingView;
+import com.zdn.view.PhoneConstactView;
 
 import android.app.ActionBar;
 import android.content.Context;
@@ -33,11 +33,12 @@ import android.widget.RelativeLayout;
 public class ConstactFragment extends Fragment {
 	private Context mContext;
 	private View mBaseView;
-	private LoadingView mLoadingView;
 	private IphoneTreeView mIphoneTreeView;
+	private PhoneConstactView mPhoneContract;
 	private View mSearchView;
 	private ExpAdapter mExpAdapter;
 	private RelativeLayout constacts;
+	private RelativeLayout mFriend;
 	private HashMap<String, List<RecentChat>> maps = new HashMap<String, List<RecentChat>>();
 
 	private DrawerLayout mDrawerLayout;
@@ -55,10 +56,12 @@ public class ConstactFragment extends Fragment {
 	}
 
 	private void findView() {
-		mSearchView=mBaseView.findViewById(R.id.search);
-		mLoadingView = (LoadingView) mBaseView.findViewById(R.id.loadingView);
-		mIphoneTreeView = (IphoneTreeView) mBaseView.findViewById(R.id.iphone_tree_view);
-		constacts=(RelativeLayout) mBaseView.findViewById(R.id.rl_tonxunru);
+		mSearchView=mBaseView.findViewById( R.id.search );
+		mIphoneTreeView = (IphoneTreeView) mBaseView.findViewById( R.id.iphone_tree_view );
+		mFriend =(RelativeLayout) mBaseView.findViewById( R.id.rl_friend);
+		constacts=(RelativeLayout) mBaseView.findViewById( R.id.rl_tonxunru );
+		mPhoneContract = (PhoneConstactView) mBaseView.findViewById( R.id.iphone_phoneContract );
+		
 	}
 
 	private void init() {
@@ -68,18 +71,26 @@ public class ConstactFragment extends Fragment {
 		mExpAdapter = new ExpAdapter(mContext, maps, mIphoneTreeView,mSearchView);
 		mIphoneTreeView.setAdapter(mExpAdapter);
 		
+		mFriend.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				mIphoneTreeView.setVisibility(View.VISIBLE);
+				mPhoneContract.setVisibility(View.GONE);
+			}
+			
+			});
 		constacts.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				Intent  intent=new Intent(mContext, QQconstactActivity.class);
-				startActivity(intent);
-				getActivity().overridePendingTransition(R.anim.activity_up, R.anim.fade_out);
+				mIphoneTreeView.setVisibility(View.GONE);
+				mPhoneContract.setVisibility(View.VISIBLE);
 				
 			}
 		});
 		
-		new AsyncTaskLoading(mLoadingView).execute(0);
+		new AsyncTaskLoading(null).execute(0);
 	}
 
 	private class AsyncTaskLoading extends AsyncTaskBase {

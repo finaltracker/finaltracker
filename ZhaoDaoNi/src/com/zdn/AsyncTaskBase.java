@@ -23,17 +23,24 @@ public class AsyncTaskBase extends AsyncTask<Integer, Integer, Integer> {
 	@Override
 	protected void onPostExecute(Integer result) {
 		super.onPostExecute(result);
-		if(result==1){
+		if(mLoadingView != null )
+		{
+			if(result==1){
+		
 			mLoadingView.setVisibility(View.GONE);
-		}else{
-			mLoadingView.setText(R.string.no_data);
+			}else{
+				mLoadingView.setText(R.string.no_data);
+			}
 		}
 	}
 
 	@Override
 	protected void onPreExecute() {
 		super.onPreExecute();
-		mLoadingView.setVisibility(View.VISIBLE);
+		if(mLoadingView != null )
+		{
+			mLoadingView.setVisibility(View.VISIBLE);
+		}
 	}
 
 }
