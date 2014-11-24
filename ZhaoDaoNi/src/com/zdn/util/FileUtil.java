@@ -28,9 +28,9 @@ public class FileUtil {
 	private static String path="";
 	static{
 		if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
-			path=Environment.getExternalStorageDirectory()+"/QQ";
+			path=Environment.getExternalStorageDirectory()+"/zhaodaoni";
 		}else{
-			path=Environment.getDataDirectory().getAbsolutePath()+"/QQ";
+			path=Environment.getDataDirectory().getAbsolutePath()+"/zhaodaoni";
 		}
 	}
 	

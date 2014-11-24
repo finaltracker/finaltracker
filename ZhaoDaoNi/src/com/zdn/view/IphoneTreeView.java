@@ -95,6 +95,7 @@ public class IphoneTreeView extends ExpandableListView implements
 
 	private int mHeaderViewHeight;
 
+   // view is: fragment_constact_head_view
 	public void setHeaderView(View view) {
 		mHeaderView = view;
 		AbsListView.LayoutParams lp = new AbsListView.LayoutParams(

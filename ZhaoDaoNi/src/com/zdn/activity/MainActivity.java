@@ -4,6 +4,7 @@ package com.zdn.activity;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import com.qq.test.SDManager;
 import com.zdn.R;
 import com.zdn.CommandParser.CommandE;
 import com.zdn.CommandParser.Property;
@@ -43,6 +44,7 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 
 	//for receive customer msg from jpush server
 	private MessageReceiver mMessageReceiver;
+	
 	public static final String MESSAGE_RECEIVED_ACTION = "com.spirit.zdn.MESSAGE_RECEIVED_ACTION";
 	public static final String KEY_TITLE = "title";
 	public static final String KEY_MESSAGE = "message";
@@ -89,6 +91,10 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 				(DrawerLayout) findViewById(R.id.drawer_layout));
 
 		
+		//for test
+			SDManager manager = new SDManager(this);
+			manager.moveUserIcon();
+
 		control = new MainControl("MainControl" , this );
 		this.setTag(MainControl.imsi);
 		control.start();

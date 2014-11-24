@@ -45,13 +45,13 @@ public class PhoneConstactView extends RelativeLayout {
 	private LoadingView mLoadingView;
 
 	/**
-	 * 姹夊瓧杞崲鎴愭嫾闊崇殑
+	 * 濮瑰鐡ф潪顒佸床閹存劖瀚鹃棅宕囨畱
 	 */
 	private CharacterParser characterParser;
 	private List<SortModel> SourceDateList;
 
 	/**
-	 * 鏍规嵁鎷奸煶鏉ユ帓鍒桳istView閲岄潰鐨勬暟鎹被
+	 * 閺嶈宓侀幏濂哥叾閺夈儲甯撻崚妗砳stView闁插矂娼伴惃鍕殶閹诡喚琚�
 	 */
 	private PinyinComparator pinyinComparator;
 
@@ -75,20 +75,20 @@ public class PhoneConstactView extends RelativeLayout {
 	}
 
 	private void init() {
-		// 瀹炰緥鍖栨眽瀛楄浆鎷奸煶锟�
+		// 鐎圭偘绶ラ崠鏍ㄧ溄鐎涙娴嗛幏濂哥叾閿燂拷
 		characterParser = CharacterParser.getInstance();
 
 		pinyinComparator = new PinyinComparator();
 
 		sideBar.setTextView(dialog);
 
-		// 璁剧疆鍙充晶瑙︽懜鐩戝惉
+		// 鐠佸墽鐤嗛崣鍏呮櫠鐟欙附鎳滈惄鎴濇儔
 		sideBar.setOnTouchingLetterChangedListener(new OnTouchingLetterChangedListener() {
 
 			@SuppressLint("NewApi")
 			@Override
 			public void onTouchingLetterChanged(String s) {
-				// 璇ュ瓧姣嶉娆″嚭鐜扮殑浣嶇疆
+				// 鐠囥儱鐡уВ宥夘浕濞嗏�鍤悳鎵畱娴ｅ秶鐤�
 				int position = adapter.getPositionForSection(s.charAt(0));
 				if (position != -1) {
 					sortListView.setSelection(position);
@@ -101,7 +101,7 @@ public class PhoneConstactView extends RelativeLayout {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				// 杩欓噷瑕佸埄鐢╝dapter.getItem(position)鏉ヨ幏鍙栧綋鍓峱osition锟�锟斤拷搴旂殑瀵硅薄
+				// 鏉╂瑩鍣风憰浣稿焺閻⑩暆dapter.getItem(position)閺夈儴骞忛崣鏍х秼閸撳潮osition閿燂拷閿熸枻鎷锋惔鏃傛畱鐎电钖�
 				// Toast.makeText(getApplication(),
 				// ((SortModel)adapter.getItem(position)).getName(),
 				// Toast.LENGTH_SHORT).show();
@@ -123,6 +123,7 @@ public class PhoneConstactView extends RelativeLayout {
 		@Override
 		protected Integer doInBackground(Integer... params) {
 			int result = -1;
+			//Get All phone record from contract
 			callRecords = ConstactUtil.getAllCallRecords(mContext);
 			result = 1;
 			return result;
@@ -132,6 +133,7 @@ public class PhoneConstactView extends RelativeLayout {
 		protected void onPostExecute(Integer result) {
 			super.onPostExecute(result);
 			if (result == 1) {
+				//get all record's name 
 				List<String> constact = new ArrayList<String>();
 				for (Iterator<String> keys = callRecords.keySet().iterator(); keys
 						.hasNext();) {
@@ -140,23 +142,23 @@ public class PhoneConstactView extends RelativeLayout {
 				}
 				String[] names = new String[] {};
 				names = constact.toArray(names);
+				
 				SourceDateList = filledData(names);
 
-				// 鏍规嵁a-z杩涜鎺掑簭婧愭暟锟�
-				Collections.sort(SourceDateList, pinyinComparator);
+				// 閺嶈宓乤-z鏉╂稖顢戦幒鎺戠碍濠ф劖鏆熼敓锟�				Collections.sort(SourceDateList, pinyinComparator);
 				adapter = new SortAdapter(mContext, SourceDateList);
 				sortListView.setAdapter(adapter);
 
 				mClearEditText = (ClearEditText) mBaseView
 						.findViewById(R.id.filter_edit);
 
-				// 鏍规嵁杈撳叆妗嗚緭鍏ワ拷?鐨勬敼鍙樻潵杩囨护鎼滅储
+				// 閺嶈宓佹潏鎾冲弳濡楀棜绶崗銉嫹?閻ㄥ嫭鏁奸崣妯绘降鏉╁洦鎶ら幖婊呭偍
 				mClearEditText.addTextChangedListener(new TextWatcher() {
 
 					@Override
 					public void onTextChanged(CharSequence s, int start,
 							int before, int count) {
-						// 褰撹緭鍏ユ閲岄潰鐨勶拷?涓虹┖锛屾洿鏂颁负鍘熸潵鐨勫垪琛紝鍚﹀垯涓鸿繃婊ゆ暟鎹垪锟�
+						// 瑜版捁绶崗銉︻攱闁插矂娼伴惃鍕舵嫹?娑撹櫣鈹栭敍灞炬纯閺傞璐熼崢鐔告降閻ㄥ嫬鍨悰顭掔礉閸氾箑鍨稉楦跨箖濠娿倖鏆熼幑顔煎灙閿燂拷
 						filterData(s.toString());
 					}
 
@@ -181,7 +183,7 @@ public class PhoneConstactView extends RelativeLayout {
 	}
 
 	/**
-	 * 涓篖istView濉厖鏁版嵁
+	 * 娑撶瘱istView婵夘偄鍘栭弫鐗堝祦
 	 * 
 	 * @param date
 	 * @return
@@ -192,11 +194,11 @@ public class PhoneConstactView extends RelativeLayout {
 		for (int i = 0; i < date.length; i++) {
 			SortModel sortModel = new SortModel();
 			sortModel.setName(date[i]);
-			// 姹夊瓧杞崲鎴愭嫾锟�
+			// 濮瑰鐡ф潪顒佸床閹存劖瀚鹃敓锟�			
 			String pinyin = characterParser.getSelling(date[i]);
 			String sortString = pinyin.substring(0, 1).toUpperCase();
 
-			// 姝ｅ垯琛ㄨ揪寮忥紝鍒ゆ柇棣栧瓧姣嶆槸鍚︽槸鑻辨枃瀛楁瘝
+			// 濮濓絽鍨悰銊ㄦ彧瀵骏绱濋崚銈嗘焽妫ｆ牕鐡уВ宥嗘Ц閸氾附妲搁懟杈ㄦ瀮鐎涙鐦�
 			if (sortString.matches("[A-Z]")) {
 				sortModel.setSortLetters(sortString.toUpperCase());
 			} else {
@@ -210,7 +212,7 @@ public class PhoneConstactView extends RelativeLayout {
 	}
 
 	/**
-	 * 鏍规嵁杈撳叆妗嗕腑鐨勶拷?鏉ヨ繃婊ゆ暟鎹苟鏇存柊ListView
+	 * 閺嶈宓佹潏鎾冲弳濡楀棔鑵戦惃鍕舵嫹?閺夈儴绻冨銈嗘殶閹诡喖鑻熼弴瀛樻煀ListView
 	 * 
 	 * @param filterStr
 	 */
@@ -231,7 +233,7 @@ public class PhoneConstactView extends RelativeLayout {
 			}
 		}
 
-		// 鏍规嵁a-z杩涜鎺掑簭
+		// 閺嶈宓乤-z鏉╂稖顢戦幒鎺戠碍
 		Collections.sort(filterDateList, pinyinComparator);
 		adapter.updateListView(filterDateList);
 	}
