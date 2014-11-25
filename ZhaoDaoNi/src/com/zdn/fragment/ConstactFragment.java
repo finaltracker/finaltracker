@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.zdn.AsyncTaskBase;
 import com.zdn.R;
+import com.zdn.sort.ClearEditText;
 import com.zdn.test.TestData;
 import com.zdn.adapter.ExpAdapter;
 import com.zdn.bean.RecentChat;
@@ -23,6 +24,8 @@ import android.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -35,7 +38,8 @@ public class ConstactFragment extends Fragment {
 	private View mBaseView;
 	private IphoneTreeView mIphoneTreeView;
 	private PhoneConstactView mPhoneContract;
-	private View mSearchView;
+	private ClearEditText mSearchView;
+	
 	private ExpAdapter mExpAdapter;
 	private RelativeLayout constacts;
 	private RelativeLayout mFriend;
@@ -56,7 +60,7 @@ public class ConstactFragment extends Fragment {
 	}
 
 	private void findView() {
-		mSearchView=mBaseView.findViewById( R.id.search );
+		mSearchView=(ClearEditText) mBaseView.findViewById( R.id.ll_constact_serach );
 		mIphoneTreeView = (IphoneTreeView) mBaseView.findViewById( R.id.iphone_tree_view );
 		mFriend =(RelativeLayout) mBaseView.findViewById( R.id.rl_friend);
 		constacts=(RelativeLayout) mBaseView.findViewById( R.id.rl_tonxunru );
@@ -68,8 +72,31 @@ public class ConstactFragment extends Fragment {
 		mIphoneTreeView.setHeaderView(LayoutInflater.from(mContext).inflate(
 				R.layout.fragment_constact_head_view, mIphoneTreeView, false));
 		mIphoneTreeView.setGroupIndicator(null);
-		mExpAdapter = new ExpAdapter(mContext, maps, mIphoneTreeView,mSearchView);
+
+		mExpAdapter = new ExpAdapter(mContext, maps, mIphoneTreeView,null);
 		mIphoneTreeView.setAdapter(mExpAdapter);
+
+		mSearchView.addTextChangedListener(new TextWatcher() {
+
+					@Override
+					public void onTextChanged(CharSequence s, int start,
+							int before, int count) {
+						// 瑜版捁绶崗銉︻攱闁插矂娼伴惃鍕舵嫹?娑撹櫣鈹栭敍灞炬纯閺傞璐熼崢鐔告降閻ㄥ嫬鍨悰顭掔礉閸氾箑鍨稉楦跨箖濠娿倖鏆熼幑顔煎灙閿燂拷
+						//filterData(s.toString());
+					}
+
+					@Override
+					public void beforeTextChanged(CharSequence s, int start,
+							int count, int after) {
+
+					}
+
+					@Override
+					public void afterTextChanged(Editable s) {
+						// TODO Auto-generated method stub
+						
+					}
+				});
 		
 		mFriend.setOnClickListener(new OnClickListener() {
 			

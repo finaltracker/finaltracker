@@ -3,10 +3,20 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content" >
 
-    <include
+   
+	<com.zdn.sort.ClearEditText
         android:id="@+id/ll_constact_serach"
-        layout="@layout/common_search_l" />
-
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dip"
+        android:background="@drawable/acm_inputbox"
+        android:drawableLeft="@drawable/search"
+        android:hint="@string/search"
+        android:singleLine="true"
+        android:textSize="15.0dip" />
+	
     <LinearLayout
         android:id="@+id/ll_center"
         android:layout_width="match_parent"
