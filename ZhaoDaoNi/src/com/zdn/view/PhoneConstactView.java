@@ -9,7 +9,6 @@ import java.util.Map;
 import com.zdn.AsyncTaskBase;
 import com.zdn.R;
 import com.zdn.sort.CharacterParser;
-import com.zdn.sort.ClearEditText;
 import com.zdn.sort.PinyinComparator;
 import com.zdn.sort.SideBar;
 import com.zdn.sort.SideBar.OnTouchingLetterChangedListener;
@@ -40,7 +39,6 @@ public class PhoneConstactView extends RelativeLayout {
 	private SideBar sideBar;
 	private TextView dialog;
 	private SortAdapter adapter;
-	private ClearEditText mClearEditText;
 	private Map<String, String> callRecords;
 	private LoadingView mLoadingView;
 
@@ -149,29 +147,7 @@ public class PhoneConstactView extends RelativeLayout {
 				adapter = new SortAdapter(mContext, SourceDateList);
 				sortListView.setAdapter(adapter);
 
-				mClearEditText = (ClearEditText) mBaseView
-						.findViewById(R.id.filter_edit);
 
-				// 閺嶈宓佹潏鎾冲弳濡楀棜绶崗銉嫹?閻ㄥ嫭鏁奸崣妯绘降鏉╁洦鎶ら幖婊呭偍
-				mClearEditText.addTextChangedListener(new TextWatcher() {
-
-					@Override
-					public void onTextChanged(CharSequence s, int start,
-							int before, int count) {
-						// 瑜版捁绶崗銉︻攱闁插矂娼伴惃鍕舵嫹?娑撹櫣鈹栭敍灞炬纯閺傞璐熼崢鐔告降閻ㄥ嫬鍨悰顭掔礉閸氾箑鍨稉楦跨箖濠娿倖鏆熼幑顔煎灙閿燂拷
-						filterData(s.toString());
-					}
-
-					@Override
-					public void beforeTextChanged(CharSequence s, int start,
-							int count, int after) {
-
-					}
-
-					@Override
-					public void afterTextChanged(Editable s) {
-					}
-				});
 			}
 		}
 
@@ -216,7 +192,7 @@ public class PhoneConstactView extends RelativeLayout {
 	 * 
 	 * @param filterStr
 	 */
-	private void filterData(String filterStr) {
+	public void filterData(String filterStr) {
 		List<SortModel> filterDateList = new ArrayList<SortModel>();
 
 		if (TextUtils.isEmpty(filterStr)) {

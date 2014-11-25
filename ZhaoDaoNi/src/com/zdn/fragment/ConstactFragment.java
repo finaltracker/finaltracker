@@ -82,7 +82,15 @@ public class ConstactFragment extends Fragment {
 					public void onTextChanged(CharSequence s, int start,
 							int before, int count) {
 						// 瑜版捁绶崗銉︻攱闁插矂娼伴惃鍕舵嫹?娑撹櫣鈹栭敍灞炬纯閺傞璐熼崢鐔告降閻ㄥ嫬鍨悰顭掔礉閸氾箑鍨稉楦跨箖濠娿倖鏆熼幑顔煎灙閿燂拷
-						//filterData(s.toString());
+						if( View.VISIBLE == mPhoneContract.getVisibility())
+						{
+							mPhoneContract.filterData(s.toString());
+						}
+						else if( View.VISIBLE == mIphoneTreeView.getVisibility() )
+						{
+							//mIphoneTreeView.filterData(s.toString());
+						}
+						
 					}
 
 					@Override
