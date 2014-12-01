@@ -26,7 +26,7 @@ import android.widget.ExpandableListView.OnGroupClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class ExpAdapter extends BaseExpandableListAdapter implements
+public class FriendListAdapter extends BaseExpandableListAdapter implements
 		IphoneTreeHeaderAdapter {
 
 	private static final String TAG = "ExpAdapter";
@@ -37,49 +37,12 @@ public class ExpAdapter extends BaseExpandableListAdapter implements
 	private HashMap<String, SoftReference<Bitmap>> hashMaps = new HashMap<String, SoftReference<Bitmap>>();
 	private String dir = FileUtil.getRecentChatPath();
 
+	private List<teamData> teams = null;
 	// 伪数�?
 	private HashMap<Integer, Integer> groupStatusMap;
-	private String[] groups = { "我的好友", "家人", "123456", "S2S73", "S1S24",
-			"S1S5", "亲戚" };
-	private String[][] children = {
-			{ "宋慧", "章泽", "宋茜", "韩孝", "景甜", "刘亦", "康", "邓紫" },
-			{ "宋慧", "章泽", "宋茜", "韩孝", "景甜", "刘亦", "康", "邓紫" },
-			{ "宋慧", "章泽", "宋茜", "韩孝", "景甜", "刘亦", "康", "邓紫" },
-			{ "宋慧", "章泽", "宋茜", "韩孝", "景甜", "刘亦", "康", "邓紫" },
-			{ "宋慧", "章泽", "宋茜", "韩孝", "景甜", "刘亦", "康", "邓紫" },
-			{ "宋慧", "章泽", "宋茜", "韩孝", "景甜", "刘亦", "康", "邓紫" },
-			{ "宋慧", "章泽", "宋茜", "韩孝", "景甜", "刘亦", "康", "邓紫" } };
-	private String[][] childPath = {
-			{ dir + "songhuiqiao.jpg", dir + "zhangzetian.jpg",
-					dir + "songqian.jpg", dir + "hangxiaozhu.jpg",
-					dir + "jingtian.jpg", dir + "liuyifei.jpg",
-					dir + "kangyikun.jpg", dir + "dengziqi.jpg" },
-			{ dir + "songhuiqiao.jpg", dir + "zhangzetian.jpg",
-					dir + "songqian.jpg", dir + "hangxiaozhu.jpg",
-					dir + "jingtian.jpg", dir + "liuyifei.jpg",
-					dir + "kangyikun.jpg", dir + "dengziqi.jpg" },
-			{ dir + "songhuiqiao.jpg", dir + "zhangzetian.jpg",
-					dir + "songqian.jpg", dir + "hangxiaozhu.jpg",
-					dir + "jingtian.jpg", dir + "liuyifei.jpg",
-					dir + "kangyikun.jpg", dir + "dengziqi.jpg" },
-			{ dir + "songhuiqiao.jpg", dir + "zhangzetian.jpg",
-					dir + "songqian.jpg", dir + "hangxiaozhu.jpg",
-					dir + "jingtian.jpg", dir + "liuyifei.jpg",
-					dir + "kangyikun.jpg", dir + "dengziqi.jpg" },
-			{ dir + "songhuiqiao.jpg", dir + "zhangzetian.jpg",
-					dir + "songqian.jpg", dir + "hangxiaozhu.jpg",
-					dir + "jingtian.jpg", dir + "liuyifei.jpg",
-					dir + "kangyikun.jpg", dir + "dengziqi.jpg" },
-			{ dir + "songhuiqiao.jpg", dir + "zhangzetian.jpg",
-					dir + "songqian.jpg", dir + "hangxiaozhu.jpg",
-					dir + "jingtian.jpg", dir + "liuyifei.jpg",
-					dir + "kangyikun.jpg", dir + "dengziqi.jpg" },
-			{ dir + "songhuiqiao.jpg", dir + "zhangzetian.jpg",
-					dir + "songqian.jpg", dir + "hangxiaozhu.jpg",
-					dir + "jingtian.jpg", dir + "liuyifei.jpg",
-					dir + "kangyikun.jpg", dir + "dengziqi.jpg" }, };
+	
 
-	public ExpAdapter(Context context, HashMap<String, List<RecentChat>> maps,
+	public FriendListAdapter(Context context, HashMap<String, List<RecentChat>> maps,
 			IphoneTreeView mIphoneTreeView, View searchView) {
 		this.mContext = context;
 		this.maps = maps;
@@ -90,7 +53,26 @@ public class ExpAdapter extends BaseExpandableListAdapter implements
 	}
 
 	public Object getChild(int groupPosition, int childPosition) {
-		return children[groupPosition][childPosition];
+		 Object ret = null;
+		 
+		 if( teams == null )
+		 {
+			 return null;
+		 }
+		 else
+		 {
+			 if( groupPosition >(teams.size() -1)   )
+			 {
+				 return null;
+			 }
+			 if( childPosition > (teams.get(groupPosition).member.size()-1) )
+			 {
+				 return null;
+			 }
+			 
+			 return teams.get(groupPosition).member.get(childPosition);
+		 }
+		 
 	}
 
 	public long getChildId(int groupPosition, int childPosition) {
@@ -98,15 +80,29 @@ public class ExpAdapter extends BaseExpandableListAdapter implements
 	}
 
 	public int getChildrenCount(int groupPosition) {
-		return children[groupPosition].length;
+		if( groupPosition >(teams.size() -1)   )
+		{
+			return 0;
+		}
+		else
+		{
+			return teams.get(groupPosition).member.size();
+		}
 	}
 
 	public Object getGroup(int groupPosition) {
-		return groups[groupPosition];
+		if( groupPosition >(teams.size() -1) )
+		{
+			return null;
+		}
+		else
+		{
+			return teams.get(groupPosition);
+		}
 	}
 
 	public int getGroupCount() {
-		return groups.length;
+		return teams.size();
 	}
 
 	public long getGroupId(int groupPosition) {
@@ -139,33 +135,11 @@ public class ExpAdapter extends BaseExpandableListAdapter implements
 			holder = (GroupHolder) convertView.getTag();
 		}
 
-		String path = childPath[groupPosition][childPosition];
-		if (hashMaps.containsKey(path)) {
-			holder.iconView.setImageBitmap(hashMaps.get(path).get());
-			// 另一个地方缓存释放资�?
-			ImgUtil.getInstance().reomoveCache(path);
-		} else {
-			holder.iconView.setTag(path);
-			ImgUtil.getInstance().loadBitmap(path, new OnLoadBitmapListener() {
-				@Override
-				public void loadImage(Bitmap bitmap, String path) {
-					ImageView iv = (ImageView) mIphoneTreeView
-							.findViewWithTag(path);
-					if (bitmap != null && iv != null) {
-						bitmap = SystemMethod.toRoundCorner(bitmap, 15);
-						iv.setImageBitmap(bitmap);
+		memberData md = (memberData)getChild(groupPosition,childPosition);
 
-						if (!hashMaps.containsKey(path)) {
-							hashMaps.put(path,
-									new SoftReference<Bitmap>(bitmap));
-						}
-					}
-				}
-			});
-
-		}
-		holder.nameView.setText(getChild(groupPosition, childPosition)
-				.toString());
+		holder.iconView.setImageBitmap(md.picture);
+		 
+		holder.nameView.setText( md.memberName );
 		holder.feelView.setText("爱生�?..爱Android...");
 		return convertView;
 	}
@@ -188,7 +162,7 @@ public class ExpAdapter extends BaseExpandableListAdapter implements
 		} else {
 			holder = (ChildHolder) convertView.getTag();
 		}
-		holder.nameView.setText(groups[groupPosition]);
+		holder.nameView.setText( ((teamData)getGroup(groupPosition)).teamName );
 		holder.onLineView.setText(getChildrenCount(groupPosition) + "/"
 				+ getChildrenCount(groupPosition));
 		if (isExpanded) {
@@ -200,6 +174,7 @@ public class ExpAdapter extends BaseExpandableListAdapter implements
 	}
 
 	@Override
+	
 	public int getTreeHeaderState(int groupPosition, int childPosition) {
 		final int childCount = getChildrenCount(groupPosition);
 		if (childPosition == childCount - 1) {
@@ -219,7 +194,7 @@ public class ExpAdapter extends BaseExpandableListAdapter implements
 	public void configureTreeHeader(View header, int groupPosition,
 			int childPosition, int alpha) {
 		((TextView) header.findViewById(R.id.group_name))
-				.setText(groups[groupPosition]);
+				.setText(((teamData)getGroup(groupPosition)).teamName);
 		((TextView) header.findViewById(R.id.online_count))
 				.setText(getChildrenCount(groupPosition) + "/"
 						+ getChildrenCount(groupPosition));
@@ -238,6 +213,10 @@ public class ExpAdapter extends BaseExpandableListAdapter implements
 			return 0;
 		}
 	}
+	public void updateListView( List<teamData> updateTeams )
+	{
+		this.teams = updateTeams;
+	}
 
 	class GroupHolder {
 		TextView nameView;
@@ -250,5 +229,20 @@ public class ExpAdapter extends BaseExpandableListAdapter implements
 		TextView onLineView;
 		ImageView iconView;
 	}
+	//define member struct
 
+	public class memberData
+	{
+		public memberData() {}
+		
+		public String 	memberName;
+		public Bitmap	picture;
+	}
+	//define team struct
+	public class teamData{
+		public	teamData(){}
+		public String   teamName;
+		public List<memberData>	member;
+	}
 }
+

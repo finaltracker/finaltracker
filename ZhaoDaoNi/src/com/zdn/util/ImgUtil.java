@@ -64,7 +64,7 @@ public class ImgUtil {
 		}.start();
 	}
 
-	private Bitmap loadBitmapFromCache(String path) {
+	public Bitmap loadBitmapFromCache(String path) {
 		if (imgCaches == null) {
 			imgCaches = new HashMap<String, SoftReference<Bitmap>>();
 		}

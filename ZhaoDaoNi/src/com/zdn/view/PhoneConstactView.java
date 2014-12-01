@@ -18,9 +18,7 @@ import com.zdn.util.ConstactUtil;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -143,7 +141,8 @@ public class PhoneConstactView extends RelativeLayout {
 				
 				SourceDateList = filledData(names);
 
-				// 閺嶈宓乤-z鏉╂稖顢戦幒鎺戠碍濠ф劖鏆熼敓锟�				Collections.sort(SourceDateList, pinyinComparator);
+				// 閺嶈宓乤-z鏉╂稖顢戦幒鎺戠碍濠ф劖鏆熼敓锟�				
+				Collections.sort(SourceDateList, pinyinComparator);
 				adapter = new SortAdapter(mContext, SourceDateList);
 				sortListView.setAdapter(adapter);
 
@@ -203,7 +202,11 @@ public class PhoneConstactView extends RelativeLayout {
 				String name = sortModel.getName();
 				if (name.indexOf(filterStr.toString()) != -1
 						|| characterParser.getSelling(name).startsWith(
-								filterStr.toString())) {
+								filterStr.toString())
+						|| characterParser.getFristLetterSpell(name).startsWith(
+								filterStr.toString())
+				) 
+				{
 					filterDateList.add(sortModel);
 				}
 			}

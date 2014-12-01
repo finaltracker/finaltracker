@@ -1,5 +1,6 @@
 package com.zdn.fragment;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -7,7 +8,10 @@ import com.zdn.AsyncTaskBase;
 import com.zdn.R;
 import com.zdn.sort.ClearEditText;
 import com.zdn.test.TestData;
-import com.zdn.adapter.ExpAdapter;
+import com.zdn.util.FileUtil;
+import com.zdn.util.ImgUtil;
+import com.zdn.util.ImgUtil.OnLoadBitmapListener;
+import com.zdn.adapter.FriendListAdapter;
 import com.zdn.bean.RecentChat;
 import com.zdn.view.IphoneTreeView;
 import com.zdn.view.LoadingView;
@@ -17,6 +21,7 @@ import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -32,6 +37,10 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import com.zdn.adapter.FriendListAdapter.teamData;
+import com.zdn.adapter.FriendListAdapter.memberData;
+import java.lang.ref.SoftReference;
+import java.util.HashMap;
 
 public class ConstactFragment extends Fragment {
 	private Context mContext;
@@ -40,7 +49,7 @@ public class ConstactFragment extends Fragment {
 	private PhoneConstactView mPhoneContract;
 	private ClearEditText mSearchView;
 	
-	private ExpAdapter mExpAdapter;
+	private FriendListAdapter mFriendListAdapter;
 	private RelativeLayout constacts;
 	private RelativeLayout mFriend;
 	private HashMap<String, List<RecentChat>> maps = new HashMap<String, List<RecentChat>>();
@@ -48,6 +57,7 @@ public class ConstactFragment extends Fragment {
 	private DrawerLayout mDrawerLayout;
 	private ActionBarDrawerToggle mDrawerToggle;
 	private View mFragmentContainerView;
+
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -73,8 +83,9 @@ public class ConstactFragment extends Fragment {
 				R.layout.fragment_constact_head_view, mIphoneTreeView, false));
 		mIphoneTreeView.setGroupIndicator(null);
 
-		mExpAdapter = new ExpAdapter(mContext, maps, mIphoneTreeView,null);
-		mIphoneTreeView.setAdapter(mExpAdapter);
+		mFriendListAdapter = new FriendListAdapter(mContext, maps, mIphoneTreeView,null);
+		updateAdapter();
+		mIphoneTreeView.setAdapter(mFriendListAdapter);
 
 		mSearchView.addTextChangedListener(new TextWatcher() {
 
@@ -241,4 +252,71 @@ public class ConstactFragment extends Fragment {
 		return getActivity().getActionBar();
 	}
 
+	//only for test
+	
+	public void updateAdapter()
+	{
+		List<teamData> updateTeams = new ArrayList<teamData>();
+		
+		String[] groups = { "我的好友", "家人", "123456", "S2S73", "S1S24",
+				"S1S5", "亲戚" };
+		String[][] children = {
+				{ "宋慧", "章泽", "宋茜", "韩孝", "景甜", "刘亦", "康", "邓紫" },
+				{ "宋慧", "章泽", "宋茜", "韩孝", "景甜", "刘亦", "康", "邓紫" },
+				{ "宋慧", "章泽", "宋茜", "韩孝", "景甜", "刘亦", "康", "邓紫" },
+				{ "宋慧", "章泽", "宋茜", "韩孝", "景甜", "刘亦", "康", "邓紫" },
+				{ "宋慧", "章泽", "宋茜", "韩孝", "景甜", "刘亦", "康", "邓紫" },
+				{ "宋慧", "章泽", "宋茜", "韩孝", "景甜", "刘亦", "康", "邓紫" },
+				{ "宋慧", "章泽", "宋茜", "韩孝", "景甜", "刘亦", "康", "邓紫" } };
+		String dir = FileUtil.getRecentChatPath();
+		String[][] childPath = {
+				{ dir + "songhuiqiao.jpg", dir + "zhangzetian.jpg",
+						dir + "songqian.jpg", dir + "hangxiaozhu.jpg",
+						dir + "jingtian.jpg", dir + "liuyifei.jpg",
+						dir + "kangyikun.jpg", dir + "dengziqi.jpg" },
+				{ dir + "songhuiqiao.jpg", dir + "zhangzetian.jpg",
+						dir + "songqian.jpg", dir + "hangxiaozhu.jpg",
+						dir + "jingtian.jpg", dir + "liuyifei.jpg",
+						dir + "kangyikun.jpg", dir + "dengziqi.jpg" },
+				{ dir + "songhuiqiao.jpg", dir + "zhangzetian.jpg",
+						dir + "songqian.jpg", dir + "hangxiaozhu.jpg",
+						dir + "jingtian.jpg", dir + "liuyifei.jpg",
+						dir + "kangyikun.jpg", dir + "dengziqi.jpg" },
+				{ dir + "songhuiqiao.jpg", dir + "zhangzetian.jpg",
+						dir + "songqian.jpg", dir + "hangxiaozhu.jpg",
+						dir + "jingtian.jpg", dir + "liuyifei.jpg",
+						dir + "kangyikun.jpg", dir + "dengziqi.jpg" },
+				{ dir + "songhuiqiao.jpg", dir + "zhangzetian.jpg",
+						dir + "songqian.jpg", dir + "hangxiaozhu.jpg",
+						dir + "jingtian.jpg", dir + "liuyifei.jpg",
+						dir + "kangyikun.jpg", dir + "dengziqi.jpg" },
+				{ dir + "songhuiqiao.jpg", dir + "zhangzetian.jpg",
+						dir + "songqian.jpg", dir + "hangxiaozhu.jpg",
+						dir + "jingtian.jpg", dir + "liuyifei.jpg",
+						dir + "kangyikun.jpg", dir + "dengziqi.jpg" },
+				{ dir + "songhuiqiao.jpg", dir + "zhangzetian.jpg",
+						dir + "songqian.jpg", dir + "hangxiaozhu.jpg",
+						dir + "jingtian.jpg", dir + "liuyifei.jpg",
+						dir + "kangyikun.jpg", dir + "dengziqi.jpg" }, };
+		
+		for( int i = 0 ; i < groups.length ; i++  )
+		{
+			teamData td =  mFriendListAdapter.new teamData();
+			td.teamName = groups[i];
+			td.member = new ArrayList<memberData>();
+			updateTeams.add(td);
+			for( int j = 0 ; j < children[i].length ; j++ )
+			{
+				memberData md = mFriendListAdapter.new memberData();
+				md.memberName = children[i][j];
+				
+				String path = childPath[i][j];				
+				md.picture = ImgUtil.getInstance().loadBitmapFromCache(path);
+
+				td.member.add( md );
+			}
+		}
+		mFriendListAdapter.updateListView( updateTeams );
+	}
+	
 }

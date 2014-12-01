@@ -1,9 +1,9 @@
-#Mon Nov 24 11:35:21 CST 2014
+#Mon Dec 01 10:54:50 CST 2014
 eclipse.preferences.version=1
 encoding//res/menu/main.xml=GBK
 encoding//src/com/logic/InternetComponent.java=UTF-8
 encoding//src/com/qq/test/TestData.java=UTF-8
-encoding//src/com/zdn/adapter/ExpAdapter.java=UTF-8
+encoding//src/com/zdn/adapter/FriendListAdapter.java=UTF-8
 encoding//src/com/zdn/fragment/ConstactFragment.java=UTF-8
 encoding//src/com/zdn/test/TestData.java=UTF-8
 encoding//src/com/zdn/util/ConstactUtil.java=UTF-8
