@@ -19,14 +19,14 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class QQconstactAdapter extends BaseAdapter {
+public class constactAdapter extends BaseAdapter {
 	protected static final String TAG = "NewsAdapter";
 	private Context mContext;
 	private List<RecentChat> lists;
 	private CustomListView mCustomListView;
 	private HashMap<String, SoftReference<Bitmap>> hashMaps = new HashMap<String, SoftReference<Bitmap>>();
 
-	public QQconstactAdapter(Context context, List<RecentChat> lists,
+	public constactAdapter(Context context, List<RecentChat> lists,
 			CustomListView customListView) {
 		this.mContext = context;
 		this.lists = lists;

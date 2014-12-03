@@ -25,7 +25,7 @@ public class MainControl extends HandlerThread {
 	MainActivity		mMainActivity;
 	InternetComponent 	mInternetCom = null ;
 	static public  MainControl me = null;
-	static String imsi = null;
+	public static String imsi = null;
 	
 	final public int   STATE_NULL	= 0;
 	final public int   STATE_WAIT_QUEUE_REGSIT_RESULT	= STATE_NULL + 1; //≤È—Ø «∑Ò◊Ê≤·¡À
