@@ -8,11 +8,11 @@ import java.util.Map;
 
 import com.zdn.AsyncTaskBase;
 import com.zdn.R;
+import com.zdn.adapter.PhoneConstactSortAdapter;
 import com.zdn.sort.CharacterParser;
 import com.zdn.sort.PinyinComparator;
 import com.zdn.sort.SideBar;
 import com.zdn.sort.SideBar.OnTouchingLetterChangedListener;
-import com.zdn.sort.SortAdapter;
 import com.zdn.sort.SortModel;
 import com.zdn.util.ConstactUtil;
 
@@ -36,7 +36,7 @@ public class PhoneConstactView extends RelativeLayout {
 	private ListView sortListView;
 	private SideBar sideBar;
 	private TextView dialog;
-	private SortAdapter adapter;
+	private PhoneConstactSortAdapter adapter;
 	private Map<String, String> callRecords;
 	private LoadingView mLoadingView;
 
@@ -143,7 +143,7 @@ public class PhoneConstactView extends RelativeLayout {
 
 				// 閺嶈宓乤-z鏉╂稖顢戦幒鎺戠碍濠ф劖鏆熼敓锟�				
 				Collections.sort(SourceDateList, pinyinComparator);
-				adapter = new SortAdapter(mContext, SourceDateList);
+				adapter = new PhoneConstactSortAdapter(mContext, SourceDateList);
 				sortListView.setAdapter(adapter);
 
 

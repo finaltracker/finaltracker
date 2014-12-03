@@ -7,7 +7,7 @@ import com.zdn.CommandParser.CommandE;
 import com.zdn.CommandParser.Property;
 import com.zdn.activity.MainActivity;
 import com.zdn.activity.MainControl;
-import com.zdn.common.EventDefine;
+import com.zdn.event.EventDefine;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -18,11 +18,11 @@ import android.util.Log;
 import cn.jpush.android.api.JPushInterface;
 
 /**
- * 自定义接收器
+ * 鑷畾涔夋帴鏀跺櫒
  * 
- * 如果不定义这�?Receiver，则�?
- * 1) 默认用户会打�?��界面
- * 2) 接收不到自定义消�?
+ * 濡傛灉涓嶅畾涔夎繖锟�Receiver锛屽垯锟�
+ * 1) 榛樿鐢ㄦ埛浼氭墦锟�锟斤拷鐣岄潰
+ * 2) 鎺ユ敹涓嶅埌鑷畾涔夋秷锟�
  */
 public class MyReceiver extends BroadcastReceiver {
 	private static final String TAG = "JPush";
@@ -34,22 +34,22 @@ public class MyReceiver extends BroadcastReceiver {
 		
         if (JPushInterface.ACTION_REGISTRATION_ID.equals(intent.getAction())) {
             String regId = bundle.getString(JPushInterface.EXTRA_REGISTRATION_ID);
-            Log.d(TAG, "[MyReceiver] 接收Registration Id : " + regId);
+            Log.d(TAG, "[MyReceiver] 鎺ユ敹Registration Id : " + regId);
             //send the Registration Id to your server...
                         
         } else if (JPushInterface.ACTION_MESSAGE_RECEIVED.equals(intent.getAction())) {
-        	Log.d(TAG, "[MyReceiver] 接收到推送下来的自定义消�? " + bundle.getString(JPushInterface.EXTRA_MESSAGE));
+        	Log.d(TAG, "[MyReceiver] 鎺ユ敹鍒版帹閫佷笅鏉ョ殑鑷畾涔夋秷锟� " + bundle.getString(JPushInterface.EXTRA_MESSAGE));
         	processCustomMessage(context, bundle);
         
         } else if (JPushInterface.ACTION_NOTIFICATION_RECEIVED.equals(intent.getAction())) {
-            Log.d(TAG, "[MyReceiver] 接收到推送下来的通知");
+            Log.d(TAG, "[MyReceiver] 鎺ユ敹鍒版帹閫佷笅鏉ョ殑閫氱煡");
             int notifactionId = bundle.getInt(JPushInterface.EXTRA_NOTIFICATION_ID);
-            Log.d(TAG, "[MyReceiver] 接收到推送下来的通知的ID: " + notifactionId);
+            Log.d(TAG, "[MyReceiver] 鎺ユ敹鍒版帹閫佷笅鏉ョ殑閫氱煡鐨処D: " + notifactionId);
         	
         } else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {
-            Log.d(TAG, "[MyReceiver] 用户点击打开了 NOTIFICATION ");
+            Log.d(TAG, "[MyReceiver] 鐢ㄦ埛鐐瑰嚮鎵撳紑浜�NOTIFICATION ");
             
-        	//打开自定义的Activity
+        	//鎵撳紑鑷畾涔夌殑Activity
         	Intent i = new Intent(context, TestActivity.class);
         	i.putExtras(bundle);
         	//i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -57,8 +57,8 @@ public class MyReceiver extends BroadcastReceiver {
         	context.startActivity(i);
         	
         } else if (JPushInterface.ACTION_RICHPUSH_CALLBACK.equals(intent.getAction())) {
-            Log.d(TAG, "[MyReceiver] 用户收到到RICH PUSH CALLBACK: " + bundle.getString(JPushInterface.EXTRA_EXTRA));
-            //在这里根JPushInterface.EXTRA_EXTRA 的内容处理代码，比如打开新的Activity�?打开�?��网页�?.
+            Log.d(TAG, "[MyReceiver] 鐢ㄦ埛鏀跺埌鍒癛ICH PUSH CALLBACK: " + bundle.getString(JPushInterface.EXTRA_EXTRA));
+            //鍦ㄨ繖閲屾牴JPushInterface.EXTRA_EXTRA 鐨勫唴瀹瑰鐞嗕唬鐮侊紝姣斿鎵撳紑鏂扮殑Activity锟�鎵撳紑锟�锟斤拷缃戦〉锟�.
         	
         } else if(JPushInterface.ACTION_CONNECTION_CHANGE.equals(intent.getAction())) {
         	boolean connected = intent.getBooleanExtra(JPushInterface.EXTRA_CONNECTION_CHANGE, false);
@@ -68,7 +68,7 @@ public class MyReceiver extends BroadcastReceiver {
         }
 	}
 
-	// 打印 intent extra 数据
+	// 鎵撳嵃 intent extra 鏁版嵁
 	private static String printBundle(Bundle bundle) {
 		StringBuilder sb = new StringBuilder();
 		for (String key : bundle.keySet()) {

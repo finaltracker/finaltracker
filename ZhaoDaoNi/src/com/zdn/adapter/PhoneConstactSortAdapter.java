@@ -1,8 +1,9 @@
-package com.zdn.sort;
+package com.zdn.adapter;
 
 import java.util.List;
 
 import com.zdn.R;
+import com.zdn.sort.SortModel;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,11 +13,11 @@ import android.widget.BaseAdapter;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
 
-public class SortAdapter extends BaseAdapter implements SectionIndexer{
+public class PhoneConstactSortAdapter extends BaseAdapter implements SectionIndexer{
 	private List<SortModel> list = null;
 	private Context mContext;
 	
-	public SortAdapter(Context mContext, List<SortModel> list) {
+	public PhoneConstactSortAdapter(Context mContext, List<SortModel> list) {
 		this.mContext = mContext;
 		this.list = list;
 	}

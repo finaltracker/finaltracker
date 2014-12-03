@@ -1,4 +1,4 @@
-package com.zdn.common;
+package com.zdn.event;
 
 public class EventDefine {
 	public static final int IS_ACCOUNT_QUEUE_REQ	= 1;

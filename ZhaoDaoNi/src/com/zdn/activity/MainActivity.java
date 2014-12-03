@@ -8,7 +8,7 @@ import com.qq.test.SDManager;
 import com.zdn.R;
 import com.zdn.CommandParser.CommandE;
 import com.zdn.CommandParser.Property;
-import com.zdn.common.EventDefine;
+import com.zdn.event.EventDefine;
 import com.zdn.fragment.ConstactFragment;
 import com.zdn.fragment.NavigationDrawerFragment;
 import com.zdn.jpush.ExampleUtil;

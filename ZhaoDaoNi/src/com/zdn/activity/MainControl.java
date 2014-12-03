@@ -10,7 +10,7 @@ import cn.jpush.android.api.TagAliasCallback;
 
 import com.zdn.CommandParser.CommandE;
 import com.zdn.CommandParser.Property;
-import com.zdn.common.EventDefine;
+import com.zdn.event.EventDefine;
 import com.zdn.jpush.ExampleUtil;
 import com.zdn.logic.InternetComponent;
 

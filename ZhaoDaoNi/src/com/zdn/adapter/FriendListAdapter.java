@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.zdn.R;
-import com.zdn.bean.RecentChat;
 import com.zdn.util.FileUtil;
 import com.zdn.util.ImgUtil;
 import com.zdn.util.SystemMethod;
@@ -31,7 +30,6 @@ public class FriendListAdapter extends BaseExpandableListAdapter implements
 
 	private static final String TAG = "ExpAdapter";
 	private Context mContext;
-	private HashMap<String, List<RecentChat>> maps;
 	private IphoneTreeView mIphoneTreeView;
 	private View mSearchView;
 	private HashMap<String, SoftReference<Bitmap>> hashMaps = new HashMap<String, SoftReference<Bitmap>>();
@@ -42,10 +40,10 @@ public class FriendListAdapter extends BaseExpandableListAdapter implements
 	private HashMap<Integer, Integer> groupStatusMap;
 	
 
-	public FriendListAdapter(Context context, HashMap<String, List<RecentChat>> maps,
+	public FriendListAdapter(Context context, 
 			IphoneTreeView mIphoneTreeView, View searchView) {
 		this.mContext = context;
-		this.maps = maps;
+
 		this.mIphoneTreeView = mIphoneTreeView;
 		groupStatusMap = new HashMap<Integer, Integer>();
 		dir = FileUtil.getRecentChatPath();

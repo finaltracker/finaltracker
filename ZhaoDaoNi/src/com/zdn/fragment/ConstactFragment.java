@@ -11,12 +11,10 @@ import com.adn.db.DBManager.MemberInfo;
 import com.zdn.AsyncTaskBase;
 import com.zdn.R;
 import com.zdn.sort.ClearEditText;
-import com.zdn.test.TestData;
 import com.zdn.util.FileUtil;
 import com.zdn.util.ImgUtil;
 import com.zdn.util.ImgUtil.OnLoadBitmapListener;
 import com.zdn.adapter.FriendListAdapter;
-import com.zdn.bean.RecentChat;
 import com.zdn.view.IphoneTreeView;
 import com.zdn.view.LoadingView;
 import com.zdn.view.PhoneConstactView;
@@ -56,8 +54,7 @@ public class ConstactFragment extends Fragment {
 	private FriendListAdapter mFriendListAdapter;
 	private RelativeLayout constacts;
 	private RelativeLayout mFriend;
-	private HashMap<String, List<RecentChat>> maps = new HashMap<String, List<RecentChat>>();
-
+	
 	private DrawerLayout mDrawerLayout;
 	private ActionBarDrawerToggle mDrawerToggle;
 	private View mFragmentContainerView;
@@ -89,7 +86,7 @@ public class ConstactFragment extends Fragment {
 				R.layout.fragment_constact_head_view, mIphoneTreeView, false));
 		mIphoneTreeView.setGroupIndicator(null);
 
-		mFriendListAdapter = new FriendListAdapter(mContext, maps, mIphoneTreeView,null);
+		mFriendListAdapter = new FriendListAdapter(mContext, mIphoneTreeView,null);
 		updateAdapter();
 		mIphoneTreeView.setAdapter(mFriendListAdapter);
 
@@ -153,9 +150,7 @@ public class ConstactFragment extends Fragment {
 		@Override
 		protected Integer doInBackground(Integer... params) {
 			int result = -1;
-			maps.put("我的同学", TestData.getRecentChats());
-			maps.put("我的朋友", TestData.getRecentChats());
-			maps.put("家人", TestData.getRecentChats());
+
 			result = 1;
 			return result;
 		}

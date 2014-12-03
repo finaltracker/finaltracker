@@ -7,8 +7,7 @@ import java.io.IOException;
 import com.zdn.R;
 import com.zdn.CommandParser.CommandE;
 import com.zdn.CommandParser.Property;
-import com.zdn.common.EventDefine;
-import com.zdn.logic.InternetComponent;
+import com.zdn.event.EventDefine;
 
 import android.app.Activity;
 import android.os.Bundle;

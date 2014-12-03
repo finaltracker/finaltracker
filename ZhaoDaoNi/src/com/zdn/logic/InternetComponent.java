@@ -4,7 +4,7 @@ import com.zdn.CommandParser.CommandE;
 import com.zdn.CommandParser.Property;
 import com.zdn.activity.MainControl;
 import com.zdn.channel.Http;
-import com.zdn.common.EventDefine;
+import com.zdn.event.EventDefine;
 
 import android.os.Handler;
 import android.os.Looper;
