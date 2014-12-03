@@ -10,9 +10,6 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.HashSet;
 
-import com.zdn.wifi.foregin.FileInfo;
-import com.zdn.wifi.foregin.GlobalConsts;
-import com.zdn.wifi.foregin.Settings;
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
@@ -60,20 +57,6 @@ public class FileUtil {
         return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
     }
 
-    // if path1 contains path2
-    public static boolean containsPath(String path1, String path2) {
-        String path = path2;
-        while (path != null) {
-            if (path.equalsIgnoreCase(path1))
-                return true;
-
-            if (path.equals(GlobalConsts.ROOT_PATH))
-                break;
-            path = new File(path).getParent();
-        }
-
-        return false;
-    }
 
     public static String makePath(String path1, String path2) {
         if (path1.endsWith(File.separator))
@@ -88,59 +71,6 @@ public class FileUtil {
 
     public static boolean isNormalFile(String fullName) {
         return !fullName.equals(ANDROID_SECURE);
-    }
-
-    public static FileInfo GetFileInfo(String filePath) {
-        File lFile = new File(filePath);
-        if (!lFile.exists())
-            return null;
-
-        FileInfo lFileInfo = new FileInfo();
-        lFileInfo.canRead = lFile.canRead();
-        lFileInfo.canWrite = lFile.canWrite();
-        lFileInfo.isHidden = lFile.isHidden();
-        lFileInfo.fileName = FileUtil.getNameFromFilepath(filePath);
-        lFileInfo.ModifiedDate = lFile.lastModified();
-        lFileInfo.IsDir = lFile.isDirectory();
-        lFileInfo.filePath = filePath;
-        lFileInfo.fileSize = lFile.length();
-        return lFileInfo;
-    }
-
-    public static FileInfo GetFileInfo(File f, FilenameFilter filter, boolean showHidden) {
-        FileInfo lFileInfo = new FileInfo();
-        String filePath = f.getPath();
-        File lFile = new File(filePath);
-        lFileInfo.canRead = lFile.canRead();
-        lFileInfo.canWrite = lFile.canWrite();
-        lFileInfo.isHidden = lFile.isHidden();
-        lFileInfo.fileName = f.getName();
-        lFileInfo.ModifiedDate = lFile.lastModified();
-        lFileInfo.IsDir = lFile.isDirectory();
-        lFileInfo.filePath = filePath;
-        if (lFileInfo.IsDir) {
-            int lCount = 0;
-            File[] files = lFile.listFiles(filter);
-
-            // null means we cannot access this dir
-            if (files == null) {
-                return null;
-            }
-
-            for (File child : files) {
-                if ((!child.isHidden() || showHidden)
-                        && FileUtil.isNormalFile(child.getAbsolutePath())) {
-                    lCount++;
-                }
-            }
-            lFileInfo.Count = lCount;
-
-        } else {
-
-            lFileInfo.fileSize = lFile.length();
-
-        }
-        return lFileInfo;
     }
 
     /*
@@ -262,29 +192,8 @@ public class FileUtil {
         "miren_browser/imagecaches"
     };
 
-    public static boolean shouldShowFile(String path) {
-        return shouldShowFile(new File(path));
-    }
 
-    public static boolean shouldShowFile(File file) {
-        boolean show = Settings.instance().getShowDotAndHiddenFiles();
-        if (show)
-            return true;
 
-        if (file.isHidden())
-            return false;
-
-        if (file.getName().startsWith("."))
-            return false;
-
-        String sdFolder = getSdDirectory();
-        for (String s : SysFileDirs) {
-            if (file.getPath().startsWith(makePath(sdFolder, s)))
-                return false;
-        }
-
-        return true;
-    }
 
    /* public static ArrayList<FavoriteItem> getDefaultFavorites(Context context) {
         ArrayList<FavoriteItem> list = new ArrayList<FavoriteItem>();
