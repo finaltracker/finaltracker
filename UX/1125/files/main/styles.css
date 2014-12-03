@@ -554,7 +554,7 @@
 }
 #u49 {
   position:absolute;
-  left:239px;
+  left:209px;
   top:5px;
   width:50px;
   height:35px;
@@ -576,7 +576,7 @@
 }
 #u51 {
   position:absolute;
-  left:296px;
+  left:261px;
   top:5px;
   width:50px;
   height:35px;
@@ -813,4 +813,26 @@
   top:0px;
   width:81px;
   white-space:nowrap;
+}
+#u73 {
+  position:absolute;
+  left:315px;
+  top:5px;
+  width:45px;
+  height:40px;
+}
+#u73_img {
+  position:absolute;
+  left:0px;
+  top:0px;
+  width:45px;
+  height:40px;
+}
+#u74 {
+  position:absolute;
+  left:2px;
+  top:12px;
+  width:41px;
+  visibility:hidden;
+  word-wrap:break-word;
 }
