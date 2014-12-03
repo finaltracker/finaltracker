@@ -2,8 +2,12 @@ package com.zdn.fragment;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
+import com.adn.db.DBManager;
+import com.adn.db.DBManager.MemberInfo;
 import com.zdn.AsyncTaskBase;
 import com.zdn.R;
 import com.zdn.sort.ClearEditText;
@@ -57,6 +61,7 @@ public class ConstactFragment extends Fragment {
 	private DrawerLayout mDrawerLayout;
 	private ActionBarDrawerToggle mDrawerToggle;
 	private View mFragmentContainerView;
+	private DBManager dbm;
 
 	
 	@Override
@@ -79,6 +84,7 @@ public class ConstactFragment extends Fragment {
 	}
 
 	private void init() {
+		dbm = new DBManager( mContext );
 		mIphoneTreeView.setHeaderView(LayoutInflater.from(mContext).inflate(
 				R.layout.fragment_constact_head_view, mIphoneTreeView, false));
 		mIphoneTreeView.setGroupIndicator(null);
@@ -252,12 +258,50 @@ public class ConstactFragment extends Fragment {
 		return getActivity().getActionBar();
 	}
 
+	private List<teamData> constructTeamInfoFromDb()
+	{
+		List<teamData> updateTeams = new ArrayList<teamData>();
+		
+		ArrayList<MemberInfo> miList = dbm.searchAllData();
+		
+		Map< String ,List<memberData> > mapTeamData = new HashMap< String ,List<memberData> >();
+		
+		for( int i = 0 ; i < miList.size() ; i++ )
+		{
+			MemberInfo dbMi = miList.get(i);
+			
+			List<memberData> memberDataList = null;
+			memberDataList = mapTeamData.get(dbMi.teamName);
+			if( null == memberDataList )
+			{
+				memberDataList = new ArrayList<memberData>();
+				mapTeamData.put(dbMi.teamName, memberDataList);
+			}
+			memberData md = mFriendListAdapter.new memberData();
+			md.memberName = dbMi.memberName;
+			md.pictureAddress = dbMi.pictureAddress;
+			md.picture = ImgUtil.getInstance().loadBitmapFromCache(md.pictureAddress);
+				
+			memberDataList.add(md);
+				
+		}
+		
+		for (String key : mapTeamData.keySet()) 
+		{
+
+			teamData td =  mFriendListAdapter.new teamData();
+			updateTeams.add(td);
+			td.teamName = key;
+			td.member = mapTeamData.get(key);
+		}
+		
+		
+		return updateTeams;
+	}
 	//only for test
 	
 	public void updateAdapter()
 	{
-		List<teamData> updateTeams = new ArrayList<teamData>();
-		
 		String[] groups = { "我的好友", "家人", "123456", "S2S73", "S1S24",
 				"S1S5", "亲戚" };
 		String[][] children = {
@@ -301,22 +345,19 @@ public class ConstactFragment extends Fragment {
 		
 		for( int i = 0 ; i < groups.length ; i++  )
 		{
-			teamData td =  mFriendListAdapter.new teamData();
-			td.teamName = groups[i];
-			td.member = new ArrayList<memberData>();
-			updateTeams.add(td);
+			
 			for( int j = 0 ; j < children[i].length ; j++ )
 			{
-				memberData md = mFriendListAdapter.new memberData();
-				md.memberName = children[i][j];
+				dbm.add( 0 , groups[i] ,children[i][j], childPath[i][j] );
 				
-				String path = childPath[i][j];				
-				md.picture = ImgUtil.getInstance().loadBitmapFromCache(path);
-
-				td.member.add( md );
 			}
+			
+			
 		}
-		mFriendListAdapter.updateListView( updateTeams );
+		
+		
+
+		mFriendListAdapter.updateListView( constructTeamInfoFromDb() );
 	}
 	
 }

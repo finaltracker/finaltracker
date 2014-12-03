@@ -236,6 +236,7 @@ public class FriendListAdapter extends BaseExpandableListAdapter implements
 		public memberData() {}
 		
 		public String 	memberName;
+		public String   pictureAddress;
 		public Bitmap	picture;
 	}
 	//define team struct
