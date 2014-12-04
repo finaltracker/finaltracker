@@ -35,7 +35,7 @@
 	        android:layout_width="match_parent"
 	        android:layout_height="match_parent"
 		/>
-	    <com.zdn.view.IphoneTreeView
+	    <com.zdn.view.FriendListView
 	        android:id="@+id/iphone_tree_view"
 	        android:layout_width="match_parent"
 	        android:layout_height="match_parent"

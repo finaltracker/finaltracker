@@ -12,19 +12,19 @@ import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnGroupClickListener;
 
-public class IphoneTreeView extends ExpandableListView implements
+public class FriendListView extends ExpandableListView implements
 		OnScrollListener, OnGroupClickListener {
-	public IphoneTreeView(Context context, AttributeSet attrs, int defStyle) {
+	public FriendListView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		registerListener();
 	}
 
-	public IphoneTreeView(Context context, AttributeSet attrs) {
+	public FriendListView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		registerListener();
 	}
 
-	public IphoneTreeView(Context context) {
+	public FriendListView(Context context) {
 		super(context);
 		registerListener();
 	}

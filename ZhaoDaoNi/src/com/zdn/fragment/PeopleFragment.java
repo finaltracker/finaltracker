@@ -15,17 +15,14 @@ import com.zdn.util.FileUtil;
 import com.zdn.util.ImgUtil;
 import com.zdn.util.ImgUtil.OnLoadBitmapListener;
 import com.zdn.adapter.FriendListAdapter;
-import com.zdn.view.IphoneTreeView;
+import com.zdn.view.FriendListView;
 import com.zdn.view.LoadingView;
 import com.zdn.view.PhoneConstactView;
 
 import android.app.ActionBar;
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -37,17 +34,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import com.zdn.adapter.FriendListAdapter.teamData;
 import com.zdn.adapter.FriendListAdapter.memberData;
-import java.lang.ref.SoftReference;
-import java.util.HashMap;
 
-public class ConstactFragment extends Fragment {
+
+public class PeopleFragment extends Fragment {
 	private Context mContext;
 	private View mBaseView;
-	private IphoneTreeView mIphoneTreeView;
+	private FriendListView mIphoneTreeView;
 	private PhoneConstactView mPhoneContract;
 	private ClearEditText mSearchView;
 	
@@ -73,7 +68,7 @@ public class ConstactFragment extends Fragment {
 
 	private void findView() {
 		mSearchView=(ClearEditText) mBaseView.findViewById( R.id.ll_constact_serach );
-		mIphoneTreeView = (IphoneTreeView) mBaseView.findViewById( R.id.iphone_tree_view );
+		mIphoneTreeView = (FriendListView) mBaseView.findViewById( R.id.iphone_tree_view );
 		mFriend =(RelativeLayout) mBaseView.findViewById( R.id.rl_friend);
 		constacts=(RelativeLayout) mBaseView.findViewById( R.id.rl_tonxunru );
 		mPhoneContract = (PhoneConstactView) mBaseView.findViewById( R.id.iphone_phoneContract );

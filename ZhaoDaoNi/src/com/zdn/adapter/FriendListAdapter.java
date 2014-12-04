@@ -1,53 +1,40 @@
 package com.zdn.adapter;
 
-import java.lang.ref.SoftReference;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.zdn.R;
-import com.zdn.util.FileUtil;
-import com.zdn.util.ImgUtil;
-import com.zdn.util.SystemMethod;
-import com.zdn.util.ImgUtil.OnLoadBitmapListener;
-import com.zdn.view.IphoneTreeView;
-import com.zdn.view.IphoneTreeView.IphoneTreeHeaderAdapter;
+import com.zdn.view.FriendListView;
+import com.zdn.view.FriendListView.IphoneTreeHeaderAdapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.ExpandableListView;
-import android.widget.ExpandableListView.OnGroupClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 public class FriendListAdapter extends BaseExpandableListAdapter implements
 		IphoneTreeHeaderAdapter {
 
-	private static final String TAG = "ExpAdapter";
+	private static final String TAG = "FriendListAdapter";
 	private Context mContext;
-	private IphoneTreeView mIphoneTreeView;
-	private View mSearchView;
-	private HashMap<String, SoftReference<Bitmap>> hashMaps = new HashMap<String, SoftReference<Bitmap>>();
-	private String dir = FileUtil.getRecentChatPath();
-
+	private FriendListView mIphoneTreeView;
+	
 	private List<teamData> teams = null;
 	// 伪数�?
 	private HashMap<Integer, Integer> groupStatusMap;
 	
 
 	public FriendListAdapter(Context context, 
-			IphoneTreeView mIphoneTreeView, View searchView) {
+			FriendListView mIphoneTreeView, View searchView) {
 		this.mContext = context;
 
 		this.mIphoneTreeView = mIphoneTreeView;
 		groupStatusMap = new HashMap<Integer, Integer>();
-		dir = FileUtil.getRecentChatPath();
-		mSearchView = searchView;
+
 	}
 
 	public Object getChild(int groupPosition, int childPosition) {

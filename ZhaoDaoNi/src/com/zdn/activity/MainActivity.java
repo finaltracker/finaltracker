@@ -9,7 +9,7 @@ import com.zdn.R;
 import com.zdn.CommandParser.CommandE;
 import com.zdn.CommandParser.Property;
 import com.zdn.event.EventDefine;
-import com.zdn.fragment.ConstactFragment;
+import com.zdn.fragment.PeopleFragment;
 import com.zdn.fragment.NavigationDrawerFragment;
 import com.zdn.jpush.ExampleUtil;
 
@@ -66,7 +66,7 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 	 * {@link #restoreActionBar()}.
 	 */
 	MainControl control ;
-	private ConstactFragment cf;
+	private PeopleFragment cf;
 	
 
 	private CharSequence mTitle;
@@ -86,7 +86,7 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 				.findFragmentById(R.id.navigation_drawer);
 		mTitle = getTitle();
 		me = this; // 
-		cf = new ConstactFragment();
+		cf = new PeopleFragment();
 		// Set up the drawer.
 		mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
 				(DrawerLayout) findViewById(R.id.drawer_layout));
