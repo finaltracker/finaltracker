@@ -9,6 +9,7 @@ import com.zdn.R;
 import com.zdn.CommandParser.CommandE;
 import com.zdn.CommandParser.Property;
 import com.zdn.event.EventDefine;
+import com.zdn.fragment.AddFriendfragment;
 import com.zdn.fragment.PeopleFragment;
 import com.zdn.fragment.NavigationDrawerFragment;
 import com.zdn.jpush.ExampleUtil;
@@ -67,6 +68,7 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 	 */
 	MainControl control ;
 	private PeopleFragment cf;
+	private AddFriendfragment aff;
 	
 
 	private CharSequence mTitle;
@@ -87,6 +89,7 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 		mTitle = getTitle();
 		me = this; // 
 		cf = new PeopleFragment();
+		aff = new AddFriendfragment();
 		// Set up the drawer.
 		mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
 				(DrawerLayout) findViewById(R.id.drawer_layout));
@@ -162,16 +165,24 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
+		
+		FragmentManager fragmentManager = this.getFragmentManager();
+		FragmentTransaction ft = fragmentManager.beginTransaction();
+		
 		int id = item.getItemId();
 		switch(id)
 		{
 		case R.id.action_settings:
 			
 			break;
+		case R.id.action_add:
+			
+			ft.replace(R.id.container, aff );
+			ft.addToBackStack(null);
+			ft.commit();
+			break;
 		case R.id.contact_friend:
 			
-			FragmentManager fragmentManager = this.getFragmentManager();
-			FragmentTransaction ft = fragmentManager.beginTransaction();
 			ft.replace(R.id.container, cf );
 			ft.addToBackStack(null);
 			ft.commit();

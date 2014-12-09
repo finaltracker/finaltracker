@@ -292,7 +292,7 @@ public class NavigationDrawerFragment extends Fragment {
 			return true;
 		}
 
-		if (item.getItemId() == R.id.action_example) {
+		if (item.getItemId() == R.id.action_add) {
 			//Toast.makeText(getActivity(), "Example action.", Toast.LENGTH_SHORT)
 			//		.show();
 			addA_Friend( "13636630387","it is me!");
