@@ -244,6 +244,8 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 		{
 			control.quit();
 		}
+		//fix warning message
+		unRegisterMessageReceiver();
 		
 		super.onDestroy();
 	}
@@ -340,6 +342,11 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 		filter.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY);
 		filter.addAction(MESSAGE_RECEIVED_ACTION);
 		registerReceiver(mMessageReceiver, filter);
+	}
+	
+	public void unRegisterMessageReceiver() {
+		if(mMessageReceiver != null)
+			unregisterReceiver(mMessageReceiver);
 	}
 
 	public class MessageReceiver extends BroadcastReceiver {

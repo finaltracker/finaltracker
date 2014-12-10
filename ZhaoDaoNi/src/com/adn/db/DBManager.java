@@ -97,7 +97,8 @@ public class DBManager {
      * Çå¿ÕÊý¾Ý
      */
     public void clearData() {
-        ExecSQL("DELETE * FROM info");
+        //ExecSQL("DELETE * FROM info");
+    	ExecSQL("drop info if exists");
         Log.i(TAG, "clear data");
     }
 
