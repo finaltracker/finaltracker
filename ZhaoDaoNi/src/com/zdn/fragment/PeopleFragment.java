@@ -77,8 +77,10 @@ public class PeopleFragment extends Fragment {
 
 	private void init() {
 		dbm = new DBManager( mContext );
+		/*
 		mIphoneTreeView.setHeaderView(LayoutInflater.from(mContext).inflate(
 				R.layout.fragment_constact_group, mIphoneTreeView, false));
+		*/
 		mIphoneTreeView.setGroupIndicator(null);//set icon in front of group
 
 		mFriendListAdapter = new FriendListAdapter(mContext, mIphoneTreeView,null);
@@ -332,7 +334,8 @@ public class PeopleFragment extends Fragment {
 						dir + "songqian.jpg", dir + "hangxiaozhu.jpg",
 						dir + "jingtian.jpg", dir + "liuyifei.jpg",
 						dir + "kangyikun.jpg", dir + "dengziqi.jpg" }, };
-		
+
+		dbm.clearData();
 		for( int i = 0 ; i < groups.length ; i++  )
 		{
 			
