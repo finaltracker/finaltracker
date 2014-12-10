@@ -11,6 +11,15 @@ import android.widget.AbsListView.OnScrollListener;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnGroupClickListener;
+/*
+	expandGroup (int groupPos) ;//在分组列表视图中 展开一组，
+	setSelectedGroup (int groupPosition) ;//设置选择指定的组。
+	setSelectedChild (int groupPosition, int childPosition, boolean shouldExpandGroup);//设置选择指定的子项。
+	getPackedPositionGroup (long packedPosition);//返回所选择的组
+	getPackedPositionForChild (int groupPosition, int childPosition) ;//返回所选择的子项
+	getPackedPositionType (long packedPosition);//返回所选择项的类型（Child,Group）
+	isGroupExpanded (int groupPosition);//判断此组是否展开
+*/
 
 public class FriendListView extends ExpandableListView implements
 		OnScrollListener, OnGroupClickListener {
