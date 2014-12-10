@@ -112,7 +112,7 @@ public class DBManager {
     }
 
     public ArrayList<MemberInfo> searchAllData() {
-        String sql = "SELECT * FROM info";
+        String sql = "SELECT  FROM info";
         return ExecSQLForMemberInfo(sql);
     }
 
