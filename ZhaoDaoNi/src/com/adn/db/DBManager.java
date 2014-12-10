@@ -97,7 +97,7 @@ public class DBManager {
      * Çå¿ÕÊý¾Ý
      */
     public void clearData() {
-        ExecSQL("DELETE * FROM info");
+        ExecSQL("DELETE FROM info");
         Log.i(TAG, "clear data");
     }
 
@@ -112,7 +112,7 @@ public class DBManager {
     }
 
     public ArrayList<MemberInfo> searchAllData() {
-        String sql = "SELECT  FROM info";
+        String sql = "SELECT * FROM info";
         return ExecSQLForMemberInfo(sql);
     }
 
