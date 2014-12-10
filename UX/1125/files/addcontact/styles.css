@@ -875,3 +875,12 @@
   color:#000000;
   text-align:left;
 }
+#u74 {
+  position:absolute;
+  left:0px;
+  top:181px;
+  width:360px;
+  height:64px;
+  overflow:hidden;
+  background-image:url('../../resources/images/transparent.gif');
+}
