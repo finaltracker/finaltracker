@@ -4,19 +4,114 @@
     android:layout_height="match_parent"
     android:orientation="horizontal" >
 
-    <EditText
-        android:id="@+id/editText1"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="10" >
+        android:orientation="vertical" >
 
-        <requestFocus />
-    </EditText>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal" >
 
-    <Button
-        android:id="@+id/button1"
-        android:layout_width="wrap_content"
+            <EditText
+                android:id="@+id/editText1"
+                android:layout_width="wrap_content"
+                android:layout_height="40.0dip"
+                android:layout_marginTop="3.0dip"
+                android:background="@drawable/edittext_bg_selector"
+                android:hint="I love you"
+                android:singleLine="true"
+                android:layout_weight="3"
+                android:textColorHint="@color/hintColor"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/button1"
+                android:layout_width="wrap_content"
+                android:layout_marginTop="3.0dip"
+                android:layout_height="50.0dip"
+                android:layout_weight="1"
+                android:text="search" />
+        </LinearLayout>
+        
+        <ImageView
+        android:id="@+id/line"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Search" />
+
+        android:layout_marginLeft="0.0dip"
+        android:src="@drawable/yellow_line"
+        android:contentDescription="@string/app_name" 
+        android:scaleType="fitXY"/>
+        
+		<include android:id="@+id/add_friend_detail_add_contract" 
+		    layout="@layout/add_friend_detail_item"/> 
+		
+		<ImageView
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_marginLeft="0.0dip"
+        android:src="@drawable/yellow_line"
+        android:contentDescription="@string/app_name" 
+        android:scaleType="fitXY"/>
+        
+		<include android:id="@+id/add_friend_detail_add_webchat" 
+		    layout="@layout/add_friend_detail_item"/> 
+		
+		<ImageView
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_marginLeft="0.0dip"
+        android:src="@drawable/yellow_line"
+        android:contentDescription="@string/app_name" 
+        android:scaleType="fitXY"/>
+        
+		<include android:id="@+id/add_friend_detail_add_qq" 
+		    layout="@layout/add_friend_detail_item"/> 
+		
+		<ImageView
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_marginLeft="0.0dip"
+        android:src="@drawable/yellow_line"
+        android:contentDescription="@string/app_name" 
+        android:scaleType="fitXY"/>
+		
+		<TextView
+        android:id="@+id/add_friend_detail_create"
+        android:layout_width="fill_parent"
+        android:layout_height="25.0dip"
+        android:layout_marginLeft="10.0dip"
+        android:layout_marginRight="18.0dip"
+        android:ellipsize="end"
+        android:gravity="left|center"
+        android:includeFontPadding="false"
+        android:padding="0.0dip"
+        android:singleLine="true"
+        android:text="创建"
+        android:textSize="16.0sp" />
+		
+		<ImageView
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_marginLeft="0.0dip"
+        android:src="@drawable/yellow_line"
+        android:contentDescription="@string/app_name" 
+        android:scaleType="fitXY"/>
+        
+		<include android:id="@+id/create_circle" 
+		    layout="@layout/add_friend_detail_item"/> 
+        
+    </LinearLayout>
 
 </LinearLayout>

@@ -78,9 +78,7 @@ public class PeopleFragment extends Fragment {
 	private void init() {
 		dbm = new DBManager( mContext );
 		
-		mIphoneTreeView.setHeaderView(LayoutInflater.from(mContext).inflate(
-				R.layout.fragment_constact_group, mIphoneTreeView, false));
-		
+
 		mIphoneTreeView.setGroupIndicator(null);//set icon in front of group
 
 		mFriendListAdapter = new FriendListAdapter(mContext, mIphoneTreeView,null);

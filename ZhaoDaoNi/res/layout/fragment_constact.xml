@@ -39,7 +39,6 @@
 	        android:id="@+id/iphone_tree_view"
 	        android:layout_width="match_parent"
 	        android:layout_height="match_parent"
-	
 	        android:background="@android:color/transparent"
 	        android:cacheColorHint="@android:color/transparent"
 	        android:divider="@color/gray"

@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.Button;
+import android.widget.Toast;
 
 public class AddFriendfragment extends Fragment {
 	private View mView;
@@ -99,11 +100,43 @@ public class AddFriendfragment extends Fragment {
                 R.layout.add_friend_detail, null);
         //initVideoView(VideoView);
         allViews.add(VideoView);
-
-        View AppView = LayoutInflater.from(context).inflate(
-                R.layout.add_friend_detail, null);
+        
+        View detailItemView =  VideoView.findViewById(R.id.add_friend_detail_add_contract );
+        detailItemView.setOnClickListener(new View.OnClickListener() {
+        	public void onClick(View v) {
+        		Toast.makeText( getActivity(), "添加通信录好友",
+        			     Toast.LENGTH_SHORT).show();
+        	}
+        	});
+        
+        detailItemView =  VideoView.findViewById(R.id.add_friend_detail_add_webchat );
+        detailItemView.setOnClickListener(new View.OnClickListener() {
+        	public void onClick(View v) {
+        		Toast.makeText( getActivity(), "添加微信好友",
+        			     Toast.LENGTH_SHORT).show();
+        	}
+        	});
+        
+        detailItemView =  VideoView.findViewById(R.id.add_friend_detail_add_qq );
+        detailItemView.setOnClickListener(new View.OnClickListener() {
+        	public void onClick(View v) {
+        		Toast.makeText( getActivity(), "添加QQ好友",
+        			     Toast.LENGTH_SHORT).show();
+        	}
+        	});
+        
+        detailItemView =  VideoView.findViewById(R.id.create_circle );
+        detailItemView.setOnClickListener(new View.OnClickListener() {
+        	public void onClick(View v) {
+        		Toast.makeText( getActivity(), "创建圈子",
+        			     Toast.LENGTH_SHORT).show();
+        	}
+        	});
+        
+        //View AppView = LayoutInflater.from(context).inflate(
+        //        R.layout.add_friend_detail, null);
         //initAppView(AppView);
-        allViews.add(AppView);
+       // allViews.add(AppView);
 
        
 
@@ -149,10 +182,24 @@ public class AddFriendfragment extends Fragment {
 									.setBackgroundResource(allBottomsImgsSelecting[temp]);
 						}
 						if (event.getAction() == MotionEvent.ACTION_UP) {
-							bottomBtns[temp]
-									.setBackgroundResource(allBottomsImgsSelected[temp]);
 							pageNo = temp;
-							pager.setCurrentItem(temp, true);
+							for( int i = 0 ; i < 2 ; i++ )
+							{
+								if( i == pageNo)
+								{
+									bottomBtns[i]
+												.setBackgroundResource(allBottomsImgsSelected[i]);
+										
+								}
+								else
+								{
+									bottomBtns[i]
+												.setBackgroundResource(allBottomsImgs[i]);
+										
+								}
+							}
+							//Do not real do viewpage change , cause: here only on view 
+							//pager.setCurrentItem(temp, true); 
 						}
 					}
 					return false;

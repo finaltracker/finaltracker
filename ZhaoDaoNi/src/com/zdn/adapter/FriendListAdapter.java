@@ -5,8 +5,6 @@ import java.util.List;
 
 import com.zdn.R;
 import com.zdn.view.FriendListView;
-import com.zdn.view.FriendListView.IphoneTreeHeaderAdapter;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
@@ -16,24 +14,20 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class FriendListAdapter extends BaseExpandableListAdapter implements
-		IphoneTreeHeaderAdapter {
+public class FriendListAdapter extends BaseExpandableListAdapter 
+		 {
 
 	private static final String TAG = "FriendListAdapter";
 	private Context mContext;
-	private FriendListView mIphoneTreeView;
 	
 	private List<teamData> teams = null;
-	// 伪数�?
-	private HashMap<Integer, Integer> groupStatusMap;
+
 	
 
 	public FriendListAdapter(Context context, 
 			FriendListView mIphoneTreeView, View searchView) {
 		this.mContext = context;
 
-		this.mIphoneTreeView = mIphoneTreeView;
-		groupStatusMap = new HashMap<Integer, Integer>();
 
 	}
 
@@ -158,46 +152,6 @@ public class FriendListAdapter extends BaseExpandableListAdapter implements
 		return convertView;
 	}
 
-	@Override
-	
-	public int getTreeHeaderState(int groupPosition, int childPosition) {
-		final int childCount = getChildrenCount(groupPosition);
-		if (childPosition == childCount - 1) {
-			//mSearchView.setVisibility(View.GONE);
-			return PINNED_HEADER_PUSHED_UP;
-		} else if (childPosition == -1
-				&& !mIphoneTreeView.isGroupExpanded(groupPosition)) {
-			//mSearchView.setVisibility(View.VISIBLE);
-			return PINNED_HEADER_GONE;
-		} else {
-			//mSearchView.setVisibility(View.GONE);
-			return PINNED_HEADER_VISIBLE;
-		}
-	}
-
-	@Override
-	public void configureTreeHeader(View header, int groupPosition,
-			int childPosition, int alpha) {
-		((TextView) header.findViewById(R.id.group_name))
-				.setText(((teamData)getGroup(groupPosition)).teamName);
-		((TextView) header.findViewById(R.id.online_count))
-				.setText(getChildrenCount(groupPosition) + "/"
-						+ getChildrenCount(groupPosition));
-	}
-
-	@Override
-	public void onHeadViewClick(int groupPosition, int status) {
-		groupStatusMap.put(groupPosition, status);
-	}
-
-	@Override
-	public int getHeadViewClickStatus(int groupPosition) {
-		if (groupStatusMap.containsKey(groupPosition)) {
-			return groupStatusMap.get(groupPosition);
-		} else {
-			return 0;
-		}
-	}
 	public void updateListView( List<teamData> updateTeams )
 	{
 		this.teams = updateTeams;
