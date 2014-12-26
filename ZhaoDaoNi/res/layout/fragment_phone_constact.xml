@@ -18,6 +18,7 @@
                 android:layout_height="fill_parent"
                 android:layout_gravity="center" />
 
+            <!-- visible at center of screen when press the letter a ,b , c-->
             <TextView
                 android:id="@+id/dialog"
                 android:layout_width="80.0dip"
@@ -29,6 +30,7 @@
                 android:textSize="30.0dip"
                 android:visibility="invisible" />
 
+            <!-- sideBar:  the right letter : for example a ,b ,c d ...-->
             <com.zdn.sort.SideBar
                 android:id="@+id/sidrbar"
                 android:layout_width="30.0dip"

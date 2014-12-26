@@ -104,8 +104,8 @@ public class AddFriendfragment extends Fragment {
         View detailItemView =  VideoView.findViewById(R.id.add_friend_detail_add_contract );
         detailItemView.setOnClickListener(new View.OnClickListener() {
         	public void onClick(View v) {
-        		Toast.makeText( getActivity(), "添加通信录好友",
-        			     Toast.LENGTH_SHORT).show();
+
+        		startActivity( new Intent("com.zdn.activity.ContactActivity.ACTION") );
         	}
         	});
         
