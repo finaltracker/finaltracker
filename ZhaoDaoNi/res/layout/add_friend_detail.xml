@@ -36,81 +36,51 @@
                 android:text="search" />
         </LinearLayout>
         
+       
         <ImageView
-        android:id="@+id/line"
+        android:id="@+id/add_friend_detail_add_contract"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
         android:layout_marginLeft="0.0dip"
-        android:src="@drawable/yellow_line"
-        android:contentDescription="@string/app_name" 
-        android:scaleType="fitXY"/>
+        android:contentDescription="@string/app_name"
+        android:scaleType="fitXY"
+        android:src="@drawable/right_arrow" />
         
-		<include android:id="@+id/add_friend_detail_add_contract" 
-		    layout="@layout/add_friend_detail_item"/> 
-		
-		<ImageView
-        android:id="@+id/line"
+        <ImageView
+        android:id="@+id/add_friend_detail_add_webchat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
         android:layout_marginLeft="0.0dip"
-        android:src="@drawable/yellow_line"
-        android:contentDescription="@string/app_name" 
-        android:scaleType="fitXY"/>
+        android:contentDescription="@string/app_name"
+        android:scaleType="fitXY"
+        android:src="@drawable/right_arrow" />
         
-		<include android:id="@+id/add_friend_detail_add_webchat" 
-		    layout="@layout/add_friend_detail_item"/> 
-		
-		<ImageView
-        android:id="@+id/line"
+        <ImageView
+        android:id="@+id/add_friend_detail_add_qq"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
         android:layout_marginLeft="0.0dip"
-        android:src="@drawable/yellow_line"
-        android:contentDescription="@string/app_name" 
-        android:scaleType="fitXY"/>
+        android:contentDescription="@string/app_name"
+        android:scaleType="fitXY"
+        android:src="@drawable/right_arrow" />
         
-		<include android:id="@+id/add_friend_detail_add_qq" 
-		    layout="@layout/add_friend_detail_item"/> 
-		
-		<ImageView
-        android:id="@+id/line"
+        <ImageView
+        android:id="@+id/add_friend_detail_expand"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
         android:layout_marginLeft="0.0dip"
-        android:src="@drawable/yellow_line"
-        android:contentDescription="@string/app_name" 
-        android:scaleType="fitXY"/>
-		
-		<TextView
-        android:id="@+id/add_friend_detail_create"
-        android:layout_width="fill_parent"
-        android:layout_height="25.0dip"
-        android:layout_marginLeft="10.0dip"
-        android:layout_marginRight="18.0dip"
-        android:ellipsize="end"
-        android:gravity="left|center"
-        android:includeFontPadding="false"
-        android:padding="0.0dip"
-        android:singleLine="true"
-        android:text="创建"
-        android:textSize="16.0sp" />
-		
-		<ImageView
-        android:id="@+id/line"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-
-        android:layout_marginLeft="0.0dip"
-        android:src="@drawable/yellow_line"
-        android:contentDescription="@string/app_name" 
-        android:scaleType="fitXY"/>
+        android:contentDescription="@string/app_name"
+        android:scaleType="fitXY"
+        android:src="@drawable/right_arrow" />
         
-		<include android:id="@+id/create_circle" 
-		    layout="@layout/add_friend_detail_item"/> 
+        <ImageView
+        android:id="@+id/create_circle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0.0dip"
+        android:contentDescription="@string/app_name"
+        android:scaleType="fitXY"
+        android:src="@drawable/right_arrow" />
         
     </LinearLayout>
 
