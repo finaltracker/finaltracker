@@ -13,7 +13,7 @@
         android:paddingLeft="5dip"
         android:paddingTop="5dip"
         android:paddingBottom="5dip"/>
-    <LinearLayout 
+    <RelativeLayout 
         android:id="@+id/ll_constact"
         android:layout_height="60dp"
         android:layout_width="match_parent"
@@ -21,20 +21,45 @@
         android:gravity="center_vertical"
         android:background="@color/whites">
         <ImageView
-            android:id="@+id/icon" 
-            android:layout_height="40dp"
-            android:layout_width="40dp"
+            android:id="@+id/PersonIcon" 
+            android:layout_height="50dp"
+            android:layout_width="50dp"
             android:src="@drawable/h001"
             android:scaleType="fitXY"
+            android:layout_alignParentLeft="true"
+        	android:layout_centerVertical="true"
             android:contentDescription="@string/app_name"
             android:layout_marginLeft="5dp"/>
         <TextView 
             android:id="@+id/title"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="10.0dip"
+	        android:layout_marginRight="18.0dip"
+	        android:layout_toRightOf="@id/PersonIcon"
             android:textColor="#336598"
-            android:layout_marginLeft="10dp"
             android:textSize="18sp"/>
-    </LinearLayout>
+        
+        <TextView 
+            android:id="@+id/phoneNumber"
+            android:layout_height="25dp"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="10.0dip"
+	        android:layout_marginRight="18.0dip"
+	        android:layout_toRightOf="@id/PersonIcon"
+	        android:layout_below  = "@id/title"
+            android:textColor="#336598"
+            android:textSize="16sp"/>
+        <ImageView
+            android:id="@+id/AddFriend" 
+            android:layout_height="40dp"
+            android:layout_width="40dp"
+            android:src="@drawable/add"
+            android:scaleType="fitXY"
+            android:layout_alignParentRight="true"
+        	android:layout_centerVertical="true"
+            android:contentDescription="@string/app_name"
+            android:layout_marginRight="25dp"/>
+    </RelativeLayout>
 
 </LinearLayout>

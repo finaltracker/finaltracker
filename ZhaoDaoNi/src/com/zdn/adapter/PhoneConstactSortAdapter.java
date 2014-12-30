@@ -10,8 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class PhoneConstactSortAdapter extends BaseAdapter implements SectionIndexer{
 	private List<SortModel> list = null;
@@ -51,6 +53,17 @@ public class PhoneConstactSortAdapter extends BaseAdapter implements SectionInde
 			view = LayoutInflater.from(mContext).inflate(R.layout.fragment_phone_constacts_item, null);
 			viewHolder.tvTitle = (TextView) view.findViewById(R.id.title);
 			viewHolder.tvLetter = (TextView) view.findViewById(R.id.catalog);
+			viewHolder.majia = (ImageView) view.findViewById(R.id.PersonIcon);
+			viewHolder.phoneNumner = (TextView) view.findViewById(R.id.phoneNumber);
+			viewHolder.add = (ImageView) view.findViewById(R.id.AddFriend );
+			
+			viewHolder.add.setOnClickListener(new View.OnClickListener() {
+	        	public void onClick(View v) {
+
+	        		Toast.makeText( v.getContext(), "don't touch me!",
+	        			     Toast.LENGTH_SHORT).show();
+	        	}
+	        	});
 			view.setTag(viewHolder);
 		} else {
 			viewHolder = (ViewHolder) view.getTag();
@@ -68,6 +81,8 @@ public class PhoneConstactSortAdapter extends BaseAdapter implements SectionInde
 		}
 	
 		viewHolder.tvTitle.setText(this.list.get(position).getName());
+		viewHolder.phoneNumner.setText(this.list.get(position).GetPhoneNumber() );
+		//show majia 
 		
 		return view;
 
@@ -77,7 +92,11 @@ public class PhoneConstactSortAdapter extends BaseAdapter implements SectionInde
 
 	final static class ViewHolder {
 		TextView tvLetter;
+		ImageView majia;
 		TextView tvTitle;
+		TextView phoneNumner;
+		ImageView add;
+		
 	}
 
 

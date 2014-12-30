@@ -68,8 +68,8 @@ public class AddFriendfragment extends Fragment {
 		pager.setOnPageChangeListener(new OnPageChangeListener() {
 			@Override
 			public void onPageSelected(int arg0) {
-				// 调整头部的文�?
-				// 调整底部按钮的图片显�?
+				// 
+				//
 				pageNo = arg0;
 				for (int i = 0; i < bottomBtns.length; i++) {
 					if (i == arg0) {

@@ -129,17 +129,8 @@ public class PhoneConstactView extends RelativeLayout {
 		protected void onPostExecute(Integer result) {
 			super.onPostExecute(result);
 			if (result == 1) {
-				//get all record's name 
-				List<String> constact = new ArrayList<String>();
-				for (Iterator<String> keys = callRecords.keySet().iterator(); keys
-						.hasNext();) {
-					String key = keys.next();
-					constact.add(key);
-				}
-				String[] names = new String[] {};
-				names = constact.toArray(names);
 				
-				SourceDateList = filledData(names);
+				SourceDateList = filledData( callRecords );
 
 				// 閺嶈宓乤-z鏉╂稖顢戦幒鎺戠碍濠ф劖鏆熼敓锟�				
 				Collections.sort(SourceDateList, pinyinComparator);
@@ -163,14 +154,19 @@ public class PhoneConstactView extends RelativeLayout {
 	 * @param date
 	 * @return
 	 */
-	private List<SortModel> filledData(String[] date) {
+	private List<SortModel> filledData(Map<String, String> date) {
 		List<SortModel> mSortList = new ArrayList<SortModel>();
 
-		for (int i = 0; i < date.length; i++) {
+		for (Iterator<String> keys = date.keySet().iterator(); keys
+		.hasNext();) {
+		String key = keys.next();
+		
+		//for (int i = 0; i < date.length; i++) {
 			SortModel sortModel = new SortModel();
-			sortModel.setName(date[i]);
+			sortModel.setName(key);
+			sortModel.setPhoneNumber(date.get(key)  );
 			// 濮瑰鐡ф潪顒佸床閹存劖瀚鹃敓锟�			
-			String pinyin = characterParser.getSelling(date[i]);
+			String pinyin = characterParser.getSelling(key);
 			String sortString = pinyin.substring(0, 1).toUpperCase();
 
 			// 濮濓絽鍨悰銊ㄦ彧瀵骏绱濋崚銈嗘焽妫ｆ牕鐡уВ宥嗘Ц閸氾附妲搁懟杈ㄦ瀮鐎涙鐦�
