@@ -43,16 +43,12 @@ public class PeopleFragment extends Fragment {
 	private Context mContext;
 	private View mBaseView;
 	private FriendListView mIphoneTreeView;
-	private PhoneConstactView mPhoneContract;
 	private ClearEditText mSearchView;
 	
 	private FriendListAdapter mFriendListAdapter;
-	private RelativeLayout constacts;
-	private RelativeLayout mFriend;
 	
 	private DrawerLayout mDrawerLayout;
 	private ActionBarDrawerToggle mDrawerToggle;
-	private View mFragmentContainerView;
 	private DBManager dbm;
 
 	
@@ -69,9 +65,6 @@ public class PeopleFragment extends Fragment {
 	private void findView() {
 		mSearchView=(ClearEditText) mBaseView.findViewById( R.id.ll_constact_serach );
 		mIphoneTreeView = (FriendListView) mBaseView.findViewById( R.id.iphone_tree_view );
-		mFriend =(RelativeLayout) mBaseView.findViewById( R.id.rl_friend);
-		constacts=(RelativeLayout) mBaseView.findViewById( R.id.rl_tonxunru );
-		mPhoneContract = (PhoneConstactView) mBaseView.findViewById( R.id.iphone_phoneContract );
 		
 	}
 
@@ -91,11 +84,8 @@ public class PeopleFragment extends Fragment {
 					public void onTextChanged(CharSequence s, int start,
 							int before, int count) {
 						// 瑜版捁绶崗銉︻攱闁插矂娼伴惃鍕舵嫹?娑撹櫣鈹栭敍灞炬纯閺傞璐熼崢鐔告降閻ㄥ嫬鍨悰顭掔礉閸氾箑鍨稉楦跨箖濠娿倖鏆熼幑顔煎灙閿燂拷
-						if( View.VISIBLE == mPhoneContract.getVisibility())
-						{
-							mPhoneContract.filterData(s.toString());
-						}
-						else if( View.VISIBLE == mIphoneTreeView.getVisibility() )
+						
+						if( View.VISIBLE == mIphoneTreeView.getVisibility() )
 						{
 							//mIphoneTreeView.filterData(s.toString());
 						}
@@ -114,25 +104,6 @@ public class PeopleFragment extends Fragment {
 						
 					}
 				});
-		
-		mFriend.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				mIphoneTreeView.setVisibility(View.VISIBLE);
-				mPhoneContract.setVisibility(View.GONE);
-			}
-			
-			});
-		constacts.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				mIphoneTreeView.setVisibility(View.GONE);
-				mPhoneContract.setVisibility(View.VISIBLE);
-				
-			}
-		});
 		
 		new AsyncTaskLoading(null).execute(0);
 	}
@@ -175,7 +146,6 @@ public class PeopleFragment extends Fragment {
 	 */
 	public void setUp(int fragmentId, DrawerLayout drawerLayout) {
 		FragmentActivity fa = (FragmentActivity) getActivity();
-		mFragmentContainerView = getActivity().findViewById(fragmentId);
 		mDrawerLayout = drawerLayout;
 
 		// set a custom shadow that overlays the main content when the drawer
