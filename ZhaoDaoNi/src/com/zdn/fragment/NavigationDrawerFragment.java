@@ -273,19 +273,7 @@ public class NavigationDrawerFragment extends Fragment {
 		super.onCreateOptionsMenu(menu, inflater);
 	}
 
-	/* add a friend */
-	private void addA_Friend( String phoneNumner ,String attachMentContext )
-	{
-		CommandE e = new  CommandE("ADD_A_FRIEND");
-		e.AddAProperty(new Property("EventDefine",Integer.toString( EventDefine.ADD_A_FRIEND ) ) );
-		e.AddAProperty(new Property("URL" ,"" ) );
-		e.AddAProperty(new Property("imsi",MainControl.imsi ) );
-		e.AddAProperty(new Property("target_user",phoneNumner ) );
-		e.AddAProperty(new Property("attament",attachMentContext ) );
-		Message m = MainControl.getInstance().handler.obtainMessage();
-		m.obj = e;
-		MainControl.getInstance().handler.sendMessage(m);
-	}
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (mDrawerToggle.onOptionsItemSelected(item)) {
@@ -293,9 +281,9 @@ public class NavigationDrawerFragment extends Fragment {
 		}
 
 		if (item.getItemId() == R.id.action_add) {
-			//Toast.makeText(getActivity(), "Example action.", Toast.LENGTH_SHORT)
-			//		.show();
-			addA_Friend( "13636630387","it is me!");
+			Toast.makeText(getActivity(), "Example action.", Toast.LENGTH_SHORT)
+					.show();
+			
 			
 			return true;
 		}

@@ -44,12 +44,13 @@ public class PeopleFragment extends Fragment {
 	private View mBaseView;
 	private FriendListView mIphoneTreeView;
 	private ClearEditText mSearchView;
-	
+	private  String const_teamName_myFriend = "我的好友";
 	private FriendListAdapter mFriendListAdapter;
 	
 	private DrawerLayout mDrawerLayout;
 	private ActionBarDrawerToggle mDrawerToggle;
 	private DBManager dbm;
+	List<teamData>   allFriend = null;
 
 	
 	@Override
@@ -259,6 +260,62 @@ public class PeopleFragment extends Fragment {
 		return updateTeams;
 	}
 	//only for test
+
+	public void addA_FriendRsp( String teamName ,String name , String majiaUrl )
+	{
+		int i = 0 ;
+		
+		teamData const_my_friend = null;
+		
+		for( i = 0 ; i < allFriend.size(); i++ )
+		{
+			if( allFriend.get(i).teamName.equals(teamName) )
+			{
+				memberData md = mFriendListAdapter.new memberData();
+				md.memberName = name;
+				md.pictureAddress = majiaUrl;
+				md.picture = ImgUtil.getInstance().loadBitmapFromCache(md.pictureAddress);
+					
+			
+				allFriend.get(i).member.add( md );
+				break;
+			}
+			else if(allFriend.get(i).teamName.equals( const_teamName_myFriend ) )
+			{
+				const_my_friend = allFriend.get(i);
+			}
+			
+		}
+		
+		if( i == allFriend.size() )
+		{	//not find 
+			
+			teamData team = null;
+			
+			if( const_my_friend != null )
+			{ // 
+				team = const_my_friend;
+			}
+			else
+			{
+				team =  mFriendListAdapter.new teamData();
+				team.teamName = const_teamName_myFriend;
+				allFriend.add( team );
+			}
+			
+			memberData md = null;
+			md = mFriendListAdapter.new memberData();
+			md.memberName = name;
+			md.pictureAddress = majiaUrl;
+			md.picture = ImgUtil.getInstance().loadBitmapFromCache(md.pictureAddress);
+				
+		
+			team.member.add( md );
+		}
+		
+		dbm.add( 0 , teamName ,name, majiaUrl );
+		mFriendListAdapter.updateListView( allFriend );
+	}
 	
 	public void updateAdapter()
 	{
@@ -316,9 +373,9 @@ public class PeopleFragment extends Fragment {
 			
 		}
 		
-		
+		allFriend =  constructTeamInfoFromDb();
 
-		mFriendListAdapter.updateListView( constructTeamInfoFromDb() );
+		mFriendListAdapter.updateListView( allFriend );
 	}
 	
 }

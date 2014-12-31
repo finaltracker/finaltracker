@@ -253,6 +253,14 @@ public class MainControl extends HandlerThread {
 				{
 					Log.d("MainControl" , "add a friend £¬server accept!" );
 					//request OK , only need wait the friend feedback
+					Message m = MainActivity.getInstance().handler.obtainMessage();
+					m.what = MainActivity.EVENT_UI_ADD_A_FRIEND_SUCCESS;
+					m.arg1 = queueRsp;
+					//need add some response infor into Message
+					m.obj = null;
+		
+					MainActivity.getInstance().handler.sendMessage( m );
+					
 				}
 				else if (queueRsp == 34 )
 				{

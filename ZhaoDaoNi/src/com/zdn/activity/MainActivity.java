@@ -55,6 +55,7 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 	public static final int EVENT_UI_LOG_IN_START		=	1;
 	public static final int EVENT_UI_REGIST_RESULT		=	EVENT_UI_LOG_IN_START+1;
 	public static final int MSG_SET_TAGS				=  EVENT_UI_REGIST_RESULT +1 ;
+	public static final int EVENT_UI_ADD_A_FRIEND_SUCCESS = MSG_SET_TAGS+1;
 	/**
 	 * Fragment managing the behaviors, interactions and presentation of the
 	 * navigation drawer.
@@ -243,18 +244,7 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 		super.onDestroy();
 	}
 	
-	/* add a friend */
-	private void addA_Friend( String phoneNumner ,String attachMentContext )
-	{
-		CommandE e = new  CommandE("ADD_A_FRIEND");
-		e.AddAProperty(new Property("EventDefine",Integer.toString( EventDefine.ADD_A_FRIEND ) ) );
-		e.AddAProperty(new Property("URL" ,"" ) );
-		e.AddAProperty(new Property("PHONE",phoneNumner ) );
-		e.AddAProperty(new Property("ATTACHMENT",attachMentContext ) );
-		Message m = MainControl.getInstance().handler.obtainMessage();
-		m.obj = e;
-		MainControl.getInstance().handler.sendMessage(m);
-	}
+	
 	
 	//result 1 : agree
 	//result 0 :disagree
@@ -311,6 +301,11 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 	             JPushInterface.setAliasAndTags(getApplicationContext(), null, (Set<String>) msg.obj, mTagsCallback);
 
 			 }
+			else if(msg.what == EVENT_UI_ADD_A_FRIEND_SUCCESS )
+			{
+				Log.d("MainActivity", "EVENT_UI_ADD_A_FRIEND_SUCCESS");
+				cf.addA_FriendRsp("teamName","name","majiaUrl" );
+			}
 
 		};
 	};

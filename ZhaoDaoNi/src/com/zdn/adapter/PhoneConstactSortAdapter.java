@@ -3,9 +3,14 @@ package com.zdn.adapter;
 import java.util.List;
 
 import com.zdn.R;
+import com.zdn.CommandParser.CommandE;
+import com.zdn.CommandParser.Property;
+import com.zdn.activity.MainControl;
+import com.zdn.event.EventDefine;
 import com.zdn.sort.SortModel;
 
 import android.content.Context;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,8 +50,22 @@ public class PhoneConstactSortAdapter extends BaseAdapter implements SectionInde
 		return position;
 	}
 
+	/* add a friend */
+	private void addA_Friend( String phoneNumner ,String attachMentContext )
+	{
+		CommandE e = new  CommandE("ADD_A_FRIEND");
+		e.AddAProperty(new Property("EventDefine",Integer.toString( EventDefine.ADD_A_FRIEND ) ) );
+		e.AddAProperty(new Property("URL" ,"" ) );
+		e.AddAProperty(new Property("imsi",MainControl.imsi ) );
+		e.AddAProperty(new Property("target_user",phoneNumner ) );
+		e.AddAProperty(new Property("attament",attachMentContext ) );
+		Message m = MainControl.getInstance().handler.obtainMessage();
+		m.obj = e;
+		MainControl.getInstance().handler.sendMessage(m);
+	}
+	
 	public View getView(final int position, View view, ViewGroup arg2) {
-		ViewHolder viewHolder = null;
+		final ViewHolder viewHolder ;
 		final SortModel mContent = list.get(position);
 		if (view == null) {
 			viewHolder = new ViewHolder();
@@ -59,9 +78,9 @@ public class PhoneConstactSortAdapter extends BaseAdapter implements SectionInde
 			
 			viewHolder.add.setOnClickListener(new View.OnClickListener() {
 	        	public void onClick(View v) {
-
-	        		Toast.makeText( v.getContext(), "don't touch me!",
-	        			     Toast.LENGTH_SHORT).show();
+	        		
+	        		addA_Friend( viewHolder.phoneNumner.getText().toString(),"some information!");
+	   
 	        	}
 	        	});
 			view.setTag(viewHolder);
