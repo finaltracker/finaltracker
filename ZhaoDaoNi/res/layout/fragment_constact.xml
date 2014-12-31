@@ -3,16 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <!--
-    <com.zdn.view.CustomerScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" >
-    -->
-
+    
     <include
         android:id="@+id/search"
         layout="@layout/common_search_x" />
@@ -43,9 +34,6 @@
 	        
 	</FrameLayout>
     
-    <!--
-             </RelativeLayout>
-    </com.zdn.view.CustomerScrollView>
-    -->
+   
 
 </RelativeLayout>

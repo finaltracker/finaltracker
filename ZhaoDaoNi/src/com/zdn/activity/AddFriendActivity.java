@@ -1,4 +1,4 @@
-package com.zdn.fragment;
+package com.zdn.activity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,24 +6,22 @@ import java.util.List;
 import com.zdn.R;
 import com.zdn.adapter.MyPageAdapter;
 
-import android.app.Fragment;
-import android.content.Context;
+import android.app.Activity;
+
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.Toast;
 
-public class AddFriendfragment extends Fragment {
-	private View mView;
+public class AddFriendActivity extends Activity  {
+	
 	private ViewPager pager;
 	private int pageNo = 1;
 
@@ -40,27 +38,20 @@ public class AddFriendfragment extends Fragment {
 
 	private List<View> allViews = new ArrayList<View>();
 	
-	public AddFriendfragment() {
+	public AddFriendActivity() {
 		// TODO Auto-generated constructor stub
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-		mView = inflater.inflate(R.layout.add_friend, null);
-
-		return mView;
-	}
-
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.add_friend);
 		setupViews();
 	}
 
 	private void setupViews() {
-		pager = (ViewPager) mView.findViewById(R.id.pager);
+		pager = (ViewPager) findViewById(R.id.pager);
 		pager.setOffscreenPageLimit(2);
 
 		pageNo = pager.getCurrentItem();
@@ -95,8 +86,8 @@ public class AddFriendfragment extends Fragment {
 		});
 		allViews.clear();
 
-		Context context = getActivity();
-        View VideoView = LayoutInflater.from(context).inflate(
+
+        View VideoView = LayoutInflater.from(this).inflate(
                 R.layout.add_friend_detail, null);
         //initVideoView(VideoView);
         allViews.add(VideoView);
@@ -112,7 +103,7 @@ public class AddFriendfragment extends Fragment {
         detailItemView =  VideoView.findViewById(R.id.add_friend_detail_add_webchat );
         detailItemView.setOnClickListener(new View.OnClickListener() {
         	public void onClick(View v) {
-        		Toast.makeText( getActivity(), "添加微信好友",
+        		Toast.makeText( AddFriendActivity.this, "添加微信好友",
         			     Toast.LENGTH_SHORT).show();
         	}
         	});
@@ -120,7 +111,7 @@ public class AddFriendfragment extends Fragment {
         detailItemView =  VideoView.findViewById(R.id.add_friend_detail_add_qq );
         detailItemView.setOnClickListener(new View.OnClickListener() {
         	public void onClick(View v) {
-        		Toast.makeText( getActivity(), "添加QQ好友",
+        		Toast.makeText( AddFriendActivity.this, "添加QQ好友",
         			     Toast.LENGTH_SHORT).show();
         	}
         	});
@@ -128,7 +119,7 @@ public class AddFriendfragment extends Fragment {
         detailItemView =  VideoView.findViewById(R.id.create_circle );
         detailItemView.setOnClickListener(new View.OnClickListener() {
         	public void onClick(View v) {
-        		Toast.makeText( getActivity(), "创建圈子",
+        		Toast.makeText( AddFriendActivity.this, "创建圈子",
         			     Toast.LENGTH_SHORT).show();
         	}
         	});
@@ -142,15 +133,15 @@ public class AddFriendfragment extends Fragment {
 
         MyPageAdapter myPagerAdapter = new MyPageAdapter(allViews);
         pager.setAdapter(myPagerAdapter);
-		Intent intent = getActivity().getIntent();
+		Intent intent = getIntent();
 		initPager(0);
 		pager.setCurrentItem(intent.getIntExtra("currPage", 0), true);
 	}
 
 	public void initPager(int selectedBtn) {
 		// 分别取得这些组件
-		bottomBtns[0] = (Button) mView.findViewById(R.id.title_movie_bt);
-		bottomBtns[1] = (Button) mView.findViewById(R.id.title_video_bt);
+		bottomBtns[0] = (Button) findViewById(R.id.title_movie_bt);
+		bottomBtns[1] = (Button) findViewById(R.id.title_video_bt);
 
 		// 循环为底部按钮加入监听
 		for (int i = 0; i < bottomBtns.length; i++) {

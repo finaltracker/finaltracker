@@ -9,7 +9,6 @@ import com.zdn.R;
 import com.zdn.CommandParser.CommandE;
 import com.zdn.CommandParser.Property;
 import com.zdn.event.EventDefine;
-import com.zdn.fragment.AddFriendfragment;
 import com.zdn.fragment.PeopleFragment;
 import com.zdn.fragment.NavigationDrawerFragment;
 import com.zdn.jpush.ExampleUtil;
@@ -68,7 +67,6 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 	 */
 	MainControl control ;
 	private PeopleFragment cf;
-	private AddFriendfragment aff;
 	
 
 	private CharSequence mTitle;
@@ -89,7 +87,6 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 		mTitle = getTitle();
 		me = this; // 
 		cf = new PeopleFragment();
-		aff = new AddFriendfragment();
 		// Set up the drawer.
 		mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
 				(DrawerLayout) findViewById(R.id.drawer_layout));
@@ -176,11 +173,9 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 			
 			break;
 		case R.id.action_add:
-			
-			ft.replace(R.id.container, aff );
-			ft.addToBackStack(null);
-			ft.commit();
+			startActivity( new Intent("com.zdn.activity.AddFriendActivity.ACTION") );
 			break;
+			
 		case R.id.contact_friend:
 			
 			ft.replace(R.id.container, cf );
