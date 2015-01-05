@@ -1,8 +1,8 @@
-package com.zdn.logic;
+package com.zdn.interf;
 
 import com.zdn.CommandParser.CommandE;
 
-public interface ServerInterface {
+public interface ServerInterfaceCmd {
 
 	/* 流程管理 */
 	public int registReq( String phoneNumber ,  String passWord ,String imsi );
@@ -24,10 +24,4 @@ public interface ServerInterface {
 	public void requestFriendGpsInfo( String phoneNumber , int longitude, int latitude );
 
 	
-	/* ServerInterface Call back interface */
-	/* String message : 增加朋友的时候，添加的信息*/
-	public void friendAddMe( String callerPhoneNumber , String callerNickName , int validPeriod , String message );
-
-	public void addA_FriendAnswer( int result );
-
 }

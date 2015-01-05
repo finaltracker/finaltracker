@@ -105,13 +105,7 @@ public class Zhuce extends Activity {
 					Toast.makeText(getApplicationContext(), "用户名或密码不能为空",Toast.LENGTH_SHORT).show();
 					return ;
 				}
-				CommandE e = new  CommandE("ACCOUNT_REQUST");
-				e.AddAProperty(new Property("EventDefine",Integer.toString( EventDefine.UI_TO_CTRL_ACCOUNT_REQUEST ) ) );
-				e.AddAProperty(new Property("ID",Id ) );
-				e.AddAProperty(new Property("PASS_WORD",passWord ) );
-				Message m = MainControl.getInstance().handler.obtainMessage();
-				m.obj = e;
-				MainControl.getInstance().handler.sendMessage(m);
+				MainControl.registReq(Id, passWord);
 				
 				//still stay this activity until response back
 			}

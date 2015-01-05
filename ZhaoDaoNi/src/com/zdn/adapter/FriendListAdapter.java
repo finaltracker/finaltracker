@@ -1,12 +1,12 @@
 package com.zdn.adapter;
 
-import java.util.HashMap;
 import java.util.List;
 
 import com.zdn.R;
+import com.zdn.basicStruct.friendMemberData;
+import com.zdn.basicStruct.friendTeamData;
 import com.zdn.view.FriendListView;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +20,7 @@ public class FriendListAdapter extends BaseExpandableListAdapter
 	private static final String TAG = "FriendListAdapter";
 	private Context mContext;
 	
-	private List<teamData> teams = null;
+	private List<friendTeamData> teams = null;
 
 	
 
@@ -114,7 +114,7 @@ public class FriendListAdapter extends BaseExpandableListAdapter
 			holder = (GroupHolder) convertView.getTag();
 		}
 
-		memberData md = (memberData)getChild(groupPosition,childPosition);
+		friendMemberData md = (friendMemberData)getChild(groupPosition,childPosition);
 
 		holder.iconView.setImageBitmap(md.picture);
 		 
@@ -141,7 +141,7 @@ public class FriendListAdapter extends BaseExpandableListAdapter
 		} else {
 			holder = (ChildHolder) convertView.getTag();
 		}
-		holder.nameView.setText( ((teamData)getGroup(groupPosition)).teamName );
+		holder.nameView.setText( ((friendTeamData)getGroup(groupPosition)).teamName );
 		holder.onLineView.setText(getChildrenCount(groupPosition) + "/"
 				+ getChildrenCount(groupPosition));
 		if (isExpanded) {
@@ -152,7 +152,7 @@ public class FriendListAdapter extends BaseExpandableListAdapter
 		return convertView;
 	}
 
-	public void updateListView( List<teamData> updateTeams )
+	public void updateListView( List<friendTeamData> updateTeams )
 	{
 		this.teams = updateTeams;
 	}
@@ -168,21 +168,8 @@ public class FriendListAdapter extends BaseExpandableListAdapter
 		TextView onLineView;
 		ImageView iconView;
 	}
-	//define member struct
+	
 
-	public class memberData
-	{
-		public memberData() {}
-		
-		public String 	memberName;
-		public String   pictureAddress;
-		public Bitmap	picture;
-	}
-	//define team struct
-	public class teamData{
-		public	teamData(){}
-		public String   teamName;
-		public List<memberData>	member;
-	}
+	
 }
 

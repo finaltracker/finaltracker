@@ -50,19 +50,7 @@ public class PhoneConstactSortAdapter extends BaseAdapter implements SectionInde
 		return position;
 	}
 
-	/* add a friend */
-	private void addA_Friend( String phoneNumner ,String attachMentContext )
-	{
-		CommandE e = new  CommandE("ADD_A_FRIEND");
-		e.AddAProperty(new Property("EventDefine",Integer.toString( EventDefine.ADD_A_FRIEND ) ) );
-		e.AddAProperty(new Property("URL" ,"" ) );
-		e.AddAProperty(new Property("imsi",MainControl.imsi ) );
-		e.AddAProperty(new Property("target_user",phoneNumner ) );
-		e.AddAProperty(new Property("attament",attachMentContext ) );
-		Message m = MainControl.getInstance().handler.obtainMessage();
-		m.obj = e;
-		MainControl.getInstance().handler.sendMessage(m);
-	}
+	
 	
 	public View getView(final int position, View view, ViewGroup arg2) {
 		final ViewHolder viewHolder ;
@@ -79,7 +67,7 @@ public class PhoneConstactSortAdapter extends BaseAdapter implements SectionInde
 			viewHolder.add.setOnClickListener(new View.OnClickListener() {
 	        	public void onClick(View v) {
 	        		
-	        		addA_Friend( viewHolder.phoneNumner.getText().toString(),"some information!");
+	        		MainControl.addA_Friend( viewHolder.phoneNumner.getText().toString(),"some information!");
 	   
 	        	}
 	        	});

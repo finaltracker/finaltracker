@@ -13,11 +13,11 @@ import com.zdn.R;
 import com.zdn.sort.ClearEditText;
 import com.zdn.util.FileUtil;
 import com.zdn.util.ImgUtil;
-import com.zdn.util.ImgUtil.OnLoadBitmapListener;
 import com.zdn.adapter.FriendListAdapter;
+import com.zdn.basicStruct.friendMemberData;
+import com.zdn.basicStruct.friendTeamData;
 import com.zdn.view.FriendListView;
 import com.zdn.view.LoadingView;
-import com.zdn.view.PhoneConstactView;
 
 import android.app.ActionBar;
 import android.content.Context;
@@ -32,12 +32,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
-import com.zdn.adapter.FriendListAdapter.teamData;
-import com.zdn.adapter.FriendListAdapter.memberData;
-
 
 public class PeopleFragment extends Fragment {
 	private Context mContext;
@@ -50,7 +45,7 @@ public class PeopleFragment extends Fragment {
 	private DrawerLayout mDrawerLayout;
 	private ActionBarDrawerToggle mDrawerToggle;
 	private DBManager dbm;
-	List<teamData>   allFriend = null;
+	List<friendTeamData>   allFriend = null;
 
 	
 	@Override
@@ -219,26 +214,26 @@ public class PeopleFragment extends Fragment {
 		return getActivity().getActionBar();
 	}
 
-	private List<teamData> constructTeamInfoFromDb()
+	private List<friendTeamData> constructTeamInfoFromDb()
 	{
-		List<teamData> updateTeams = new ArrayList<teamData>();
+		List<friendTeamData> updateTeams = new ArrayList<friendTeamData>();
 		
 		ArrayList<MemberInfo> miList = dbm.searchAllData();
 		
-		Map< String ,List<memberData> > mapTeamData = new HashMap< String ,List<memberData> >();
+		Map< String ,List<friendMemberData> > mapTeamData = new HashMap< String ,List<friendMemberData> >();
 		
 		for( int i = 0 ; i < miList.size() ; i++ )
 		{
 			MemberInfo dbMi = miList.get(i);
 			
-			List<memberData> memberDataList = null;
+			List<friendMemberData> memberDataList = null;
 			memberDataList = mapTeamData.get(dbMi.teamName);
 			if( null == memberDataList )
 			{
-				memberDataList = new ArrayList<memberData>();
+				memberDataList = new ArrayList<friendMemberData>();
 				mapTeamData.put(dbMi.teamName, memberDataList);
 			}
-			memberData md = mFriendListAdapter.new memberData();
+			friendMemberData md = new friendMemberData();
 			md.memberName = dbMi.memberName;
 			md.pictureAddress = dbMi.pictureAddress;
 			md.picture = ImgUtil.getInstance().loadBitmapFromCache(md.pictureAddress);
@@ -250,7 +245,7 @@ public class PeopleFragment extends Fragment {
 		for (String key : mapTeamData.keySet()) 
 		{
 
-			teamData td =  mFriendListAdapter.new teamData();
+			friendTeamData td =  new friendTeamData();
 			updateTeams.add(td);
 			td.teamName = key;
 			td.member = mapTeamData.get(key);
@@ -265,13 +260,13 @@ public class PeopleFragment extends Fragment {
 	{
 		int i = 0 ;
 		
-		teamData const_my_friend = null;
+		friendTeamData const_my_friend = null;
 		
 		for( i = 0 ; i < allFriend.size(); i++ )
 		{
 			if( allFriend.get(i).teamName.equals(teamName) )
 			{
-				memberData md = mFriendListAdapter.new memberData();
+				friendMemberData md = new friendMemberData();
 				md.memberName = name;
 				md.pictureAddress = majiaUrl;
 				md.picture = ImgUtil.getInstance().loadBitmapFromCache(md.pictureAddress);
@@ -290,7 +285,7 @@ public class PeopleFragment extends Fragment {
 		if( i == allFriend.size() )
 		{	//not find 
 			
-			teamData team = null;
+			friendTeamData team = null;
 			
 			if( const_my_friend != null )
 			{ // 
@@ -298,13 +293,13 @@ public class PeopleFragment extends Fragment {
 			}
 			else
 			{
-				team =  mFriendListAdapter.new teamData();
+				team =  new friendTeamData();
 				team.teamName = const_teamName_myFriend;
 				allFriend.add( team );
 			}
 			
-			memberData md = null;
-			md = mFriendListAdapter.new memberData();
+			friendMemberData md = null;
+			md = new friendMemberData();
 			md.memberName = name;
 			md.pictureAddress = majiaUrl;
 			md.picture = ImgUtil.getInstance().loadBitmapFromCache(md.pictureAddress);

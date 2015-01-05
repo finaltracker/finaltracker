@@ -246,19 +246,6 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 	
 	
 	
-	//result 1 : agree
-	//result 0 :disagree
-	private void addA_FriendConfirm( String result )
-	{
-		CommandE e = new  CommandE("ADD_A_FRIEND_CONFIRM");
-		e.AddAProperty(new Property("EventDefine",Integer.toString( EventDefine.ADD_A_FRIEND_ANSWER ) ) );
-		e.AddAProperty(new Property("URL" ,"" ) );
-		e.AddAProperty(new Property("RESULT",result ) );
-		Message m = MainControl.getInstance().handler.obtainMessage();
-		m.obj = e;
-		MainControl.getInstance().handler.sendMessage(m);
-	}
-	
 	HandlerThread uIhandlerThread = null ;
 
 	

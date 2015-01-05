@@ -1,17 +1,11 @@
 package com.zdn.activity;
 
-import java.util.Set;
-
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import cn.jpush.android.api.TagAliasCallback;
 
 import com.zdn.CommandParser.CommandE;
 import com.zdn.CommandParser.Property;
 import com.zdn.event.EventDefine;
-import com.zdn.jpush.ExampleUtil;
 import com.zdn.logic.InternetComponent;
 
 import android.content.Context;
@@ -233,6 +227,7 @@ public class MainControl extends HandlerThread {
 			switch( RcvCommand )
 			{
 			case EventDefine.ADD_A_FRIEND:
+				Log.d("MainControl" , "ADD_A_FRIEND: " );
 				mInternetCom.addA_Friend( e );
 				break;
 			case EventDefine.ADD_A_FRIEND_RSP:
@@ -252,15 +247,8 @@ public class MainControl extends HandlerThread {
 				if( queueRsp == 0 )
 				{
 					Log.d("MainControl" , "add a friend £¬server accept!" );
-					//request OK , only need wait the friend feedback
-					Message m = MainActivity.getInstance().handler.obtainMessage();
-					m.what = MainActivity.EVENT_UI_ADD_A_FRIEND_SUCCESS;
-					m.arg1 = queueRsp;
-					//need add some response infor into Message
-					m.obj = null;
-		
-					MainActivity.getInstance().handler.sendMessage( m );
 					
+					//request OK , only need wait the friend feedback
 				}
 				else if (queueRsp == 34 )
 				{
@@ -308,5 +296,44 @@ public class MainControl extends HandlerThread {
 		
 	}
 	
+	
+	//COMMON API
+	
+	/* add a friend */
+	static public void addA_Friend( String phoneNumner ,String attachMentContext )
+	{
+		CommandE e = new  CommandE("ADD_A_FRIEND");
+		e.AddAProperty(new Property("EventDefine",Integer.toString( EventDefine.ADD_A_FRIEND ) ) );
+		e.AddAProperty(new Property("URL" ,"" ) );
+		e.AddAProperty(new Property("imsi",MainControl.imsi ) );
+		e.AddAProperty(new Property("target_user",phoneNumner ) );
+		e.AddAProperty(new Property("attament",attachMentContext ) );
+		Message m = MainControl.getInstance().handler.obtainMessage();
+		m.obj = e;
+		MainControl.getInstance().handler.sendMessage(m);
+	}
 
+	static public void registReq( String Id , String passWord )
+	{
+		CommandE e = new  CommandE("ACCOUNT_REQUST");
+		e.AddAProperty(new Property("EventDefine",Integer.toString( EventDefine.UI_TO_CTRL_ACCOUNT_REQUEST ) ) );
+		e.AddAProperty(new Property("ID",Id ) );
+		e.AddAProperty(new Property("PASS_WORD",passWord ) );
+		Message m = MainControl.getInstance().handler.obtainMessage();
+		m.obj = e;
+		MainControl.getInstance().handler.sendMessage(m);
+	}
+	
+	//result 1 : agree
+	//result 0 :disagree
+	static void addA_FriendConfirm( String result )
+	{
+		CommandE e = new  CommandE("ADD_A_FRIEND_CONFIRM");
+		e.AddAProperty(new Property("EventDefine",Integer.toString( EventDefine.ADD_A_FRIEND_ANSWER ) ) );
+		e.AddAProperty(new Property("URL" ,"" ) );
+		e.AddAProperty(new Property("RESULT",result ) );
+		Message m = MainControl.getInstance().handler.obtainMessage();
+		m.obj = e;
+		MainControl.getInstance().handler.sendMessage(m);
+	}
 }

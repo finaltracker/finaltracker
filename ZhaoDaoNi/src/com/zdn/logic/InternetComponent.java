@@ -5,12 +5,14 @@ import com.zdn.CommandParser.Property;
 import com.zdn.activity.MainControl;
 import com.zdn.channel.Http;
 import com.zdn.event.EventDefine;
+import com.zdn.interf.ServerInterfaceCallBack;
+import com.zdn.interf.ServerInterfaceCmd;
 
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 
-public class InternetComponent implements ServerInterface{
+public class InternetComponent implements ServerInterfaceCmd , ServerInterfaceCallBack {
 	/* web site address define */
 	String WEBSITE_ADDRESS_BASE	= "http://10.4.65.164/";
 	String WEBSITE_ADDRESS_QUERY = WEBSITE_ADDRESS_BASE + "user/check_register/";
