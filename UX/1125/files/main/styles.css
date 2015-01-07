@@ -836,3 +836,26 @@
   visibility:hidden;
   word-wrap:break-word;
 }
+#u75 {
+  position:absolute;
+  left:237px;
+  top:6px;
+  width:20px;
+  height:20px;
+  color:#FF0000;
+}
+#u75_img {
+  position:absolute;
+  left:0px;
+  top:0px;
+  width:20px;
+  height:20px;
+}
+#u76 {
+  position:absolute;
+  left:2px;
+  top:2px;
+  width:16px;
+  visibility:hidden;
+  word-wrap:break-word;
+}

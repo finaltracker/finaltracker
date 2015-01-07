@@ -974,3 +974,26 @@
   width:161px;
   white-space:nowrap;
 }
+#u80 {
+  position:absolute;
+  left:239px;
+  top:54px;
+  width:20px;
+  height:20px;
+  color:#FF0000;
+}
+#u80_img {
+  position:absolute;
+  left:0px;
+  top:0px;
+  width:20px;
+  height:20px;
+}
+#u81 {
+  position:absolute;
+  left:2px;
+  top:2px;
+  width:16px;
+  visibility:hidden;
+  word-wrap:break-word;
+}
