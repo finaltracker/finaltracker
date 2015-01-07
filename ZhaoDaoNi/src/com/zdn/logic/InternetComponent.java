@@ -5,20 +5,20 @@ import com.zdn.CommandParser.Property;
 import com.zdn.activity.MainControl;
 import com.zdn.channel.Http;
 import com.zdn.event.EventDefine;
-import com.zdn.interf.ServerInterfaceCallBack;
 import com.zdn.interf.ServerInterfaceCmd;
 
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 
-public class InternetComponent implements ServerInterfaceCmd , ServerInterfaceCallBack {
+public class InternetComponent implements ServerInterfaceCmd {
 	/* web site address define */
 	String WEBSITE_ADDRESS_BASE	= "http://10.4.65.164/";
 	String WEBSITE_ADDRESS_QUERY = WEBSITE_ADDRESS_BASE + "user/check_register/";
 	String WEBSITE_ADDRESS_ACCOUNT_REQ = WEBSITE_ADDRESS_BASE + "user/register/";
 	String WEBSITE_ADDRESS_ADD_A_FRIEND_REQ = WEBSITE_ADDRESS_BASE + "friend/add_friend/";
 	String WEBSITE_ADDRESS_ADD_A_FRIEND_ANSWER_REQ = WEBSITE_ADDRESS_BASE + "user/register/";
+	String WEBSITE_ADDRESS_GET_FRIEND_LIST = WEBSITE_ADDRESS_BASE + "friend/get_friend/";
 	
 	
 	
@@ -89,12 +89,6 @@ public class InternetComponent implements ServerInterfaceCmd , ServerInterfaceCa
 	}
 
 	@Override
-	public CommandE requestFriendList() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public void updateGpsInfo(String phoneNumber, int longitude, int latitude) {
 		// TODO Auto-generated method stub
 		
@@ -108,18 +102,21 @@ public class InternetComponent implements ServerInterfaceCmd , ServerInterfaceCa
 	}
 
 	@Override
-	public void friendAddMe(String callerPhoneNumber, String callerNickName,
-			int validPeriod, String message) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void getFriendList(String imsi, int mobile_friend_version ) {
+		Message msg = handler.obtainMessage(); 
+		msg.what = ThreadTaskHandler.SEND_MESSAGE_TO_SERVER;
+        
+		CommandE e = new CommandE("SEND_MESSAGE_TO_SERVER");
+		e.AddAProperty(new Property("EventDefine" ,Integer.toString(EventDefine.GET_FRIEND_LIST_REQ ) ) );
+		e.AddAProperty(new Property("URL" ,WEBSITE_ADDRESS_GET_FRIEND_LIST ) );
+		e.AddAProperty(new Property("imsi",imsi ) );
+		e.AddAProperty(new Property("mobile_friend_version",Integer.toString(mobile_friend_version ) ) );
+        msg.obj = e;   //
+        
+        handler.sendMessage(msg);
 
-	@Override
-	public void addA_FriendAnswer(int result) {
-		// TODO Auto-generated method stub
-		
-	}
 
+	};
 	
 	class ThreadTaskHandler extends Handler {
 		
@@ -154,5 +151,7 @@ public class InternetComponent implements ServerInterfaceCmd , ServerInterfaceCa
 			super.handleMessage(msg);
 		}
 
-	};
+	}
+
+
 }

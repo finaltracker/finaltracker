@@ -7,6 +7,7 @@ import com.zdn.CommandParser.CommandE;
 import com.zdn.CommandParser.Property;
 import com.zdn.event.EventDefine;
 import com.zdn.logic.InternetComponent;
+import com.zdn.util.PreferencesUtil;
 
 import android.content.Context;
 import android.os.Handler;
@@ -17,6 +18,7 @@ import android.util.Log;
 
 public class MainControl extends HandlerThread {
 	MainActivity		mMainActivity;
+	PreferencesUtil     preferencesPara;
 	InternetComponent 	mInternetCom = null ;
 	static public  MainControl me = null;
 	public static String imsi = null;
@@ -41,6 +43,7 @@ public class MainControl extends HandlerThread {
 		me = this;
 		TelephonyManager mTelephonyMgr = (TelephonyManager) mMainActivity.getSystemService(Context.TELEPHONY_SERVICE);
 		imsi = mTelephonyMgr.getSubscriberId();
+		preferencesPara = new PreferencesUtil(mMainActivity);
 
 	}
 
@@ -86,230 +89,338 @@ public class MainControl extends HandlerThread {
 
 		};
 	};
+// some commandE don't care state machine
+	
+	//return true : handled
+    //       false: no handle
+	private boolean commonStateHandle(CommandE e  )
+	{
+		boolean ret = false;
+		
+		
+		return ret;
+	}
+	
 
-	// RcvCommand  command
-	public void control( CommandE e )
+	private void stateNull( CommandE e  )
+	{
+		mInternetCom.isRegist( imsi );
+		state = STATE_WAIT_QUEUE_REGSIT_RESULT;
+		
+	}
+
+	private void stateWaitQueueRegsitResult( CommandE e  )
 	{
 		int RcvCommand = Integer.parseInt(e.GetPropertyContext("EventDefine"));
-		Log.d("MainControl", "control:RcvCommand " + e.GetPropertyContext("EventDefine") );
-		switch(state)
+		
+		switch (RcvCommand)
 		{
-		case STATE_NULL:
-			
-			
-			mInternetCom.isRegist( imsi );
-			state = STATE_WAIT_QUEUE_REGSIT_RESULT;
-			
-			break;
-		case STATE_WAIT_QUEUE_REGSIT_RESULT:  // waiting queue gegist result
-			switch (RcvCommand)
+		case EventDefine.IS_ACCOUNT_QUEUE_RSP:
+			String rep = e.GetPropertyContext("HTTP_REQ_RSP");
+			if( rep == null || ( rep.isEmpty()) )
 			{
-			case EventDefine.IS_ACCOUNT_QUEUE_RSP:
-				String rep = e.GetPropertyContext("HTTP_REQ_RSP");
-				if( rep == null || ( rep.isEmpty()) )
-				{
-					Log.d("MainControl", "HTTP_REQ_RSP = null" );
-					
-					{ // for test
-						Message m = MainActivity.getInstance().handler.obtainMessage();
-						m.what = MainActivity.EVENT_UI_LOG_IN_START;
-						MainActivity.getInstance().handler.sendMessage( m );
-						state = STATE_WAIT_UI_LOGIN;
-					}
-					break;
-				}
-				JSONObject  jason_obj = null;
-				int queueRsp = -1;
-				try {
-					jason_obj = new JSONObject(rep);
-					queueRsp = jason_obj.getInt("status");
-				} catch (JSONException e1) {
-
-					Log.d("MainControl" , "server response error: " + e1.getMessage() );
-					e1.printStackTrace();
-				}
+				Log.d("MainControl", "HTTP_REQ_RSP = null" );
 				
-				if ( queueRsp == EventDefine.IS_REQIST_RSP_NO_REGIST )
-				{
-					//  regist a account
+				{ // for test
 					Message m = MainActivity.getInstance().handler.obtainMessage();
 					m.what = MainActivity.EVENT_UI_LOG_IN_START;
 					MainActivity.getInstance().handler.sendMessage( m );
 					state = STATE_WAIT_UI_LOGIN;
 				}
-				else if( queueRsp == EventDefine.IS_REQIST_RSP_HAS_REGIST )
-				{// 
-					// 请求好友列表
-					mInternetCom.requestFriendList();
-					state = STATE_LOGIN_NORMAL;
-					//TODO
-				}
-				else
-				{
-					Log.d("MainControl" , "server response error queueRsp =  " + queueRsp );
-				}
-				break;
-			default:
-				Log.d("MainControl", "unknow RcvCommand " + RcvCommand );
 				break;
 			}
+			JSONObject  jason_obj = null;
+			int queueRsp = -1;
+			try {
+				jason_obj = new JSONObject(rep);
+				queueRsp = jason_obj.getInt("status");
+			} catch (JSONException e1) {
+
+				Log.d("MainControl" , "server response error: " + e1.getMessage() );
+				e1.printStackTrace();
+			}
+			
+			if ( queueRsp == EventDefine.IS_REQIST_RSP_NO_REGIST )
+			{
+				//  regist a account
+				Message m = MainActivity.getInstance().handler.obtainMessage();
+				m.what = MainActivity.EVENT_UI_LOG_IN_START;
+				MainActivity.getInstance().handler.sendMessage( m );
+				state = STATE_WAIT_UI_LOGIN;
+			}
+			else if( queueRsp == EventDefine.IS_REQIST_RSP_HAS_REGIST )
+			{// 
+				// 请求好友列表
+				mInternetCom.getFriendList(imsi,  preferencesPara.getFriendListVersion() );
+				
+				state = STATE_LOGIN_NORMAL;
+				//TODO
+			}
+			else
+			{
+				Log.d("MainControl" , "server response error queueRsp =  " + queueRsp );
+			}
 			break;
+		default:
+			Log.d("MainControl", "unknow RcvCommand " + RcvCommand );
+			break;
+		}
 		
-		case STATE_WAIT_UI_LOGIN:
-			switch (RcvCommand)
-			{
-			case EventDefine.UI_TO_CTRL_ACCOUNT_REQUEST:
-				String Id = e.GetPropertyContext("ID");
-				String passWord = e.GetPropertyContext("PASS_WORD");
+		
+	}
 
-				mInternetCom.registReq(Id,  passWord ,imsi );
-				state = STATE_WAIT_SERVER_REGSIT_RESULT;
-			break;
-			default:
-			break;
-			
-			}
-			
-		case STATE_WAIT_SERVER_REGSIT_RESULT:  // waiting queue regist result
-			switch (RcvCommand)
-			{
-			case EventDefine.IS_ACCOUNT_RSP:
-				//获得注册结果
-				String rep = e.GetPropertyContext("HTTP_REQ_RSP");
-				
-				
-				if( rep == null || ( rep.isEmpty()) )
-				{
-					//no internet connection or server no response 
-				}
-				else
-				{
-					JSONObject  jason_obj = null;
-					int queueRsp = -1;
-					String error = "";
-					
-					try {
-						jason_obj = new JSONObject(rep);
-						queueRsp = jason_obj.getInt("status");
-						error    = jason_obj.getString("error");
-					} catch (JSONException e1) {
-
-						Log.d("MainControl" , "server response error: " + e1.getMessage() );
-						e1.printStackTrace();
-					}
-					
-					Message m = MainActivity.getInstance().handler.obtainMessage();
-					m.what = MainActivity.EVENT_UI_REGIST_RESULT;
-					m.arg1 = queueRsp;
-					m.obj = error;
-					
-					switch(queueRsp)
-					{
-						case 0: // success
-							state = STATE_LOGIN_NORMAL;
-							break;
-						default:
-							Log.d("MainControl","regist a account server response:" + queueRsp );
-							state = STATE_WAIT_UI_LOGIN;
-							break; //exception
-					}
-	
-					MainActivity.getInstance().handler.sendMessage( m );
-					
-				}
-				break;
-			default:
-				break;
-			}
-			break;
-		case STATE_LOGIN_NORMAL:
+	private void stateWaitUiLogin( CommandE e  )
+	{
+		int RcvCommand = Integer.parseInt(e.GetPropertyContext("EventDefine"));
+		
+		switch (RcvCommand)
 		{
-			switch( RcvCommand )
+		case EventDefine.IS_ACCOUNT_REQ:
+			String Id = e.GetPropertyContext("ID");
+			String passWord = e.GetPropertyContext("PASS_WORD");
+
+			mInternetCom.registReq(Id,  passWord ,imsi );
+			state = STATE_WAIT_SERVER_REGSIT_RESULT;
+		break;
+		default:
+		break;
+		
+		}
+		
+	}
+
+	private void stateWaitServerRegistResult( CommandE e )
+	{
+		int RcvCommand = Integer.parseInt(e.GetPropertyContext("EventDefine"));
+		
+		switch (RcvCommand)
+		{
+		case EventDefine.IS_ACCOUNT_RSP:
+			//获得注册结果
+			String rep = e.GetPropertyContext("HTTP_REQ_RSP");
+			
+			
+			if( rep == null || ( rep.isEmpty()) )
 			{
-			case EventDefine.ADD_A_FRIEND:
-				Log.d("MainControl" , "ADD_A_FRIEND: " );
-				mInternetCom.addA_Friend( e );
-				break;
-			case EventDefine.ADD_A_FRIEND_RSP:
+				//no internet connection or server no response 
+			}
+			else
 			{
-				String rep = e.GetPropertyContext("HTTP_REQ_RSP");
 				JSONObject  jason_obj = null;
 				int queueRsp = -1;
+				String error = "";
+				
 				try {
 					jason_obj = new JSONObject(rep);
 					queueRsp = jason_obj.getInt("status");
+					error    = jason_obj.getString("error");
 				} catch (JSONException e1) {
 
 					Log.d("MainControl" , "server response error: " + e1.getMessage() );
 					e1.printStackTrace();
 				}
 				
-				if( queueRsp == 0 )
-				{
-					Log.d("MainControl" , "add a friend ，server accept!" );
-					
-					//request OK , only need wait the friend feedback
-				}
-				else if (queueRsp == 34 )
-				{
-					Log.d("MainControl" , "add a friend ，server response: friend have not exist!" );
-					//TODO
-					//发送短信提醒
-				}
-				else
-				{
-					Log.d("MainControl" , "add a friend ，user do not exist" );
-				}
+				Message m = MainActivity.getInstance().handler.obtainMessage();
+				m.what = MainActivity.EVENT_UI_REGIST_RESULT;
+				m.arg1 = queueRsp;
+				m.obj = error;
 				
-				break;
+				switch(queueRsp)
+				{
+					case 0: // success
+						state = STATE_LOGIN_NORMAL;
+						break;
+					default:
+						Log.d("MainControl","regist a account server response:" + queueRsp );
+						state = STATE_WAIT_UI_LOGIN;
+						break; //exception
+				}
+
+				MainActivity.getInstance().handler.sendMessage( m );
+				
 			}
-			case EventDefine.JPUSH_SERVER_COMMAND:
+			break;
+		default:
+			break;
+		}
+	}
+
+	private void stateLoginNormal( CommandE e )
+	{
+		int RcvCommand = Integer.parseInt(e.GetPropertyContext("EventDefine"));
+		
+
+		switch( RcvCommand )
+		{
+		case EventDefine.ADD_A_FRIEND_REQ:
+		{
+			Log.d("MainControl" , "ADD_A_FRIEND: " );
+			mInternetCom.addA_Friend( e );
+			break;
+		}
+		case EventDefine.ADD_A_FRIEND_RSP:
+		{
+			int queueRsp = parseHttpReqRspStatus(e);
+			
+			if( queueRsp == 0 )
 			{
-			
-				int cmd =  Integer.parseInt(e.GetPropertyContext("Command"));
+				Log.d("MainControl" , "add a friend ，server accept!" );
 				
-				switch (cmd )
-				{
-				case 201:
-					
-					Log.d("MainControl" , "jpush server call me ,someone add me " );
-					//mInternetCom();
-					break;
-				case 202:
-					Log.d("MainControl" , "jpush server call me , add a friend sequence continue ,inquire who response   " );
-					//send "ok_friend " message to server
-					
-					break;
-					
-				default:
-					Log.d("MainControl" , "jpush server call me  , but command undefine" );
-					break;
-				}
-				break;
+				//request OK , only need wait the friend feedback
 			}
-			case EventDefine.ADD_A_FRIEND_ANSWER:
-				mInternetCom.friendAddMeAnswer(e);
+			else if (queueRsp == 34 )
+			{
+				Log.d("MainControl" , "add a friend ，server response: friend have not exist!" );
+				//TODO
+				//发送短信提醒
+			}
+			else
+			{
+				Log.d("MainControl" , "add a friend ，user do not exist" );
+			}
+			
+			break;
+		}
+		
+		case EventDefine.JPUSH_SERVER_COMMAND:
+		{
+		
+			int cmd =  Integer.parseInt(e.GetPropertyContext("Command"));
+			
+			switch (cmd )
+			{
+			case 201:
+				
+				Log.d("MainControl" , "jpush server call me ,update friend " );
+				mInternetCom.getFriendList( imsi,  preferencesPara.getFriendListVersion() );
+				//
 				break;
 			
+				
 			default:
+				Log.d("MainControl" , "jpush server call me  , but command undefine" );
 				break;
 			}
 			break;
 		}
+		case EventDefine.GET_FRIEND_LIST_REQ:
+		{
+			Log.d("MainControl" , "invalid GET_FRIEND_LIST_REQ message" );
+		
+			assert(false);
+			break;
+		}
+
+			
+		case EventDefine.GET_FRIEND_LIST_RSP:
+		{
+			//update UI
+		}
+			break;
+		case EventDefine.ADD_A_FRIEND_ANSWER_REQ:
+			mInternetCom.friendAddMeAnswer(e);
+			break;
+		case EventDefine.ADD_A_FRIEND_ANSWER_RSP:
+			{
+				int queueRsp = parseHttpReqRspStatus(e);
+				
+				if( queueRsp == 0 )
+				{
+					Log.d("MainControl" , "send add-a-friend-answer success" );
+
+				}
+			}
+			break;
+		default:
+			break;
+		}
+	
+	}
+	
+	private void stateMachineHandle(CommandE e  )
+	{
+
+		Log.d("MainControl", "stateMachineHandle:RcvCommand " + e.GetPropertyContext("EventDefine") );
+
+		switch(state)
+		{
+		case STATE_NULL:
+			
+			stateNull(e);
+			break;
+		case STATE_WAIT_QUEUE_REGSIT_RESULT:  // waiting queue gegist result
+			stateWaitQueueRegsitResult(e);
+			break;
+		
+		case STATE_WAIT_UI_LOGIN:
+			stateWaitUiLogin(e);
+			break;
+			
+		case STATE_WAIT_SERVER_REGSIT_RESULT:  // waiting query regist result
+			stateWaitServerRegistResult(e);
+			
+			break;
+		case STATE_LOGIN_NORMAL:
+			stateLoginNormal(e);
+			break;
 		default:
 			break;
 		}
 		
+	
 	}
 	
 	
+	// RcvCommand  command
+	public void control( CommandE e )
+	{
+		Log.d("MainControl", "control:RcvCommand " + e.GetPropertyContext("EventDefine") );
+		
+		
+		if( !commonStateHandle(e) )
+		{
+			stateMachineHandle(e);
+		}
+	
+	}
+	
+	private JSONObject parseHttpReqRsp( CommandE e  )
+	{
+		String rep = e.GetPropertyContext("HTTP_REQ_RSP");
+		JSONObject  jason_obj = null;
+		try {
+			jason_obj = new JSONObject(rep);
+		} catch (JSONException e1) {
+
+			Log.d("MainControl" , "server response error: " + e1.getMessage() );
+			e1.printStackTrace();
+		}
+		
+		return jason_obj;
+	}
+	
+private int parseHttpReqRspStatus( CommandE e  )
+	{
+		int queueRsp = -1;
+		JSONObject  jason_obj = parseHttpReqRsp(e);
+		try {
+			queueRsp = jason_obj.getInt("status");
+		} catch (JSONException e1) {
+	
+			Log.d("MainControl" , "server response error: " + e1.getMessage() );
+			e1.printStackTrace();
+		}
+		
+		
+		return queueRsp;
+	}	
 	//COMMON API
 	
 	/* add a friend */
 	static public void addA_Friend( String phoneNumner ,String attachMentContext )
 	{
 		CommandE e = new  CommandE("ADD_A_FRIEND");
-		e.AddAProperty(new Property("EventDefine",Integer.toString( EventDefine.ADD_A_FRIEND ) ) );
+		e.AddAProperty(new Property("EventDefine",Integer.toString( EventDefine.ADD_A_FRIEND_REQ ) ) );
 		e.AddAProperty(new Property("URL" ,"" ) );
 		e.AddAProperty(new Property("imsi",MainControl.imsi ) );
 		e.AddAProperty(new Property("target_user",phoneNumner ) );
@@ -322,7 +433,7 @@ public class MainControl extends HandlerThread {
 	static public void registReq( String Id , String passWord )
 	{
 		CommandE e = new  CommandE("ACCOUNT_REQUST");
-		e.AddAProperty(new Property("EventDefine",Integer.toString( EventDefine.UI_TO_CTRL_ACCOUNT_REQUEST ) ) );
+		e.AddAProperty(new Property("EventDefine",Integer.toString( EventDefine.IS_ACCOUNT_REQ ) ) );
 		e.AddAProperty(new Property("ID",Id ) );
 		e.AddAProperty(new Property("PASS_WORD",passWord ) );
 		Message m = MainControl.getInstance().handler.obtainMessage();
@@ -335,11 +446,13 @@ public class MainControl extends HandlerThread {
 	static void addA_FriendConfirm( String result )
 	{
 		CommandE e = new  CommandE("ADD_A_FRIEND_CONFIRM");
-		e.AddAProperty(new Property("EventDefine",Integer.toString( EventDefine.ADD_A_FRIEND_ANSWER ) ) );
+		e.AddAProperty(new Property("EventDefine",Integer.toString( EventDefine.ADD_A_FRIEND_ANSWER_REQ ) ) );
 		e.AddAProperty(new Property("URL" ,"" ) );
 		e.AddAProperty(new Property("RESULT",result ) );
 		Message m = MainControl.getInstance().handler.obtainMessage();
 		m.obj = e;
 		MainControl.getInstance().handler.sendMessage(m);
 	}
+	
+	
 }

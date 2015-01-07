@@ -15,7 +15,7 @@ public interface ServerInterfaceCmd {
 	//好友加我的回复
 	public void friendAddMeAnswer( CommandE e );
 	
-	public CommandE requestFriendList();
+	public void getFriendList( String imsi , int mobile_friend_version );
 	
 	//向服务器发送自己的GPS信息
 	public void updateGpsInfo( String phoneNumber , int longitude, int latitude );
