@@ -273,8 +273,14 @@ public class MainControl extends HandlerThread {
 				case 201:
 					
 					Log.d("MainControl" , "jpush server call me ,someone add me " );
-					//request OK , only need wait the friend feedback
+					//mInternetCom();
 					break;
+				case 202:
+					Log.d("MainControl" , "jpush server call me , add a friend sequence continue ,inquire who response   " );
+					//send "ok_friend " message to server
+					
+					break;
+					
 				default:
 					Log.d("MainControl" , "jpush server call me  , but command undefine" );
 					break;
