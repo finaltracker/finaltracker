@@ -5,6 +5,7 @@ import java.util.List;
 import com.zdn.R;
 import com.zdn.basicStruct.friendMemberData;
 import com.zdn.basicStruct.friendTeamData;
+import com.zdn.basicStruct.friendTeamDataManager;
 import com.zdn.view.FriendListView;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -20,7 +21,7 @@ public class FriendListAdapter extends BaseExpandableListAdapter
 	private static final String TAG = "FriendListAdapter";
 	private Context mContext;
 	
-	private List<friendTeamData> teams = null;
+	private friendTeamDataManager teams = null;
 
 	
 
@@ -32,25 +33,8 @@ public class FriendListAdapter extends BaseExpandableListAdapter
 	}
 
 	public Object getChild(int groupPosition, int childPosition) {
-		 Object ret = null;
-		 
-		 if( teams == null )
-		 {
-			 return null;
-		 }
-		 else
-		 {
-			 if( groupPosition >(teams.size() -1)   )
-			 {
-				 return null;
-			 }
-			 if( childPosition > (teams.get(groupPosition).member.size()-1) )
-			 {
-				 return null;
-			 }
-			 
-			 return teams.get(groupPosition).member.get(childPosition);
-		 }
+
+		return teams.getMemberData( groupPosition , childPosition );
 		 
 	}
 
@@ -59,29 +43,17 @@ public class FriendListAdapter extends BaseExpandableListAdapter
 	}
 
 	public int getChildrenCount(int groupPosition) {
-		if( groupPosition >(teams.size() -1)   )
-		{
-			return 0;
-		}
-		else
-		{
-			return teams.get(groupPosition).member.size();
-		}
+		return teams.getMemberNumInTeam(groupPosition);
+		
 	}
 
 	public Object getGroup(int groupPosition) {
-		if( groupPosition >(teams.size() -1) )
-		{
-			return null;
-		}
-		else
-		{
-			return teams.get(groupPosition);
-		}
+		
+		return teams.getTeamData(groupPosition);
 	}
 
 	public int getGroupCount() {
-		return teams.size();
+		return teams.getTeamNum();
 	}
 
 	public long getGroupId(int groupPosition) {
@@ -152,7 +124,7 @@ public class FriendListAdapter extends BaseExpandableListAdapter
 		return convertView;
 	}
 
-	public void updateListView( List<friendTeamData> updateTeams )
+	public void updateListView( friendTeamDataManager updateTeams )
 	{
 		this.teams = updateTeams;
 	}

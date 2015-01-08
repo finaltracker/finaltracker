@@ -16,6 +16,7 @@ import com.zdn.util.ImgUtil;
 import com.zdn.adapter.FriendListAdapter;
 import com.zdn.basicStruct.friendMemberData;
 import com.zdn.basicStruct.friendTeamData;
+import com.zdn.basicStruct.friendTeamDataManager;
 import com.zdn.view.FriendListView;
 import com.zdn.view.LoadingView;
 
@@ -45,7 +46,7 @@ public class PeopleFragment extends Fragment {
 	private DrawerLayout mDrawerLayout;
 	private ActionBarDrawerToggle mDrawerToggle;
 	private DBManager dbm;
-	List<friendTeamData>   allFriend = null;
+	friendTeamDataManager   allFriend = null;
 
 	
 	@Override
@@ -214,41 +215,19 @@ public class PeopleFragment extends Fragment {
 		return getActivity().getActionBar();
 	}
 
-	private List<friendTeamData> constructTeamInfoFromDb()
+	private friendTeamDataManager constructTeamInfoFromDb()
 	{
-		List<friendTeamData> updateTeams = new ArrayList<friendTeamData>();
+		friendTeamDataManager updateTeams = new friendTeamDataManager();
 		
 		ArrayList<MemberInfo> miList = dbm.searchAllData();
 		
-		Map< String ,List<friendMemberData> > mapTeamData = new HashMap< String ,List<friendMemberData> >();
 		
 		for( int i = 0 ; i < miList.size() ; i++ )
 		{
 			MemberInfo dbMi = miList.get(i);
 			
-			List<friendMemberData> memberDataList = null;
-			memberDataList = mapTeamData.get(dbMi.teamName);
-			if( null == memberDataList )
-			{
-				memberDataList = new ArrayList<friendMemberData>();
-				mapTeamData.put(dbMi.teamName, memberDataList);
-			}
-			friendMemberData md = new friendMemberData();
-			md.memberName = dbMi.memberName;
-			md.pictureAddress = dbMi.pictureAddress;
-			md.picture = ImgUtil.getInstance().loadBitmapFromCache(md.pictureAddress);
+			updateTeams.addA_FriendMemberData(dbMi.teamName, dbMi.memberName, "", dbMi.pictureAddress );
 				
-			memberDataList.add(md);
-				
-		}
-		
-		for (String key : mapTeamData.keySet()) 
-		{
-
-			friendTeamData td =  new friendTeamData();
-			updateTeams.add(td);
-			td.teamName = key;
-			td.member = mapTeamData.get(key);
 		}
 		
 		
@@ -260,54 +239,8 @@ public class PeopleFragment extends Fragment {
 	{
 		int i = 0 ;
 		
-		friendTeamData const_my_friend = null;
 		
-		for( i = 0 ; i < allFriend.size(); i++ )
-		{
-			if( allFriend.get(i).teamName.equals(teamName) )
-			{
-				friendMemberData md = new friendMemberData();
-				md.memberName = name;
-				md.pictureAddress = majiaUrl;
-				md.picture = ImgUtil.getInstance().loadBitmapFromCache(md.pictureAddress);
-					
-			
-				allFriend.get(i).member.add( md );
-				break;
-			}
-			else if(allFriend.get(i).teamName.equals( const_teamName_myFriend ) )
-			{
-				const_my_friend = allFriend.get(i);
-			}
-			
-		}
-		
-		if( i == allFriend.size() )
-		{	//not find 
-			
-			friendTeamData team = null;
-			
-			if( const_my_friend != null )
-			{ // 
-				team = const_my_friend;
-			}
-			else
-			{
-				team =  new friendTeamData();
-				team.teamName = const_teamName_myFriend;
-				allFriend.add( team );
-			}
-			
-			friendMemberData md = null;
-			md = new friendMemberData();
-			md.memberName = name;
-			md.pictureAddress = majiaUrl;
-			md.picture = ImgUtil.getInstance().loadBitmapFromCache(md.pictureAddress);
-				
-		
-			team.member.add( md );
-		}
-		
+		allFriend.addA_FriendMemberData(teamName, name, "", majiaUrl);
 		dbm.add( 0 , teamName ,name, majiaUrl );
 		mFriendListAdapter.updateListView( allFriend );
 	}
