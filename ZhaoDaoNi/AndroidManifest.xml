@@ -82,6 +82,14 @@
             </intent-filter>    
         </activity>  
         
+        <activity android:name="com.zdn.activity.PeopleActivity"    
+                  android:label="@string/app_name">    
+            <intent-filter>    
+                <action android:name="com.zdn.activity.PeopleActivity.ACTION"/>    
+                <category android:name="android.intent.category.DEFAULT"/>    
+            </intent-filter>    
+        </activity>
+        
         <activity android:name="com.zdn.activity.searchForAddFriendAdapter"    
                   android:label="@string/app_name">    
             <intent-filter>    

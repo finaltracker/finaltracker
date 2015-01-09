@@ -38,6 +38,7 @@ public class friendTeamDataManager {
 		{ 
 			ftd = new friendTeamData();
 			ftd.teamName = teamName;
+			ftd.member = new ArrayList<friendMemberData>();
 			Teams.add(ftd);
 		}
 		

@@ -9,7 +9,6 @@ import com.zdn.R;
 import com.zdn.CommandParser.CommandE;
 import com.zdn.CommandParser.Property;
 import com.zdn.event.EventDefine;
-import com.zdn.fragment.PeopleFragment;
 import com.zdn.fragment.NavigationDrawerFragment;
 import com.zdn.jpush.ExampleUtil;
 
@@ -55,7 +54,6 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 	public static final int EVENT_UI_LOG_IN_START		=	1;
 	public static final int EVENT_UI_REGIST_RESULT		=	EVENT_UI_LOG_IN_START+1;
 	public static final int MSG_SET_TAGS				=  EVENT_UI_REGIST_RESULT +1 ;
-	public static final int EVENT_UI_ADD_A_FRIEND_SUCCESS = MSG_SET_TAGS+1;
 	/**
 	 * Fragment managing the behaviors, interactions and presentation of the
 	 * navigation drawer.
@@ -67,7 +65,6 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 	 * {@link #restoreActionBar()}.
 	 */
 	MainControl control ;
-	private PeopleFragment cf;
 	
 
 	private CharSequence mTitle;
@@ -87,7 +84,6 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 				.findFragmentById(R.id.navigation_drawer);
 		mTitle = getTitle();
 		me = this; // 
-		cf = new PeopleFragment();
 		// Set up the drawer.
 		mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
 				(DrawerLayout) findViewById(R.id.drawer_layout));
@@ -179,9 +175,7 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 			
 		case R.id.contact_friend:
 			
-			ft.replace(R.id.container, cf );
-			ft.addToBackStack(null);
-			ft.commit();
+			startActivity( new Intent("com.zdn.activity.PeopleActivity.ACTION") );
 			
 			break;
 		default:
@@ -288,11 +282,6 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 	             JPushInterface.setAliasAndTags(getApplicationContext(), null, (Set<String>) msg.obj, mTagsCallback);
 
 			 }
-			else if(msg.what == EVENT_UI_ADD_A_FRIEND_SUCCESS )
-			{
-				Log.d("MainActivity", "EVENT_UI_ADD_A_FRIEND_SUCCESS");
-				cf.addA_FriendRsp("teamName","name","majiaUrl" );
-			}
 
 		};
 	};
