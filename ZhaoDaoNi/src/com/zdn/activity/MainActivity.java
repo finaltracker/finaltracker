@@ -69,6 +69,11 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 
 	private CharSequence mTitle;
 	public static boolean isForeground = false;
+	
+	MainActivity()
+	{
+		me = this; // 
+	}
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -83,7 +88,7 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 		mNavigationDrawerFragment = (NavigationDrawerFragment) getFragmentManager()
 				.findFragmentById(R.id.navigation_drawer);
 		mTitle = getTitle();
-		me = this; // 
+
 		// Set up the drawer.
 		mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
 				(DrawerLayout) findViewById(R.id.drawer_layout));

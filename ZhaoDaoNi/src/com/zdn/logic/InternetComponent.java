@@ -17,7 +17,7 @@ public class InternetComponent implements ServerInterfaceCmd {
 	String WEBSITE_ADDRESS_QUERY = WEBSITE_ADDRESS_BASE + "user/check_register/";
 	String WEBSITE_ADDRESS_ACCOUNT_REQ = WEBSITE_ADDRESS_BASE + "user/register/";
 	String WEBSITE_ADDRESS_ADD_A_FRIEND_REQ = WEBSITE_ADDRESS_BASE + "friend/add_friend/";
-	String WEBSITE_ADDRESS_ADD_A_FRIEND_ANSWER_REQ = WEBSITE_ADDRESS_BASE + "user/register/";
+	String WEBSITE_ADDRESS_ADD_A_FRIEND_ANSWER_REQ = WEBSITE_ADDRESS_BASE + "friend/ok_friend/";
 	String WEBSITE_ADDRESS_GET_FRIEND_LIST = WEBSITE_ADDRESS_BASE + "friend/get_friend/";
 	
 	
@@ -88,6 +88,7 @@ public class InternetComponent implements ServerInterfaceCmd {
 		
 	}
 
+	
 	@Override
 	public void updateGpsInfo(String phoneNumber, int longitude, int latitude) {
 		// TODO Auto-generated method stub
@@ -153,5 +154,6 @@ public class InternetComponent implements ServerInterfaceCmd {
 
 	}
 
+	
 
 }

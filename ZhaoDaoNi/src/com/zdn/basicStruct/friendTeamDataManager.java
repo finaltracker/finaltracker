@@ -3,6 +3,10 @@ package com.zdn.basicStruct;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Context;
+
+import com.adn.db.DBManager;
+import com.adn.db.DBManager.MemberInfo;
 import com.zdn.util.ImgUtil;
 
 public class friendTeamDataManager {
@@ -60,7 +64,7 @@ public class friendTeamDataManager {
 		
 		}
 		
-		fmd.PhoneNumber = PhoneNumber;
+		fmd.phoneNumber = PhoneNumber;
 		fmd.pictureAddress = pictureAddress;
 		
 		fmd.picture = ImgUtil.getInstance().loadBitmapFromCache(fmd.pictureAddress);
@@ -106,4 +110,44 @@ public class friendTeamDataManager {
 		}
 		return Teams.get(teamIndex).member.get(memberIndex);
 	}
+	
+	public void constructTeamInfoFromDb( Context context )
+	{
+		//friendTeamDataManager updateTeams = new friendTeamDataManager();
+		
+		DBManager dbm = new DBManager( context );
+		
+		ArrayList<MemberInfo> miList = dbm.searchAllData();
+		
+		
+		for( int i = 0 ; i < miList.size() ; i++ )
+		{
+			MemberInfo dbMi = miList.get(i);
+			
+			addA_FriendMemberData(dbMi.teamName, dbMi.memberName, "", dbMi.pictureAddress );
+				
+		}
+
+	}
+	
+	public void updateDataToDb( Context context )
+	{
+		DBManager dbm = new DBManager( context );
+		dbm.clearData();
+		
+		for( int i = 0 ; i < getTeamNum(); i++  )
+		{
+			
+			for( int j = 0 ; j < getMemberNumInTeam(i) ; j++ )
+			{
+				friendMemberData fmd = getMemberData(i, j);
+				//phone numner no handle
+				dbm.add( 0 , getTeamData(i).teamName ,fmd.memberName, fmd.phoneNumber , fmd.pictureAddress );
+				
+			}
+			
+			
+		}
+	}
+	
 }

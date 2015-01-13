@@ -30,14 +30,16 @@ public class DBManager {
         public int    _id;
         public String teamName;
         public String memberName;
+		public String phoneNumber;
         public String pictureAddress;
 
         public MemberInfo(){}
-        public MemberInfo(int _id,String teamName , String name,String pictureAddress ){
+        public MemberInfo(int _id,String teamName , String name, String phoneNumber , String pictureAddress ){
             this._id = _id;
             this.teamName = teamName;
             this.memberName = memberName;
             this.pictureAddress = pictureAddress;
+			this.phoneNumber = phoneNumber;
         }
 
     }
@@ -52,9 +54,9 @@ public class DBManager {
         try {
             for (MemberInfo info : memberInfo) {
                 Log.i(TAG, "------add memberInfo----------");
-                Log.i(TAG, info.teamName + "/" + info.memberName + "/" + info.pictureAddress );
+                Log.i(TAG, info.teamName + "/" + info.memberName + info.phoneNumber + "/" + info.pictureAddress );
                 // 向表info中插入数据
-                db.execSQL("INSERT INTO info VALUES(null,?,?,?)", new Object[] { info.teamName, info.memberName, info.pictureAddress });
+                db.execSQL("INSERT INTO info VALUES(null,?,?,?,?)", new Object[] { info.teamName, info.memberName, info.phoneNumber, info.pictureAddress });
             }
             db.setTransactionSuccessful();// 事务成功
         } finally {
@@ -69,12 +71,13 @@ public class DBManager {
      * @param website
      * @param weibo
      */
-    public void add(int _id, String teamName , String memberName, String pictureAddress ) {
+    public void add(int _id, String teamName , String memberName, String phoneNumber , String pictureAddress ) {
         Log.i(TAG, "------add data----------");
         ContentValues cv = new ContentValues();
         // cv.put("_id", _id);
         cv.put("teamName", teamName );
         cv.put("memberName", memberName);
+        cv.put("phoneNumber", phoneNumber);
         cv.put("pictureAddress", pictureAddress);
         db.insert(DBHelper.DB_TABLE_NAME, null, cv);
         Log.i(TAG, teamName + "/" + memberName + "/" + pictureAddress  );
@@ -144,6 +147,7 @@ public class DBManager {
             info._id = c.getInt(c.getColumnIndex("_id"));
             info.teamName = c.getString(c.getColumnIndex("teamName"));
             info.memberName = c.getString(c.getColumnIndex("memberName"));
+            info.phoneNumber = c.getString(c.getColumnIndex("phoneNumber"));
             info.pictureAddress = c.getString(c.getColumnIndex("pictureAddress"));
             list.add(info);
         }

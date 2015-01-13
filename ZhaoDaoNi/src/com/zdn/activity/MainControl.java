@@ -1,10 +1,12 @@
 package com.zdn.activity;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.zdn.CommandParser.CommandE;
 import com.zdn.CommandParser.Property;
+import com.zdn.basicStruct.friendTeamDataManager;
 import com.zdn.event.EventDefine;
 import com.zdn.logic.InternetComponent;
 import com.zdn.util.PreferencesUtil;
@@ -22,6 +24,7 @@ public class MainControl extends HandlerThread {
 	InternetComponent 	mInternetCom = null ;
 	static public  MainControl me = null;
 	public static String imsi = null;
+	friendTeamDataManager   allFriend = null;  //friend list
 	
 	final public int   STATE_NULL	= 0;
 	final public int   STATE_WAIT_QUEUE_REGSIT_RESULT	= STATE_NULL + 1; //查询是否祖册了
@@ -315,6 +318,47 @@ public class MainControl extends HandlerThread {
 		case EventDefine.GET_FRIEND_LIST_RSP:
 		{
 			//update UI
+			//获得注册结果
+			String rep = e.GetPropertyContext("HTTP_REQ_RSP");
+			
+			
+			if( rep == null || ( rep.isEmpty()) )
+			{
+				//no internet connection or server no response 
+			}
+			else
+			{
+				JSONObject  jason_obj = null;
+				int status = -1;
+				String error = "";
+				int update_type = 1;
+				
+				try {
+					jason_obj = new JSONObject(rep);
+					
+					status = jason_obj.getInt("status");
+					preferencesPara.saveFriendListVersion(jason_obj.getInt("server_friend_version"));
+					
+					update_type = jason_obj.getInt("update_type");
+					JSONArray jason_friendList = jason_obj.getJSONArray("friends");
+					JSONArray jason_CircleList = jason_obj.getJSONArray("circle");
+					//send it to PeopleActivity
+					Message m = PeopleActivity.getInstance().handler.obtainMessage();
+					m.obj = jason_obj;
+					if( PeopleActivity.getInstance() != null )
+					{
+						PeopleActivity.getInstance().handler.sendMessage(m);
+					}
+					else
+					{
+						Log.e("MainControl" , "PeopleActivity.getInstance() == null " );
+					}
+				} catch (JSONException e1) {
+
+					Log.d("MainControl" , "server response error: " + e1.getMessage() );
+					e1.printStackTrace();
+				}
+			}
 		}
 			break;
 		case EventDefine.ADD_A_FRIEND_ANSWER_REQ:
@@ -443,12 +487,14 @@ private int parseHttpReqRspStatus( CommandE e  )
 	
 	//result 1 : agree
 	//result 0 :disagree
-	static void addA_FriendConfirm( String result )
+	static void addA_FriendConfirm( String result , String targetUser  )
 	{
 		CommandE e = new  CommandE("ADD_A_FRIEND_CONFIRM");
 		e.AddAProperty(new Property("EventDefine",Integer.toString( EventDefine.ADD_A_FRIEND_ANSWER_REQ ) ) );
 		e.AddAProperty(new Property("URL" ,"" ) );
-		e.AddAProperty(new Property("RESULT",result ) );
+		e.AddAProperty(new Property("nok",result ) );
+		e.AddAProperty(new Property("target_user",targetUser ) );
+		e.AddAProperty(new Property("imsi",MainControl.imsi ) );
 		Message m = MainControl.getInstance().handler.obtainMessage();
 		m.obj = e;
 		MainControl.getInstance().handler.sendMessage(m);

@@ -111,7 +111,7 @@ public class searchForAddFriendAdapter extends BaseAdapter{
 			viewHolder = (ViewHolder) view.getTag();
 		}
 		
-		if( md.PhoneNumber == null ){
+		if( md.phoneNumber == null ){
 			viewHolder.tvLetter.setVisibility(View.VISIBLE);
 			viewHolder.tvLetter.setText(md.memberName );
 			viewHolder.tvTitle.setVisibility(View.GONE);

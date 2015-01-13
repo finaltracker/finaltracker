@@ -7,7 +7,7 @@ import android.graphics.Bitmap;
 public class friendMemberData {
 
 	public String 	memberName;
-	public String   PhoneNumber;  // todo
+	public String   phoneNumber;  // todo
 	public String   pictureAddress;
 	public Bitmap	picture;
 	
