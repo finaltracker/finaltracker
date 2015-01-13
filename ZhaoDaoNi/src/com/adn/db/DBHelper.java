@@ -27,7 +27,7 @@ public class DBHelper  extends SQLiteOpenHelper{
 	public void onCreate(SQLiteDatabase db) {		
 		//创建表
 		  db.execSQL("CREATE TABLE IF NOT EXISTS info" +  
-	                "(_id INTEGER PRIMARY KEY AUTOINCREMENT,teamName STRING ,  memberName VARCHAR, pictureAddress STRING )");
+	                "(_id INTEGER PRIMARY KEY AUTOINCREMENT,teamName STRING ,  memberName VARCHAR, phoneNumber STRING ,pictureAddress STRING )");
 		  Log.i(TAG, "create table");
 	}
 	//数据库第一次创建时onCreate方法会被调用，我们可以执行创建表的语句，当系统发现版本变化之后，会调用onUpgrade方法，我们可以执行修改表结构等语句

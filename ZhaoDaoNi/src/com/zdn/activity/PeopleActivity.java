@@ -14,6 +14,7 @@ import com.zdn.sort.ClearEditText;
 import com.zdn.adapter.FriendListAdapter;
 import com.zdn.basicStruct.friendMemberData;
 import com.zdn.basicStruct.friendTeamDataManager;
+import com.zdn.util.FileUtil;
 import com.zdn.view.FriendListView;
 import com.zdn.view.LoadingView;
 
@@ -40,8 +41,9 @@ public class PeopleActivity extends Activity {
 	friendTeamDataManager   allFriend = null;
 	
 	
-	PeopleActivity()
+	public PeopleActivity()
 	{
+		allFriend = new friendTeamDataManager();
 		me = this;
 	}
 	@Override
@@ -146,8 +148,8 @@ public class PeopleActivity extends Activity {
 	
 	public void updateAdapterInit()
 	{
-	/*
-		String[] groups = { "我的好友", "家人", "123456", "S2S73", "S1S24",
+		DBManager dbm = new DBManager( this );
+		String[] groups = { "待验证好友","我的好友", "家人",  "S2S73", "S1S24",
 				"S1S5", "亲戚" };
 		String[][] children = {
 				{ "宋慧", "章泽", "宋茜", "韩孝", "景甜", "刘亦", "康", "邓紫" },
@@ -200,8 +202,8 @@ public class PeopleActivity extends Activity {
 			
 			
 		}
-		*/
-		 allFriend.constructTeamInfoFromDb(this);
+		dbm.closeDB();
+		allFriend.constructTeamInfoFromDb(this);
 
 		mFriendListAdapter.updateListView( allFriend );
 	}

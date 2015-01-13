@@ -487,7 +487,7 @@ private int parseHttpReqRspStatus( CommandE e  )
 	
 	//result 1 : agree
 	//result 0 :disagree
-	static void addA_FriendConfirm( String result , String targetUser  )
+	static public void addA_FriendConfirm( String result , String targetUser  )
 	{
 		CommandE e = new  CommandE("ADD_A_FRIEND_CONFIRM");
 		e.AddAProperty(new Property("EventDefine",Integer.toString( EventDefine.ADD_A_FRIEND_ANSWER_REQ ) ) );

@@ -57,5 +57,16 @@
         android:singleLine="true"
         android:textColor="@color/gray"
         android:textSize="12.0sp" />
-
+		
+		
+		<ImageView
+        android:id="@+id/accept_button"
+        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignBottom="@id/icon"
+        android:layout_alignTop="@id/icon" 
+        android:src="@drawable/accept"
+        android:contentDescription="@string/app_name"/>
+		
 </RelativeLayout>

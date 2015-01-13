@@ -70,7 +70,7 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 	private CharSequence mTitle;
 	public static boolean isForeground = false;
 	
-	MainActivity()
+	public MainActivity()
 	{
 		me = this; // 
 	}

@@ -34,7 +34,7 @@ public class DBManager {
         public String pictureAddress;
 
         public MemberInfo(){}
-        public MemberInfo(int _id,String teamName , String name, String phoneNumber , String pictureAddress ){
+        public MemberInfo(int _id,String teamName , String memberName, String phoneNumber , String pictureAddress ){
             this._id = _id;
             this.teamName = teamName;
             this.memberName = memberName;

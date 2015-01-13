@@ -3,6 +3,7 @@ package com.zdn.adapter;
 import java.util.List;
 
 import com.zdn.R;
+import com.zdn.activity.MainControl;
 import com.zdn.basicStruct.friendMemberData;
 import com.zdn.basicStruct.friendTeamData;
 import com.zdn.basicStruct.friendTeamDataManager;
@@ -20,7 +21,7 @@ public class FriendListAdapter extends BaseExpandableListAdapter
 
 	private static final String TAG = "FriendListAdapter";
 	private Context mContext;
-	
+	private static final String verifingFriend = "待验证好友";
 	private friendTeamDataManager teams = null;
 
 	
@@ -71,21 +72,46 @@ public class FriendListAdapter extends BaseExpandableListAdapter
 	@Override
 	public View getChildView(int groupPosition, int childPosition,
 			boolean isLastChild, View convertView, ViewGroup parent) {
-		GroupHolder holder = null;
+		ChildHolder holder = null;
 		if (convertView == null) {
 			convertView = LayoutInflater.from(mContext).inflate(
 					R.layout.fragment_constact_child, null);
-			holder = new GroupHolder();
+			holder = new ChildHolder();
 			holder.nameView = (TextView) convertView
 					.findViewById(R.id.contact_list_item_name);
 			holder.feelView = (TextView) convertView
 					.findViewById(R.id.cpntact_list_item_state);
 			holder.iconView = (ImageView) convertView.findViewById(R.id.icon);
+			holder.acceptButton = (ImageView) convertView.findViewById(R.id.accept_button);
+			
 			convertView.setTag(holder);
 		} else {
-			holder = (GroupHolder) convertView.getTag();
+			holder = (ChildHolder) convertView.getTag();
 		}
+		
+		friendTeamData ft = (friendTeamData)getGroup( groupPosition );
+		if( ft.teamName.equals( verifingFriend ) )
+		{
+			holder.nameView.setCompoundDrawables(null,null,null,null);
+			holder.acceptButton.setVisibility(View.VISIBLE );
+    		final int groupIndex = groupPosition;
+    		final int childIndex = childPosition;
+			holder.acceptButton.setOnClickListener(new View.OnClickListener() {
+        	public void onClick(View v) {
 
+
+        		MainControl.addA_FriendConfirm( "1" , ((friendMemberData)getChild( groupIndex,childIndex)).phoneNumber  );
+        	}
+        	});
+
+
+		}
+		else
+		{
+			holder.acceptButton.setVisibility(View.GONE );
+		}
+		
+		
 		friendMemberData md = (friendMemberData)getChild(groupPosition,childPosition);
 
 		holder.iconView.setImageBitmap(md.picture);
@@ -98,11 +124,11 @@ public class FriendListAdapter extends BaseExpandableListAdapter
 	@Override
 	public View getGroupView(int groupPosition, boolean isExpanded,
 			View convertView, ViewGroup parent) {
-		ChildHolder holder = null;
+		GroupHolder holder = null;
 		if (convertView == null) {
 			convertView = LayoutInflater.from(mContext).inflate(
 					R.layout.fragment_constact_group, null);
-			holder = new ChildHolder();
+			holder = new GroupHolder();
 			holder.nameView = (TextView) convertView
 					.findViewById(R.id.group_name);
 			holder.onLineView = (TextView) convertView
@@ -111,7 +137,7 @@ public class FriendListAdapter extends BaseExpandableListAdapter
 					.findViewById(R.id.group_indicator);
 			convertView.setTag(holder);
 		} else {
-			holder = (ChildHolder) convertView.getTag();
+			holder = (GroupHolder) convertView.getTag();
 		}
 		holder.nameView.setText( ((friendTeamData)getGroup(groupPosition)).teamName );
 		holder.onLineView.setText(getChildrenCount(groupPosition) + "/"
@@ -129,16 +155,19 @@ public class FriendListAdapter extends BaseExpandableListAdapter
 		this.teams = updateTeams;
 	}
 
-	class GroupHolder {
+	class ChildHolder {
 		TextView nameView;
 		TextView feelView;
 		ImageView iconView;
+		ImageView acceptButton;
+
 	}
 
-	class ChildHolder {
+	class GroupHolder {
 		TextView nameView;
 		TextView onLineView;
 		ImageView iconView;
+
 	}
 	
 

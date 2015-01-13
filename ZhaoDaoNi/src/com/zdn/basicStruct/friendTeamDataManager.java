@@ -127,6 +127,7 @@ public class friendTeamDataManager {
 			addA_FriendMemberData(dbMi.teamName, dbMi.memberName, "", dbMi.pictureAddress );
 				
 		}
+		dbm.closeDB();
 
 	}
 	
@@ -148,6 +149,7 @@ public class friendTeamDataManager {
 			
 			
 		}
+		dbm.closeDB();
 	}
 	
 }
