@@ -32,7 +32,7 @@ import android.view.View;
 public class PeopleActivity extends Activity {
 	//private Context this;
 	//private View mBaseView;
-	static public int UPDATE_VIEW_FROM_REMOT		= 1 ;
+	static public final int  UPDATE_VIEW_FROM_REMOT		= 1 ;
 	private FriendListView mIphoneTreeView;
 	private ClearEditText mSearchView;
 	private FriendListAdapter mFriendListAdapter;

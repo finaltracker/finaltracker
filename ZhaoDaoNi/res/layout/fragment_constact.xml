@@ -5,11 +5,11 @@
 
     
     <include
-        android:id="@+id/search"
+        android:id="@+id/Fragment_ConstactSearch"
         layout="@layout/common_search_x" />
     <TextView 
         android:id="@+id/tv"
-        android:layout_below="@id/search"
+        android:layout_below="@id/Fragment_ConstactSearch"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:text="@string/friend_group"

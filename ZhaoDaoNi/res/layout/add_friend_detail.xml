@@ -16,19 +16,19 @@
             android:orientation="horizontal" >
 
             <EditText
-                android:id="@+id/editText1"
+                android:id="@+id/add_friend_detail_serach_context"
                 android:layout_width="wrap_content"
                 android:layout_height="40.0dip"
                 android:layout_marginTop="3.0dip"
                 android:background="@drawable/edittext_bg_selector"
-                android:hint="I love you"
+                android:hint="请输入好友号码/手机号"
                 android:singleLine="true"
                 android:layout_weight="3"
                 android:textColorHint="@color/hintColor"
                 android:textStyle="bold" />
 
             <Button
-                android:id="@+id/search"
+                android:id="@+id/AddFriendDetailSearch"
                 android:layout_width="wrap_content"
                 android:layout_marginTop="3.0dip"
                 android:layout_height="50.0dip"

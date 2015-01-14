@@ -329,21 +329,17 @@ public class MainControl extends HandlerThread {
 			else
 			{
 				JSONObject  jason_obj = null;
-				int status = -1;
 				String error = "";
-				int update_type = 1;
 				
 				try {
 					jason_obj = new JSONObject(rep);
 					
-					status = jason_obj.getInt("status");
+					int status = jason_obj.getInt("status");
 					preferencesPara.saveFriendListVersion(jason_obj.getInt("server_friend_version"));
 					
-					update_type = jason_obj.getInt("update_type");
-					JSONArray jason_friendList = jason_obj.getJSONArray("friends");
-					JSONArray jason_CircleList = jason_obj.getJSONArray("circle");
 					//send it to PeopleActivity
 					Message m = PeopleActivity.getInstance().handler.obtainMessage();
+					m.what = PeopleActivity.UPDATE_VIEW_FROM_REMOT ;
 					m.obj = jason_obj;
 					if( PeopleActivity.getInstance() != null )
 					{
@@ -370,11 +366,56 @@ public class MainControl extends HandlerThread {
 				
 				if( queueRsp == 0 )
 				{
-					Log.d("MainControl" , "send add-a-friend-answer success" );
+					Log.d("MainControl" , "send ADD_A_FRIEND_ANSWER_REQ queueRsp ok" );
 
 				}
 			}
 			break;
+		case EventDefine.SEARCH_FRIEND_OR_CIRCLE_REQ:
+			mInternetCom.searchFirendOrCircle( e );
+			
+			break;
+		case EventDefine.SEARCH_FRIEND_OR_CIRCLE_RSP:
+			{
+				//update UI
+				//获得注册结果
+				String rep = e.GetPropertyContext("HTTP_REQ_RSP");
+				
+				
+				if( rep == null || ( rep.isEmpty()) )
+				{
+					//no internet connection or server no response 
+				}
+				else
+				{
+					JSONObject  jason_obj = null;
+					int status = -1;
+					String error = "";
+					try {
+						jason_obj = new JSONObject(rep);
+						
+						status = jason_obj.getInt("status");
+						//send it to searchFriendResultForAddActivity
+						if( searchFriendResultForAddActivity.getInstance() != null )
+						{
+							Message m = searchFriendResultForAddActivity.getInstance().handler.obtainMessage();
+							m.what = searchFriendResultForAddActivity.UPDATE_VIEW_FROM_REMOT;
+							m.obj = jason_obj;
+							searchFriendResultForAddActivity.getInstance().handler.sendMessage(m);
+						}
+						else
+						{
+							Log.e("MainControl" , "PeopleActivity.getInstance() == null " );
+						}
+					} catch (JSONException e1) {
+
+						Log.d("MainControl" , "server response error: " + e1.getMessage() );
+						e1.printStackTrace();
+					}
+				}
+			}
+			break;
+		
 		default:
 			break;
 		}
@@ -500,5 +541,16 @@ private int parseHttpReqRspStatus( CommandE e  )
 		MainControl.getInstance().handler.sendMessage(m);
 	}
 	
-	
+	static public void searchFirendOrCircle(String search_str) {
+
+		CommandE e = new CommandE("SEND_MESSAGE_TO_SERVER");
+		e.AddAProperty(new Property("EventDefine" ,Integer.toString(EventDefine.SEARCH_FRIEND_OR_CIRCLE_REQ ) ) );
+		e.AddAProperty(new Property("URL" ,InternetComponent.WEBSITE_SEARCH_FRIEND_OR_CIRCLE ) );
+		e.AddAProperty(new Property("search_str",search_str ) );
+		Message m = MainControl.getInstance().handler.obtainMessage();
+		m.obj = e;   //
+        
+		MainControl.getInstance().handler.sendMessage(m);
+
+	}
 }

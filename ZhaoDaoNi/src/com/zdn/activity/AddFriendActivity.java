@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 public class AddFriendActivity extends Activity  {
@@ -38,6 +39,9 @@ public class AddFriendActivity extends Activity  {
 
 	private List<View> allViews = new ArrayList<View>();
 	
+	EditText searchContext = null ;
+	Button	 searchButton = null;
+	
 	public AddFriendActivity() {
 		// TODO Auto-generated constructor stub
 	}
@@ -53,37 +57,9 @@ public class AddFriendActivity extends Activity  {
 	private void setupViews() {
 		pager = (ViewPager) findViewById(R.id.pager);
 		pager.setOffscreenPageLimit(2);
-
+		
 		pageNo = pager.getCurrentItem();
-
-		pager.setOnPageChangeListener(new OnPageChangeListener() {
-			@Override
-			public void onPageSelected(int arg0) {
-				// 
-				//
-				pageNo = arg0;
-				for (int i = 0; i < bottomBtns.length; i++) {
-					if (i == arg0) {
-						bottomBtns[i]
-								.setBackgroundResource(allBottomsImgsSelected[i]);
-					} else {
-						bottomBtns[i].setBackgroundResource(allBottomsImgs[i]);
-					}
-				}
-			}
-
-			@Override
-			public void onPageScrollStateChanged(int arg0) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void onPageScrolled(int arg0, float arg1, int arg2) {
-				// TODO Auto-generated method stub
-
-			}
-		});
+		
 		allViews.clear();
 
 
@@ -92,7 +68,22 @@ public class AddFriendActivity extends Activity  {
         //initVideoView(VideoView);
         allViews.add(VideoView);
         
+        searchContext = (EditText) VideoView.findViewById(R.id.add_friend_detail_serach_context);
+		searchButton = (Button) VideoView.findViewById(R.id.AddFriendDetailSearch);
+		searchButton.setOnClickListener( new View.OnClickListener() {
+        	public void onClick(View v) {
+        		String text = searchContext.getText().toString() ;
+        		if(!text.isEmpty())
+        		{
+        			MainControl.searchFirendOrCircle( text );
+        		}
+        		
+        	}
+        	});
+        
         View detailItemView =  VideoView.findViewById(R.id.add_friend_detail_add_contract );
+
+		
         detailItemView.setOnClickListener(new View.OnClickListener() {
         	public void onClick(View v) {
 
@@ -174,6 +165,15 @@ public class AddFriendActivity extends Activity  {
 						}
 						if (event.getAction() == MotionEvent.ACTION_UP) {
 							pageNo = temp;
+							if(pageNo == 0 )
+							{
+								searchContext.setHint("ÇëÊäÈëºÃÓÑºÅÂë/ÊÖ»úºÅ");
+							}
+							else
+							{
+								searchContext.setHint("ÇëÊäÈ¦×ÓºÅÂë");
+							}
+							
 							for( int i = 0 ; i < 2 ; i++ )
 							{
 								if( i == pageNo)

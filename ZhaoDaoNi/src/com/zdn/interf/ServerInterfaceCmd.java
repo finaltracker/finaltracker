@@ -22,6 +22,8 @@ public interface ServerInterfaceCmd {
 	
 	//向服务器请求friend的GPS信息
 	public void requestFriendGpsInfo( String phoneNumber , int longitude, int latitude );
+	
+	public void searchFirendOrCircle(  CommandE e );
 
 	
 }

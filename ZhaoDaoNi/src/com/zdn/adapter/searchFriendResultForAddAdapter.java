@@ -1,14 +1,21 @@
 package com.zdn.adapter;
 
-import java.util.List;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.zdn.R;
 
 import com.zdn.activity.MainControl;
+import com.zdn.activity.PeopleActivity;
 import com.zdn.basicStruct.friendMemberData;
-import com.zdn.basicStruct.friendTeamData;
+import com.zdn.basicStruct.friendTeamDataManager;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,29 +24,31 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
-public class searchForAddFriendAdapter extends BaseAdapter{
-	private List<friendTeamData> teams = null;;
+public class searchFriendResultForAddAdapter extends BaseAdapter{
+	private friendTeamDataManager teams = null;;
 	private Context mContext;
 	
-	public searchForAddFriendAdapter(Context mContext, List<friendTeamData> teams ) {
+	
+	public searchFriendResultForAddAdapter(Context mContext ,friendTeamDataManager teams ) {
 		this.mContext = mContext;
-		this.teams = teams;
+		this.teams =  teams;
+
 	}
 	
 	/**
 	 * 当ListView数据发生变化�?调用此方法来更新ListView
 	 * @param list
 	 */
-	public void updateListView(List<friendTeamData> teams ){
+	public void updateListView(friendTeamDataManager teams ){
 		this.teams = teams;
 		notifyDataSetChanged();
 	}
 
 	public int getCount() {
 		int count = 0 ;
-		for( int i = 0 ; i < teams.size() ; i ++ )
+		for( int i = 0 ; i < teams.getTeamNum() ; i ++ )
 		{
-			count += teams.get(i).member.size();
+			count += teams.getMemberNumInTeam(i);
 		}
 		return count;
 	}
@@ -47,16 +56,16 @@ public class searchForAddFriendAdapter extends BaseAdapter{
 	public Object getItem(int position) {
 		
 		Object ret = null;
-		for( int i = 0 ; i < teams.size() ; i ++ )
+		for( int i = 0 ; i < teams.getTeamNum() ; i ++ )
 		{
-			if( ( position - teams.get(i).member.size())  < 0 )
+			if( ( position - teams.getMemberNumInTeam(i))  < 0 )
 			{
-				ret = teams.get(i).member.get(position);
+				ret = teams.getMemberData(i, position);
 				break;
 			}
 			else
 			{
-				position -= teams.get(i).member.size();
+				position -= teams.getMemberNumInTeam(i) ;
 			}
 			
 		}
@@ -74,16 +83,16 @@ public class searchForAddFriendAdapter extends BaseAdapter{
 		int location = position;
 		friendMemberData md = null;
 		
-		for( int i = 0 ; i < teams.size() ; i ++ )
+		for( int i = 0 ; i < teams.getTeamNum( ); i ++ )
 		{
-			if( ( location - teams.get(i).member.size())  < 0 )
+			if( ( location - teams.getMemberNumInTeam(i) ) < 0 )
 			{
-				md = teams.get(i).member.get(location);
+				md = teams.getMemberData(i, location);
 				break;
 			}
 			else
 			{
-				location -= teams.get(i).member.size();
+				location -= teams.getMemberNumInTeam(i);
 			}
 			
 		}
@@ -135,6 +144,7 @@ public class searchForAddFriendAdapter extends BaseAdapter{
 		return view;
 
 	}
+	
 	
 
 
