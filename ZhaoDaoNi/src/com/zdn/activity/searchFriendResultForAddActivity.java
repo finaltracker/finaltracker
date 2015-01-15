@@ -14,12 +14,14 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.widget.ListView;
 
 public class searchFriendResultForAddActivity extends Activity {
 	
 	public static final int UPDATE_VIEW_FROM_REMOT = 0;
 	private searchFriendResultForAddAdapter sfafAdapter ;
 	friendTeamDataManager teams = null;
+	ListView         search_for_add_friend_list = null;
 	
 	static public searchFriendResultForAddActivity me;
 	
@@ -48,7 +50,9 @@ public class searchFriendResultForAddActivity extends Activity {
 	
 	private void init() 
 	{
+		search_for_add_friend_list = (ListView)findViewById(R.id.search_for_add_friend_list );
 		sfafAdapter = new searchFriendResultForAddAdapter( this ,teams );
+		search_for_add_friend_list.setAdapter( sfafAdapter );
 	}
  
 	private void updateListFromServer( JSONArray jason_friendList )
@@ -58,17 +62,20 @@ public class searchFriendResultForAddActivity extends Activity {
 		for( int i = 0 ; i < jason_friendList.length() ; i++ )
 		{
 			JSONObject obj;
+			String memberName="";
+			String phoneNumber="";
+			String pictureAddress = null;
 			try {
 				obj = (JSONObject)(jason_friendList.get(i));
 			
-				String memberName = obj.getString("nickname");
-				String phoneNumber = obj.getString("mobile");
-				String pictureAddress = obj.getString("avatar_url");
-				teams.addA_FriendMemberData( "找到的好友", memberName, phoneNumber , pictureAddress );
+				memberName = obj.getString("nickname");
+				phoneNumber = obj.getString("mobile");
+				pictureAddress = obj.getString("avatar_url");
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			teams.addA_FriendMemberData( "找到的好友", memberName, phoneNumber , pictureAddress );
 			
 		}				
 		sfafAdapter.updateListView(teams);

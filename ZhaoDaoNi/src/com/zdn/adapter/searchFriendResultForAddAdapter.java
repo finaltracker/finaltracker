@@ -39,8 +39,9 @@ public class searchFriendResultForAddAdapter extends BaseAdapter{
 	 * 当ListView数据发生变化�?调用此方法来更新ListView
 	 * @param list
 	 */
-	public void updateListView(friendTeamDataManager teams ){
-		this.teams = teams;
+	public void updateListView(friendTeamDataManager new_teams ){
+		
+		teams = new_teams;
 		notifyDataSetChanged();
 	}
 
@@ -102,11 +103,11 @@ public class searchFriendResultForAddAdapter extends BaseAdapter{
 		if (view == null) {
 			viewHolder = new ViewHolder();
 			view = LayoutInflater.from(mContext).inflate(R.layout.search_for_for_add_friend_item, null);
-			viewHolder.tvTitle = (TextView) view.findViewById(R.id.title);
-			viewHolder.tvLetter = (TextView) view.findViewById(R.id.catalog);
-			viewHolder.majia = (ImageView) view.findViewById(R.id.PersonIcon);
-			viewHolder.phoneNumner = (TextView) view.findViewById(R.id.phoneNumber);
-			viewHolder.AddFriend = (ImageView) view.findViewById(R.id.AddFriend );
+			viewHolder.tvTitle = (TextView) view.findViewById(R.id.Search_for_for_add_friend_item_title);
+			viewHolder.tvLetter = (TextView) view.findViewById(R.id.Search_for_for_add_friend_item_catalog);
+			viewHolder.majia = (ImageView) view.findViewById(R.id.Search_for_for_add_friend_item_PersonIcon);
+			viewHolder.phoneNumner = (TextView) view.findViewById(R.id.Search_for_for_add_friend_item_phoneNumber);
+			viewHolder.AddFriend = (ImageView) view.findViewById(R.id.Search_for_for_add_friend_item_AddFriend );
 			
 			viewHolder.AddFriend.setOnClickListener(new View.OnClickListener() {
 	        	public void onClick(View v) {
@@ -133,9 +134,11 @@ public class searchFriendResultForAddAdapter extends BaseAdapter{
 
 			viewHolder.tvLetter.setVisibility(View.GONE);
 			
+			viewHolder.tvTitle.setVisibility(View.VISIBLE);
 			viewHolder.tvTitle.setText(md.memberName );
-			viewHolder.tvTitle.setText(View.GONE);
-			viewHolder.phoneNumner.setText(View.GONE);
+			//viewHolder.tvTitle.setText(View.GONE);
+			viewHolder.phoneNumner.setVisibility(View.VISIBLE);
+			viewHolder.phoneNumner.setText(md.phoneNumber);
 			//viewHolder.AddFriend.setImageBitmap()
 			//viewHolder.AddFriend.setImageBitmap( );
 		

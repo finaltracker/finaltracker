@@ -6,7 +6,7 @@
     android:orientation="vertical" >
 
     <TextView
-        android:id="@+id/catalog"
+        android:id="@+id/Search_for_for_add_friend_item_catalog"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:textColor="#454545"
@@ -14,14 +14,14 @@
         android:paddingTop="5dip"
         android:paddingBottom="5dip"/>
     <RelativeLayout 
-        android:id="@+id/ll_constact"
+        android:id="@+id/Search_for_for_add_friend_item_ll_constact"
         android:layout_height="60dp"
         android:layout_width="match_parent"
         android:orientation="horizontal"
         android:gravity="center_vertical"
         android:background="@color/whites">
         <ImageView
-            android:id="@+id/PersonIcon" 
+            android:id="@+id/Search_for_for_add_friend_item_PersonIcon" 
             android:layout_height="50dp"
             android:layout_width="50dp"
             android:src="@drawable/h001"
@@ -31,27 +31,29 @@
             android:contentDescription="@string/app_name"
             android:layout_marginLeft="5dp"/>
         <TextView 
-            android:id="@+id/title"
+            android:id="@+id/Search_for_for_add_friend_item_title"
             android:layout_height="25dp"
             android:layout_width="wrap_content"
             android:layout_marginLeft="10.0dip"
 	        android:layout_marginRight="18.0dip"
-	        android:layout_toRightOf="@id/PersonIcon"
+	        android:layout_toRightOf="@id/Search_for_for_add_friend_item_PersonIcon"
+	        android:text="default"
             android:textColor="#336598"
             android:textSize="18sp"/>
         
         <TextView 
-            android:id="@+id/phoneNumber"
+            android:id="@+id/Search_for_for_add_friend_item_phoneNumber"
             android:layout_height="25dp"
             android:layout_width="wrap_content"
             android:layout_marginLeft="10.0dip"
 	        android:layout_marginRight="18.0dip"
-	        android:layout_toRightOf="@id/PersonIcon"
+	        android:layout_toRightOf="@id/Search_for_for_add_friend_item_PersonIcon"
 	        android:layout_below  = "@id/title"
+	         android:text="default"
             android:textColor="#336598"
             android:textSize="16sp"/>
         <ImageView
-            android:id="@+id/AddFriend" 
+            android:id="@+id/Search_for_for_add_friend_item_AddFriend" 
             android:layout_height="40dp"
             android:layout_width="40dp"
             android:src="@drawable/add"

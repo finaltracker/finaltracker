@@ -1,6 +1,7 @@
 package com.zdn.basicStruct;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import android.content.Context;
@@ -152,4 +153,10 @@ public class friendTeamDataManager {
 		dbm.closeDB();
 	}
 	
+	public void cloneToAnother( friendTeamDataManager another )
+	{
+		another.Teams.clear();
+		Collections.copy(this.Teams, another.Teams );;
+
+	}
 }
