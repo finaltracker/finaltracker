@@ -125,7 +125,6 @@ public class InternetComponent implements ServerInterfaceCmd {
 		Message msg = handler.obtainMessage(); 
 		msg.what = ThreadTaskHandler.SEND_MESSAGE_TO_SERVER;
         
-		e.GetProperty("URL").SetPropertyContext( WEBSITE_ADDRESS_ADD_A_FRIEND_ANSWER_REQ );
 		msg.obj = e;   //
         
         handler.sendMessage(msg);

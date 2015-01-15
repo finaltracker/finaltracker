@@ -101,7 +101,10 @@ public class searchFriendResultForAddActivity extends Activity {
 						e.printStackTrace();
 					}
 					
-					updateListFromServer( jason_friendList );
+					if( jason_friendList != null )
+					{
+						updateListFromServer( jason_friendList );
+					}
 				}
 			} 
 		}

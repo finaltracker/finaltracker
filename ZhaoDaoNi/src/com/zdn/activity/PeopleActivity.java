@@ -37,13 +37,10 @@ public class PeopleActivity extends Activity {
 	private ClearEditText mSearchView;
 	private FriendListAdapter mFriendListAdapter;
 	static public PeopleActivity me;
-	//private DBManager dbm;
-	friendTeamDataManager   allFriend = null;
 	
 	
 	public PeopleActivity()
 	{
-		allFriend = new friendTeamDataManager();
 		me = this;
 	}
 	@Override
@@ -148,6 +145,7 @@ public class PeopleActivity extends Activity {
 	
 	public void updateAdapterInit()
 	{
+		/*
 		DBManager dbm = new DBManager( this );
 		String[] groups = { "待验证好友","我的好友", "家人",  "S2S73", "S1S24",
 				"S1S5", "亲戚" };
@@ -203,43 +201,18 @@ public class PeopleActivity extends Activity {
 			
 		}
 		dbm.closeDB();
-		allFriend.constructTeamInfoFromDb(this);
+		*/
+		
 
-		mFriendListAdapter.updateListView( allFriend );
+		mFriendListAdapter.updateListView( MainControl.getFrilendList() );
 	}
 	
+	public void update()
+	{
+		mFriendListAdapter.updateListView( MainControl.getFrilendList() );
+	}
 	// "update_type: " 	1  	update all
 	// 					2 	part update 
-	public void updateFriendListFromServer( int update_type , JSONArray jason_friendList )
-	{
-		if( 1 == update_type  || ( allFriend == null) )
-		{
-			allFriend = new friendTeamDataManager();
-		}
-		
-			
-		for( int i = 0 ; i < jason_friendList.length() ; i++ )
-		{
-			JSONObject obj;
-			try {
-				obj = (JSONObject)(jason_friendList.get(i));
-			
-				String teamName = obj.getString("team");
-				String memberName = obj.getString("nickname");
-				String phoneNumber = obj.getString("mobile");
-				String pictureAddress = obj.getString("avatar_url");
-				allFriend.addA_FriendMemberData( teamName, memberName, phoneNumber , pictureAddress );
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-		}				
-		allFriend.updateDataToDb(this);
-		mFriendListAdapter.updateListView( allFriend );
-
-		
-	}
 	
 	public Handler handler = new Handler() {
 		public void handleMessage(Message msg) {
@@ -251,22 +224,7 @@ public class PeopleActivity extends Activity {
 				}
 				else
 				{
-					JSONObject jason_obj = (JSONObject)(msg.obj);
-					
-					int update_type = 0;
-					JSONArray jason_friendList = null;
-					JSONArray jason_CircleList = null;
-					try {
-	
-						update_type = jason_obj.getInt("update_type");
-						jason_friendList = jason_obj.getJSONArray("friends");
-						jason_CircleList = jason_obj.getJSONArray("circle");
-					} catch (JSONException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					
-					updateFriendListFromServer( update_type, jason_friendList );
+					update();
 				}
 			} 
 		}

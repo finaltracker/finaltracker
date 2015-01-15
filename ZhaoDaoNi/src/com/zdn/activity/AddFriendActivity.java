@@ -75,6 +75,7 @@ public class AddFriendActivity extends Activity  {
         		String text = searchContext.getText().toString() ;
         		if(!text.isEmpty())
         		{
+        			startActivity( new Intent("com.zdn.activity.searchFriendResultForAddActivity.ACTION") );
         			MainControl.searchFirendOrCircle( text );
         		}
         		

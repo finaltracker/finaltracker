@@ -24,7 +24,7 @@ public class MainControl extends HandlerThread {
 	InternetComponent 	mInternetCom = null ;
 	static public  MainControl me = null;
 	public static String imsi = null;
-	friendTeamDataManager   allFriend = null;  //friend list
+	static friendTeamDataManager   allFriend = null;  //friend list
 	
 	final public int   STATE_NULL	= 0;
 	final public int   STATE_WAIT_QUEUE_REGSIT_RESULT	= STATE_NULL + 1; //查询是否祖册了
@@ -35,9 +35,11 @@ public class MainControl extends HandlerThread {
 	
 	String TAG = "MainControl";
 	final public int COMMAND_NULL	= 0;
+	public static String UserName; // phone number
 	
 	static public final int SEND_MESSAGE_TO_SERVER_RSP = 1;
 	static public final int JPUSH_SERVER_TO_UE_COMMAND = 2;
+	
 	
 	public MainControl(String name ,MainActivity ma ) {
 		super(name);
@@ -47,6 +49,8 @@ public class MainControl extends HandlerThread {
 		TelephonyManager mTelephonyMgr = (TelephonyManager) mMainActivity.getSystemService(Context.TELEPHONY_SERVICE);
 		imsi = mTelephonyMgr.getSubscriberId();
 		preferencesPara = new PreferencesUtil(mMainActivity);
+		allFriend = new friendTeamDataManager();
+		allFriend.constructTeamInfoFromDb(mMainActivity);
 
 	}
 
@@ -137,6 +141,7 @@ public class MainControl extends HandlerThread {
 			try {
 				jason_obj = new JSONObject(rep);
 				queueRsp = jason_obj.getInt("status");
+				UserName = jason_obj.getString("username");
 			} catch (JSONException e1) {
 
 				Log.d("MainControl" , "server response error: " + e1.getMessage() );
@@ -154,6 +159,7 @@ public class MainControl extends HandlerThread {
 			else if( queueRsp == EventDefine.IS_REQIST_RSP_HAS_REGIST )
 			{// 
 				// 请求好友列表
+				
 				mInternetCom.getFriendList(imsi,  preferencesPara.getFriendListVersion() );
 				
 				state = STATE_LOGIN_NORMAL;
@@ -335,8 +341,13 @@ public class MainControl extends HandlerThread {
 					jason_obj = new JSONObject(rep);
 					
 					int status = jason_obj.getInt("status");
+					if( status != 0 )
+					{
+						Log.d("MainControl", "GET_FRIEND_LIST_RSP status = " + status );
+					}
 					preferencesPara.saveFriendListVersion(jason_obj.getInt("server_friend_version"));
 					
+					updateFriendListFromServer( jason_obj.getInt("update_type") , jason_obj.getJSONArray("friends"));
 					//send it to PeopleActivity
 					Message m = PeopleActivity.getInstance().handler.obtainMessage();
 					m.what = PeopleActivity.UPDATE_VIEW_FROM_REMOT ;
@@ -484,7 +495,7 @@ public class MainControl extends HandlerThread {
 		return jason_obj;
 	}
 	
-private int parseHttpReqRspStatus( CommandE e  )
+	private int parseHttpReqRspStatus( CommandE e  )
 	{
 		int queueRsp = -1;
 		JSONObject  jason_obj = parseHttpReqRsp(e);
@@ -499,6 +510,42 @@ private int parseHttpReqRspStatus( CommandE e  )
 		
 		return queueRsp;
 	}	
+	
+	static public friendTeamDataManager getFrilendList()
+	{
+		return allFriend;
+	}
+	
+	public void updateFriendListFromServer( int update_type , JSONArray jason_friendList )
+	{
+		if( jason_friendList == null ) return;
+		
+		if( 1 == update_type  || ( allFriend == null) )
+		{
+			allFriend = new friendTeamDataManager();
+		}
+		
+			
+		for( int i = 0 ; i < jason_friendList.length() ; i++ )
+		{
+			JSONObject obj;
+			try {
+				obj = (JSONObject)(jason_friendList.get(i));
+			
+				String teamName = obj.getString("team");
+				String memberName = obj.getString("nickname");
+				String phoneNumber = obj.getString("mobile");
+				String pictureAddress = obj.getString("avatar_url");
+				allFriend.addA_FriendMemberData( teamName, memberName, phoneNumber , pictureAddress );
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}				
+		allFriend.updateDataToDb( mMainActivity );
+
+	}
 	//COMMON API
 	
 	/* add a friend */
@@ -536,6 +583,7 @@ private int parseHttpReqRspStatus( CommandE e  )
 		e.AddAProperty(new Property("nok",result ) );
 		e.AddAProperty(new Property("target_user",targetUser ) );
 		e.AddAProperty(new Property("imsi",MainControl.imsi ) );
+		e.AddAProperty(new Property("client",MainControl.UserName ) );
 		Message m = MainControl.getInstance().handler.obtainMessage();
 		m.obj = e;
 		MainControl.getInstance().handler.sendMessage(m);
@@ -547,6 +595,7 @@ private int parseHttpReqRspStatus( CommandE e  )
 		e.AddAProperty(new Property("EventDefine" ,Integer.toString(EventDefine.SEARCH_FRIEND_OR_CIRCLE_REQ ) ) );
 		e.AddAProperty(new Property("URL" ,InternetComponent.WEBSITE_SEARCH_FRIEND_OR_CIRCLE ) );
 		e.AddAProperty(new Property("search_str",search_str ) );
+		e.AddAProperty(new Property("client",MainControl.UserName ) );
 		Message m = MainControl.getInstance().handler.obtainMessage();
 		m.obj = e;   //
         
