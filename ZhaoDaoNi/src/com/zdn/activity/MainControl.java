@@ -2,7 +2,7 @@ package com.zdn.activity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject; 
+import org.json.JSONObject;
 
 import com.zdn.CommandParser.CommandE;
 import com.zdn.CommandParser.Property;
@@ -27,7 +27,7 @@ public class MainControl extends HandlerThread {
 	static friendTeamDataManager   allFriend = null;  //friend list
 	
 	final public int   STATE_NULL	= 0;
-	final public int   STATE_WAIT_QUEUE_REGSIT_RESULT	= STATE_NULL + 1; //ï¿½ï¿½Ñ¯ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	final public int   STATE_WAIT_QUEUE_REGSIT_RESULT	= STATE_NULL + 1; //²éÑ¯ÊÇ·ñ×æ²áÁË
 	final public int   STATE_WAIT_UI_LOGIN				= STATE_WAIT_QUEUE_REGSIT_RESULT + 1; // wait UI launch login procedure
 	final public int   STATE_WAIT_SERVER_REGSIT_RESULT			= STATE_WAIT_UI_LOGIN + 1; // wait UI launch login procedure
 	final public int   STATE_LOGIN_NORMAL			= STATE_WAIT_SERVER_REGSIT_RESULT + 1; // LOGIN_NORMAL
@@ -158,7 +158,7 @@ public class MainControl extends HandlerThread {
 			}
 			else if( queueRsp == EventDefine.IS_REQIST_RSP_HAS_REGIST )
 			{// 
-				// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð±ï¿½
+				// ÇëÇóºÃÓÑÁÐ±í
 				
 				mInternetCom.getFriendList(imsi,  preferencesPara.getFriendListVersion() );
 				
@@ -205,7 +205,7 @@ public class MainControl extends HandlerThread {
 		switch (RcvCommand)
 		{
 		case EventDefine.IS_ACCOUNT_RSP:
-			//ï¿½ï¿½ï¿½×¢ï¿½ï¿½ï¿½ï¿½
+			//»ñµÃ×¢²á½á¹û
 			String rep = e.GetPropertyContext("HTTP_REQ_RSP");
 			
 			
@@ -273,19 +273,19 @@ public class MainControl extends HandlerThread {
 			
 			if( queueRsp == 0 )
 			{
-				Log.d("MainControl" , "add a friend ï¿½ï¿½server accept!" );
+				Log.d("MainControl" , "add a friend £¬server accept!" );
 				
 				//request OK , only need wait the friend feedback
 			}
 			else if (queueRsp == 34 )
 			{
-				Log.d("MainControl" , "add a friend ï¿½ï¿½server response: friend have not exist!" );
+				Log.d("MainControl" , "add a friend £¬server response: friend have not exist!" );
 				//TODO
-				//ï¿½ï¿½ï¿½Í¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+				//·¢ËÍ¶ÌÐÅÌáÐÑ
 			}
 			else
 			{
-				Log.d("MainControl" , "add a friend ï¿½ï¿½user do not exist" );
+				Log.d("MainControl" , "add a friend £¬user do not exist" );
 			}
 			
 			break;
@@ -324,7 +324,7 @@ public class MainControl extends HandlerThread {
 		case EventDefine.GET_FRIEND_LIST_RSP:
 		{
 			//update UI
-			//ï¿½ï¿½ï¿½×¢ï¿½ï¿½ï¿½ï¿½
+			//»ñµÃ×¢²á½á¹û
 			String rep = e.GetPropertyContext("HTTP_REQ_RSP");
 			
 			
@@ -389,7 +389,7 @@ public class MainControl extends HandlerThread {
 		case EventDefine.SEARCH_FRIEND_OR_CIRCLE_RSP:
 			{
 				//update UI
-				//ï¿½ï¿½ï¿½×¢ï¿½ï¿½ï¿½ï¿½
+				//»ñµÃ×¢²á½á¹û
 				String rep = e.GetPropertyContext("HTTP_REQ_RSP");
 				
 				
