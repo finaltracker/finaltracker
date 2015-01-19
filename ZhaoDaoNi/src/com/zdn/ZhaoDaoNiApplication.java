@@ -1,4 +1,4 @@
-package com.zdn.activity;
+package com.zdn;
 
 import cn.jpush.android.api.JPushInterface;
 import android.app.Application;
