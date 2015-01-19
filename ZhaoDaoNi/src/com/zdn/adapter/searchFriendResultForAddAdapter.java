@@ -135,7 +135,7 @@ public class searchFriendResultForAddAdapter extends BaseAdapter{
 			viewHolder.tvLetter.setVisibility(View.GONE);
 			
 			viewHolder.tvTitle.setVisibility(View.VISIBLE);
-			viewHolder.tvTitle.setText(md.memberName );
+			viewHolder.tvTitle.setText(md.memberName);
 			//viewHolder.tvTitle.setText(View.GONE);
 			viewHolder.phoneNumner.setVisibility(View.VISIBLE);
 			viewHolder.phoneNumner.setText(md.phoneNumber);
