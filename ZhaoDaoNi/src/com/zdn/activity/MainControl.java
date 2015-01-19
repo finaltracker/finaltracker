@@ -36,7 +36,7 @@ public class MainControl extends HandlerThread {
 	public static String UserName; // phone number
 	
 	static public final int SEND_MESSAGE_TO_SERVER_RSP = 1;
-	static public final int JPUSH_SERVER_TO_UE_COMMAND = 2;
+
 	
 	
 	public MainControl(String name ,MainActivity ma ) {

@@ -118,7 +118,7 @@ public class MyReceiver extends BroadcastReceiver {
 			}
 				
 			Message msg_cmd = MainControl.getInstance().obtainMessage(); 
-			msg_cmd.what = MainControl.JPUSH_SERVER_TO_UE_COMMAND;
+			msg_cmd.what = EventDefine.JPUSH_SERVER_COMMAND;
 			
 			CommandE e_c = new CommandE("JPUSH_SERVER_COMMAND");
 			
