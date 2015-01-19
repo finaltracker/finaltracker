@@ -1,11 +1,11 @@
 package com.zdn.event;
 
 public class EventDefine {
-	public static final int IS_ACCOUNT_QUEUE_REQ	= 1;
-	public static final int IS_ACCOUNT_QUEUE_RSP	= IS_ACCOUNT_QUEUE_REQ+1;
-	public static final int IS_ACCOUNT_REQ			= IS_ACCOUNT_QUEUE_RSP+1;
-	public static final int IS_ACCOUNT_RSP			= IS_ACCOUNT_REQ+1;
-	public static final int GET_FRIEND_LIST_REQ		= IS_ACCOUNT_RSP+1;
+	public static final int CHECK_REGIST_REQ	= 1;
+	public static final int CHECK_REGIST_RSP	= CHECK_REGIST_REQ+1;
+	public static final int REGIST_REQ			= CHECK_REGIST_RSP+1;
+	public static final int REGIST_RSP			= REGIST_REQ+1;
+	public static final int GET_FRIEND_LIST_REQ		= REGIST_RSP+1;
 	public static final int GET_FRIEND_LIST_RSP		= GET_FRIEND_LIST_REQ+1;
 	public static final int ADD_A_FRIEND_ANSWER_REQ	= GET_FRIEND_LIST_RSP+1;
 	public static final int ADD_A_FRIEND_ANSWER_RSP	= ADD_A_FRIEND_ANSWER_REQ+1;

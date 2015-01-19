@@ -5,7 +5,7 @@ import com.zdn.CommandParser.CommandE;
 public interface ServerInterfaceCmd {
 
 	/* 流程管理 */
-	public int registReq( String phoneNumber ,  String passWord ,String imsi );
+	public int registReq( CommandE e  );
 	
 	//是否已经注册了
 	public void isRegist( String imsi );

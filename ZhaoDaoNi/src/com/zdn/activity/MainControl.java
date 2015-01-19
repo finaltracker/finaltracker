@@ -1,12 +1,10 @@
 package com.zdn.activity;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.zdn.CommandParser.CommandE;
 import com.zdn.CommandParser.Property;
-import com.zdn.basicStruct.friendTeamDataManager;
 import com.zdn.data.dataManager;
 import com.zdn.event.EventDefine;
 import com.zdn.logic.InternetComponent;
@@ -121,7 +119,7 @@ public class MainControl extends HandlerThread {
 		
 		switch (RcvCommand)
 		{
-		case EventDefine.IS_ACCOUNT_QUEUE_RSP:
+		case EventDefine.CHECK_REGIST_RSP:
 			String rep = e.GetPropertyContext("HTTP_REQ_RSP");
 			if( rep == null || ( rep.isEmpty()) )
 			{
@@ -183,11 +181,8 @@ public class MainControl extends HandlerThread {
 		
 		switch (RcvCommand)
 		{
-		case EventDefine.IS_ACCOUNT_REQ:
-			String Id = e.GetPropertyContext("ID");
-			String passWord = e.GetPropertyContext("PASS_WORD");
-
-			mInternetCom.registReq(Id,  passWord ,imsi );
+		case EventDefine.REGIST_REQ:
+			mInternetCom.registReq( e );
 			state = STATE_WAIT_SERVER_REGSIT_RESULT;
 		break;
 		default:
@@ -203,7 +198,7 @@ public class MainControl extends HandlerThread {
 		
 		switch (RcvCommand)
 		{
-		case EventDefine.IS_ACCOUNT_RSP:
+		case EventDefine.REGIST_RSP:
 			//获得注册结果
 			String rep = e.GetPropertyContext("HTTP_REQ_RSP");
 			
@@ -531,13 +526,22 @@ public class MainControl extends HandlerThread {
 
 	static public void registReq( String Id , String passWord )
 	{
-		CommandE e = new  CommandE("ACCOUNT_REQUST");
-		e.AddAProperty(new Property("EventDefine",Integer.toString( EventDefine.IS_ACCOUNT_REQ ) ) );
-		e.AddAProperty(new Property("ID",Id ) );
-		e.AddAProperty(new Property("PASS_WORD",passWord ) );
 		Message m = MainControl.getInstance().handler.obtainMessage();
+
+		CommandE e = new CommandE("SEND_MESSAGE_TO_SERVER");
+		e.AddAProperty(new Property("EventDefine" ,Integer.toString(EventDefine.REGIST_REQ ) ) );
+		e.AddAProperty(new Property("URL" ,InternetComponent.WEBSITE_ADDRESS_REGIST_REQ ) );
+		e.AddAProperty(new Property("mobile",Id ) );
+		e.AddAProperty(new Property("password",passWord ) );
+		e.AddAProperty(new Property("confirmpass",passWord ) );
+		e.AddAProperty(new Property("imsi",imsi ) );
+		e.AddAProperty(new Property("nickname","小迷糊" ) );
+		
 		m.obj = e;
 		MainControl.getInstance().handler.sendMessage(m);
+		
+		return ;
+		
 	}
 	
 	//result 1 : agree

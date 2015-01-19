@@ -14,8 +14,8 @@ import android.os.Message;
 public class InternetComponent implements ServerInterfaceCmd {
 	/* web site address define */
 	static public String WEBSITE_ADDRESS_BASE	= "http://10.4.65.164/";
-	static public String WEBSITE_ADDRESS_QUERY = WEBSITE_ADDRESS_BASE + "user/check_register/";
-	static public String WEBSITE_ADDRESS_ACCOUNT_REQ = WEBSITE_ADDRESS_BASE + "user/register/";
+	static public String WEBSITE_ADDRESS_CHECK_REGIST_REQ = WEBSITE_ADDRESS_BASE + "user/check_register/";
+	static public String WEBSITE_ADDRESS_REGIST_REQ = WEBSITE_ADDRESS_BASE + "user/register/";
 	static public String WEBSITE_ADDRESS_ADD_A_FRIEND_REQ = WEBSITE_ADDRESS_BASE + "friend/add_friend/";
 	static public String WEBSITE_ADDRESS_ADD_A_FRIEND_ANSWER_REQ = WEBSITE_ADDRESS_BASE + "friend/accept_friend/";
 	static public String WEBSITE_ADDRESS_GET_FRIEND_LIST = WEBSITE_ADDRESS_BASE + "friend/get_friend/";
@@ -32,21 +32,15 @@ public class InternetComponent implements ServerInterfaceCmd {
 	{
 		handler = new ThreadTaskHandler(looper);
 	}
+	
 	@Override
-	public int registReq(String phoneNumber, String passWord ,String imsi ) {
+	public int registReq( CommandE e   ) {
 		Message msg = handler.obtainMessage(); 
 		msg.what = ThreadTaskHandler.SEND_MESSAGE_TO_SERVER;
         
-		CommandE e = new CommandE("SEND_MESSAGE_TO_SERVER");
-		e.AddAProperty(new Property("EventDefine" ,Integer.toString(EventDefine.IS_ACCOUNT_REQ ) ) );
-		e.AddAProperty(new Property("URL" ,WEBSITE_ADDRESS_ACCOUNT_REQ ) );
-		e.AddAProperty(new Property("mobile",phoneNumber ) );
-		e.AddAProperty(new Property("password",passWord ) );
-		e.AddAProperty(new Property("confirmpass",passWord ) );
-		e.AddAProperty(new Property("imsi",imsi ) );
-		
-		msg.obj = e;
-		handler.sendMessage(msg);
+		msg.obj = e;   //
+        
+        handler.sendMessage(msg);
 		return 0;
 	}
 
@@ -56,8 +50,8 @@ public class InternetComponent implements ServerInterfaceCmd {
 		msg.what = ThreadTaskHandler.SEND_MESSAGE_TO_SERVER;
         
 		CommandE e = new CommandE("SEND_MESSAGE_TO_SERVER");
-		e.AddAProperty(new Property("EventDefine" ,Integer.toString(EventDefine.IS_ACCOUNT_QUEUE_REQ ) ) );
-		e.AddAProperty(new Property("URL" ,WEBSITE_ADDRESS_QUERY ) );
+		e.AddAProperty(new Property("EventDefine" ,Integer.toString(EventDefine.CHECK_REGIST_REQ ) ) );
+		e.AddAProperty(new Property("URL" ,WEBSITE_ADDRESS_CHECK_REGIST_REQ ) );
 		e.AddAProperty(new Property("imsi",imsi ) );
         msg.obj = e;   //
         
