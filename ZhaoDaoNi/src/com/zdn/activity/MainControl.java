@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import com.zdn.CommandParser.CommandE;
 import com.zdn.CommandParser.Property;
 import com.zdn.basicStruct.friendTeamDataManager;
+import com.zdn.data.dataManager;
 import com.zdn.event.EventDefine;
 import com.zdn.logic.InternetComponent;
 import com.zdn.util.PreferencesUtil;
@@ -24,7 +25,6 @@ public class MainControl extends HandlerThread {
 	InternetComponent 	mInternetCom = null ;
 	static public  MainControl me = null;
 	public static String imsi = null;
-	static friendTeamDataManager   allFriend = null;  //friend list
 	
 	final public int   STATE_NULL	= 0;
 	final public int   STATE_WAIT_QUEUE_REGSIT_RESULT	= STATE_NULL + 1; //≤È—Ø «∑Ò◊Ê≤·¡À
@@ -49,8 +49,7 @@ public class MainControl extends HandlerThread {
 		TelephonyManager mTelephonyMgr = (TelephonyManager) mMainActivity.getSystemService(Context.TELEPHONY_SERVICE);
 		imsi = mTelephonyMgr.getSubscriberId();
 		preferencesPara = new PreferencesUtil(mMainActivity);
-		allFriend = new friendTeamDataManager();
-		allFriend.constructTeamInfoFromDb(mMainActivity);
+		dataManager.init(mMainActivity);
 
 	}
 
@@ -347,11 +346,11 @@ public class MainControl extends HandlerThread {
 					}
 					preferencesPara.saveFriendListVersion(jason_obj.getInt("server_friend_version"));
 					
-					updateFriendListFromServer( jason_obj.getInt("update_type") , jason_obj.getJSONArray("friends"));
+					dataManager.updateFriendListFromServer( jason_obj.getInt("update_type") , jason_obj.getJSONArray("friends") , mMainActivity );
 					//send it to PeopleActivity
 					Message m = PeopleActivity.getInstance().handler.obtainMessage();
 					m.what = PeopleActivity.UPDATE_VIEW_FROM_REMOT ;
-					m.obj = jason_obj;
+					m.obj = null;
 					if( PeopleActivity.getInstance() != null )
 					{
 						PeopleActivity.getInstance().handler.sendMessage(m);
@@ -511,41 +510,9 @@ public class MainControl extends HandlerThread {
 		return queueRsp;
 	}	
 	
-	static public friendTeamDataManager getFrilendList()
-	{
-		return allFriend;
-	}
 	
-	public void updateFriendListFromServer( int update_type , JSONArray jason_friendList )
-	{
-		if( jason_friendList == null ) return;
-		
-		if( 1 == update_type  || ( allFriend == null) )
-		{
-			allFriend = new friendTeamDataManager();
-		}
-		
-			
-		for( int i = 0 ; i < jason_friendList.length() ; i++ )
-		{
-			JSONObject obj;
-			try {
-				obj = (JSONObject)(jason_friendList.get(i));
-			
-				String teamName = obj.getString("team");
-				String memberName = obj.getString("nickname");
-				String phoneNumber = obj.getString("mobile");
-				String pictureAddress = obj.getString("avatar_url");
-				allFriend.addA_FriendMemberData( teamName, memberName, phoneNumber , pictureAddress );
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-		}				
-		allFriend.updateDataToDb( mMainActivity );
-
-	}
+	
+	
 	//COMMON API
 	
 	/* add a friend */

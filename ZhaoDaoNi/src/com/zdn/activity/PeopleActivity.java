@@ -14,6 +14,7 @@ import com.zdn.sort.ClearEditText;
 import com.zdn.adapter.FriendListAdapter;
 import com.zdn.basicStruct.friendMemberData;
 import com.zdn.basicStruct.friendTeamDataManager;
+import com.zdn.data.dataManager;
 import com.zdn.util.FileUtil;
 import com.zdn.view.FriendListView;
 import com.zdn.view.LoadingView;
@@ -204,12 +205,12 @@ public class PeopleActivity extends Activity {
 		*/
 		
 
-		mFriendListAdapter.updateListView( MainControl.getFrilendList() );
+		mFriendListAdapter.updateListView( dataManager.getFrilendList() );
 	}
 	
 	public void update()
 	{
-		mFriendListAdapter.updateListView( MainControl.getFrilendList() );
+		mFriendListAdapter.updateListView( dataManager.getFrilendList() );
 	}
 	// "update_type: " 	1  	update all
 	// 					2 	part update 
