@@ -3,6 +3,7 @@ package com.zdn.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.util.Log;
 
 public class PreferencesUtil {
 	private Context context;
@@ -19,6 +20,7 @@ public class PreferencesUtil {
 	 * @param age ƒÍ¡‰
 	 */
 	public void saveFriendListVersion(int friendListVersion ){
+		Log.d("PreferencesUtil" , "save friendListVersion = " + friendListVersion );
 		SharedPreferences sharedPreferences = context.getSharedPreferences( preferenceFileName, Context.MODE_PRIVATE);
 		Editor editor = sharedPreferences.edit();
 		editor.putInt("friendListVersion", friendListVersion);

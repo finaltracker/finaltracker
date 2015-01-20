@@ -343,11 +343,12 @@ public class MainControl extends HandlerThread {
 					
 					dataManager.updateFriendListFromServer( jason_obj.getInt("update_type") , jason_obj.getJSONArray("friends") , mMainActivity );
 					//send it to PeopleActivity
-					Message m = PeopleActivity.getInstance().handler.obtainMessage();
-					m.what = PeopleActivity.UPDATE_VIEW_FROM_REMOT ;
-					m.obj = null;
 					if( PeopleActivity.getInstance() != null )
 					{
+						Message m = PeopleActivity.getInstance().handler.obtainMessage();
+						m.what = PeopleActivity.UPDATE_VIEW_FROM_REMOT ;
+						m.obj = null;
+						
 						PeopleActivity.getInstance().handler.sendMessage(m);
 					}
 					else

@@ -113,7 +113,7 @@ public class searchFriendResultForAddAdapter extends BaseAdapter{
 	        	public void onClick(View v) {
 	        		
 	        		MainControl.addA_Friend( viewHolder.phoneNumner.getText().toString(),"some information!");
-	        		   
+	        		
 	        	}
 	        	});
 			view.setTag(viewHolder);

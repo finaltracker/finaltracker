@@ -13,7 +13,8 @@ import android.os.Message;
 
 public class InternetComponent implements ServerInterfaceCmd {
 	/* web site address define */
-	static public String WEBSITE_ADDRESS_BASE	= "http://10.4.65.164/";
+	static public String WEBSITE_ADDRESS_BASE	= "http://10.4.65.41/";
+	//static public String WEBSITE_ADDRESS_BASE	= "http://10.4.65.164/";
 	static public String WEBSITE_ADDRESS_CHECK_REGIST_REQ = WEBSITE_ADDRESS_BASE + "user/check_register/";
 	static public String WEBSITE_ADDRESS_REGIST_REQ = WEBSITE_ADDRESS_BASE + "user/register/";
 	static public String WEBSITE_ADDRESS_ADD_A_FRIEND_REQ = WEBSITE_ADDRESS_BASE + "friend/add_friend/";

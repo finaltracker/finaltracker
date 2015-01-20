@@ -42,7 +42,7 @@ public class dataManager {
 			try {
 				obj = (JSONObject)(jason_friendList.get(i));
 			
-				String teamName = obj.getString("team");
+				String teamName = obj.getString("group");
 				String memberName = obj.getString("nickname");
 				String phoneNumber = obj.getString("mobile");
 				String pictureAddress = obj.getString("avatar_url");
