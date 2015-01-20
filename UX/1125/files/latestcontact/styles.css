@@ -997,3 +997,12 @@
   visibility:hidden;
   word-wrap:break-word;
 }
+#u82 {
+  position:absolute;
+  left:0px;
+  top:181px;
+  width:360px;
+  height:64px;
+  overflow:hidden;
+  background-image:url('../../resources/images/transparent.gif');
+}
