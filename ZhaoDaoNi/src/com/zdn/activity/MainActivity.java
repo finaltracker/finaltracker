@@ -234,7 +234,8 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 	
 	@Override
 	protected void onDestroy() {
-		
+
+		unregisterReceiver(mMessageReceiver);
 		if(control!= null)
 		{
 			control.quit();

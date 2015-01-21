@@ -59,6 +59,8 @@ public class searchFriendResultForAddActivity extends Activity {
 	{
 		teams = new friendTeamDataManager();
 
+		teams.addA_FriendMemberData( "找到的好友", "找到的好友", null , null );
+		
 		for( int i = 0 ; i < jason_friendList.length() ; i++ )
 		{
 			JSONObject obj;

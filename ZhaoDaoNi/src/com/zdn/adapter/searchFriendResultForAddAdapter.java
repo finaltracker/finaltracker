@@ -9,6 +9,7 @@ import com.zdn.R;
 
 import com.zdn.activity.MainControl;
 import com.zdn.activity.PeopleActivity;
+import com.zdn.activity.searchFriendResultForAddActivity;
 import com.zdn.basicStruct.friendMemberData;
 import com.zdn.basicStruct.friendTeamDataManager;
 
@@ -21,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
@@ -108,12 +110,17 @@ public class searchFriendResultForAddAdapter extends BaseAdapter{
 			viewHolder.majia = (ImageView) view.findViewById(R.id.Search_for_for_add_friend_item_PersonIcon);
 			viewHolder.phoneNumner = (TextView) view.findViewById(R.id.Search_for_for_add_friend_item_phoneNumber);
 			viewHolder.AddFriend = (ImageView) view.findViewById(R.id.Search_for_for_add_friend_item_AddFriend );
-			
+			viewHolder.relativeLayout = (RelativeLayout)view.findViewById(R.id.Search_for_for_add_friend_item_ll_constact);
+				
 			viewHolder.AddFriend.setOnClickListener(new View.OnClickListener() {
 	        	public void onClick(View v) {
 	        		
 	        		MainControl.addA_Friend( viewHolder.phoneNumner.getText().toString(),"some information!");
-	        		
+	        		if(mContext != null)
+	        		{
+	        			searchFriendResultForAddActivity sfrfaa = (searchFriendResultForAddActivity)(mContext);
+	        			sfrfaa.finish();
+	        		}
 	        	}
 	        	});
 			view.setTag(viewHolder);
@@ -124,11 +131,13 @@ public class searchFriendResultForAddAdapter extends BaseAdapter{
 		if( md.phoneNumber == null ){
 			viewHolder.tvLetter.setVisibility(View.VISIBLE);
 			viewHolder.tvLetter.setText(md.memberName );
+			
+/*
 			viewHolder.tvTitle.setVisibility(View.GONE);
 			viewHolder.phoneNumner.setVisibility(View.GONE);
 			viewHolder.AddFriend.setVisibility(View.GONE);		
 			viewHolder.majia.setVisibility(View.GONE);
-			
+*/			viewHolder.relativeLayout.setVisibility(View.GONE);
 			
 		}else{
 
@@ -153,6 +162,7 @@ public class searchFriendResultForAddAdapter extends BaseAdapter{
 
 	final static class ViewHolder {
 		TextView tvLetter;
+		RelativeLayout relativeLayout;
 		ImageView majia;
 		TextView tvTitle;
 		TextView phoneNumner;

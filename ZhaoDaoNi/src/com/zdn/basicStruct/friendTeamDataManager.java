@@ -68,7 +68,14 @@ public class friendTeamDataManager {
 		fmd.phoneNumber = PhoneNumber;
 		fmd.pictureAddress = pictureAddress;
 		
-		fmd.picture = ImgUtil.getInstance().loadBitmapFromCache(fmd.pictureAddress);
+		if(fmd.pictureAddress!=null && !fmd.pictureAddress.isEmpty() )
+		{
+			fmd.picture = ImgUtil.getInstance().loadBitmapFromCache(fmd.pictureAddress);
+		}
+		else
+		{
+			//set it to default pictures
+		}
 		
 	}
 	public void deleteA_FriendMemberData( String friendMemberName )
