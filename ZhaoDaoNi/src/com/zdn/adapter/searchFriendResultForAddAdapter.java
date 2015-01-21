@@ -24,6 +24,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 public class searchFriendResultForAddAdapter extends BaseAdapter{
@@ -120,6 +121,7 @@ public class searchFriendResultForAddAdapter extends BaseAdapter{
 	        		{
 	        			searchFriendResultForAddActivity sfrfaa = (searchFriendResultForAddActivity)(mContext);
 	        			sfrfaa.finish();
+	        			Toast.makeText(mContext, "请求已发出", Toast.LENGTH_SHORT ).show ();
 	        		}
 	        	}
 	        	});
