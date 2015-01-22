@@ -46,7 +46,7 @@ public class dataManager {
 				String memberName = obj.getString("nickname");
 				String phoneNumber = obj.getString("mobile");
 				String pictureAddress = obj.getString("avatar_url");
-				allFriend.addA_FriendMemberData( teamName, memberName, phoneNumber , pictureAddress );
+				allFriend.addA_FriendMemberData( teamName, memberName, memberName , "" , phoneNumber , pictureAddress );
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

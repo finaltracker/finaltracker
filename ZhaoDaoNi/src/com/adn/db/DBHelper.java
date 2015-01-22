@@ -1,6 +1,8 @@
 package com.adn.db;
 
 
+import java.lang.reflect.Field;
+
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -16,19 +18,30 @@ public class DBHelper  extends SQLiteOpenHelper{
 	public static final String DB_TABLE_NAME = "info";
 	private static final int DB_VERSION=1;
 	private static final String TAG = "DBHelper";
+	private Field[]friendMemberDataBasicClassFs = null;
 	
-	public DBHelper(Context context) {
+	public DBHelper(Context context ,Field[]friendMemberDataBasicClassFs ) {
 		//Context context, String name, CursorFactory factory, int version
 		//factory输入null,使用默认值
 		super(context, DB_NAME, null, DB_VERSION);
+		
+		this.friendMemberDataBasicClassFs = friendMemberDataBasicClassFs;
 	}
 	//数据第一次创建的时候会调用onCreate
 	@Override
 	public void onCreate(SQLiteDatabase db) {		
 		//创建表
-		  db.execSQL("CREATE TABLE IF NOT EXISTS info" +  
-	                "(_id INTEGER PRIMARY KEY AUTOINCREMENT,teamName STRING ,  memberName VARCHAR, phoneNumber STRING ,pictureAddress STRING )");
-		  Log.i(TAG, "create table");
+		
+		 String variableCombin = "(_id INTEGER PRIMARY KEY AUTOINCREMENT";
+		 
+		 for (Field field : friendMemberDataBasicClassFs )
+		 {
+			 variableCombin +="," + field.getName() + " STRING";
+		 }
+		 variableCombin +=")";
+		 
+		 db.execSQL("CREATE TABLE IF NOT EXISTS info" +  variableCombin );
+		 Log.i(TAG, "create table");
 	}
 	//数据库第一次创建时onCreate方法会被调用，我们可以执行创建表的语句，当系统发现版本变化之后，会调用onUpgrade方法，我们可以执行修改表结构等语句
 	@Override

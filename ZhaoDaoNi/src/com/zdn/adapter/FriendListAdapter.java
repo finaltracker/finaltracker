@@ -5,6 +5,7 @@ import java.util.List;
 import com.zdn.R;
 import com.zdn.activity.MainControl;
 import com.zdn.basicStruct.friendMemberData;
+import com.zdn.basicStruct.friendMemberDataBasic;
 import com.zdn.basicStruct.friendTeamData;
 import com.zdn.basicStruct.friendTeamDataManager;
 import com.zdn.view.FriendListView;
@@ -100,7 +101,7 @@ public class FriendListAdapter extends BaseExpandableListAdapter
         	public void onClick(View v) {
 
 
-        		MainControl.addA_FriendConfirm( "1" , ((friendMemberData)getChild( groupIndex,childIndex)).phoneNumber  );
+        		MainControl.addA_FriendConfirm( "1" , ((friendMemberDataBasic)getChild( groupIndex,childIndex)).phoneNumber  );
         	}
         	});
 
@@ -116,8 +117,8 @@ public class FriendListAdapter extends BaseExpandableListAdapter
 
 		holder.iconView.setImageBitmap(md.picture);
 		 
-		holder.nameView.setText( md.memberName );
-		holder.feelView.setText("爱生�?..爱Android...");
+		holder.nameView.setText( md.basic.memberName );
+		holder.feelView.setText("爱生活..爱Android...");
 		return convertView;
 	}
 

@@ -1,8 +1,12 @@
 package com.adn.db;
 
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.zdn.basicStruct.friendMemberData;
+import com.zdn.basicStruct.friendMemberDataBasic;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -19,47 +23,64 @@ public class DBManager {
     private DBHelper       helper;
     private SQLiteDatabase db;
     private String TAG = "DBManager";
+    
+    Field[]friendMemberDataBasicClassFs = null;
 
-    public DBManager(Context context){
-        helper = new DBHelper(context);
+    public DBManager(Context context  ){
+         Class c = null;
+		c = friendMemberDataBasic.class;
+		friendMemberDataBasicClassFs = c.getFields(); 
+		
+		helper = new DBHelper(context , friendMemberDataBasicClassFs );
         db = helper.getWritableDatabase();
+       
     }
 
-    public class MemberInfo {
-
-        public int    _id;
-        public String teamName;
-        public String memberName;
-		public String phoneNumber;
-        public String pictureAddress;
-
-        public MemberInfo(){}
-        public MemberInfo(int _id,String teamName , String memberName, String phoneNumber , String pictureAddress ){
-            this._id = _id;
-            this.teamName = teamName;
-            this.memberName = memberName;
-            this.pictureAddress = pictureAddress;
-			this.phoneNumber = phoneNumber;
-        }
-
-    }
     
     /**
      * 向表info中增加一个成员信息
      * 
      * @param memberInfo
      */
-    public void add(List<MemberInfo> memberInfo) {
+    public void add(List<friendMemberData> memberInfo) {
         db.beginTransaction();// 开始事务
         try {
-            for (MemberInfo info : memberInfo) {
+        	String execSqlStrBegin = "INSERT INTO info VALUES(null";
+        	String execSqlStrEnd = ")";
+        	
+        	String execSqlStrAll = execSqlStrBegin;
+        	
+        	int paraNumber = friendMemberDataBasicClassFs.length;
+        	
+        	for( int i = 0 ; i < paraNumber ; i++ )
+        	{
+        		execSqlStrAll += ",?";
+        	}
+        	
+        	execSqlStrAll += execSqlStrEnd;
+        	
+        	Object[] newObjArray = new Object[paraNumber] ;
+        	
+            for (friendMemberData info : memberInfo) {
                 Log.i(TAG, "------add memberInfo----------");
-                Log.i(TAG, info.teamName + "/" + info.memberName + info.phoneNumber + "/" + info.pictureAddress );
+                //Log.i(TAG, info.teamName + "/" + info.memberName + "/" +info.phoneNumber + "/" +info.nickName+ "/" +info.comment+"/" + info.pictureAddress );
                 // 向表info中插入数据
-                db.execSQL("INSERT INTO info VALUES(null,?,?,?,?)", new Object[] { info.teamName, info.memberName, info.phoneNumber, info.pictureAddress });
+                for( int i = 0 ; i < paraNumber ; i++ )
+                //for (Field field : friendMemberDataBasicClassFs )
+            	{
+                	newObjArray[i] = (String) friendMemberDataBasicClassFs[i].get(info.basic) ;
+            	}
+                //db.execSQL("INSERT INTO info VALUES(null,?,?,?,?)", new Object[] { info.teamName, info.memberName, info.phoneNumber, info.nickName , info.comment , info.pictureAddress });
+                db.execSQL( execSqlStrAll , newObjArray);
             }
             db.setTransactionSuccessful();// 事务成功
-        } finally {
+        } catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
             db.endTransaction();// 结束事务
         }
     }
@@ -71,16 +92,29 @@ public class DBManager {
      * @param website
      * @param weibo
      */
-    public void add(int _id, String teamName , String memberName, String phoneNumber , String pictureAddress ) {
+    //classPacketName object
+    public void add(  Object o ) 
+    {
         Log.i(TAG, "------add data----------");
         ContentValues cv = new ContentValues();
         // cv.put("_id", _id);
-        cv.put("teamName", teamName );
-        cv.put("memberName", memberName);
-        cv.put("phoneNumber", phoneNumber);
-        cv.put("pictureAddress", pictureAddress);
+        for (Field field : friendMemberDataBasicClassFs ) {
+        	String value = null;
+        	try {
+				value = (String) field.get(o);
+			} catch (IllegalAccessException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IllegalArgumentException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+        	cv.put(field.getName(),value );
+
+        	Log.i(TAG, field.getName() +" = " +  value );
+        }
+       
         db.insert(DBHelper.DB_TABLE_NAME, null, cv);
-        Log.i(TAG, teamName + "/" + memberName + "/" + pictureAddress  );
     }
 
     /**
@@ -109,12 +143,12 @@ public class DBManager {
      * 
      * @param name
      */
-    public ArrayList<MemberInfo> searchData(final String name) {
+    public ArrayList<friendMemberData> searchData(final String name) {
         String sql = "SELECT * FROM info WHERE name =" + "'" + name + "'";
         return ExecSQLForMemberInfo(sql);
     }
 
-    public ArrayList<MemberInfo> searchAllData() {
+    public ArrayList<friendMemberData> searchAllData() {
         String sql = "SELECT * FROM info";
         return ExecSQLForMemberInfo(sql);
     }
@@ -139,17 +173,27 @@ public class DBManager {
      * @param sql
      * @return
      */
-    private ArrayList<MemberInfo> ExecSQLForMemberInfo(String sql) {
-        ArrayList<MemberInfo> list = new ArrayList<MemberInfo>();
+    private ArrayList<friendMemberData> ExecSQLForMemberInfo(String sql) {
+        ArrayList<friendMemberData> list = new ArrayList<friendMemberData>();
         Cursor c = ExecSQLForCursor(sql);
         while (c.moveToNext()) {
-            MemberInfo info = new MemberInfo();
-            info._id = c.getInt(c.getColumnIndex("_id"));
-            info.teamName = c.getString(c.getColumnIndex("teamName"));
-            info.memberName = c.getString(c.getColumnIndex("memberName"));
-            info.phoneNumber = c.getString(c.getColumnIndex("phoneNumber"));
-            info.pictureAddress = c.getString(c.getColumnIndex("pictureAddress"));
-            list.add(info);
+        	 friendMemberData fmd = new friendMemberData();
+        	 
+        	 for (Field field : friendMemberDataBasicClassFs ) {
+             	String value = null;
+             	
+             	try {
+					field.set( fmd.basic, c.getString(c.getColumnIndex( field.getName())) );
+				} catch (IllegalAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IllegalArgumentException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+        	 }
+            
+            list.add(fmd);
         }
         c.close();
         return list;

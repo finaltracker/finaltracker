@@ -11,6 +11,7 @@ import com.zdn.activity.MainControl;
 import com.zdn.activity.PeopleActivity;
 import com.zdn.activity.searchFriendResultForAddActivity;
 import com.zdn.basicStruct.friendMemberData;
+import com.zdn.basicStruct.friendMemberDataBasic;
 import com.zdn.basicStruct.friendTeamDataManager;
 
 import android.content.Context;
@@ -130,9 +131,9 @@ public class searchFriendResultForAddAdapter extends BaseAdapter{
 			viewHolder = (ViewHolder) view.getTag();
 		}
 		
-		if( md.phoneNumber == null ){
+		if( md.basic.phoneNumber == null ){
 			viewHolder.tvLetter.setVisibility(View.VISIBLE);
-			viewHolder.tvLetter.setText(md.memberName );
+			viewHolder.tvLetter.setText(md.basic.memberName );
 			
 /*
 			viewHolder.tvTitle.setVisibility(View.GONE);
@@ -146,10 +147,10 @@ public class searchFriendResultForAddAdapter extends BaseAdapter{
 			viewHolder.tvLetter.setVisibility(View.GONE);
 			
 			viewHolder.tvTitle.setVisibility(View.VISIBLE);
-			viewHolder.tvTitle.setText(md.memberName);
+			viewHolder.tvTitle.setText(md.basic.memberName);
 			//viewHolder.tvTitle.setText(View.GONE);
 			viewHolder.phoneNumner.setVisibility(View.VISIBLE);
-			viewHolder.phoneNumner.setText(md.phoneNumber);
+			viewHolder.phoneNumner.setText(md.basic.phoneNumber);
 			//viewHolder.AddFriend.setImageBitmap()
 			//viewHolder.AddFriend.setImageBitmap( );
 		

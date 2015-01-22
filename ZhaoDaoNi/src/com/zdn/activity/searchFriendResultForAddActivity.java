@@ -59,25 +59,28 @@ public class searchFriendResultForAddActivity extends Activity {
 	{
 		teams = new friendTeamDataManager();
 
-		teams.addA_FriendMemberData( "找到的好友", "找到的好友", null , null );
+		teams.addA_FriendMemberData( "找到的好友", "找到的好友", null , null , null ,null  );
 		
 		for( int i = 0 ; i < jason_friendList.length() ; i++ )
 		{
 			JSONObject obj;
 			String memberName="";
+			String nickName="";
+			String comment="";
 			String phoneNumber="";
 			String pictureAddress = null;
 			try {
 				obj = (JSONObject)(jason_friendList.get(i));
 			
 				memberName = obj.getString("nickname");
+				nickName = memberName;
 				phoneNumber = obj.getString("mobile");
 				pictureAddress = obj.getString("avatar_url");
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			teams.addA_FriendMemberData( "找到的好友", memberName, phoneNumber , pictureAddress );
+			teams.addA_FriendMemberData( "找到的好友", memberName, nickName , comment , phoneNumber , pictureAddress );
 			
 		}				
 		sfafAdapter.updateListView(teams);

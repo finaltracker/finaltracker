@@ -7,12 +7,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.adn.db.DBManager;
-import com.adn.db.DBManager.MemberInfo;
 import com.zdn.AsyncTaskBase;
 import com.zdn.R;
 import com.zdn.sort.ClearEditText;
 import com.zdn.adapter.FriendListAdapter;
-import com.zdn.basicStruct.friendMemberData;
+import com.zdn.basicStruct.friendMemberDataBasic;
 import com.zdn.basicStruct.friendTeamDataManager;
 import com.zdn.data.dataManager;
 import com.zdn.util.FileUtil;

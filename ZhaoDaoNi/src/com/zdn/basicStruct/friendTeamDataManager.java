@@ -7,8 +7,6 @@ import java.util.List;
 import android.content.Context;
 
 import com.adn.db.DBManager;
-import com.adn.db.DBManager.MemberInfo;
-import com.zdn.util.ImgUtil;
 
 public class friendTeamDataManager {
 
@@ -16,16 +14,53 @@ public class friendTeamDataManager {
 	
 	public List<friendTeamData> getFriendTeamDataList() { return this.Teams; }
 	
-	public void addA_FriendTeam( friendTeamData ftd )
+	
+	public friendTeamData getFriendTeamData( String teamName )
 	{
+		friendTeamData ftd = null;
 		
+		for( int i = 0 ; i < Teams.size() ; i++ )
+		{
+			if(Teams.get(i).teamName.equals(teamName))
+			{
+				return Teams.get(i);
+			}
+		}
+		return ftd;
+	}
+	
+	
+	public void addA_FriendMemberData( friendMemberData fmd )
+	{
+		friendTeamData ftd = null;
+
+		ftd = getFriendTeamData(fmd.basic.teamName);
+		
+		if(ftd == null )
+		{
+			ftd = new friendTeamData();
+			ftd.teamName = 	fmd.basic.teamName;
+			Teams.add(ftd);
+		}
+		
+		friendMemberData f = ftd.getFriendMemberData( fmd.basic.phoneNumber );
+		if(f == null )
+		{
+			ftd.addFriendMemberData(fmd);
+		}
+		else
+		{
+			f.clone(fmd);
+		}
 	}
 	
 	public void deleteA_FriendTeam( String teamName )
 	{
 		
 	}
-	public void addA_FriendMemberData( String teamName , String memberName , String PhoneNumber , String pictureAddress )
+
+
+	public void addA_FriendMemberData( String teamName , String memberName , String nickName , String comment , String PhoneNumber , String pictureAddress )
 	{
 		
 		friendTeamData ftd = null;
@@ -43,14 +78,13 @@ public class friendTeamDataManager {
 		{ 
 			ftd = new friendTeamData();
 			ftd.teamName = teamName;
-			ftd.member = new ArrayList<friendMemberData>();
 			Teams.add(ftd);
 		}
 		
 		friendMemberData fmd = null;
 		for( i = 0 ; i < ftd.member.size() ; i++ )
 		{
-			if(memberName.equals( ftd.member.get(i).memberName ) )
+			if(PhoneNumber.equals( ftd.member.get(i).basic.phoneNumber ) )
 			{
 				fmd = ftd.member.get(i);
 				break;
@@ -60,25 +94,21 @@ public class friendTeamDataManager {
 		if( null == fmd )
 		{
 			fmd = new friendMemberData();
-			fmd.memberName = memberName;
+			fmd.basic.memberName = memberName;
 			ftd.member.add(fmd);
 		
 		}
 		
-		fmd.phoneNumber = PhoneNumber;
-		fmd.pictureAddress = pictureAddress;
+		fmd.basic.teamName = teamName;
+		fmd.basic.nickName = nickName;
+		fmd.basic.comment  = comment;
+		fmd.basic.phoneNumber = PhoneNumber;
+		fmd.basic.pictureAddress = pictureAddress;
 		
-		if(fmd.pictureAddress!=null && !fmd.pictureAddress.isEmpty() )
-		{
-			fmd.picture = ImgUtil.getInstance().loadBitmapFromCache(fmd.pictureAddress);
-		}
-		else
-		{
-			//set it to default pictures
-		}
+		fmd.rebuildFriendMemberData();
 		
 	}
-	public void deleteA_FriendMemberData( String friendMemberName )
+	public void deleteA_FriendMemberData( String phoneNumber )
 	{
 		
 	}
@@ -121,18 +151,17 @@ public class friendTeamDataManager {
 	
 	public void constructTeamInfoFromDb( Context context )
 	{
-		//friendTeamDataManager updateTeams = new friendTeamDataManager();
-		
+	
 		DBManager dbm = new DBManager( context );
 		
-		ArrayList<MemberInfo> miList = dbm.searchAllData();
+		ArrayList<friendMemberData> miList = dbm.searchAllData();
 		
 		
 		for( int i = 0 ; i < miList.size() ; i++ )
 		{
-			MemberInfo dbMi = miList.get(i);
-			
-			addA_FriendMemberData(dbMi.teamName, dbMi.memberName, "", dbMi.pictureAddress );
+			friendMemberData dbMi = miList.get(i);
+			dbMi.rebuildFriendMemberData(); // first rebuilt it
+			addA_FriendMemberData( dbMi );
 				
 		}
 		dbm.closeDB();
@@ -146,15 +175,7 @@ public class friendTeamDataManager {
 		
 		for( int i = 0 ; i < getTeamNum(); i++  )
 		{
-			
-			for( int j = 0 ; j < getMemberNumInTeam(i) ; j++ )
-			{
-				friendMemberData fmd = getMemberData(i, j);
-				//phone numner no handle
-				dbm.add( 0 , getTeamData(i).teamName ,fmd.memberName, fmd.phoneNumber , fmd.pictureAddress );
-				
-			}
-			
+			dbm.add(  Teams.get(i).member );
 			
 		}
 		dbm.closeDB();
