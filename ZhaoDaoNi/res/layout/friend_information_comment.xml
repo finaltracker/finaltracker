@@ -1,0 +1,33 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+    	android:layout_height="50.0dip"
+    	android:orientation="horizontal" >
+
+        <EditTextWithDel
+            android:id="@+id/editText1"
+            android:layout_height="wrap_content" 
+            android:layout_width="wrap_content"
+            android:text=" temp1111">
+            
+            <requestFocus />
+        </EditTextWithDel>
+		
+        <ImageView
+	        android:id="@+id/majia"
+	        android:gravity="right"
+	        android:layout_width="40.0dip"
+	        android:layout_height="40.0dip"
+	        android:src="@drawable/u18" />
+	    
+       
+
+	</LinearLayout>
+
+    
+</LinearLayout>

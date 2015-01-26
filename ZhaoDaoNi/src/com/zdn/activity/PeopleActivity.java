@@ -1,20 +1,11 @@
 package com.zdn.activity;
 
-import java.util.ArrayList;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import com.adn.db.DBManager;
 import com.zdn.AsyncTaskBase;
 import com.zdn.R;
 import com.zdn.sort.ClearEditText;
 import com.zdn.adapter.FriendListAdapter;
-import com.zdn.basicStruct.friendMemberDataBasic;
-import com.zdn.basicStruct.friendTeamDataManager;
 import com.zdn.data.dataManager;
-import com.zdn.util.FileUtil;
 import com.zdn.view.FriendListView;
 import com.zdn.view.LoadingView;
 
@@ -28,8 +19,9 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.ExpandableListView;
 
-public class PeopleActivity extends Activity {
+public class PeopleActivity extends Activity implements ExpandableListView.OnChildClickListener  {
 	//private Context this;
 	//private View mBaseView;
 	static public final int  UPDATE_VIEW_FROM_REMOT		= 1 ;
@@ -76,7 +68,7 @@ public class PeopleActivity extends Activity {
 
 	private void init() {
 		
-		
+		mIphoneTreeView.setOnChildClickListener( this );
 
 		mIphoneTreeView.setGroupIndicator(null);//set icon in front of group
 
@@ -229,6 +221,28 @@ public class PeopleActivity extends Activity {
 			} 
 		}
 	};
+
+
+	@Override
+	public boolean onChildClick(ExpandableListView parent, View v,
+			int groupPosition, int childPosition, long id) {
+
+		Intent intent = new Intent(this, friendInformationDetailActivity.class);  
+		// 创建Bundle对象用来存放数据,Bundle对象可以理解为数据的载体  
+		Bundle b = new Bundle();  
+		// 调用Bundle对象的putString方法,采用 key-value的形式保存数据  
+		b.putInt("groupPosition", groupPosition );  
+		b.putInt("childPosition",childPosition  );  
+		// 将数据载体BUndle对象放入Intent对象中.  
+		intent.putExtras(b);  
+		// 调用startActivityForResult方法  
+		// startActivityForResult(intent,requestCode);  
+		// intent,数据载体  
+		// requestCode 请求的Code,这里一般 大于等于0的整型数据就可以.  
+		startActivity(intent);  
+		
+		return false;
+	}
 
 
 
