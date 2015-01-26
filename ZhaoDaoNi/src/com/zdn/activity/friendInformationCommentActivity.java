@@ -33,6 +33,34 @@ public class friendInformationCommentActivity extends Activity {
 		String oldComment = intent.getStringExtra("comment");
 		commentView.setHint(oldComment);
 		
+		friendMemberData fmd = dataManager.getFrilendList().getMemberData( teamPosition, memberPosition );
+		if(fmd != null )
+		{
+			userNameTextView.setText( fmd.basic.memberName + "-" + fmd.basic.nickName );
+			commentTextView.setText(fmd.basic.comment      );
+		}
+		else
+		{
+			Log.d(this.getClass().getName() ,  "invalid friend member data in (" + teamPosition + "," + memberPosition + ")");
+		}
 	}
+
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		String newComment = commentView.getText().toString();
+		
+		if( newComment.equals(commentView.getHint()))
+		{
+			
+		}
+		else
+		{
+			//update data to data manager
+			
+		}
+		super.onPause();
+	}
+	
 	
 }
