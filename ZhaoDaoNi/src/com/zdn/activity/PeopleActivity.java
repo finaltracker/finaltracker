@@ -231,8 +231,8 @@ public class PeopleActivity extends Activity implements ExpandableListView.OnChi
 		// 创建Bundle对象用来存放数据,Bundle对象可以理解为数据的载体  
 		Bundle b = new Bundle();  
 		// 调用Bundle对象的putString方法,采用 key-value的形式保存数据  
-		b.putInt("groupPosition", groupPosition );  
-		b.putInt("childPosition",childPosition  );  
+		b.putInt("teamPosition", groupPosition );  
+		b.putInt("memberPosition",childPosition  );  
 		// 将数据载体BUndle对象放入Intent对象中.  
 		intent.putExtras(b);  
 		// 调用startActivityForResult方法  

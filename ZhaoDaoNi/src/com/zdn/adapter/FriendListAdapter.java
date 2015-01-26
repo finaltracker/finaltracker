@@ -101,7 +101,7 @@ public class FriendListAdapter extends BaseExpandableListAdapter
         	public void onClick(View v) {
 
 
-        		MainControl.addA_FriendConfirm( "1" , ((friendMemberDataBasic)getChild( groupIndex,childIndex)).phoneNumber  );
+        		MainControl.addA_FriendConfirm( "1" , ((friendMemberDataBasic)getChild( groupIndex,childIndex)).getPhoneNumber()  );
         	}
         	});
 
@@ -117,7 +117,7 @@ public class FriendListAdapter extends BaseExpandableListAdapter
 
 		holder.iconView.setImageBitmap(md.picture);
 		 
-		holder.nameView.setText( md.basic.memberName );
+		holder.nameView.setText( md.basic.getMemberName() );
 		holder.feelView.setText("爱生活..爱Android...");
 		return convertView;
 	}

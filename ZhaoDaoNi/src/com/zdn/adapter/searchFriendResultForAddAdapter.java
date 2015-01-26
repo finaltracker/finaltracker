@@ -131,9 +131,9 @@ public class searchFriendResultForAddAdapter extends BaseAdapter{
 			viewHolder = (ViewHolder) view.getTag();
 		}
 		
-		if( md.basic.phoneNumber == null ){
+		if( md.basic.getPhoneNumber() == null ){
 			viewHolder.tvLetter.setVisibility(View.VISIBLE);
-			viewHolder.tvLetter.setText(md.basic.memberName );
+			viewHolder.tvLetter.setText(md.basic.getMemberName());
 			
 /*
 			viewHolder.tvTitle.setVisibility(View.GONE);
@@ -147,10 +147,10 @@ public class searchFriendResultForAddAdapter extends BaseAdapter{
 			viewHolder.tvLetter.setVisibility(View.GONE);
 			
 			viewHolder.tvTitle.setVisibility(View.VISIBLE);
-			viewHolder.tvTitle.setText(md.basic.memberName);
+			viewHolder.tvTitle.setText(md.basic.getMemberName());
 			//viewHolder.tvTitle.setText(View.GONE);
 			viewHolder.phoneNumner.setVisibility(View.VISIBLE);
-			viewHolder.phoneNumner.setText(md.basic.phoneNumber);
+			viewHolder.phoneNumner.setText(md.basic.getPhoneNumber());
 			//viewHolder.AddFriend.setImageBitmap()
 			//viewHolder.AddFriend.setImageBitmap( );
 		
