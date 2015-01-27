@@ -201,7 +201,10 @@ public class PeopleActivity extends Activity implements ExpandableListView.OnChi
 	
 	public void update()
 	{
-		mFriendListAdapter.updateListView( dataManager.getFrilendList() );
+		if( !isDestroyed() )
+		{
+			mFriendListAdapter.updateListView( dataManager.getFrilendList() );
+		}
 	}
 	// "update_type: " 	1  	update all
 	// 					2 	part update 

@@ -13,6 +13,8 @@ public class EventDefine {
 	public static final int ADD_A_FRIEND_RSP		= ADD_A_FRIEND_REQ+1;
 	public static final int SEARCH_FRIEND_OR_CIRCLE_REQ		= ADD_A_FRIEND_RSP+1;
 	public static final int SEARCH_FRIEND_OR_CIRCLE_RSP		= SEARCH_FRIEND_OR_CIRCLE_REQ+1;
+	public static final int UPDATE_FRIEND_INFORMATION_REQ		= SEARCH_FRIEND_OR_CIRCLE_RSP+1;
+	public static final int UPDATE_FRIEND_INFORMATION_RSP		= UPDATE_FRIEND_INFORMATION_REQ+1;
 	
 	/*jpush*/
 	

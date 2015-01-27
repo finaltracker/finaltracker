@@ -21,6 +21,7 @@ public class InternetComponent implements ServerInterfaceCmd {
 	static public String WEBSITE_ADDRESS_ADD_A_FRIEND_ANSWER_REQ = WEBSITE_ADDRESS_BASE + "friend/accept_friend/";
 	static public String WEBSITE_ADDRESS_GET_FRIEND_LIST = WEBSITE_ADDRESS_BASE + "friend/get_friend/";
 	static public String WEBSITE_SEARCH_FRIEND_OR_CIRCLE = WEBSITE_ADDRESS_BASE + "friend/search_friend/";
+	static public String WEBSITE_ADDRESS_UPDATE_FRIEND = WEBSITE_ADDRESS_BASE + "friend/update_friend/";
 	
 	
 	
@@ -124,6 +125,19 @@ public class InternetComponent implements ServerInterfaceCmd {
         
         handler.sendMessage(msg);
 
+	}
+
+
+	@Override
+	public void updateFriendInfomation(CommandE e) {
+		Message msg = handler.obtainMessage(); 
+		msg.what = ThreadTaskHandler.SEND_MESSAGE_TO_SERVER;
+        
+		msg.obj = e;   //
+        
+        handler.sendMessage(msg);
+
+		
 	}
 
 	

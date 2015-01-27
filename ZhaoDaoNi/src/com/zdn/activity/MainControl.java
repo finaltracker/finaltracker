@@ -5,6 +5,7 @@ import org.json.JSONObject;
 
 import com.zdn.CommandParser.CommandE;
 import com.zdn.CommandParser.Property;
+import com.zdn.basicStruct.friendMemberData;
 import com.zdn.basicStruct.friendMemberDataBasic;
 import com.zdn.data.dataManager;
 import com.zdn.event.EventDefine;
@@ -378,6 +379,22 @@ public class MainControl extends HandlerThread {
 				}
 			}
 			break;
+		case EventDefine.UPDATE_FRIEND_INFORMATION_REQ:
+			mInternetCom.updateFriendInfomation(e);
+			break;
+			
+		case EventDefine.UPDATE_FRIEND_INFORMATION_RSP:
+			{
+				int queueRsp = parseHttpReqRspStatus(e);
+				
+				if( queueRsp == 0 )
+				{
+					Log.d("MainControl" , "send UPDATE_FRIEND_INFORMATION_REQ ok" );
+
+				}
+			}
+			break;
+			
 		case EventDefine.SEARCH_FRIEND_OR_CIRCLE_REQ:
 			mInternetCom.searchFirendOrCircle( e );
 			
@@ -517,7 +534,15 @@ public class MainControl extends HandlerThread {
 		{
 			dataManager.getFrilendList().RebuiltTeam( fmdb.getTeamName() );
 		}
+		
+		preferencesPara.saveFriendListVersion( preferencesPara.getFriendListVersion()+1 );
+		
+
 		//modify friend list view
+		if( PeopleActivity.getInstance() != null )
+		{
+			PeopleActivity.getInstance().update();
+		}
 	}
 	
 	//COMMON API
@@ -585,4 +610,42 @@ public class MainControl extends HandlerThread {
 		MainControl.getInstance().handler.sendMessage(m);
 
 	}
+	
+	static public void updateFriendInfo( friendMemberData fmd ) {
+
+		CommandE e = new CommandE("SEND_MESSAGE_TO_SERVER");
+		e.AddAProperty(new Property("EventDefine" ,Integer.toString(EventDefine.UPDATE_FRIEND_INFORMATION_REQ ) ) );
+		e.AddAProperty(new Property("URL" ,InternetComponent.WEBSITE_ADDRESS_UPDATE_FRIEND) );
+		e.AddAProperty(new Property("client",fmd.basic.getMemberName() ) );
+		e.AddAProperty(new Property("teamName",fmd.basic.getTeamName()) );
+		e.AddAProperty(new Property("comment",fmd.basic.getComment()) );
+		e.AddAProperty(new Property("nickname",fmd.basic.getNickName() ) );
+		e.AddAProperty(new Property("mobile",fmd.basic.getPhoneNumber() ) );
+		e.AddAProperty(new Property("clientVersion",Integer.toString(MainControl.getInstance().preferencesPara.getFriendListVersion() )) );
+		e.AddAProperty(new Property("imsi",MainControl.imsi ) );
+		
+		Message m = MainControl.getInstance().handler.obtainMessage();
+		m.obj = e;   //
+        
+		MainControl.getInstance().handler.sendMessage(m);
+
+	}
+
+	static public void deleteA_Friend( friendMemberData fmd ) {
+
+		CommandE e = new CommandE("SEND_MESSAGE_TO_SERVER");
+		e.AddAProperty(new Property("EventDefine" ,Integer.toString(EventDefine.UPDATE_FRIEND_INFORMATION_REQ ) ) );
+		e.AddAProperty(new Property("URL" ,InternetComponent.WEBSITE_ADDRESS_UPDATE_FRIEND) );
+		e.AddAProperty(new Property("client",fmd.basic.getMemberName() ) );
+		e.AddAProperty(new Property("mobile",fmd.basic.getPhoneNumber() ) );
+		e.AddAProperty(new Property("clientVersion",Integer.toString(MainControl.getInstance().preferencesPara.getFriendListVersion() )) );
+		e.AddAProperty(new Property("imsi",MainControl.imsi ) );
+		
+		Message m = MainControl.getInstance().handler.obtainMessage();
+		m.obj = e;   //
+        
+		MainControl.getInstance().handler.sendMessage(m);
+
+	}
+
 }
