@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.zdn.R;
 import com.zdn.basicStruct.friendMemberData;
 import com.zdn.data.dataManager;
-
+import com.zdn.activity.friendInformationCommentActivity;
 
 public class friendInformationDetailActivity extends Activity {
 	
@@ -20,12 +20,15 @@ public class friendInformationDetailActivity extends Activity {
 	View		groupLineView;
 	TextView	userNameTextView;
 	TextView	commentTextView;
+	TextView    groupTextView;
+	friendMemberData fmd ;
 	static friendInformationDetailActivity  instance = null;
 	
 	
 	public friendInformationDetailActivity()
 	{
 		instance = this;
+		fmd = null;
 	}
 	
 	@Override
@@ -46,6 +49,7 @@ public class friendInformationDetailActivity extends Activity {
 	{
 		commentLineView = this.findViewById(R.id.commentLine);
 		userNameTextView = (TextView) this.findViewById(R.id.userName );
+		groupTextView = (TextView) this.findViewById( R.id.group );
 		groupLineView = this.findViewById(R.id.groupLine);
 		commentTextView = (TextView) this.findViewById(R.id.comment );
 		
@@ -66,7 +70,7 @@ public class friendInformationDetailActivity extends Activity {
 		int teamPosition = intent.getIntExtra("teamPosition",0);
 		int memberPosition = intent.getIntExtra("memberPosition", 0);
 		
-		friendMemberData fmd = dataManager.getFrilendList().getMemberData( teamPosition, memberPosition );
+		fmd = dataManager.getFrilendList().getMemberData( teamPosition, memberPosition );
 		if(fmd != null )
 		{
 			userNameTextView.setText( fmd.basic.getMemberName() + "-" + fmd.basic.getNickName());
@@ -79,6 +83,12 @@ public class friendInformationDetailActivity extends Activity {
 		commentLineView.setOnClickListener( new View.OnClickListener() {
         	public void onClick(View v) {
         		//start comment edit activity
+        		Intent intent = new Intent( friendInformationDetailActivity.this, friendInformationCommentActivity.class );  
+        		Bundle b = new Bundle();  
+        		b.putString("oldComment", commentTextView.getText().toString() );  
+        		intent.putExtras(b);  
+        		friendInformationDetailActivity.this.startActivityForResult(intent, 1 );  
+
         	}
         	});
 
@@ -86,6 +96,12 @@ public class friendInformationDetailActivity extends Activity {
 		groupLineView.setOnClickListener( new View.OnClickListener() {
         	public void onClick(View v) {
         		//start group select View activitys
+        		Intent intent = new Intent( friendInformationDetailActivity.this, friendInformationGroupActivity.class );  
+        		Bundle b = new Bundle(); 
+        		b.putInt( "groupIndex", dataManager.getFrilendList().findAfriendTeam(groupTextView.getText().toString() )  );  
+        		intent.putExtras(b);  
+        		friendInformationDetailActivity.this.startActivityForResult(intent, 2 );  
+
         	}
         	});
 
@@ -95,6 +111,40 @@ public class friendInformationDetailActivity extends Activity {
         		
         	}
         	});
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		
+		switch( resultCode)
+		{
+		case (friendInformationCommentActivity.FRIEND_INFORMATION_COMMENT_ACTIVITY):
+			String newComment = data.getExtras().getString("newComment");//得到新Activity 关闭后返回的数据
+			commentTextView.setText( newComment );
+			Log.i(this.getClass().getName(), "user new comment " + newComment );
+			
+			fmd.basic.setComment( newComment );
+			break;
+		
+		case (friendInformationGroupActivity.FRIEND_INFORMATION_GROUP_ACTIVITY):
+			String newGroup = data.getExtras().getString("newGroup");//得到新Activity 关闭后返回的数据
+			groupTextView.setText( newGroup );
+			Log.i(this.getClass().getName(), "user new group " + newGroup );
+			
+			fmd.basic.setTeamName( newGroup );
+			break;
+			
+		default:
+			Log.i(this.getClass().getName(), "invalid resultCode" + resultCode );
+			break;
+		
+			
+		}
+		
+		
+        
+        
+		super.onActivityResult(requestCode, resultCode, data);
 	}
 
 	

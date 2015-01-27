@@ -5,6 +5,7 @@ import org.json.JSONObject;
 
 import com.zdn.CommandParser.CommandE;
 import com.zdn.CommandParser.Property;
+import com.zdn.basicStruct.friendMemberDataBasic;
 import com.zdn.data.dataManager;
 import com.zdn.event.EventDefine;
 import com.zdn.logic.InternetComponent;
@@ -507,7 +508,17 @@ public class MainControl extends HandlerThread {
 	}	
 	
 	
-	
+	public void FriendBasicInfoChange( friendMemberDataBasic fmdb , int mask )
+	{
+		//TODO
+		//send a message to server : notify a friend member'sdata changed
+		//rebuit friendTeam
+		if( ( mask & friendMemberDataBasic.TEAM_NAME )!= 0 )
+		{
+			dataManager.getFrilendList().RebuiltTeam( fmdb.getTeamName() );
+		}
+		//modify friend list view
+	}
 	
 	//COMMON API
 	

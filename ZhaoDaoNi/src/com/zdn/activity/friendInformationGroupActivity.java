@@ -3,58 +3,56 @@ package com.zdn.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ListView;
 
 import com.zdn.R;
+import com.zdn.adapter.friendInformationGroupAdapter;
 import com.zdn.control.EditTextWithDel;
 
 
-public class friendInformationCommentActivity extends Activity {
+public class friendInformationGroupActivity extends Activity {
 	
-	EditTextWithDel	commentView;
+	ListView	groupView;
+	friendInformationGroupAdapter fimga;
 
-	static public final int FRIEND_INFORMATION_COMMENT_ACTIVITY		= 1;
+	static public final int FRIEND_INFORMATION_GROUP_ACTIVITY		= 2;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.friend_information_detail );
+		setContentView(R.layout.friend_information_group );
 		findView();
 		init();
+
 	}
 
 	private void findView()
 	{
-		commentView = (EditTextWithDel) this.findViewById(R.id.newComment );
+		groupView = (ListView) this.findViewById(R.id.groupList );
 	}
 	
+
 	private void init()
 	{
 		Intent intent = this.getIntent();
-		String oldComment = intent.getStringExtra("comment");
-		commentView.setHint(oldComment);
-		
-		
+		String group = intent.getStringExtra("group");
+		fimga = new friendInformationGroupAdapter( this,group );
+		groupView.setAdapter( fimga );
 	}
-
 	@Override
 	protected void onPause() {
 		// TODO Auto-generated method stub
-		String newComment = commentView.getText().toString();
-		
-		if( newComment.equals(commentView.getHint()))
-		{
-			
-		}
-		else
+
+
 		{
 			//send a intent back to main friend information activity
 			
 			//数据是使用Intent返回
             Intent intent = new Intent();
             //把返回数据存入Intent
-            intent.putExtra("newComment", newComment );
+            intent.putExtra("newGroup", fimga.getSelectedGroup() );
             //设置返回数据
-            this.setResult( FRIEND_INFORMATION_COMMENT_ACTIVITY , intent);
+            this.setResult( FRIEND_INFORMATION_GROUP_ACTIVITY , intent);
             //关闭Activity
             
 			this.finish();

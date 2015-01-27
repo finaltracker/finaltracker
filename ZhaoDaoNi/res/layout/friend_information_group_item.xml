@@ -5,13 +5,13 @@
     android:orientation="horizontal" >
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/groupName"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:text="TextView" />
 
     <ImageView
-        android:id="@+id/majia"
+        android:id="@+id/select"
         android:gravity="right"
         android:layout_width="40.0dip"
         android:layout_height="40.0dip"

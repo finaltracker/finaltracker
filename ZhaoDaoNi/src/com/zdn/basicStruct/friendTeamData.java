@@ -20,8 +20,6 @@ public class friendTeamData {
 	}
 	
 
-	
-	
 	public friendMemberData getFriendMemberData ( String phoneNumber )
 	{
 		friendMemberData  fmd = null;

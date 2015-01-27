@@ -14,7 +14,18 @@ public class friendTeamDataManager {
 	
 	public List<friendTeamData> getFriendTeamDataList() { return this.Teams; }
 	
-	
+	//return index , -1 not find
+	public int findAfriendTeam( String teamName  )
+	{
+		for( int i = 0 ; i < Teams.size() ; i++ )
+		{
+			if(Teams.get(i).teamName.equals(teamName))
+			{
+				return i;
+			}
+		}
+		return -1;
+	}
 	public friendTeamData getFriendTeamData( String teamName )
 	{
 		friendTeamData ftd = null;
@@ -56,7 +67,15 @@ public class friendTeamDataManager {
 	
 	public void deleteA_FriendTeam( String teamName )
 	{
-		
+
+		for( int i = 0 ; i < Teams.size() ; i++ )
+		{
+			if(Teams.get(i).teamName.equals(teamName))
+			{
+				Teams.remove(i);
+				i--;
+			}
+		}
 	}
 
 
@@ -108,10 +127,7 @@ public class friendTeamDataManager {
 		fmd.rebuildFriendMemberData();
 		
 	}
-	public void deleteA_FriendMemberData( String phoneNumber )
-	{
-		
-	}
+	
 	
 	public int getTeamNum()
 	{
@@ -186,5 +202,30 @@ public class friendTeamDataManager {
 		another.Teams.clear();
 		Collections.copy(this.Teams, another.Teams );;
 
+	}
+	
+	public void RebuiltTeam( String teamName )
+	{
+		friendTeamData ftd = getFriendTeamData( teamName );
+		for( int i = 0 ; i < ftd.member.size() ; i++ )
+		{
+			friendMemberData fmd = ftd.member.get(i);
+			if( fmd.basic.teamName.equals(teamName ) )
+			{
+				
+			}
+			else
+			{
+				addA_FriendMemberData(fmd); 
+				ftd.member.remove(i);
+				i--;
+			}
+		}
+		
+		if(ftd.member.size() == 0 )
+		{
+			deleteA_FriendTeam( teamName );
+		}
+			
 	}
 }
