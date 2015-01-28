@@ -8,20 +8,16 @@ import com.zdn.activity.MainControl;
 public class friendMemberDataBasic {
 	
 	
-	static public int   	TEAM_NAME 		= 0x01; 
-	static public int 		MEMBER_NAME		= 0x02;
-	static public int   	PHONE_NUMBER	= 0x04; 
-	static public int   	NICK_NAME		= 0x08;
-	static public int   	COMMENT			= 0x10;
-	static public int   	PICTURE_ADDRESS	= 0x20;
-	
-	
-	protected String   teamName; 
-	protected String 	memberName;
-	protected String   phoneNumber;  // todo
-	protected String   nickName;
-	protected String   comment;
-	protected String   pictureAddress;
+
+	//for reflect: only string type to be define, all public field will be save to db
+
+	// public for java reflect
+	public String   teamName; 
+	public String 	memberName;
+	public String   phoneNumber;  // todo
+	public String   nickName;
+	public String   comment;
+	public String   pictureAddress;
 	
 	
 	
@@ -29,7 +25,7 @@ public class friendMemberDataBasic {
 	{
 		this.teamName = teamName;
 		
-		notifyToMainControl( TEAM_NAME );
+		notifyToMainControl( friendMemberData.TEAM_NAME );
 	}
 	
 	public String getTeamName( )
@@ -40,7 +36,7 @@ public class friendMemberDataBasic {
 	public void setMemberName( String memberName )
 	{
 		this.memberName = memberName;
-		notifyToMainControl( MEMBER_NAME );
+		notifyToMainControl(friendMemberData.MEMBER_NAME );
 	}
 	
 	public String getMemberName( )
@@ -51,7 +47,7 @@ public class friendMemberDataBasic {
 	public void setPhoneNumber( String phoneNumber )
 	{
 		this.phoneNumber = phoneNumber;
-		notifyToMainControl( PHONE_NUMBER );
+		notifyToMainControl( friendMemberData.PHONE_NUMBER );
 	}
 	
 	public String getPhoneNumber( )
@@ -62,7 +58,7 @@ public class friendMemberDataBasic {
 	public void setNickName( String nickName )
 	{
 		this.nickName = nickName;
-		notifyToMainControl( NICK_NAME );
+		notifyToMainControl( friendMemberData.NICK_NAME );
 	}
 	
 	public String getNickName( )
@@ -73,7 +69,7 @@ public class friendMemberDataBasic {
 	public void setComment( String comment )
 	{
 		this.comment = comment;
-		notifyToMainControl( COMMENT );
+		notifyToMainControl( friendMemberData.COMMENT );
 	}
 	
 	public String getComment( )
@@ -84,7 +80,7 @@ public class friendMemberDataBasic {
 	public void setPictureAddress( String pictureAddress )
 	{
 		this.pictureAddress = pictureAddress;
-		notifyToMainControl( PICTURE_ADDRESS );
+		notifyToMainControl( friendMemberData.PICTURE_ADDRESS );
 	}
 	
 	

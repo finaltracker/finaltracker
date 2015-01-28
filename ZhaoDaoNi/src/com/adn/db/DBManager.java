@@ -2,6 +2,7 @@ package com.adn.db;
 
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,7 +69,9 @@ public class DBManager {
                 for( int i = 0 ; i < paraNumber ; i++ )
                 //for (Field field : friendMemberDataBasicClassFs )
             	{
-                	newObjArray[i] = (String) friendMemberDataBasicClassFs[i].get(info.basic) ;
+                	Object object = friendMemberDataBasicClassFs[i].get(info.basic);
+
+                	newObjArray[i] = (String)object ;
             	}
                 //db.execSQL("INSERT INTO info VALUES(null,?,?,?,?)", new Object[] { info.teamName, info.memberName, info.phoneNumber, info.nickName , info.comment , info.pictureAddress });
                 db.execSQL( execSqlStrAll , newObjArray);

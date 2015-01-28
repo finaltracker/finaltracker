@@ -549,7 +549,7 @@ public class MainControl extends HandlerThread {
 		//TODO
 		//send a message to server : notify a friend member'sdata changed
 		//rebuit friendTeam
-		if( ( mask & friendMemberDataBasic.TEAM_NAME )!= 0 )
+		if( ( mask & friendMemberData.TEAM_NAME )!= 0 )
 		{
 			dataManager.getFrilendList().RebuiltTeam( fmdb.getTeamName() );
 		}

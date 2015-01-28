@@ -108,6 +108,7 @@ public class Zhuce extends Activity {
 				MainControl.registReq(Id, passWord);
 				
 				//still stay this activity until response back
+				Toast.makeText(getApplicationContext(),"注册消息已发出",Toast.LENGTH_SHORT).show();
 			}
 			
 		}

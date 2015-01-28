@@ -34,20 +34,20 @@ public class MyReceiver extends BroadcastReceiver {
 		
         if (JPushInterface.ACTION_REGISTRATION_ID.equals(intent.getAction())) {
             String regId = bundle.getString(JPushInterface.EXTRA_REGISTRATION_ID);
-            Log.d(TAG, "[MyReceiver] 鎺ユ敹Registration Id : " + regId);
+            Log.d(TAG, "[MyReceiver] ACTION_REGISTRATION_ID : " + regId);
             //send the Registration Id to your server...
                         
         } else if (JPushInterface.ACTION_MESSAGE_RECEIVED.equals(intent.getAction())) {
-        	Log.d(TAG, "[MyReceiver] 鎺ユ敹鍒版帹閫佷笅鏉ョ殑鑷畾涔夋秷锟� " + bundle.getString(JPushInterface.EXTRA_MESSAGE));
+        	Log.d(TAG, "[MyReceiver] ACTION_MESSAGE_RECEIVED EXTRA_MESSAGE : " + bundle.getString(JPushInterface.EXTRA_MESSAGE));
         	processCustomMessage(context, bundle);
         
         } else if (JPushInterface.ACTION_NOTIFICATION_RECEIVED.equals(intent.getAction())) {
-            Log.d(TAG, "[MyReceiver] 鎺ユ敹鍒版帹閫佷笅鏉ョ殑閫氱煡");
+            Log.d(TAG, "[MyReceiver] ACTION_NOTIFICATION_RECEIVED");
             int notifactionId = bundle.getInt(JPushInterface.EXTRA_NOTIFICATION_ID);
-            Log.d(TAG, "[MyReceiver] 鎺ユ敹鍒版帹閫佷笅鏉ョ殑閫氱煡鐨処D: " + notifactionId);
+            Log.d(TAG, "[MyReceiver] ACTION_NOTIFICATION_RECEIVED  notifactionId: " + notifactionId);
         	
         } else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {
-            Log.d(TAG, "[MyReceiver] 鐢ㄦ埛鐐瑰嚮鎵撳紑浜�NOTIFICATION ");
+            Log.d(TAG, "[MyReceiver] ACTION_NOTIFICATION_OPENED ");
             
         	//鎵撳紑鑷畾涔夌殑Activity
         	Intent i = new Intent(context, TestActivity.class);
@@ -57,7 +57,7 @@ public class MyReceiver extends BroadcastReceiver {
         	context.startActivity(i);
         	
         } else if (JPushInterface.ACTION_RICHPUSH_CALLBACK.equals(intent.getAction())) {
-            Log.d(TAG, "[MyReceiver] 鐢ㄦ埛鏀跺埌鍒癛ICH PUSH CALLBACK: " + bundle.getString(JPushInterface.EXTRA_EXTRA));
+            Log.d(TAG, "[MyReceiver] ACTION_RICHPUSH_CALLBACK  EXTRA_EXTRA: " + bundle.getString(JPushInterface.EXTRA_EXTRA));
             //鍦ㄨ繖閲屾牴JPushInterface.EXTRA_EXTRA 鐨勫唴瀹瑰鐞嗕唬鐮侊紝姣斿鎵撳紑鏂扮殑Activity锟�鎵撳紑锟�锟斤拷缃戦〉锟�.
         	
         } else if(JPushInterface.ACTION_CONNECTION_CHANGE.equals(intent.getAction())) {
