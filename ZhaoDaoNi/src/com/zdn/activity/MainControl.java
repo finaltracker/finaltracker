@@ -332,7 +332,7 @@ public class MainControl extends HandlerThread {
 			{
 				JSONObject  jason_obj = null;
 				String error = "";
-				
+				Log.d("MainControl" , "GET_FRIEND_LIST_RSP: " );
 				try {
 					jason_obj = new JSONObject(rep);
 					
@@ -366,10 +366,12 @@ public class MainControl extends HandlerThread {
 		}
 			break;
 		case EventDefine.ADD_A_FRIEND_ANSWER_REQ:
+			Log.d("MainControl" , "ADD_A_FRIEND_ANSWER_REQ: " );
 			mInternetCom.friendAddMeAnswer(e);
 			break;
 		case EventDefine.ADD_A_FRIEND_ANSWER_RSP:
 			{
+				Log.d("MainControl" , "ADD_A_FRIEND_ANSWER_RSP: " );
 				int queueRsp = parseHttpReqRspStatus(e);
 				
 				if( queueRsp == 0 )
@@ -380,11 +382,13 @@ public class MainControl extends HandlerThread {
 			}
 			break;
 		case EventDefine.UPDATE_FRIEND_INFORMATION_REQ:
+			Log.d("MainControl" , "UPDATE_FRIEND_INFORMATION_REQ: " );
 			mInternetCom.updateFriendInfomation(e);
 			break;
 			
 		case EventDefine.UPDATE_FRIEND_INFORMATION_RSP:
 			{
+				Log.d("MainControl" , "UPDATE_FRIEND_INFORMATION_RSP: " );
 				int queueRsp = parseHttpReqRspStatus(e);
 				
 				if( queueRsp == 0 )
@@ -394,13 +398,31 @@ public class MainControl extends HandlerThread {
 				}
 			}
 			break;
+		case EventDefine.DELETE_FRIEND_REQ:
+			Log.d("MainControl" , "DELETE_FRIEND_REQ: " );
+			mInternetCom.deleteFriend(e);
+			break;
 			
+		case EventDefine.DELETE_FRIEND_RSP:
+			{
+				Log.d("MainControl" , "DELETE_FRIEND_RSP: " );
+				int queueRsp = parseHttpReqRspStatus(e);
+				
+				if( queueRsp == 0 )
+				{
+					Log.d("MainControl" , "send DELETE_FRIEND_REQ ok" );
+
+				}
+			}
+			break;	
 		case EventDefine.SEARCH_FRIEND_OR_CIRCLE_REQ:
+			Log.d("MainControl" , "SEARCH_FRIEND_OR_CIRCLE_REQ: " );
 			mInternetCom.searchFirendOrCircle( e );
 			
 			break;
 		case EventDefine.SEARCH_FRIEND_OR_CIRCLE_RSP:
 			{
+				Log.d("MainControl" , "SEARCH_FRIEND_OR_CIRCLE_RSP: " );
 				//update UI
 				//获得注册结果
 				String rep = e.GetPropertyContext("HTTP_REQ_RSP");
@@ -413,12 +435,9 @@ public class MainControl extends HandlerThread {
 				else
 				{
 					JSONObject  jason_obj = null;
-					int status = -1;
-					String error = "";
 					try {
 						jason_obj = new JSONObject(rep);
 						
-						status = jason_obj.getInt("status");
 						//send it to searchFriendResultForAddActivity
 						if( searchFriendResultForAddActivity.getInstance() != null )
 						{
@@ -634,7 +653,7 @@ public class MainControl extends HandlerThread {
 	static public void deleteA_Friend( friendMemberData fmd ) {
 
 		CommandE e = new CommandE("SEND_MESSAGE_TO_SERVER");
-		e.AddAProperty(new Property("EventDefine" ,Integer.toString(EventDefine.UPDATE_FRIEND_INFORMATION_REQ ) ) );
+		e.AddAProperty(new Property("EventDefine" ,Integer.toString(EventDefine.DELETE_FRIEND_REQ ) ) );
 		e.AddAProperty(new Property("URL" ,InternetComponent.WEBSITE_ADDRESS_UPDATE_FRIEND) );
 		e.AddAProperty(new Property("client",fmd.basic.getMemberName() ) );
 		e.AddAProperty(new Property("mobile",fmd.basic.getPhoneNumber() ) );

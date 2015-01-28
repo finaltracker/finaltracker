@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.zdn.R;
 import com.zdn.basicStruct.friendMemberData;
@@ -108,7 +109,9 @@ public class friendInformationDetailActivity extends Activity {
 		deleteFriend.setOnClickListener( new View.OnClickListener() {
         	public void onClick(View v) {
         		//send delete friend request
-        		
+        		MainControl.deleteA_Friend( fmd );
+        		Toast.makeText( friendInformationDetailActivity.this, "删除好友消息以发出" , Toast.LENGTH_SHORT).show();
+        		friendInformationDetailActivity.this.finish();
         	}
         	});
 	}

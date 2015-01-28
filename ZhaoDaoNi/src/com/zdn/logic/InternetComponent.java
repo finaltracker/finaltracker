@@ -22,6 +22,7 @@ public class InternetComponent implements ServerInterfaceCmd {
 	static public String WEBSITE_ADDRESS_GET_FRIEND_LIST = WEBSITE_ADDRESS_BASE + "friend/get_friend/";
 	static public String WEBSITE_SEARCH_FRIEND_OR_CIRCLE = WEBSITE_ADDRESS_BASE + "friend/search_friend/";
 	static public String WEBSITE_ADDRESS_UPDATE_FRIEND = WEBSITE_ADDRESS_BASE + "friend/update_friend/";
+	static public String WEBSITE_ADDRESS_DELETE_FRIEND = WEBSITE_ADDRESS_BASE + "friend/delete_friend/";
 	
 	
 	
@@ -140,6 +141,16 @@ public class InternetComponent implements ServerInterfaceCmd {
 		
 	}
 
+	@Override
+	public void deleteFriend(CommandE e) {
+		Message msg = handler.obtainMessage(); 
+		msg.what = ThreadTaskHandler.SEND_MESSAGE_TO_SERVER;
+        
+		msg.obj = e;   //
+        
+        handler.sendMessage(msg);
+
+	}
 	
 	class ThreadTaskHandler extends Handler {
 		
@@ -175,6 +186,9 @@ public class InternetComponent implements ServerInterfaceCmd {
 		}
 
 	}
+
+
+	
 
 	
 	

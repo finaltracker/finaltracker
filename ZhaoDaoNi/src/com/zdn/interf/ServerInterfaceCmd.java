@@ -18,6 +18,10 @@ public interface ServerInterfaceCmd {
 	public void getFriendList( String imsi , int mobile_friend_version );
 	//更新好友信息
 	public void updateFriendInfomation( CommandE e);
+	
+	//删除一个好友
+	public void deleteFriend( CommandE e );
+	
 	//向服务器发送自己的GPS信息
 	public void updateGpsInfo( String phoneNumber , int longitude, int latitude );
 	
