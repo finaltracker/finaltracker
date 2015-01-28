@@ -654,7 +654,7 @@ public class MainControl extends HandlerThread {
 
 		CommandE e = new CommandE("SEND_MESSAGE_TO_SERVER");
 		e.AddAProperty(new Property("EventDefine" ,Integer.toString(EventDefine.DELETE_FRIEND_REQ ) ) );
-		e.AddAProperty(new Property("URL" ,InternetComponent.WEBSITE_ADDRESS_UPDATE_FRIEND) );
+		e.AddAProperty(new Property("URL" ,InternetComponent.WEBSITE_ADDRESS_DELETE_FRIEND) );
 		e.AddAProperty(new Property("client",fmd.basic.getMemberName() ) );
 		e.AddAProperty(new Property("mobile",fmd.basic.getPhoneNumber() ) );
 		e.AddAProperty(new Property("clientVersion",Integer.toString(MainControl.getInstance().preferencesPara.getFriendListVersion() )) );

@@ -127,7 +127,7 @@ public class MyReceiver extends BroadcastReceiver {
 			e_c.AddAProperty( new Property("Extra",  ExtraStr  ));
 
 			msg_cmd.obj = e_c;   
-	        
+	        Log.d( this.getClass().getName()," send CustomMessage to mainControl");
 			MainControl.getInstance().sendMessage(msg_cmd);
 		}
 	}
