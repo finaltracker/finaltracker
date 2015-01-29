@@ -6,11 +6,14 @@ import org.json.JSONObject;
 
 import android.content.Context;
 
+import com.zdn.basicStruct.SelfMobileData;
 import com.zdn.basicStruct.friendTeamDataManager;
 
 public class dataManager {
 
 	static friendTeamDataManager   allFriend = null;  //friend list
+	static Context mainContext = null;
+	static public SelfMobileData self = null; // myself info
 	
 	public dataManager() {
 		// TODO Auto-generated constructor stub
@@ -18,9 +21,13 @@ public class dataManager {
 	
 	static public void init( Context context )
 	{
+		mainContext = context;
 		allFriend = new friendTeamDataManager();
 		allFriend.constructTeamInfoFromDb( context );
+		self = new SelfMobileData();
+		self.init(context);
 	}
+	
 	static public friendTeamDataManager getFrilendList()
 	{
 		return allFriend;

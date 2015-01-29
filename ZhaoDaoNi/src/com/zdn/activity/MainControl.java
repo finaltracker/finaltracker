@@ -10,21 +10,17 @@ import com.zdn.basicStruct.friendMemberDataBasic;
 import com.zdn.data.dataManager;
 import com.zdn.event.EventDefine;
 import com.zdn.logic.InternetComponent;
-import com.zdn.util.PreferencesUtil;
-
-import android.content.Context;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 
 public class MainControl extends HandlerThread {
 	MainActivity		mMainActivity;
-	PreferencesUtil     preferencesPara;
+	
 	InternetComponent 	mInternetCom = null ;
 	static public  MainControl me = null;
-	public static String imsi = null;
+	
 	
 	final public int   STATE_NULL	= 0;
 	final public int   STATE_WAIT_QUEUE_REGSIT_RESULT	= STATE_NULL + 1; //查询是否祖册了
@@ -44,13 +40,10 @@ public class MainControl extends HandlerThread {
 	public MainControl(String name ,MainActivity ma ) {
 		super(name);
 
+		dataManager.init(mMainActivity);
 		mMainActivity = ma;
 		me = this;
-		TelephonyManager mTelephonyMgr = (TelephonyManager) mMainActivity.getSystemService(Context.TELEPHONY_SERVICE);
-		imsi = mTelephonyMgr.getSubscriberId();
-		preferencesPara = new PreferencesUtil(mMainActivity);
-		dataManager.init(mMainActivity);
-
+		
 	}
 
 
@@ -110,7 +103,7 @@ public class MainControl extends HandlerThread {
 
 	private void stateNull( CommandE e  )
 	{
-		mInternetCom.isRegist( imsi );
+		mInternetCom.isRegist( dataManager.self.getImsi() );
 		state = STATE_WAIT_QUEUE_REGSIT_RESULT;
 		
 	}
@@ -159,7 +152,7 @@ public class MainControl extends HandlerThread {
 			{// 
 				// 请求好友列表
 				
-				mInternetCom.getFriendList(imsi,  preferencesPara.getFriendListVersion() );
+				mInternetCom.getFriendList(dataManager.self.getImsi(),  dataManager.self.preferencesPara.getFriendListVersion() );
 				
 				state = STATE_LOGIN_NORMAL;
 				//TODO
@@ -297,7 +290,7 @@ public class MainControl extends HandlerThread {
 			case 201:
 				
 				Log.d("MainControl" , "jpush server call me ,update friend " );
-				mInternetCom.getFriendList( imsi,  preferencesPara.getFriendListVersion() );
+				mInternetCom.getFriendList( dataManager.self.getImsi(),  dataManager.self.preferencesPara.getFriendListVersion() );
 				//
 				break;
 			
@@ -341,7 +334,7 @@ public class MainControl extends HandlerThread {
 					{
 						Log.d("MainControl", "GET_FRIEND_LIST_RSP status = " + status );
 					}
-					preferencesPara.saveFriendListVersion(jason_obj.getInt("server_friend_version"));
+					dataManager.self.preferencesPara.saveFriendListVersion(jason_obj.getInt("server_friend_version"));
 					
 					dataManager.updateFriendListFromServer( jason_obj.getInt("update_type") , jason_obj.getJSONArray("friends") , mMainActivity );
 					//send it to PeopleActivity
@@ -554,7 +547,7 @@ public class MainControl extends HandlerThread {
 			dataManager.getFrilendList().RebuiltTeam( fmdb.getTeamName() );
 		}
 		
-		preferencesPara.saveFriendListVersion( preferencesPara.getFriendListVersion()+1 );
+		dataManager.self.preferencesPara.saveFriendListVersion( dataManager.self.preferencesPara.getFriendListVersion()+1 );
 		
 
 		//modify friend list view
@@ -572,7 +565,7 @@ public class MainControl extends HandlerThread {
 		CommandE e = new  CommandE("ADD_A_FRIEND");
 		e.AddAProperty(new Property("EventDefine",Integer.toString( EventDefine.ADD_A_FRIEND_REQ ) ) );
 		e.AddAProperty(new Property("URL" ,"" ) );
-		e.AddAProperty(new Property("imsi",MainControl.imsi ) );
+		e.AddAProperty(new Property("imsi",dataManager.self.getImsi() ) );
 		e.AddAProperty(new Property("target_user",phoneNumner ) );
 		e.AddAProperty(new Property("attament",attachMentContext ) );
 		Message m = MainControl.getInstance().handler.obtainMessage();
@@ -590,7 +583,7 @@ public class MainControl extends HandlerThread {
 		e.AddAProperty(new Property("mobile",Id ) );
 		e.AddAProperty(new Property("password",passWord ) );
 		e.AddAProperty(new Property("confirmpass",passWord ) );
-		e.AddAProperty(new Property("imsi",imsi ) );
+		e.AddAProperty(new Property("imsi",dataManager.self.getImsi() ) );
 		e.AddAProperty(new Property("nickname","小迷糊" ) );
 		
 		m.obj = e;
@@ -609,7 +602,7 @@ public class MainControl extends HandlerThread {
 		e.AddAProperty(new Property("URL" ,"" ) );
 		e.AddAProperty(new Property("nok",result ) );
 		e.AddAProperty(new Property("target_user",targetUser ) );
-		e.AddAProperty(new Property("imsi",MainControl.imsi ) );
+		e.AddAProperty(new Property("imsi",dataManager.self.getImsi() ) );
 		e.AddAProperty(new Property("client",MainControl.UserName ) );
 		Message m = MainControl.getInstance().handler.obtainMessage();
 		m.obj = e;
@@ -640,8 +633,8 @@ public class MainControl extends HandlerThread {
 		e.AddAProperty(new Property("comment",fmd.basic.getComment()) );
 		e.AddAProperty(new Property("nickname",fmd.basic.getNickName() ) );
 		e.AddAProperty(new Property("mobile",fmd.basic.getPhoneNumber() ) );
-		e.AddAProperty(new Property("clientVersion",Integer.toString(MainControl.getInstance().preferencesPara.getFriendListVersion() )) );
-		e.AddAProperty(new Property("imsi",MainControl.imsi ) );
+		e.AddAProperty(new Property("clientVersion",Integer.toString( dataManager.self.preferencesPara.getFriendListVersion() )) );
+		e.AddAProperty(new Property("imsi",dataManager.self.getImsi() ) );
 		
 		Message m = MainControl.getInstance().handler.obtainMessage();
 		m.obj = e;   //
@@ -657,8 +650,8 @@ public class MainControl extends HandlerThread {
 		e.AddAProperty(new Property("URL" ,InternetComponent.WEBSITE_ADDRESS_DELETE_FRIEND) );
 		e.AddAProperty(new Property("client",fmd.basic.getMemberName() ) );
 		e.AddAProperty(new Property("mobile",fmd.basic.getPhoneNumber() ) );
-		e.AddAProperty(new Property("clientVersion",Integer.toString(MainControl.getInstance().preferencesPara.getFriendListVersion() )) );
-		e.AddAProperty(new Property("imsi",MainControl.imsi ) );
+		e.AddAProperty(new Property("clientVersion",Integer.toString(dataManager.self.preferencesPara.getFriendListVersion() )) );
+		e.AddAProperty(new Property("imsi",dataManager.self.getImsi() ) );
 		
 		Message m = MainControl.getInstance().handler.obtainMessage();
 		m.obj = e;   //

@@ -8,6 +8,7 @@ import com.qq.test.SDManager;
 import com.zdn.R;
 import com.zdn.CommandParser.CommandE;
 import com.zdn.CommandParser.Property;
+import com.zdn.data.dataManager;
 import com.zdn.event.EventDefine;
 import com.zdn.fragment.NavigationDrawerFragment;
 import com.zdn.jpush.ExampleUtil;
@@ -99,7 +100,7 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 			manager.moveUserIcon();
 
 		control = new MainControl("MainControl" , this );
-		this.setTag(MainControl.imsi);
+		this.setTag( dataManager.self.getImsi());
 		control.start();
 
 		registerMessageReceiver();  // used for receive msg
