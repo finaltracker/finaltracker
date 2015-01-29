@@ -1,5 +1,7 @@
 package com.zdn.basicStruct;
 
+import com.zdn.CommandParser.CommandE;
+import com.zdn.CommandParser.Property;
 import com.zdn.activity.MainControl;
 
 
@@ -97,6 +99,16 @@ public class friendMemberDataBasic {
 		{
 			mc.FriendBasicInfoChange( this , mask );
 		}
+	}
+	
+	public void PackToCommandE( CommandE e )
+	{
+		e.AddAProperty(new Property("teamName",this.getTeamName() ) );
+		e.AddAProperty(new Property("memberName",this.getMemberName() ) );
+		e.AddAProperty(new Property("phoneNumber",this.getPhoneNumber() ) );
+		e.AddAProperty(new Property("nickName",this.getNickName() ) );
+		e.AddAProperty(new Property("comment",this.getComment()) );
+		e.AddAProperty(new Property("pictureAddress",this.getPictureAddress()) );
 	}
 	
 }

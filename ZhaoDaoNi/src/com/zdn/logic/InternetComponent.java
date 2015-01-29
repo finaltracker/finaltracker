@@ -4,6 +4,7 @@ import com.zdn.CommandParser.CommandE;
 import com.zdn.CommandParser.Property;
 import com.zdn.activity.MainControl;
 import com.zdn.channel.Http;
+import com.zdn.data.dataManager;
 import com.zdn.event.EventDefine;
 import com.zdn.interf.ServerInterfaceCmd;
 
@@ -184,11 +185,23 @@ public class InternetComponent implements ServerInterfaceCmd {
 			}
 			super.handleMessage(msg);
 		}
-
+		
+		
 	}
 
 
-	
+	static public CommandE packA_CommonCommandE_ToServer( int eventDefine , String URL )
+	{
+		CommandE e = new CommandE("SEND_MESSAGE_TO_SERVER");
+		e.AddAProperty(new Property("EventDefine" ,Integer.toString( eventDefine) ) );
+		e.AddAProperty(new Property("URL" ,URL ) );
+		
+		e.AddAProperty(new Property("clientVersion",Integer.toString( dataManager.self.preferencesPara.getFriendListVersion() )) );
+		e.AddAProperty(new Property("imsi",dataManager.self.getImsi() ) );
+		
+		
+		return e;
+	}
 
 	
 	

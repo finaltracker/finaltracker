@@ -625,16 +625,11 @@ public class MainControl extends HandlerThread {
 	
 	static public void updateFriendInfo( friendMemberData fmd ) {
 
-		CommandE e = new CommandE("SEND_MESSAGE_TO_SERVER");
-		e.AddAProperty(new Property("EventDefine" ,Integer.toString(EventDefine.UPDATE_FRIEND_INFORMATION_REQ ) ) );
-		e.AddAProperty(new Property("URL" ,InternetComponent.WEBSITE_ADDRESS_UPDATE_FRIEND) );
-		e.AddAProperty(new Property("client",fmd.basic.getMemberName() ) );
-		e.AddAProperty(new Property("teamName",fmd.basic.getTeamName()) );
-		e.AddAProperty(new Property("comment",fmd.basic.getComment()) );
-		e.AddAProperty(new Property("nickname",fmd.basic.getNickName() ) );
-		e.AddAProperty(new Property("mobile",fmd.basic.getPhoneNumber() ) );
-		e.AddAProperty(new Property("clientVersion",Integer.toString( dataManager.self.preferencesPara.getFriendListVersion() )) );
-		e.AddAProperty(new Property("imsi",dataManager.self.getImsi() ) );
+		CommandE e = InternetComponent.packA_CommonCommandE_ToServer( 
+					EventDefine.UPDATE_FRIEND_INFORMATION_REQ , 
+					InternetComponent.WEBSITE_ADDRESS_UPDATE_FRIEND 
+					);
+		fmd.basic.PackToCommandE(e);
 		
 		Message m = MainControl.getInstance().handler.obtainMessage();
 		m.obj = e;   //
@@ -645,13 +640,12 @@ public class MainControl extends HandlerThread {
 
 	static public void deleteA_Friend( friendMemberData fmd ) {
 
-		CommandE e = new CommandE("SEND_MESSAGE_TO_SERVER");
-		e.AddAProperty(new Property("EventDefine" ,Integer.toString(EventDefine.DELETE_FRIEND_REQ ) ) );
-		e.AddAProperty(new Property("URL" ,InternetComponent.WEBSITE_ADDRESS_DELETE_FRIEND) );
-		e.AddAProperty(new Property("client",fmd.basic.getMemberName() ) );
-		e.AddAProperty(new Property("mobile",fmd.basic.getPhoneNumber() ) );
-		e.AddAProperty(new Property("clientVersion",Integer.toString(dataManager.self.preferencesPara.getFriendListVersion() )) );
-		e.AddAProperty(new Property("imsi",dataManager.self.getImsi() ) );
+		CommandE e = InternetComponent.packA_CommonCommandE_ToServer( 
+				EventDefine.DELETE_FRIEND_REQ , 
+				InternetComponent.WEBSITE_ADDRESS_DELETE_FRIEND 
+				);
+		fmd.basic.PackToCommandE(e);
+	
 		
 		Message m = MainControl.getInstance().handler.obtainMessage();
 		m.obj = e;   //
