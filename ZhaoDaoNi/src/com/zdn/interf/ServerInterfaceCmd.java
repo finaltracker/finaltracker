@@ -10,6 +10,7 @@ public interface ServerInterfaceCmd {
 	//是否已经注册了
 	public void isRegist( String imsi );
 	
+	public void login( CommandE e );
 	//增加一个好友
 	public int addA_Friend( CommandE e );
 	//好友加我的回复

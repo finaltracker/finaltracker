@@ -31,7 +31,6 @@ public class MainControl extends HandlerThread {
 	
 	String TAG = "MainControl";
 	final public int COMMAND_NULL	= 0;
-	public static String UserName; // phone number
 	
 	static public final int SEND_MESSAGE_TO_SERVER_RSP = 1;
 
@@ -133,7 +132,7 @@ public class MainControl extends HandlerThread {
 			try {
 				jason_obj = new JSONObject(rep);
 				queueRsp = jason_obj.getInt("status");
-				UserName = jason_obj.getString("username");
+				
 			} catch (JSONException e1) {
 
 				Log.d("MainControl" , "server response error: " + e1.getMessage() );
@@ -177,6 +176,9 @@ public class MainControl extends HandlerThread {
 		switch (RcvCommand)
 		{
 		case EventDefine.REGIST_REQ:
+			dataManager.self.preferencesPara.savePhoneNumber(  e.GetProperty("mobile").GetPropertyContext() );
+			dataManager.self.preferencesPara.savePassWord(  e.GetProperty("password").GetPropertyContext() );
+			
 			mInternetCom.registReq( e );
 			state = STATE_WAIT_SERVER_REGSIT_RESULT;
 		break;
@@ -562,12 +564,13 @@ public class MainControl extends HandlerThread {
 	/* add a friend */
 	static public void addA_Friend( String phoneNumner ,String attachMentContext )
 	{
-		CommandE e = new  CommandE("ADD_A_FRIEND");
-		e.AddAProperty(new Property("EventDefine",Integer.toString( EventDefine.ADD_A_FRIEND_REQ ) ) );
-		e.AddAProperty(new Property("URL" ,"" ) );
-		e.AddAProperty(new Property("imsi",dataManager.self.getImsi() ) );
-		e.AddAProperty(new Property("target_user",phoneNumner ) );
+		CommandE e = InternetComponent.packA_CommonCommandE_ToServer( 
+				EventDefine.ADD_A_FRIEND_REQ , 
+				InternetComponent.WEBSITE_ADDRESS_ADD_A_FRIEND_REQ 
+				);
+		e.AddAProperty(new Property("friend_mobile",phoneNumner ) );
 		e.AddAProperty(new Property("attament",attachMentContext ) );
+		
 		Message m = MainControl.getInstance().handler.obtainMessage();
 		m.obj = e;
 		MainControl.getInstance().handler.sendMessage(m);
@@ -597,13 +600,14 @@ public class MainControl extends HandlerThread {
 	//result 0 :disagree
 	static public void addA_FriendConfirm( String result , String targetUser  )
 	{
-		CommandE e = new  CommandE("ADD_A_FRIEND_CONFIRM");
-		e.AddAProperty(new Property("EventDefine",Integer.toString( EventDefine.ADD_A_FRIEND_ANSWER_REQ ) ) );
-		e.AddAProperty(new Property("URL" ,"" ) );
+		CommandE e = InternetComponent.packA_CommonCommandE_ToServer( 
+				EventDefine.ADD_A_FRIEND_ANSWER_REQ , 
+				InternetComponent.WEBSITE_ADDRESS_ADD_A_FRIEND_ANSWER_REQ 
+				);
+		
 		e.AddAProperty(new Property("nok",result ) );
-		e.AddAProperty(new Property("target_user",targetUser ) );
-		e.AddAProperty(new Property("imsi",dataManager.self.getImsi() ) );
-		e.AddAProperty(new Property("client",MainControl.UserName ) );
+		e.AddAProperty(new Property("friend_mobile",targetUser ) );
+
 		Message m = MainControl.getInstance().handler.obtainMessage();
 		m.obj = e;
 		MainControl.getInstance().handler.sendMessage(m);
@@ -611,11 +615,12 @@ public class MainControl extends HandlerThread {
 	
 	static public void searchFirendOrCircle(String search_str) {
 
-		CommandE e = new CommandE("SEND_MESSAGE_TO_SERVER");
-		e.AddAProperty(new Property("EventDefine" ,Integer.toString(EventDefine.SEARCH_FRIEND_OR_CIRCLE_REQ ) ) );
-		e.AddAProperty(new Property("URL" ,InternetComponent.WEBSITE_SEARCH_FRIEND_OR_CIRCLE ) );
+		CommandE e = InternetComponent.packA_CommonCommandE_ToServer( 
+				EventDefine.SEARCH_FRIEND_OR_CIRCLE_REQ , 
+				InternetComponent.WEBSITE_SEARCH_FRIEND_OR_CIRCLE 
+				);
 		e.AddAProperty(new Property("search_str",search_str ) );
-		e.AddAProperty(new Property("client",MainControl.UserName ) );
+
 		Message m = MainControl.getInstance().handler.obtainMessage();
 		m.obj = e;   //
         

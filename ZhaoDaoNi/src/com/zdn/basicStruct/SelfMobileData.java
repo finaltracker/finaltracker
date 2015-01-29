@@ -10,6 +10,8 @@ import com.zdn.util.PreferencesUtil;
 public class SelfMobileData {
 
 	String imsi;
+	//public String phone; // phone number
+	
 	public PreferencesUtil     preferencesPara;
 	public friendMemberData selfInfo;
 	Context context;

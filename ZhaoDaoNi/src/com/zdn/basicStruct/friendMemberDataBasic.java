@@ -103,9 +103,9 @@ public class friendMemberDataBasic {
 	
 	public void PackToCommandE( CommandE e )
 	{
-		e.AddAProperty(new Property("teamName",this.getTeamName() ) );
+		e.AddAProperty(new Property("group",this.getTeamName() ) );
 		e.AddAProperty(new Property("memberName",this.getMemberName() ) );
-		e.AddAProperty(new Property("phoneNumber",this.getPhoneNumber() ) );
+		e.AddAProperty(new Property("mobile",this.getPhoneNumber() ) );
 		e.AddAProperty(new Property("nickName",this.getNickName() ) );
 		e.AddAProperty(new Property("comment",this.getComment()) );
 		e.AddAProperty(new Property("pictureAddress",this.getPictureAddress()) );

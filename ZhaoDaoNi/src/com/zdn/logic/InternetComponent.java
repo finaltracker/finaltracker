@@ -198,9 +198,16 @@ public class InternetComponent implements ServerInterfaceCmd {
 		
 		e.AddAProperty(new Property("clientVersion",Integer.toString( dataManager.self.preferencesPara.getFriendListVersion() )) );
 		e.AddAProperty(new Property("imsi",dataManager.self.getImsi() ) );
+		e.AddAProperty(new Property("mobile",dataManager.self.preferencesPara.getPhoneNumber() ) );
 		
 		
 		return e;
+	}
+
+	@Override
+	public void login(CommandE e) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	
