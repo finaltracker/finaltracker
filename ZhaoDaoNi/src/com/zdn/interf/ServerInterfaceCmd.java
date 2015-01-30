@@ -16,7 +16,7 @@ public interface ServerInterfaceCmd {
 	//好友加我的回复
 	public void friendAddMeAnswer( CommandE e );
 	//获取好友列表
-	public void getFriendList( String imsi , int mobile_friend_version );
+	public void getFriendList( CommandE e );
 	//更新好友信息
 	public void updateFriendInfomation( CommandE e);
 	

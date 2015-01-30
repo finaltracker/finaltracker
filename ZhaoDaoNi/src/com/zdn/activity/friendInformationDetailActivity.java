@@ -109,7 +109,7 @@ public class friendInformationDetailActivity extends Activity {
 		deleteFriend.setOnClickListener( new View.OnClickListener() {
         	public void onClick(View v) {
         		//send delete friend request
-        		MainControl.deleteA_Friend( fmd );
+        		dataManager.getFrilendList().removeA_Friend( fmd.basic.getTeamName(), fmd.basic.getPhoneNumber() );
         		Toast.makeText( friendInformationDetailActivity.this, "删除好友消息以发出" , Toast.LENGTH_SHORT).show();
         		friendInformationDetailActivity.this.finish();
         	}

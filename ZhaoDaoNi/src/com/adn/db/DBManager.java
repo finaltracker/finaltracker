@@ -28,12 +28,19 @@ public class DBManager {
     Field[]friendMemberDataBasicClassFs = null;
 
     public DBManager(Context context  ){
-         Class c = null;
-		c = friendMemberDataBasic.class;
+        Class c =  friendMemberDataBasic.class;;
+		
 		friendMemberDataBasicClassFs = c.getFields(); 
 		
 		helper = new DBHelper(context , friendMemberDataBasicClassFs );
-        db = helper.getWritableDatabase();
+		try
+        {
+			db = helper.getWritableDatabase();
+        }
+		catch(Exception e)
+		{
+			Log.d( this.getClass().getName(), e.toString() );
+		}
        
     }
 

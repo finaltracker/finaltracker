@@ -7,6 +7,7 @@ import java.util.List;
 import android.content.Context;
 
 import com.adn.db.DBManager;
+import com.zdn.activity.MainControl;
 
 public class friendTeamDataManager {
 
@@ -65,6 +66,16 @@ public class friendTeamDataManager {
 		}
 	}
 	
+	public void removeA_Friend( String teamName , String phoneNumber )
+	{
+		friendTeamData ftd = getFriendTeamData( teamName );
+
+		if(ftd!= null)
+		{
+			ftd.removeA_Frined( phoneNumber );
+		}
+	}
+	
 	public void deleteA_FriendTeam( String teamName )
 	{
 
@@ -77,6 +88,7 @@ public class friendTeamDataManager {
 			}
 		}
 	}
+
 
 
 	public void addA_FriendMemberData( String teamName , String memberName , String nickName , String comment , String PhoneNumber , String pictureAddress )
@@ -141,7 +153,7 @@ public class friendTeamDataManager {
 	
 	public friendTeamData getTeamData( int teamIndex )
 	{
-		if(teamIndex <= Teams.size() )
+		if(teamIndex < Teams.size() )
 		{
 			return Teams.get(teamIndex);
 		}

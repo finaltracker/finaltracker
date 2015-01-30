@@ -10,10 +10,12 @@ import com.zdn.basicStruct.friendMemberDataBasic;
 import com.zdn.data.dataManager;
 import com.zdn.event.EventDefine;
 import com.zdn.logic.InternetComponent;
+
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
 import android.util.Log;
+import android.widget.Toast;
 
 public class MainControl extends HandlerThread {
 	MainActivity		mMainActivity;
@@ -38,9 +40,10 @@ public class MainControl extends HandlerThread {
 	
 	public MainControl(String name ,MainActivity ma ) {
 		super(name);
-
-		dataManager.init(mMainActivity);
+		
 		mMainActivity = ma;
+		dataManager.init(mMainActivity);
+
 		me = this;
 		
 	}
@@ -151,7 +154,7 @@ public class MainControl extends HandlerThread {
 			{// 
 				// 请求好友列表
 				
-				mInternetCom.getFriendList(dataManager.self.getImsi(),  dataManager.self.preferencesPara.getFriendListVersion() );
+				mInternetCom.getFriendList(packGetFriendListCommandE() );
 				
 				state = STATE_LOGIN_NORMAL;
 				//TODO
@@ -228,8 +231,11 @@ public class MainControl extends HandlerThread {
 				switch(queueRsp)
 				{
 					case 0: // success
+						Log.d("MainControl","regist success" );
+						Toast.makeText( mMainActivity, "regist success", Toast.LENGTH_SHORT).show();
 						state = STATE_LOGIN_NORMAL;
 						break;
+						
 					default:
 						Log.d("MainControl","regist a account server response:" + queueRsp );
 						state = STATE_WAIT_UI_LOGIN;
@@ -292,7 +298,7 @@ public class MainControl extends HandlerThread {
 			case 201:
 				
 				Log.d("MainControl" , "jpush server call me ,update friend " );
-				mInternetCom.getFriendList( dataManager.self.getImsi(),  dataManager.self.preferencesPara.getFriendListVersion() );
+				mInternetCom.getFriendList( packGetFriendListCommandE() );
 				//
 				break;
 			
@@ -406,7 +412,24 @@ public class MainControl extends HandlerThread {
 				if( queueRsp == 0 )
 				{
 					Log.d("MainControl" , "send DELETE_FRIEND_REQ ok" );
+					int serverVersion = getIntFromJasonObj( parseHttpReqRsp(e) , "server_friend_version" );
+					if( dataManager.self.preferencesPara.getFriendListVersion() +1 == serverVersion )
+					{
+						
+					}
+					else
+					{
+						// 请求好友列表
+						mInternetCom.getFriendList( packGetFriendListCommandE() );
+						
+					}
 
+				}
+				else
+				{
+					// 请求好友列表
+					mInternetCom.getFriendList( packGetFriendListCommandE() );
+					
 				}
 			}
 			break;	
@@ -537,26 +560,82 @@ public class MainControl extends HandlerThread {
 		
 		return queueRsp;
 	}	
+
+	private int getIntFromJasonObj( JSONObject obj , String what )
+	{
+		int ret = -1;
+		
+		try {
+			ret = obj.getInt( what );
+		} catch (JSONException e1) {
+	
+			Log.d("MainControl" , "getIntFromJasonObj what = " + what + "error: " + e1.getMessage() );
+			e1.printStackTrace();
+		}
+		
+		return ret;
+	}
+	
+	private String getStringFromJasonObj( JSONObject obj , String what )
+	{
+		String ret = "";
+		
+		try {
+			ret = obj.getString( what );
+		} catch (JSONException e1) {
+	
+			Log.d("MainControl" , "getIntFromJasonObj what = " + what + "error: " + e1.getMessage() );
+			e1.printStackTrace();
+		}
+		
+		return ret;
+	}
+	
+	private CommandE packGetFriendListCommandE()
+	{
+
+		CommandE e = InternetComponent.packA_CommonCommandE_ToServer( 
+				EventDefine.GET_FRIEND_LIST_REQ , 
+				InternetComponent.WEBSITE_ADDRESS_GET_FRIEND_LIST 
+				);
+		
+        
+        return e;
+
+	}
+	
 	
 	
 	public void FriendBasicInfoChange( friendMemberDataBasic fmdb , int mask )
 	{
-		//TODO
+		
 		//send a message to server : notify a friend member'sdata changed
-		//rebuit friendTeam
-		if( ( mask & friendMemberData.TEAM_NAME )!= 0 )
-		{
-			dataManager.getFrilendList().RebuiltTeam( fmdb.getTeamName() );
-		}
-		
-		dataManager.self.preferencesPara.saveFriendListVersion( dataManager.self.preferencesPara.getFriendListVersion()+1 );
-		
+		updateFriendInfo( fmdb );
 
 		//modify friend list view
 		if( PeopleActivity.getInstance() != null )
 		{
 			PeopleActivity.getInstance().update();
 		}
+		
+		dataManager.getFrilendList().updateDataToDb( mMainActivity );
+		
+
+	}
+	
+	public void FriendsHasBeenRemoved( friendMemberData fmd )
+	{
+		//send a message to server
+		deleteA_Friend(fmd);
+		
+		//modify friend list view
+		if( PeopleActivity.getInstance() != null )
+		{
+			PeopleActivity.getInstance().update();
+		}
+		
+		dataManager.getFrilendList().updateDataToDb( mMainActivity );
+
 	}
 	
 	//COMMON API
@@ -587,7 +666,7 @@ public class MainControl extends HandlerThread {
 		e.AddAProperty(new Property("password",passWord ) );
 		e.AddAProperty(new Property("confirmpass",passWord ) );
 		e.AddAProperty(new Property("imsi",dataManager.self.getImsi() ) );
-		e.AddAProperty(new Property("nickname","小迷糊" ) );
+		e.AddAProperty(new Property("nick_name","小迷糊" ) );
 		
 		m.obj = e;
 		MainControl.getInstance().handler.sendMessage(m);
@@ -628,13 +707,13 @@ public class MainControl extends HandlerThread {
 
 	}
 	
-	static public void updateFriendInfo( friendMemberData fmd ) {
+	static public void updateFriendInfo( friendMemberDataBasic fmdBasic ) {
 
 		CommandE e = InternetComponent.packA_CommonCommandE_ToServer( 
 					EventDefine.UPDATE_FRIEND_INFORMATION_REQ , 
 					InternetComponent.WEBSITE_ADDRESS_UPDATE_FRIEND 
 					);
-		fmd.basic.PackToCommandE(e);
+		fmdBasic.PackToCommandE(e);
 		
 		Message m = MainControl.getInstance().handler.obtainMessage();
 		m.obj = e;   //

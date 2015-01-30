@@ -33,6 +33,9 @@ public class PreferencesUtil {
 	 */
 	public int getFriendListVersion(){
 		SharedPreferences sharedPreferences = context.getSharedPreferences( preferenceFileName , Context.MODE_PRIVATE);
+		Log.d("PreferencesUtil" , "read getFriendListVersion = " + sharedPreferences.getInt("friendListVersion", -1) );
+				
+
 		return ( sharedPreferences.getInt("friendListVersion", -1));
 	}
 	

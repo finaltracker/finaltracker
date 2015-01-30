@@ -68,7 +68,7 @@ public class InternetComponent implements ServerInterfaceCmd {
 		Message msg = handler.obtainMessage(); 
 		msg.what = ThreadTaskHandler.SEND_MESSAGE_TO_SERVER;
         
-		e.GetProperty("URL").SetPropertyContext( WEBSITE_ADDRESS_ADD_A_FRIEND_REQ );
+		//e.GetProperty("URL").SetPropertyContext( WEBSITE_ADDRESS_ADD_A_FRIEND_REQ );
 		msg.obj = e;   //
         
         handler.sendMessage(msg);
@@ -80,7 +80,7 @@ public class InternetComponent implements ServerInterfaceCmd {
 		Message msg = handler.obtainMessage(); 
 		msg.what = ThreadTaskHandler.SEND_MESSAGE_TO_SERVER;
         
-		e.GetProperty("URL").SetPropertyContext( WEBSITE_ADDRESS_ADD_A_FRIEND_ANSWER_REQ );
+		//e.GetProperty("URL").SetPropertyContext( WEBSITE_ADDRESS_ADD_A_FRIEND_ANSWER_REQ );
 		msg.obj = e;   //
         
         handler.sendMessage(msg);
@@ -102,20 +102,17 @@ public class InternetComponent implements ServerInterfaceCmd {
 	}
 
 	@Override
-	public void getFriendList(String imsi, int mobile_friend_version ) {
+	public void getFriendList( CommandE e )
+	{
+		
 		Message msg = handler.obtainMessage(); 
 		msg.what = ThreadTaskHandler.SEND_MESSAGE_TO_SERVER;
         
-		CommandE e = new CommandE("SEND_MESSAGE_TO_SERVER");
-		e.AddAProperty(new Property("EventDefine" ,Integer.toString(EventDefine.GET_FRIEND_LIST_REQ ) ) );
-		e.AddAProperty(new Property("URL" ,WEBSITE_ADDRESS_GET_FRIEND_LIST ) );
-		e.AddAProperty(new Property("imsi",imsi ) );
-		e.AddAProperty(new Property("mobile_friend_version",Integer.toString(mobile_friend_version ) ) );
-        msg.obj = e;   //
+		msg.obj = e;   //
         
         handler.sendMessage(msg);
-
-
+		
+		
 	};
 	
 	@Override
@@ -196,7 +193,7 @@ public class InternetComponent implements ServerInterfaceCmd {
 		e.AddAProperty(new Property("EventDefine" ,Integer.toString( eventDefine) ) );
 		e.AddAProperty(new Property("URL" ,URL ) );
 		
-		e.AddAProperty(new Property("clientVersion",Integer.toString( dataManager.self.preferencesPara.getFriendListVersion() )) );
+		e.AddAProperty(new Property("local_friend_version",Integer.toString( dataManager.self.preferencesPara.getFriendListVersion() )) );
 		e.AddAProperty(new Property("imsi",dataManager.self.getImsi() ) );
 		e.AddAProperty(new Property("mobile",dataManager.self.preferencesPara.getPhoneNumber() ) );
 		

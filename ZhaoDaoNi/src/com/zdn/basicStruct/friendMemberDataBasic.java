@@ -3,6 +3,7 @@ package com.zdn.basicStruct;
 import com.zdn.CommandParser.CommandE;
 import com.zdn.CommandParser.Property;
 import com.zdn.activity.MainControl;
+import com.zdn.data.dataManager;
 
 
 //define member struct
@@ -27,7 +28,7 @@ public class friendMemberDataBasic {
 	{
 		this.teamName = teamName;
 		
-		notifyToMainControl( friendMemberData.TEAM_NAME );
+		dataChangeNotifyToMainControl( friendMemberData.TEAM_NAME );
 	}
 	
 	public String getTeamName( )
@@ -38,7 +39,7 @@ public class friendMemberDataBasic {
 	public void setMemberName( String memberName )
 	{
 		this.memberName = memberName;
-		notifyToMainControl(friendMemberData.MEMBER_NAME );
+		dataChangeNotifyToMainControl(friendMemberData.MEMBER_NAME );
 	}
 	
 	public String getMemberName( )
@@ -49,7 +50,7 @@ public class friendMemberDataBasic {
 	public void setPhoneNumber( String phoneNumber )
 	{
 		this.phoneNumber = phoneNumber;
-		notifyToMainControl( friendMemberData.PHONE_NUMBER );
+		dataChangeNotifyToMainControl( friendMemberData.PHONE_NUMBER );
 	}
 	
 	public String getPhoneNumber( )
@@ -60,7 +61,7 @@ public class friendMemberDataBasic {
 	public void setNickName( String nickName )
 	{
 		this.nickName = nickName;
-		notifyToMainControl( friendMemberData.NICK_NAME );
+		dataChangeNotifyToMainControl( friendMemberData.NICK_NAME );
 	}
 	
 	public String getNickName( )
@@ -71,7 +72,7 @@ public class friendMemberDataBasic {
 	public void setComment( String comment )
 	{
 		this.comment = comment;
-		notifyToMainControl( friendMemberData.COMMENT );
+		dataChangeNotifyToMainControl( friendMemberData.COMMENT );
 	}
 	
 	public String getComment( )
@@ -82,7 +83,7 @@ public class friendMemberDataBasic {
 	public void setPictureAddress( String pictureAddress )
 	{
 		this.pictureAddress = pictureAddress;
-		notifyToMainControl( friendMemberData.PICTURE_ADDRESS );
+		dataChangeNotifyToMainControl( friendMemberData.PICTURE_ADDRESS );
 	}
 	
 	
@@ -91,7 +92,7 @@ public class friendMemberDataBasic {
 		return this.pictureAddress;
 	}
 	
-	private void notifyToMainControl( int mask )
+	private void dataChangeNotifyToMainControl( int mask )
 	{
 		MainControl mc = MainControl.getInstance();
 		
@@ -99,16 +100,27 @@ public class friendMemberDataBasic {
 		{
 			mc.FriendBasicInfoChange( this , mask );
 		}
+		dataManager.self.preferencesPara.saveFriendListVersion( dataManager.self.preferencesPara.getFriendListVersion()+1 );
+
+		//rebuit friendTeam
+		if( ( mask & friendMemberData.TEAM_NAME )!= 0 )
+		{
+			dataManager.getFrilendList().RebuiltTeam( getTeamName() );
+		}
+
+		
 	}
+	
+	
 	
 	public void PackToCommandE( CommandE e )
 	{
 		e.AddAProperty(new Property("group",this.getTeamName() ) );
-		e.AddAProperty(new Property("memberName",this.getMemberName() ) );
-		e.AddAProperty(new Property("mobile",this.getPhoneNumber() ) );
-		e.AddAProperty(new Property("nickName",this.getNickName() ) );
+		e.AddAProperty(new Property("member_name",this.getMemberName() ) );
+		e.AddAProperty(new Property("friend_mobile",this.getPhoneNumber() ) );
+		e.AddAProperty(new Property("nick_name",this.getNickName() ) );
 		e.AddAProperty(new Property("comment",this.getComment()) );
-		e.AddAProperty(new Property("pictureAddress",this.getPictureAddress()) );
+		e.AddAProperty(new Property("picture_address",this.getPictureAddress()) );
 	}
 	
 }

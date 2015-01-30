@@ -45,6 +45,7 @@ public class FriendListAdapter extends BaseExpandableListAdapter
 	}
 
 	public int getChildrenCount(int groupPosition) {
+		int count = teams.getMemberNumInTeam(groupPosition);
 		return teams.getMemberNumInTeam(groupPosition);
 		
 	}
@@ -101,7 +102,7 @@ public class FriendListAdapter extends BaseExpandableListAdapter
         	public void onClick(View v) {
 
 
-        		MainControl.addA_FriendConfirm( "1" , ((friendMemberDataBasic)getChild( groupIndex,childIndex)).getPhoneNumber()  );
+        		MainControl.addA_FriendConfirm( "1" , ((friendMemberData)getChild( groupIndex,childIndex)).basic.getPhoneNumber()  );
         	}
         	});
 
@@ -117,7 +118,7 @@ public class FriendListAdapter extends BaseExpandableListAdapter
 
 		holder.iconView.setImageBitmap(md.picture);
 		 
-		holder.nameView.setText( md.basic.getMemberName() );
+		holder.nameView.setText( md.basic.getNickName() );
 		holder.feelView.setText("爱生活..爱Android...");
 		return convertView;
 	}
@@ -154,6 +155,7 @@ public class FriendListAdapter extends BaseExpandableListAdapter
 	public void updateListView( friendTeamDataManager updateTeams )
 	{
 		this.teams = updateTeams;
+		notifyDataSetChanged();
 	}
 
 	class ChildHolder {

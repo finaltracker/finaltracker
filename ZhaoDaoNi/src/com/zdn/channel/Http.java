@@ -84,7 +84,7 @@ final public class Http {
     	Log.d("HTTP", "httpReq : " );
         for( int i = 0 ; i < command.GetPropertyNum() ; i++ )
         {
-        	Log.d("HTTP", command.GetProperty(i).GetPropertyName() +  command.GetProperty(i).GetPropertyContext() );
+        	Log.d("HTTP", command.GetProperty(i).GetPropertyName() + " " + command.GetProperty(i).GetPropertyContext() );
         }
         
         for( int i = 2 ; i < command.GetPropertyNum() ; i++ )
@@ -106,12 +106,14 @@ final public class Http {
         try {
             resp = getHttpClient().execute(post);
             
+            
             if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
                 InputStream istream = (resp.getEntity() != null) ? resp.getEntity().getContent()
                         : null;
                 if (istream != null) {
                     BufferedReader ireader = new BufferedReader(new InputStreamReader(istream));
                     ResString = ireader.readLine().trim();
+					Log.e(TAG, "Http Resp = " + ResString );
                 }
             }
             else
