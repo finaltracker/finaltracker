@@ -975,3 +975,12 @@
   visibility:hidden;
   word-wrap:break-word;
 }
+#u80 {
+  position:absolute;
+  left:0px;
+  top:96px;
+  width:360px;
+  height:41px;
+  overflow:hidden;
+  background-image:url('../../resources/images/transparent.gif');
+}
