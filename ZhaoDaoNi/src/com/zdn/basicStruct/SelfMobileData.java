@@ -2,6 +2,7 @@ package com.zdn.basicStruct;
 
 import android.content.Context;
 import android.telephony.TelephonyManager;
+import android.widget.Toast;
 
 import com.zdn.util.PreferencesUtil;
 
@@ -34,6 +35,10 @@ public class SelfMobileData {
 	public void setImsi( String imsi )
 	{
 		this.imsi = imsi;
+		if(imsi== null || imsi.isEmpty() )
+		{
+			Toast.makeText(context, "«Î≤Â»ÎSIMø®", Toast.LENGTH_SHORT).show();
+		}
 		
 	}
 	

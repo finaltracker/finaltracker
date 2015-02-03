@@ -1,4 +1,4 @@
-package com.zdn.control;
+package com.zdn.view;
 
 import com.zdn.R;
 
@@ -12,10 +12,8 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.EditText;
 
-/**
-* @author sunday
-* 2013-12-04
-*/
+
+
 public class EditTextWithDel extends EditText {
         private final static String TAG = "EditTextWithDel";
         private Drawable imgInable;
@@ -73,7 +71,7 @@ public class EditTextWithDel extends EditText {
             Log.e(TAG, "eventX = " + eventX + "; eventY = " + eventY);
             Rect rect = new Rect();
             getGlobalVisibleRect(rect);
-            rect.left = rect.right - 50;
+            rect.left = rect.right - 100;
             if(rect.contains(eventX, eventY)) 
                     setText("");
         }

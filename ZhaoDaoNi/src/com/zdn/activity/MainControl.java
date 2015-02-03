@@ -271,7 +271,6 @@ public class MainControl extends HandlerThread {
 			if( queueRsp == 0 )
 			{
 				Log.d("MainControl" , "add a friend ，server accept!" );
-				
 				//request OK , only need wait the friend feedback
 			}
 			else if (queueRsp == 34 )
@@ -295,7 +294,7 @@ public class MainControl extends HandlerThread {
 			
 			switch (cmd )
 			{
-			case 201:
+			case 202:
 				
 				Log.d("MainControl" , "jpush server call me ,update friend " );
 				mInternetCom.getFriendList( packGetFriendListCommandE() );
@@ -374,11 +373,19 @@ public class MainControl extends HandlerThread {
 			{
 				Log.d("MainControl" , "ADD_A_FRIEND_ANSWER_RSP: " );
 				int queueRsp = parseHttpReqRspStatus(e);
+				// 请求好友列表
+				mInternetCom.getFriendList( packGetFriendListCommandE() );
 				
 				if( queueRsp == 0 )
 				{
+
+					
 					Log.d("MainControl" , "send ADD_A_FRIEND_ANSWER_REQ queueRsp ok" );
 
+				}
+				else
+				{
+					Log.d("MainControl" , "send ADD_A_FRIEND_ANSWER_REQ queueRsp err queueRsp = " + queueRsp );
 				}
 			}
 			break;

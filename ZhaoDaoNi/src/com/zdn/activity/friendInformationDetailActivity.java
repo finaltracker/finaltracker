@@ -86,7 +86,7 @@ public class friendInformationDetailActivity extends Activity {
         		//start comment edit activity
         		Intent intent = new Intent( friendInformationDetailActivity.this, friendInformationCommentActivity.class );  
         		Bundle b = new Bundle();  
-        		b.putString("oldComment", commentTextView.getText().toString() );  
+        		b.putString("comment", commentTextView.getText().toString() );  
         		intent.putExtras(b);  
         		friendInformationDetailActivity.this.startActivityForResult(intent, 1 );  
 
@@ -99,7 +99,7 @@ public class friendInformationDetailActivity extends Activity {
         		//start group select View activitys
         		Intent intent = new Intent( friendInformationDetailActivity.this, friendInformationGroupActivity.class );  
         		Bundle b = new Bundle(); 
-        		b.putInt( "groupIndex", dataManager.getFrilendList().findAfriendTeam(groupTextView.getText().toString() )  );  
+        		b.putString("group", groupTextView.getText().toString()  );  
         		intent.putExtras(b);  
         		friendInformationDetailActivity.this.startActivityForResult(intent, 2 );  
 

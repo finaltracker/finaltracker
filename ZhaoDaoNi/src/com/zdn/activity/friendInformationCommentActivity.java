@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.zdn.R;
-import com.zdn.control.EditTextWithDel;
+import com.zdn.view.EditTextWithDel;
 
 
 public class friendInformationCommentActivity extends Activity {
@@ -17,7 +17,7 @@ public class friendInformationCommentActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.friend_information_detail );
+		setContentView(R.layout.friend_information_comment );
 		findView();
 		init();
 	}
@@ -31,14 +31,18 @@ public class friendInformationCommentActivity extends Activity {
 	{
 		Intent intent = this.getIntent();
 		String oldComment = intent.getStringExtra("comment");
-		commentView.setHint(oldComment);
+		if( !oldComment.isEmpty() )
+		{
+			commentView.setHint(oldComment);
+		}
 		
 		
 	}
 
+
+
 	@Override
-	protected void onPause() {
-		// TODO Auto-generated method stub
+	public void onBackPressed() {
 		String newComment = commentView.getText().toString();
 		
 		if( newComment.equals(commentView.getHint()))
@@ -51,7 +55,10 @@ public class friendInformationCommentActivity extends Activity {
 			
 			//数据是使用Intent返回
             Intent intent = new Intent();
+            //Bundle extras = new Bundle();
+            //extras.putString("newComment", newComment);
             //把返回数据存入Intent
+            //intent.putExtras(extras);
             intent.putExtra("newComment", newComment );
             //设置返回数据
             this.setResult( FRIEND_INFORMATION_COMMENT_ACTIVITY , intent);
@@ -61,7 +68,7 @@ public class friendInformationCommentActivity extends Activity {
 			
 			
 		}
-		super.onPause();
+		//super.onBackPressed();
 	}
 	
 	

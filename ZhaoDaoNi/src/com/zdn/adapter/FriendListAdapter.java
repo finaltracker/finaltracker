@@ -141,13 +141,17 @@ public class FriendListAdapter extends BaseExpandableListAdapter
 		} else {
 			holder = (GroupHolder) convertView.getTag();
 		}
-		holder.nameView.setText( ((friendTeamData)getGroup(groupPosition)).teamName );
-		holder.onLineView.setText(getChildrenCount(groupPosition) + "/"
-				+ getChildrenCount(groupPosition));
-		if (isExpanded) {
-			holder.iconView.setImageResource(R.drawable.qb_down);
-		} else {
-			holder.iconView.setImageResource(R.drawable.qb_right);
+		friendTeamData ftd = (friendTeamData)getGroup(groupPosition);
+		if( ftd!= null)
+		{
+			holder.nameView.setText( ftd.teamName );
+			holder.onLineView.setText(getChildrenCount(groupPosition) + "/"
+					+ getChildrenCount(groupPosition));
+			if (isExpanded) {
+				holder.iconView.setImageResource(R.drawable.qb_down);
+			} else {
+				holder.iconView.setImageResource(R.drawable.qb_right);
+			}
 		}
 		return convertView;
 	}

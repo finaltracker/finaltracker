@@ -50,7 +50,7 @@ public class friendInformationGroupAdapter extends BaseAdapter{
 		if (view == null) {
 			viewHolder = new ViewHolder();
 			view = LayoutInflater.from(mContext).inflate(R.layout.friend_information_group_item, null);
-			viewHolder.groupName = (TextView) view.findViewById(R.id.groupName);
+			viewHolder.groupName = (TextView) view.findViewById(R.id._groupName);
 			viewHolder.select = (ImageView) view.findViewById(R.id.select);
 			viewHolder.select.setOnClickListener(new View.OnClickListener() {
 	        	public void onClick(View v) {
@@ -68,16 +68,17 @@ public class friendInformationGroupAdapter extends BaseAdapter{
 			viewHolder = (ViewHolder) view.getTag();
 		}
 		
-		if( group.equals( viewHolder.groupName.getText().toString() ))
+		String groupNameInVeiew = viewHolder.groupName.getText().toString();
+		//if( group.equals( groupNameInVeiew ))
 		{
     		viewHolder.select.setVisibility(View.VISIBLE);
 			
 		}
-		else{
+		//else{
 
-			viewHolder.select.setVisibility(View.GONE);
+			//viewHolder.select.setVisibility(View.GONE);
 			
-		}
+		//}
 		
 		viewHolder.groupName.setText( dataManager.getFrilendList().getTeamData( position).teamName );
 		

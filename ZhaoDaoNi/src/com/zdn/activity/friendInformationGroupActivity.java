@@ -7,7 +7,7 @@ import android.widget.ListView;
 
 import com.zdn.R;
 import com.zdn.adapter.friendInformationGroupAdapter;
-import com.zdn.control.EditTextWithDel;
+import com.zdn.view.EditTextWithDel;
 
 
 public class friendInformationGroupActivity extends Activity {
@@ -39,27 +39,22 @@ public class friendInformationGroupActivity extends Activity {
 		fimga = new friendInformationGroupAdapter( this,group );
 		groupView.setAdapter( fimga );
 	}
+	
+
 	@Override
-	protected void onPause() {
-		// TODO Auto-generated method stub
+	public void onBackPressed() {
 
-
-		{
-			//send a intent back to main friend information activity
-			
-			//数据是使用Intent返回
-            Intent intent = new Intent();
-            //把返回数据存入Intent
-            intent.putExtra("newGroup", fimga.getSelectedGroup() );
-            //设置返回数据
-            this.setResult( FRIEND_INFORMATION_GROUP_ACTIVITY , intent);
-            //关闭Activity
-            
-			this.finish();
-			
-			
-		}
-		super.onPause();
+		//send a intent back to main friend information activity
+		
+		//数据是使用Intent返回
+        Intent intent = new Intent();
+        //把返回数据存入Intent
+        intent.putExtra("newGroup", fimga.getSelectedGroup() );
+        //设置返回数据
+        this.setResult( FRIEND_INFORMATION_GROUP_ACTIVITY , intent);
+        //关闭Activity
+        
+		this.finish();
 	}
 	
 	

@@ -4,30 +4,32 @@
     android:layout_height="wrap_content"
     android:orientation="vertical" >
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="fill_parent"
     	android:layout_height="50.0dip"
     	android:orientation="horizontal" >
 
-        <EditTextWithDel
+        <com.zdn.view.EditTextWithDel
             android:id="@+id/newComment"
             android:layout_height="wrap_content" 
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:text=" temp1111">
             
             <requestFocus />
-        </EditTextWithDel>
+        </com.zdn.view.EditTextWithDel>
 		
         <ImageView
 	        android:id="@+id/majia"
-	        android:gravity="right"
+	        android:layout_toRightOf="@id/newComment"
+	        android:layout_alignBottom="@id/newComment"
+	        android:layout_alignParentRight ="true"
 	        android:layout_width="40.0dip"
 	        android:layout_height="40.0dip"
 	        android:src="@drawable/u18" />
 	    
        
 
-	</LinearLayout>
+	</RelativeLayout>
 
     
 </LinearLayout>

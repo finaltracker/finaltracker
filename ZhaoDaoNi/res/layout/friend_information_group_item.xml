@@ -1,20 +1,23 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal" >
 
     <TextView
-        android:id="@+id/groupName"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
+        android:id="@+id/_groupName"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:text="TextView" />
 
     <ImageView
         android:id="@+id/select"
-        android:gravity="right"
-        android:layout_width="40.0dip"
-        android:layout_height="40.0dip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/_groupName"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight ="true"
+        android:layout_centerHorizontal="true"
         android:src="@drawable/u40" />
     
-</LinearLayout>
+</RelativeLayout>
