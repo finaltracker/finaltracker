@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.EditText;
@@ -19,7 +20,7 @@ public class EditTextWithDel extends EditText {
         private Drawable imgInable;
         private Drawable imgAble;
         private Context mContext;
-
+        private int validTouchOffset ;
         public EditTextWithDel(Context context) {
                 super(context);
                 mContext = context;
@@ -41,6 +42,9 @@ public class EditTextWithDel extends EditText {
         private void init() {
                 imgInable = mContext.getResources().getDrawable(R.drawable.delete_gray);
                 imgAble = mContext.getResources().getDrawable(R.drawable.delete);
+                DisplayMetrics dm =getResources().getDisplayMetrics();
+                validTouchOffset = 100*dm.widthPixels/1440;
+                
                 addTextChangedListener(new TextWatcher() {
                         @Override
                         public void onTextChanged(CharSequence s, int start, int before, int count) {}
@@ -71,7 +75,7 @@ public class EditTextWithDel extends EditText {
             Log.e(TAG, "eventX = " + eventX + "; eventY = " + eventY);
             Rect rect = new Rect();
             getGlobalVisibleRect(rect);
-            rect.left = rect.right - 100;
+            rect.left = rect.right - validTouchOffset;
             if(rect.contains(eventX, eventY)) 
                     setText("");
         }
