@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -150,5 +151,32 @@ public class friendInformationDetailActivity extends Activity {
 		super.onActivityResult(requestCode, resultCode, data);
 	}
 
-	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle action bar item clicks here. The action bar will
+		// automatically handle clicks on the Home/Up button, so long
+		// as you specify a parent activity in AndroidManifest.xml.
+		int id = item.getItemId();
+		switch(id)
+		{
+		case R.id.action_settings:
+			
+			break;
+		case R.id.action_add:
+			startActivity( new Intent("com.zdn.activity.AddFriendActivity.ACTION") );
+			break;
+			
+		case R.id.contact_friend:
+			
+			startActivity( new Intent("com.zdn.activity.PeopleActivity.ACTION") );
+			
+			break;
+		default:
+			
+			break;
+		}
+
+		return super.onOptionsItemSelected(item);
+	}
+
 }

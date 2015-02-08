@@ -159,6 +159,21 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 		}
 		return super.onCreateOptionsMenu(menu);
 	}
+	
+	@Override
+    public boolean onPrepareOptionsMenu(Menu menu){
+     
+     super.onPrepareOptionsMenu(menu);
+     /*
+     MenuItem removeItem=menu.findItem(REMOVE_TODO);
+     removeItem.setTitle(removeTitle);
+     
+     //只有当在添加的状态下（addingNew=true）或者ListView被selected的情况下REMOVE_TODO菜单项才可见
+     removeItem.setVisible(addingNew||idx>-1);
+     */
+     return true;
+     
+    }
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {

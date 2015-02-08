@@ -11,6 +11,7 @@ import com.zdn.view.LoadingView;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -18,8 +19,11 @@ import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
+import android.widget.ImageView;
 
 public class PeopleActivity extends Activity implements ExpandableListView.OnChildClickListener  {
 	//private Context this;
@@ -50,6 +54,10 @@ public class PeopleActivity extends Activity implements ExpandableListView.OnChi
 		//mBaseView = inflate(R.layout.fragment_constact, null);
 		findView();
 		init();
+		
+		//ImageView homeIcon = (ImageView)findViewById(android.R.id.);
+		TextView actionTitle = (TextView)findViewById(com.android.internal.R.id.action_bar_title);
+		//homeIcon.setImageDrawable( getResources().getDrawable(R.drawable.add));
 	}
 	
 	@Override
@@ -247,8 +255,51 @@ public class PeopleActivity extends Activity implements ExpandableListView.OnChi
 		return false;
 	}
 
+	 @Override
+	    public boolean onPrepareOptionsMenu(Menu menu){
+	     
+	     super.onPrepareOptionsMenu(menu);
+	     Log.d(this.getClass().getName(), "R.id.home = " + android.R.id.home );
+	     MenuItem menuItem=menu.findItem( android.R.id.home );
+	     if( menuItem !=null )
+	     {
+	    	 menuItem.setIcon(R.drawable.add);
+	     }
+	     
+	     //只有当在添加的状态下（addingNew=true）或者ListView被selected的情况下REMOVE_TODO菜单项才可见
+	    // removeItem.setVisible(addingNew||idx>-1);
+	     
+	  return true;
+	     
+	    }
+	 
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle action bar item clicks here. The action bar will
+		// automatically handle clicks on the Home/Up button, so long
+		// as you specify a parent activity in AndroidManifest.xml.
+		int id = item.getItemId();
+		switch(id)
+		{
+		case R.id.action_settings:
+			
+			break;
+		case R.id.action_add:
+			startActivity( new Intent("com.zdn.activity.AddFriendActivity.ACTION") );
+			break;
+			
+		case R.id.contact_friend:
+			
+			startActivity( new Intent("com.zdn.activity.PeopleActivity.ACTION") );
+			
+			break;
+		default:
+			
+			break;
+		}
 
-
+		return super.onOptionsItemSelected(item);
+	}
 
 
 }
