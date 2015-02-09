@@ -56,7 +56,7 @@ public class PeopleActivity extends Activity implements ExpandableListView.OnChi
 		init();
 		
 		//ImageView homeIcon = (ImageView)findViewById(android.R.id.);
-		TextView actionTitle = (TextView)findViewById(com.android.internal.R.id.action_bar_title);
+		//TextView actionTitle = (TextView)findViewById(com.android.internal.R.id.action_bar_title);
 		//homeIcon.setImageDrawable( getResources().getDrawable(R.drawable.add));
 	}
 	
