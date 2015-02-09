@@ -1,4 +1,3 @@
-#Wed Jan 28 16:03:04 CST 2015
 eclipse.preferences.version=1
 encoding//res/menu/main.xml=GBK
 encoding//src/com/logic/InternetComponent.java=UTF-8
@@ -8,3 +7,4 @@ encoding//src/com/zdn/jpush/MyReceiver.java=UTF-8
 encoding//src/com/zdn/util/ConstactUtil.java=UTF-8
 encoding//src/com/zdn/view/PhoneConstactView.java=UTF-8
 encoding//src/jpush=UTF-8
+encoding/<project>=UTF-8
