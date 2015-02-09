@@ -13,15 +13,19 @@ public class zdnBasicActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		
 		ImageView homeIcon = (ImageView)findViewById(android.R.id.home);
-		homeIcon.setOnClickListener( new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				zdnBasicActivity.this.onBackPressed();
-			}
-			
-		});
-		homeIcon.setImageDrawable( getResources().getDrawable(R.drawable.back_off));
+		
+		if( null != homeIcon )
+		{
+			homeIcon.setOnClickListener( new View.OnClickListener() {
+	
+				@Override
+				public void onClick(View v) {
+					zdnBasicActivity.this.onBackPressed();
+				}
+				
+			});
+			homeIcon.setImageDrawable( getResources().getDrawable(R.drawable.back_off));
+		}
 		
 		super.onCreate(savedInstanceState);
 	}
