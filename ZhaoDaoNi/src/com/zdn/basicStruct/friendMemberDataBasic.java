@@ -2,7 +2,7 @@ package com.zdn.basicStruct;
 
 import com.zdn.CommandParser.CommandE;
 import com.zdn.CommandParser.Property;
-import com.zdn.activity.MainControl;
+import com.zdn.logic.MainControl;
 import com.zdn.data.dataManager;
 
 

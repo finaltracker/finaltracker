@@ -3,7 +3,7 @@ package com.zdn.basicStruct;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.zdn.activity.MainControl;
+import com.zdn.logic.MainControl;
 import com.zdn.data.dataManager;
 
 public class friendTeamData {

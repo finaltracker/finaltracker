@@ -3,7 +3,7 @@ package com.zdn.fragment;
 import com.zdn.R;
 import com.zdn.CommandParser.CommandE;
 import com.zdn.CommandParser.Property;
-import com.zdn.activity.MainControl;
+import com.zdn.logic.MainControl;
 import com.zdn.event.EventDefine;
 
 import android.app.Activity;

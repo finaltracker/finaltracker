@@ -5,8 +5,8 @@ import java.util.List;
 import com.zdn.R;
 import com.zdn.CommandParser.CommandE;
 import com.zdn.CommandParser.Property;
-import com.zdn.activity.MainControl;
 import com.zdn.event.EventDefine;
+import com.zdn.logic.MainControl;
 import com.zdn.sort.SortModel;
 
 import android.content.Context;

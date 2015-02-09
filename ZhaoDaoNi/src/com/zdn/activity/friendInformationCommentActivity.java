@@ -8,7 +8,7 @@ import com.zdn.R;
 import com.zdn.view.EditTextWithDel;
 
 
-public class friendInformationCommentActivity extends Activity {
+public class friendInformationCommentActivity extends zdnBasicActivity {
 	
 	EditTextWithDel	commentView;
 
@@ -16,10 +16,11 @@ public class friendInformationCommentActivity extends Activity {
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
 		setContentView(R.layout.friend_information_comment );
 		findView();
 		init();
+		super.onCreate(savedInstanceState);
+		
 	}
 
 	private void findView()

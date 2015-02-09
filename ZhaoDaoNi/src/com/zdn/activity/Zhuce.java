@@ -8,6 +8,7 @@ import com.zdn.R;
 import com.zdn.CommandParser.CommandE;
 import com.zdn.CommandParser.Property;
 import com.zdn.event.EventDefine;
+import com.zdn.logic.MainControl;
 
 import android.app.Activity;
 import android.os.Bundle;

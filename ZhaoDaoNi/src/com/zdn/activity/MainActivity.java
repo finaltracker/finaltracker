@@ -12,6 +12,7 @@ import com.zdn.data.dataManager;
 import com.zdn.event.EventDefine;
 import com.zdn.fragment.NavigationDrawerFragment;
 import com.zdn.jpush.ExampleUtil;
+import com.zdn.logic.MainControl;
 
 
 import android.app.ActionBar;

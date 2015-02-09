@@ -11,7 +11,6 @@ import com.zdn.view.LoadingView;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -23,9 +22,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
-import android.widget.ImageView;
 
-public class PeopleActivity extends Activity implements ExpandableListView.OnChildClickListener  {
+public class PeopleActivity extends zdnBasicActivity implements ExpandableListView.OnChildClickListener  {
 	//private Context this;
 	//private View mBaseView;
 	static public final int  UPDATE_VIEW_FROM_REMOT		= 1 ;
@@ -49,7 +47,6 @@ public class PeopleActivity extends Activity implements ExpandableListView.OnChi
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-		super.onCreate(savedInstanceState);
 		setContentView(R.layout.fragment_constact);
 		//mBaseView = inflate(R.layout.fragment_constact, null);
 		findView();
@@ -58,6 +55,9 @@ public class PeopleActivity extends Activity implements ExpandableListView.OnChi
 		//ImageView homeIcon = (ImageView)findViewById(android.R.id.);
 		//TextView actionTitle = (TextView)findViewById(com.android.internal.R.id.action_bar_title);
 		//homeIcon.setImageDrawable( getResources().getDrawable(R.drawable.add));
+	
+		super.onCreate(savedInstanceState);
+		
 	}
 	
 	@Override

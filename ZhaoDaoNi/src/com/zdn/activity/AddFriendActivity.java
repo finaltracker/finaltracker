@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.zdn.R;
 import com.zdn.adapter.MyPageAdapter;
+import com.zdn.logic.MainControl;
 
 import android.app.Activity;
 
@@ -21,7 +22,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class AddFriendActivity extends Activity  {
+public class AddFriendActivity extends zdnBasicActivity  {
 	
 	private ViewPager pager;
 	private int pageNo = 1;
@@ -48,10 +49,11 @@ public class AddFriendActivity extends Activity  {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
-		super.onCreate(savedInstanceState);
 		setContentView(R.layout.add_friend);
 		setupViews();
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		
 	}
 
 	private void setupViews() {

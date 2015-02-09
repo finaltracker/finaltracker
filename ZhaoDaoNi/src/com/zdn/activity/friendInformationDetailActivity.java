@@ -15,7 +15,7 @@ import com.zdn.basicStruct.friendMemberData;
 import com.zdn.data.dataManager;
 import com.zdn.activity.friendInformationCommentActivity;
 
-public class friendInformationDetailActivity extends Activity {
+public class friendInformationDetailActivity extends zdnBasicActivity {
 	
 	ImageView 	deleteFriend;
 	View		commentLineView;
@@ -41,10 +41,11 @@ public class friendInformationDetailActivity extends Activity {
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
 		setContentView(R.layout.friend_information_detail );
 		findView();
 		init();
+		super.onCreate(savedInstanceState);
+		
 	}
 
 	private void findView()

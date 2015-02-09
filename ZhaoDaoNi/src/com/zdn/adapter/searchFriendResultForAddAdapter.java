@@ -7,12 +7,12 @@ import org.json.JSONObject;
 
 import com.zdn.R;
 
-import com.zdn.activity.MainControl;
 import com.zdn.activity.PeopleActivity;
 import com.zdn.activity.searchFriendResultForAddActivity;
 import com.zdn.basicStruct.friendMemberData;
 import com.zdn.basicStruct.friendMemberDataBasic;
 import com.zdn.basicStruct.friendTeamDataManager;
+import com.zdn.logic.MainControl;
 
 import android.content.Context;
 import android.os.Handler;

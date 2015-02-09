@@ -7,7 +7,7 @@ import com.zdn.R;
 import android.app.Activity;
 import android.os.Bundle;
 
-public class ContactActivity extends Activity {
+public class ContactActivity extends zdnBasicActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

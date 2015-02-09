@@ -7,7 +7,7 @@ import java.util.List;
 import android.content.Context;
 
 import com.adn.db.DBManager;
-import com.zdn.activity.MainControl;
+import com.zdn.logic.MainControl;
 
 public class friendTeamDataManager {
 

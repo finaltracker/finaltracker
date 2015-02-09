@@ -10,7 +10,7 @@ import com.zdn.adapter.friendInformationGroupAdapter;
 import com.zdn.view.EditTextWithDel;
 
 
-public class friendInformationGroupActivity extends Activity {
+public class friendInformationGroupActivity extends zdnBasicActivity {
 	
 	ListView	groupView;
 	friendInformationGroupAdapter fimga;
@@ -19,11 +19,11 @@ public class friendInformationGroupActivity extends Activity {
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
 		setContentView(R.layout.friend_information_group );
 		findView();
 		init();
-
+		super.onCreate(savedInstanceState);
+		
 	}
 
 	private void findView()

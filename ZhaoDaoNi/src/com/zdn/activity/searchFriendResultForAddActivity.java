@@ -16,7 +16,7 @@ import android.os.Message;
 import android.util.Log;
 import android.widget.ListView;
 
-public class searchFriendResultForAddActivity extends Activity {
+public class searchFriendResultForAddActivity extends zdnBasicActivity {
 	
 	public static final int UPDATE_VIEW_FROM_REMOT = 0;
 	private searchFriendResultForAddAdapter sfafAdapter ;
@@ -42,10 +42,10 @@ public class searchFriendResultForAddActivity extends Activity {
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
 		setContentView(R.layout.search_for_add_friend );
 		
 		init();
+		super.onCreate(savedInstanceState);
 	}
 	
 	private void init() 

@@ -3,11 +3,11 @@ package com.zdn.adapter;
 import java.util.List;
 
 import com.zdn.R;
-import com.zdn.activity.MainControl;
 import com.zdn.basicStruct.friendMemberData;
 import com.zdn.basicStruct.friendMemberDataBasic;
 import com.zdn.basicStruct.friendTeamData;
 import com.zdn.basicStruct.friendTeamDataManager;
+import com.zdn.logic.MainControl;
 import com.zdn.view.FriendListView;
 import android.content.Context;
 import android.view.LayoutInflater;

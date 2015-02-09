@@ -2,7 +2,7 @@ package com.zdn.logic;
 
 import com.zdn.CommandParser.CommandE;
 import com.zdn.CommandParser.Property;
-import com.zdn.activity.MainControl;
+import com.zdn.logic.MainControl;
 import com.zdn.channel.Http;
 import com.zdn.data.dataManager;
 import com.zdn.event.EventDefine;
