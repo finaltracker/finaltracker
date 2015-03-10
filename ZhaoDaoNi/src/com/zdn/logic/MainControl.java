@@ -124,20 +124,16 @@ public class MainControl extends HandlerThread {
 			if( rep == null || ( rep.isEmpty()) )
 			{
 				Log.d("MainControl", "HTTP_REQ_RSP = null" );
-				
-				{ // for test
-					Message m = MainActivity.getInstance().handler.obtainMessage();
-					m.what = MainActivity.EVENT_UI_LOG_IN_START;
-					MainActivity.getInstance().handler.sendMessage( m );
-					state = STATE_WAIT_UI_LOGIN;
-				}
+
 				break;
 			}
 			JSONObject  jason_obj = null;
 			int queueRsp = -1;
+			String username= "";
 			try {
 				jason_obj = new JSONObject(rep);
 				queueRsp = jason_obj.getInt("status");
+				username = jason_obj.getString("username");
 				
 			} catch (JSONException e1) {
 
@@ -156,7 +152,7 @@ public class MainControl extends HandlerThread {
 			else if( queueRsp == EventDefine.IS_REQIST_RSP_HAS_REGIST )
 			{// 
 				// 请求好友列表
-				
+				dataManager.self.preferencesPara.savePhoneNumber( username );
 				mInternetCom.getFriendList(packGetFriendListCommandE() );
 				
 				state = STATE_LOGIN_NORMAL;

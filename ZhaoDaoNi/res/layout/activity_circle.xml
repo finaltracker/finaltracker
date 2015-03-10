@@ -10,20 +10,17 @@
         <Button 
             android:id="@+id/btn_peopel_1"
             android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
+            style="@style/activity_circle_button_Style"
             android:background="@drawable/touxiang"/>
         <Button 
             android:id="@+id/btn_peopel_2"
             android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
+            style="@style/activity_circle_button_Style"
             android:background="@drawable/touxiang"/>
         <Button 
             android:id="@+id/btn_peopel_3"
             android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
+            style="@style/activity_circle_button_Style"
             android:background="@drawable/touxiang"/>
                   
     </LinearLayout>

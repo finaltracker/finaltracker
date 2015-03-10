@@ -16,23 +16,16 @@
             android:orientation="horizontal" >
 
             <EditText
+                style="@style/add_friend_detail_serach_context_Style"
                 android:id="@+id/add_friend_detail_serach_context"
-                android:layout_width="wrap_content"
-                android:layout_height="40.0dip"
-                android:layout_marginTop="3.0dip"
-                android:background="@drawable/edittext_bg_selector"
+				android:background="@drawable/edittext_bg_selector"
                 android:hint="请输入好友号码/手机号"
-                android:singleLine="true"
-                android:layout_weight="3"
-                android:textColorHint="@color/hintColor"
-                android:textStyle="bold" />
+               
+               />
 
             <Button
                 android:id="@+id/AddFriendDetailSearch"
-                android:layout_width="wrap_content"
-                android:layout_marginTop="3.0dip"
-                android:layout_height="50.0dip"
-                android:layout_weight="1"
+                style="@style/add_friend_detail_search_button_Style"
                 android:text="search" />
         </LinearLayout>
         
@@ -41,7 +34,7 @@
         android:id="@+id/add_friend_detail_add_contract"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="0.0dip"
+        style="@style/add_friend_detail_image_view"
         android:contentDescription="@string/app_name"
         android:scaleType="fitXY"
         android:src="@drawable/right_arrow" />
@@ -50,7 +43,7 @@
         android:id="@+id/add_friend_detail_add_webchat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="0.0dip"
+        style="@style/add_friend_detail_image_view"
         android:contentDescription="@string/app_name"
         android:scaleType="fitXY"
         android:src="@drawable/right_arrow" />
@@ -59,7 +52,7 @@
         android:id="@+id/add_friend_detail_add_qq"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="0.0dip"
+        style="@style/add_friend_detail_image_view"
         android:contentDescription="@string/app_name"
         android:scaleType="fitXY"
         android:src="@drawable/right_arrow" />
@@ -68,7 +61,7 @@
         android:id="@+id/add_friend_detail_expand"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="0.0dip"
+        style="@style/add_friend_detail_image_view"
         android:contentDescription="@string/app_name"
         android:scaleType="fitXY"
         android:src="@drawable/right_arrow" />
@@ -77,7 +70,7 @@
         android:id="@+id/create_circle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="0.0dip"
+        style="@style/add_friend_detail_image_view"
         android:contentDescription="@string/app_name"
         android:scaleType="fitXY"
         android:src="@drawable/right_arrow" />

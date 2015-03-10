@@ -6,14 +6,13 @@
 
     <TextView
         android:id="@+id/_groupName"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        style="@style/commonStyleTextView"
         android:text="TextView" />
 
     <ImageView
         android:id="@+id/select"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:layout_alignBottom="@id/_groupName"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight ="true"

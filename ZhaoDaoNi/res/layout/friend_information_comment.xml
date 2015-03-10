@@ -11,15 +11,14 @@
 
         <com.zdn.view.EditTextWithDel
             android:id="@+id/newComment"
-            android:layout_height="wrap_content" 
-            android:layout_width="fill_parent"
-            android:text=" temp1111">
+            style="@style/friend_information_detail_newComment_Style"
+            android:text="">
             
             <requestFocus />
         </com.zdn.view.EditTextWithDel>
 		
         <ImageView
-	        android:id="@+id/majia"
+	        android:id="@+id/pen"
 	        android:layout_toRightOf="@id/newComment"
 	        android:layout_alignBottom="@id/newComment"
 	        android:layout_alignParentRight ="true"
