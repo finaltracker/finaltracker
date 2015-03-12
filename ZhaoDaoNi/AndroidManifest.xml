@@ -102,6 +102,14 @@
             </intent-filter>    
         </activity>  
         
+        <activity android:name="com.zdn.activity.chatActivity"    
+                  android:label="@string/app_name">    
+            <intent-filter>    
+                <action android:name="com.zdn.activity.chatActivity.ACTION"/>    
+                <category android:name="android.intent.category.DEFAULT"/>    
+            </intent-filter>    
+        </activity>  
+        
         <activity android:name="com.zdn.activity.friendInformationDetailActivity"    
                   android:label="@string/app_name"
                   android:parentActivityName="com.zdn.activity.PeopleActivity" >	

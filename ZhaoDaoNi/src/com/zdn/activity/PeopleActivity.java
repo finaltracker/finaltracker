@@ -238,7 +238,13 @@ public class PeopleActivity extends zdnBasicActivity implements ExpandableListVi
 	public boolean onChildClick(ExpandableListView parent, View v,
 			int groupPosition, int childPosition, long id) {
 
-		Intent intent = new Intent(this, friendInformationDetailActivity.class);  
+		//Intent intent = new Intent(this, friendInformationDetailActivity.class);  
+		
+		//for test
+		
+		
+		Intent intent = new Intent(this, chatActivity.class);  
+		
 		// 创建Bundle对象用来存放数据,Bundle对象可以理解为数据的载体  
 		Bundle b = new Bundle();  
 		// 调用Bundle对象的putString方法,采用 key-value的形式保存数据  
@@ -251,6 +257,7 @@ public class PeopleActivity extends zdnBasicActivity implements ExpandableListVi
 		// intent,数据载体  
 		// requestCode 请求的Code,这里一般 大于等于0的整型数据就可以.  
 		startActivity(intent);  
+		
 		
 		return false;
 	}
