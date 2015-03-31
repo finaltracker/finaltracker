@@ -1,8 +1,11 @@
-package com.jialin.chat;
+package com.zdn.chat;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import com.zdn.R;
+import com.zdn.view.PagerSlidingTabStrip;
 
 import android.app.Activity;
 import android.content.Context;
@@ -30,7 +33,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
-import com.astuetz.PagerSlidingTabStrip;
 
 public class MessageInputToolBox extends RelativeLayout {
 	
@@ -170,7 +172,6 @@ public class MessageInputToolBox extends RelativeLayout {
 			
 			//点击消息输入框
 			messageEditText.setOnClickListener(new OnClickListener() {
-				@Override
 				public void onClick(View v) {
 					hideFaceLayout();
 				}
@@ -250,8 +251,7 @@ public class MessageInputToolBox extends RelativeLayout {
 	}
 	
 	/**
-	 * 隐藏软键盘
-	 * @param activity
+	 * 隐藏软键�?	 * @param activity
 	 */
 	public static void hideKeyboard(Context context) {
 		Activity activity = (Activity) context;
@@ -264,8 +264,7 @@ public class MessageInputToolBox extends RelativeLayout {
 	}
 
 	/**
-	 * 显示软键盘
-	 * @param activity
+	 * 显示软键�?	 * @param activity
 	 */
 	public static void showKeyboard(Context context) {
 		Activity activity = (Activity) context;

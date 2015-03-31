@@ -19,7 +19,7 @@
         android:layout_height="1dp"
         android:background="#7fd8d8d8" />
 
-    <com.jialin.chat.MessageInputToolBox
+    <com.zdn.chat.MessageInputToolBox
         android:id="@+id/messageInputToolBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

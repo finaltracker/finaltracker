@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
-package com.astuetz;
+package com.zdn.view;
 
 import java.util.Locale;
+
+import com.zdn.R;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -41,7 +43,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.jialin.chat.R;
+
 
 @SuppressLint("NewApi")
 public class PagerSlidingTabStrip extends HorizontalScrollView {

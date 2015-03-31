@@ -1,7 +1,9 @@
-package com.jialin.chat;
+package com.zdn.chat;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.zdn.R;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;

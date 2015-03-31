@@ -1,4 +1,4 @@
-package com.jialin.chat;
+package com.zdn.chat;
 
 import java.util.Date;
 
@@ -26,6 +26,7 @@ public class Message {
 
 	public Message(Integer type, Integer state, String fromUserName,
 			String fromUserAvatar, String toUserName, String toUserAvatar,
+			//     内容                                  是否是发送数据（主叫�?发�?结果
 			String content, Boolean isSend, Boolean sendSucces, Date time) {
 		super();
 		this.type = type;

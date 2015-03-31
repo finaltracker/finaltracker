@@ -1,5 +1,7 @@
 package com.zdn.interf;
 
+import android.os.Message;
+
 import com.zdn.CommandParser.CommandE;
 
 public interface ServerInterfaceCmd {
@@ -31,5 +33,9 @@ public interface ServerInterfaceCmd {
 	
 	public void searchFirendOrCircle(  CommandE e );
 
+	public void sendTip( CommandE e ,Message m );
+	
+	public void getTip( CommandE e );
+	
 	
 }

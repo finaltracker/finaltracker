@@ -1,6 +1,8 @@
-package com.jialin.chat;
+package com.zdn.chat;
 
 import java.util.List;
+
+import com.zdn.R;
 
 import android.content.Context;
 import android.view.LayoutInflater;

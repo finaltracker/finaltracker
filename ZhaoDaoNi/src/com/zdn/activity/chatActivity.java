@@ -19,24 +19,26 @@ import android.view.View.OnTouchListener;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.jialin.chat.Message;
-import com.jialin.chat.MessageAdapter;
-import com.jialin.chat.MessageInputToolBox;
-import com.jialin.chat.OnOperationListener;
-import com.jialin.chat.Option;
 import com.zdn.R;
+import com.zdn.chat.Message;
+import com.zdn.chat.MessageAdapter;
+import com.zdn.chat.MessageInputToolBox;
+import com.zdn.chat.OnOperationListener;
+import com.zdn.chat.Option;
 
 public class chatActivity extends FragmentActivity {
 	
 	private MessageInputToolBox box;
 	private ListView 			listView;
 	private MessageAdapter 		adapter;
+	private String              targetTo; // the message will sent to whom
 	
 	@SuppressLint("UseSparseArrays")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+		Bundle bundle=this.getIntent().getExtras(); 
+		targetTo = bundle.getString("targetTo");
 		setContentView(R.layout.chat_activity);
 		
 		initMessageInputToolBox();
@@ -56,7 +58,7 @@ public class chatActivity extends FragmentActivity {
 				
 				System.out.println("===============" + content);
 				
-				Message message = new Message(0, 1, "Tom", "avatar", "Jerry", "avatar", content, true, true, new Date());
+				Message message = new Message(0, 1, "Tom", "avatar", targetTo, "avatar", content, true, true, new Date());
 				
 				
 				adapter.getData().add(message);

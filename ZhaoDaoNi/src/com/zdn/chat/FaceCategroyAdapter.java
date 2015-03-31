@@ -1,19 +1,19 @@
-package com.jialin.chat;
+package com.zdn.chat;
 
 import java.util.ArrayList;
 import java.util.Map;
+
+import com.zdn.view.PagerSlidingTabStrip.IconTabProvider;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.astuetz.PagerSlidingTabStrip.IconTabProvider;
 
 /**
- * 表情种类对应的 pagerAdapter
- * @author 仇加林
- *
+ * 表情种类对应�?pagerAdapter
+ * @author 仇加�? *
  */
 public class FaceCategroyAdapter extends FragmentPagerAdapter implements IconTabProvider{
 	

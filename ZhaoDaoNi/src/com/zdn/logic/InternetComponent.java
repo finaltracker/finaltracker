@@ -25,6 +25,8 @@ public class InternetComponent implements ServerInterfaceCmd {
 	static public String WEBSITE_ADDRESS_UPDATE_FRIEND = WEBSITE_ADDRESS_BASE + "friend/update_friend/";
 	static public String WEBSITE_ADDRESS_DELETE_FRIEND = WEBSITE_ADDRESS_BASE + "friend/delete_friend/";
 	
+	static public String WEBSITE_ADDRESS_SEND_TIP = WEBSITE_ADDRESS_BASE + "tips/send_tip";
+	static public String WEBSITE_ADDRESS_GET_TIP = WEBSITE_ADDRESS_BASE + "tips/get_tip/";
 	
 	
 	public ThreadTaskHandler handler;
@@ -150,6 +152,36 @@ public class InternetComponent implements ServerInterfaceCmd {
 
 	}
 	
+
+	@Override
+	public void login(CommandE e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void sendTip(CommandE e , Message m ) {
+		Message msg = handler.obtainMessage(); 
+		msg.what = ThreadTaskHandler.SEND_MESSAGE_TO_SERVER;
+        
+		msg.obj = e;   //
+        
+        handler.sendMessage(msg);
+		
+	}
+
+	@Override
+	public void getTip(CommandE e) {
+		Message msg = handler.obtainMessage(); 
+		msg.what = ThreadTaskHandler.SEND_MESSAGE_TO_SERVER;
+        
+		msg.obj = e;   //
+        
+        handler.sendMessage(msg);
+		
+	}
+
+	
 	class ThreadTaskHandler extends Handler {
 		
 		static public final int SEND_MESSAGE_TO_SERVER = 1;
@@ -199,12 +231,6 @@ public class InternetComponent implements ServerInterfaceCmd {
 		
 		
 		return e;
-	}
-
-	@Override
-	public void login(CommandE e) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	

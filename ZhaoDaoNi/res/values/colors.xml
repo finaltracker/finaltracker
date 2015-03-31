@@ -52,4 +52,5 @@
     <drawable name="semi_black">#80000000</drawable>
     <color name="remote_connect_text">#FFe78018</color>
     <color name="remote_disconnect_text">#FF901821</color>
+    <color name="background_tab_pressed">#6633B5E5</color>
 </resources>
