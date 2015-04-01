@@ -2,7 +2,7 @@ package com.zdn.chat;
 
 import java.util.Date;
 
-public class Message {
+public class ZdnMessage {
 	public final static int MSG_TYPE_TEXT 	= 0;
 	public final static int MSG_TYPE_PHOTO 	= 1;
 	public final static int MSG_TYPE_FACE 	= 2;
@@ -24,7 +24,7 @@ public class Message {
 	private Boolean sendSucces;
 	private Date time;
 
-	public Message(Integer type, Integer state, String fromUserName,
+	public ZdnMessage(Integer type, Integer state, String fromUserName,
 			String fromUserAvatar, String toUserName, String toUserAvatar,
 			//     内容                                  是否是发送数据（主叫�?发�?结果
 			String content, Boolean isSend, Boolean sendSucces, Date time) {

@@ -25,9 +25,9 @@ import android.widget.TextView;
 public class MessageAdapter extends BaseAdapter {
 	
 	private Context context;
-	private List<Message> data = null;
+	private List<ZdnMessage> data = null;
 	
-	public MessageAdapter(Context context, List<Message> list) {
+	public MessageAdapter(Context context, List<ZdnMessage> list) {
 		super();
 		this.context = context;
 		this.data = list;
@@ -63,7 +63,7 @@ public class MessageAdapter extends BaseAdapter {
 	@SuppressLint("InflateParams")
 	public View getView(int position, View convertView, ViewGroup parent) {
 
-		final Message message = data.get(position);
+		final ZdnMessage message = data.get(position);
 		boolean isSend = message.getIsSend();
 
 		ViewHolder viewHolder = null;
@@ -101,7 +101,7 @@ public class MessageAdapter extends BaseAdapter {
 				viewHolder.sendDateTextView.setVisibility(View.VISIBLE);
 			}else{
 				//TODO is same day ?
-				Message pmsg = data.get(position-1);
+				ZdnMessage pmsg = data.get(position-1);
 				if(inSameDay(pmsg.getTime(), message.getTime())){
 					viewHolder.sendDateTextView.setVisibility(View.GONE);
 				}else{
@@ -248,11 +248,11 @@ public class MessageAdapter extends BaseAdapter {
 	}
 
 
-	public List<Message> getData() {
+	public List<ZdnMessage> getData() {
 		return data;
 	}
 
-	public void setData(List<Message> data) {
+	public void setData(List<ZdnMessage> data) {
 		this.data = data;
 	}
 

@@ -1,6 +1,7 @@
 package com.zdn.logic;
 
 import com.zdn.CommandParser.CommandE;
+import com.zdn.CommandParser.ExpCommandE;
 import com.zdn.CommandParser.Property;
 import com.zdn.logic.MainControl;
 import com.zdn.channel.Http;
@@ -55,9 +56,8 @@ public class InternetComponent implements ServerInterfaceCmd {
 		Message msg = handler.obtainMessage(); 
 		msg.what = ThreadTaskHandler.SEND_MESSAGE_TO_SERVER;
         
-		CommandE e = new CommandE("SEND_MESSAGE_TO_SERVER");
-		e.AddAProperty(new Property("EventDefine" ,Integer.toString(EventDefine.CHECK_REGIST_REQ ) ) );
-		e.AddAProperty(new Property("URL" ,WEBSITE_ADDRESS_CHECK_REGIST_REQ ) );
+		CommandE e = packA_CommonExpCommandE_ToServer(EventDefine.CHECK_REGIST_REQ,WEBSITE_ADDRESS_CHECK_REGIST_REQ);
+
 		e.AddAProperty(new Property("imsi",imsi ) );
         msg.obj = e;   //
         
@@ -195,7 +195,7 @@ public class InternetComponent implements ServerInterfaceCmd {
 			
 			if(SEND_MESSAGE_TO_SERVER == msg.what )
 			{
-				CommandE e = (CommandE) msg.obj;
+				ExpCommandE e = (ExpCommandE) msg.obj;
 				String reponse = Http.httpReq( e );
 			
 			
@@ -205,7 +205,7 @@ public class InternetComponent implements ServerInterfaceCmd {
 				CommandE e_r = new CommandE("SEND_MESSAGE_TO_SERVER_RSP");
 				e_r.AddAProperty( new Property("HTTP_REQ_RSP",reponse ) );
 				
-				int rsp_event =  Integer.parseInt(e.GetPropertyContext("EventDefine")) + 1;
+				int rsp_event =  Integer.parseInt(e.GetExpPropertyContext("EventDefine")) + 1;
 				e_r.AddAProperty( new Property("EventDefine", Integer.toString( rsp_event) ) );
 	
 				msg_rsp.obj = e_r;   
@@ -219,11 +219,11 @@ public class InternetComponent implements ServerInterfaceCmd {
 	}
 
 
-	static public CommandE packA_CommonCommandE_ToServer( int eventDefine , String URL )
+	static public ExpCommandE packA_CommonExpCommandE_ToServer( int eventDefine , String URL )
 	{
-		CommandE e = new CommandE("SEND_MESSAGE_TO_SERVER");
-		e.AddAProperty(new Property("EventDefine" ,Integer.toString( eventDefine) ) );
-		e.AddAProperty(new Property("URL" ,URL ) );
+		ExpCommandE e = new ExpCommandE("SEND_MESSAGE_TO_SERVER");
+		e.AddAExpProperty(new Property("EventDefine" ,Integer.toString( eventDefine) ) );
+		e.AddAExpProperty(new Property("URL" ,URL ) );
 		
 		e.AddAProperty(new Property("local_friend_version",Integer.toString( dataManager.self.preferencesPara.getFriendListVersion() )) );
 		e.AddAProperty(new Property("imsi",dataManager.self.getImsi() ) );

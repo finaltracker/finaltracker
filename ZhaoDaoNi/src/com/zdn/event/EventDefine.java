@@ -17,6 +17,8 @@ public class EventDefine {
 	public static final int UPDATE_FRIEND_INFORMATION_RSP		= UPDATE_FRIEND_INFORMATION_REQ+1;
 	public static final int DELETE_FRIEND_REQ		= UPDATE_FRIEND_INFORMATION_RSP+1;
 	public static final int DELETE_FRIEND_RSP		= DELETE_FRIEND_REQ+1;
+	public static final int SEND_MESSAGE_REQ		= DELETE_FRIEND_RSP+1;
+	public static final int SEND_MESSAGE_RSP		= SEND_MESSAGE_REQ+1;
 	
 	/*jpush*/
 	

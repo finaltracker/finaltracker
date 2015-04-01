@@ -10,9 +10,11 @@ import com.zdn.activity.PeopleActivity;
 import com.zdn.activity.searchFriendResultForAddActivity;
 import com.zdn.basicStruct.friendMemberData;
 import com.zdn.basicStruct.friendMemberDataBasic;
+import com.zdn.chat.ZdnMessage;
 import com.zdn.data.dataManager;
 import com.zdn.event.EventDefine;
 import com.zdn.logic.InternetComponent;
+import com.zdn.util.ObjectConvertTool;
 
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -482,6 +484,17 @@ public class MainControl extends HandlerThread {
 				}
 			}
 			break;
+			
+		case EventDefine.SEND_MESSAGE_REQ:
+			Log.d("MainControl" , "SEND_MESSAGE_REQ: " );
+			mInternetCom.searchFirendOrCircle( e );
+			
+			break;
+		case EventDefine.SEND_MESSAGE_RSP:
+			{
+				
+			}
+			break;
 		
 		default:
 			break;
@@ -600,7 +613,7 @@ public class MainControl extends HandlerThread {
 	private CommandE packGetFriendListCommandE()
 	{
 
-		CommandE e = InternetComponent.packA_CommonCommandE_ToServer( 
+		CommandE e = InternetComponent.packA_CommonExpCommandE_ToServer( 
 				EventDefine.GET_FRIEND_LIST_REQ , 
 				InternetComponent.WEBSITE_ADDRESS_GET_FRIEND_LIST 
 				);
@@ -649,7 +662,7 @@ public class MainControl extends HandlerThread {
 	/* add a friend */
 	static public void addA_Friend( String phoneNumner ,String attachMentContext )
 	{
-		CommandE e = InternetComponent.packA_CommonCommandE_ToServer( 
+		CommandE e = InternetComponent.packA_CommonExpCommandE_ToServer( 
 				EventDefine.ADD_A_FRIEND_REQ , 
 				InternetComponent.WEBSITE_ADDRESS_ADD_A_FRIEND_REQ 
 				);
@@ -665,9 +678,8 @@ public class MainControl extends HandlerThread {
 	{
 		Message m = MainControl.getInstance().handler.obtainMessage();
 
-		CommandE e = new CommandE("SEND_MESSAGE_TO_SERVER");
-		e.AddAProperty(new Property("EventDefine" ,Integer.toString(EventDefine.REGIST_REQ ) ) );
-		e.AddAProperty(new Property("URL" ,InternetComponent.WEBSITE_ADDRESS_REGIST_REQ ) );
+		CommandE e = InternetComponent.packA_CommonExpCommandE_ToServer(EventDefine.REGIST_REQ, InternetComponent.WEBSITE_ADDRESS_REGIST_REQ);
+
 		e.AddAProperty(new Property("mobile",Id ) );
 		e.AddAProperty(new Property("password",passWord ) );
 		e.AddAProperty(new Property("confirmpass",passWord ) );
@@ -685,7 +697,7 @@ public class MainControl extends HandlerThread {
 	//result 0 :disagree
 	static public void addA_FriendConfirm( String result , String targetUser  )
 	{
-		CommandE e = InternetComponent.packA_CommonCommandE_ToServer( 
+		CommandE e = InternetComponent.packA_CommonExpCommandE_ToServer( 
 				EventDefine.ADD_A_FRIEND_ANSWER_REQ , 
 				InternetComponent.WEBSITE_ADDRESS_ADD_A_FRIEND_ANSWER_REQ 
 				);
@@ -700,7 +712,7 @@ public class MainControl extends HandlerThread {
 	
 	static public void searchFirendOrCircle(String search_str) {
 
-		CommandE e = InternetComponent.packA_CommonCommandE_ToServer( 
+		CommandE e = InternetComponent.packA_CommonExpCommandE_ToServer( 
 				EventDefine.SEARCH_FRIEND_OR_CIRCLE_REQ , 
 				InternetComponent.WEBSITE_SEARCH_FRIEND_OR_CIRCLE 
 				);
@@ -715,11 +727,11 @@ public class MainControl extends HandlerThread {
 	
 	static public void updateFriendInfo( friendMemberDataBasic fmdBasic ) {
 
-		CommandE e = InternetComponent.packA_CommonCommandE_ToServer( 
+		CommandE e = InternetComponent.packA_CommonExpCommandE_ToServer( 
 					EventDefine.UPDATE_FRIEND_INFORMATION_REQ , 
 					InternetComponent.WEBSITE_ADDRESS_UPDATE_FRIEND 
 					);
-		fmdBasic.PackToCommandE(e);
+		ObjectConvertTool.friendMemberDataPackToCommandE(fmdBasic,e);
 		
 		Message m = MainControl.getInstance().handler.obtainMessage();
 		m.obj = e;   //
@@ -730,11 +742,11 @@ public class MainControl extends HandlerThread {
 
 	static public void deleteA_Friend( friendMemberData fmd ) {
 
-		CommandE e = InternetComponent.packA_CommonCommandE_ToServer( 
+		CommandE e = InternetComponent.packA_CommonExpCommandE_ToServer( 
 				EventDefine.DELETE_FRIEND_REQ , 
 				InternetComponent.WEBSITE_ADDRESS_DELETE_FRIEND 
 				);
-		fmd.basic.PackToCommandE(e);
+		ObjectConvertTool.friendMemberDataPackToCommandE(fmd.basic,e);
 	
 		
 		Message m = MainControl.getInstance().handler.obtainMessage();
@@ -743,5 +755,19 @@ public class MainControl extends HandlerThread {
 		MainControl.getInstance().handler.sendMessage(m);
 
 	}
+
+	static public void sendMessageToServer( ZdnMessage sendMsg ,String targetTo ) {
+
+			CommandE e = InternetComponent.packA_CommonExpCommandE_ToServer( 
+					EventDefine.SEND_MESSAGE_REQ , 
+					InternetComponent.WEBSITE_ADDRESS_SEND_TIP 
+					);
+			ObjectConvertTool.messagePackToCommandForSendToServer(sendMsg, e, targetTo );
+		
+			Message m = MainControl.getInstance().handler.obtainMessage();
+			m.obj = e;   //
+	        
+			MainControl.getInstance().handler.sendMessage(m);
+		}
 
 }

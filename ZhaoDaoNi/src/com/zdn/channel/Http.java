@@ -32,6 +32,7 @@ import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HTTP;
 
 import com.zdn.CommandParser.CommandE;
+import com.zdn.CommandParser.ExpCommandE;
 
 import android.util.Log;
 
@@ -74,23 +75,28 @@ final public class Http {
      */
     
     //CommandE 0 位置必须是URL 地址
-    public static String httpReq( CommandE command ) {
+    public static String httpReq( ExpCommandE command ) {
 
         final HttpResponse resp;
         String ResString = null;
         final ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
-        assert(command.GetPropertyNum() >= 2);
-        String url = command.GetProperty(1).GetPropertyContext();
+       
+        String url = command.GetExpPropertyContext("URL");
     	Log.d("HTTP", "httpReq : " );
+        for( int i = 0 ; i < command.GetExpPropertyNum() ; i++ )
+        {
+        	Log.d("HTTP", command.GetExpProperty(i).GetPropertyName() + " " + command.GetProperty(i).GetPropertyContext() );
+        }
         for( int i = 0 ; i < command.GetPropertyNum() ; i++ )
         {
         	Log.d("HTTP", command.GetProperty(i).GetPropertyName() + " " + command.GetProperty(i).GetPropertyContext() );
         }
         
-        for( int i = 2 ; i < command.GetPropertyNum() ; i++ )
+        for( int i = 0 ; i < command.GetPropertyNum() ; i++ )
         {
         	params.add(new BasicNameValuePair(command.GetProperty(i).GetPropertyName(), command.GetProperty(i).GetPropertyContext()));
         }
+        
         
         final HttpEntity entity;
         try {

@@ -113,14 +113,6 @@ public class friendMemberDataBasic {
 	
 	
 	
-	public void PackToCommandE( CommandE e )
-	{
-		e.AddAProperty(new Property("group",this.getTeamName() ) );
-		e.AddAProperty(new Property("member_name",this.getMemberName() ) );
-		e.AddAProperty(new Property("friend_mobile",this.getPhoneNumber() ) );
-		e.AddAProperty(new Property("nick_name",this.getNickName() ) );
-		e.AddAProperty(new Property("comment",this.getComment()) );
-		e.AddAProperty(new Property("picture_address",this.getPictureAddress()) );
-	}
+	
 	
 }

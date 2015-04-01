@@ -20,11 +20,16 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.zdn.R;
-import com.zdn.chat.Message;
+import com.zdn.CommandParser.CommandE;
+import com.zdn.chat.ZdnMessage;
 import com.zdn.chat.MessageAdapter;
 import com.zdn.chat.MessageInputToolBox;
 import com.zdn.chat.OnOperationListener;
 import com.zdn.chat.Option;
+import com.zdn.event.EventDefine;
+import com.zdn.logic.InternetComponent;
+import com.zdn.logic.MainControl;
+import com.zdn.util.ObjectConvertTool;
 
 public class chatActivity extends FragmentActivity {
 	
@@ -58,9 +63,9 @@ public class chatActivity extends FragmentActivity {
 				
 				System.out.println("===============" + content);
 				
-				Message message = new Message(0, 1, "Tom", "avatar", targetTo, "avatar", content, true, true, new Date());
+				ZdnMessage message = new ZdnMessage(0, 1, "Tom", "avatar", targetTo, "avatar", content, true, true, new Date());
 				
-				
+				MainControl.sendMessageToServer( message,targetTo);
 				adapter.getData().add(message);
 				listView.setSelection(listView.getBottom()); 
 				
@@ -72,7 +77,7 @@ public class chatActivity extends FragmentActivity {
 			public void selectedFace(String content) {
 				
 				System.out.println("===============" + content);
-				Message message = new Message(Message.MSG_TYPE_FACE, Message.MSG_STATE_SUCCESS, "Tomcat", "avatar", "Jerry", "avatar", content, true, true, new Date());
+				ZdnMessage message = new ZdnMessage(ZdnMessage.MSG_TYPE_FACE, ZdnMessage.MSG_STATE_SUCCESS, "Tomcat", "avatar", "Jerry", "avatar", content, true, true, new Date());
 				adapter.getData().add(message);
 				listView.setSelection(listView.getBottom());
 				
@@ -145,16 +150,16 @@ public class chatActivity extends FragmentActivity {
 		listView = (ListView) findViewById(R.id.messageListview);
 		
 		//create Data
-		Message message = new Message(Message.MSG_TYPE_TEXT, Message.MSG_STATE_SUCCESS, "Tom", "avatar", "Jerry", "avatar", "Hi", false, true, new Date(System.currentTimeMillis() - (1000 * 60 * 60 * 24) * 8));
-		Message message1 = new Message(Message.MSG_TYPE_TEXT, Message.MSG_STATE_SUCCESS, "Tom", "avatar", "Jerry", "avatar", "Hello World", true, true, new Date(System.currentTimeMillis() - (1000 * 60 * 60 * 24)* 8));
-		Message message2 = new Message(Message.MSG_TYPE_PHOTO, Message.MSG_STATE_SUCCESS, "Tom", "avatar", "Jerry", "avatar", "device_2014_08_21_215311", false, true, new Date(System.currentTimeMillis() - (1000 * 60 * 60 * 24) * 7));
-		Message message3 = new Message(Message.MSG_TYPE_TEXT, Message.MSG_STATE_SUCCESS, "Tom", "avatar", "Jerry", "avatar", "Haha", true, true, new Date(System.currentTimeMillis() - (1000 * 60 * 60 * 24) * 7));
-		Message message4 = new Message(Message.MSG_TYPE_FACE, Message.MSG_STATE_SUCCESS, "Tom", "avatar", "Jerry", "avatar", "big3", false, true, new Date(System.currentTimeMillis() - (1000 * 60 * 60 * 24) * 7));
-		Message message5 = new Message(Message.MSG_TYPE_FACE, Message.MSG_STATE_SUCCESS, "Tom", "avatar", "Jerry", "avatar", "big2", true, true, new Date(System.currentTimeMillis() - (1000 * 60 * 60 * 24) * 6));
-		Message message6 = new Message(Message.MSG_TYPE_TEXT, Message.MSG_STATE_FAIL, "Tom", "avatar", "Jerry", "avatar", "test send fail", true, false, new Date(System.currentTimeMillis() - (1000 * 60 * 60 * 24) * 6));
-		Message message7 = new Message(Message.MSG_TYPE_TEXT, Message.MSG_STATE_SENDING, "Tom", "avatar", "Jerry", "avatar", "test sending", true, true, new Date(System.currentTimeMillis() - (1000 * 60 * 60 * 24) * 6));
+		ZdnMessage message = new ZdnMessage(ZdnMessage.MSG_TYPE_TEXT, ZdnMessage.MSG_STATE_SUCCESS, "Tom", "avatar", "Jerry", "avatar", "Hi", false, true, new Date(System.currentTimeMillis() - (1000 * 60 * 60 * 24) * 8));
+		ZdnMessage message1 = new ZdnMessage(ZdnMessage.MSG_TYPE_TEXT, ZdnMessage.MSG_STATE_SUCCESS, "Tom", "avatar", "Jerry", "avatar", "Hello World", true, true, new Date(System.currentTimeMillis() - (1000 * 60 * 60 * 24)* 8));
+		ZdnMessage message2 = new ZdnMessage(ZdnMessage.MSG_TYPE_PHOTO, ZdnMessage.MSG_STATE_SUCCESS, "Tom", "avatar", "Jerry", "avatar", "device_2014_08_21_215311", false, true, new Date(System.currentTimeMillis() - (1000 * 60 * 60 * 24) * 7));
+		ZdnMessage message3 = new ZdnMessage(ZdnMessage.MSG_TYPE_TEXT, ZdnMessage.MSG_STATE_SUCCESS, "Tom", "avatar", "Jerry", "avatar", "Haha", true, true, new Date(System.currentTimeMillis() - (1000 * 60 * 60 * 24) * 7));
+		ZdnMessage message4 = new ZdnMessage(ZdnMessage.MSG_TYPE_FACE, ZdnMessage.MSG_STATE_SUCCESS, "Tom", "avatar", "Jerry", "avatar", "big3", false, true, new Date(System.currentTimeMillis() - (1000 * 60 * 60 * 24) * 7));
+		ZdnMessage message5 = new ZdnMessage(ZdnMessage.MSG_TYPE_FACE, ZdnMessage.MSG_STATE_SUCCESS, "Tom", "avatar", "Jerry", "avatar", "big2", true, true, new Date(System.currentTimeMillis() - (1000 * 60 * 60 * 24) * 6));
+		ZdnMessage message6 = new ZdnMessage(ZdnMessage.MSG_TYPE_TEXT, ZdnMessage.MSG_STATE_FAIL, "Tom", "avatar", "Jerry", "avatar", "test send fail", true, false, new Date(System.currentTimeMillis() - (1000 * 60 * 60 * 24) * 6));
+		ZdnMessage message7 = new ZdnMessage(ZdnMessage.MSG_TYPE_TEXT, ZdnMessage.MSG_STATE_SENDING, "Tom", "avatar", "Jerry", "avatar", "test sending", true, true, new Date(System.currentTimeMillis() - (1000 * 60 * 60 * 24) * 6));
 		
-		List<Message> messages = new ArrayList<Message>();
+		List<ZdnMessage> messages = new ArrayList<ZdnMessage>();
 		messages.add(message);
 		messages.add(message1);
 		messages.add(message2);
@@ -179,9 +184,9 @@ public class chatActivity extends FragmentActivity {
 	}
 	
 	
-	private void createReplayMsg(Message message){
+	private void createReplayMsg(ZdnMessage message){
 		
-		final Message reMessage = new Message(message.getType(), 1, "Tom", "avatar", "Jerry", "avatar", 
+		final ZdnMessage reMessage = new ZdnMessage(message.getType(), 1, "Tom", "avatar", "Jerry", "avatar", 
 											message.getType() == 0 ? "Re:" + message.getContent() : message.getContent(),
 											false, true, new Date()
 											);
