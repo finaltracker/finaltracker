@@ -202,11 +202,10 @@ public class InternetComponent implements ServerInterfaceCmd {
 				Message msg_rsp = MainControl.getInstance().obtainMessage(); 
 				msg_rsp.what = MainControl.SEND_MESSAGE_TO_SERVER_RSP;
 		        //��Message�����arg1�����ֵ����Ϊi
-				CommandE e_r = new CommandE("SEND_MESSAGE_TO_SERVER_RSP");
+				CommandE e_r = packA_CommonExpCommandE_ToMainControl( "SEND_MESSAGE_TO_SERVER_RSP",Integer.parseInt(e.GetExpPropertyContext("EventDefine")) + 1 );
 				e_r.AddAProperty( new Property("HTTP_REQ_RSP",reponse ) );
 				
-				int rsp_event =  Integer.parseInt(e.GetExpPropertyContext("EventDefine")) + 1;
-				e_r.AddAProperty( new Property("EventDefine", Integer.toString( rsp_event) ) );
+				
 	
 				msg_rsp.obj = e_r;   
 		        
@@ -234,6 +233,15 @@ public class InternetComponent implements ServerInterfaceCmd {
 	}
 
 	
+	static public ExpCommandE packA_CommonExpCommandE_ToMainControl( String name , int eventDefine )
+	{
+		ExpCommandE e = new ExpCommandE(name);
+		e.AddAExpProperty(new Property("EventDefine" ,Integer.toString( eventDefine) ) );
+		
+		return e;
+	}
+
+
 	
 
 }

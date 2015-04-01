@@ -4,6 +4,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.zdn.CommandParser.CommandE;
+import com.zdn.CommandParser.ExpCommandE;
 import com.zdn.CommandParser.Property;
 import com.zdn.activity.MainActivity;
 import com.zdn.activity.PeopleActivity;
@@ -117,7 +118,7 @@ public class MainControl extends HandlerThread {
 
 	private void stateWaitQueueRegsitResult( CommandE e  )
 	{
-		int RcvCommand = Integer.parseInt(e.GetPropertyContext("EventDefine"));
+		int RcvCommand = Integer.parseInt(((ExpCommandE )e).GetExpPropertyContext("EventDefine"));
 		
 		switch (RcvCommand)
 		{
@@ -175,7 +176,7 @@ public class MainControl extends HandlerThread {
 
 	private void stateWaitUiLogin( CommandE e  )
 	{
-		int RcvCommand = Integer.parseInt(e.GetPropertyContext("EventDefine"));
+		int RcvCommand = Integer.parseInt(((ExpCommandE )e).GetExpPropertyContext("EventDefine"));
 		
 		switch (RcvCommand)
 		{
@@ -195,7 +196,7 @@ public class MainControl extends HandlerThread {
 
 	private void stateWaitServerRegistResult( CommandE e )
 	{
-		int RcvCommand = Integer.parseInt(e.GetPropertyContext("EventDefine"));
+		int RcvCommand = Integer.parseInt(((ExpCommandE )e).GetExpPropertyContext("EventDefine"));
 		
 		switch (RcvCommand)
 		{
@@ -254,7 +255,8 @@ public class MainControl extends HandlerThread {
 
 	private void stateLoginNormal( CommandE e )
 	{
-		int RcvCommand = Integer.parseInt(e.GetPropertyContext("EventDefine"));
+		ExpCommandE exp_e = (ExpCommandE)e;
+		int RcvCommand = Integer.parseInt(exp_e.GetExpPropertyContext("EventDefine"));
 		
 
 		switch( RcvCommand )

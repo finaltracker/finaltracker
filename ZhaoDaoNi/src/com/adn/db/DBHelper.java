@@ -15,7 +15,7 @@ import android.util.Log;
 public class DBHelper  extends SQLiteOpenHelper{
 	
 	public static final String DB_NAME = "zdn.db";
-	public static final String DB_TABLE_NAME = "info";
+	//public static final String DB_TABLE_NAME = "info";
 	private static final int DB_VERSION=1;
 	private static final String TAG = "DBHelper";
 	private Field[]friendMemberDataBasicClassFs = null;

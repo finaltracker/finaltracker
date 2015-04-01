@@ -101,7 +101,7 @@ public class DBManager {
      * @param age
      * @param website
      * @param weibo
-     */
+     * /
     //classPacketName object
     public void add(  Object o ) 
     {
@@ -126,12 +126,12 @@ public class DBManager {
        
         db.insert(DBHelper.DB_TABLE_NAME, null, cv);
     }
-
+*/
     /**
      * 通过name来删除数据
      * 
      * @param name
-     */
+     * /
     public void delData(String name) {
         // ExecSQL("DELETE FROM info WHERE name ="+"'"+name+"'");
         String[] args = { name };
@@ -139,7 +139,7 @@ public class DBManager {
         Log.i(TAG, "delete data by " + name);
 
     }
-
+*/
     /**
      * 清空数据
      */

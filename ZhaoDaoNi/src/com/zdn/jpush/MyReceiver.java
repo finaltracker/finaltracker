@@ -6,6 +6,7 @@ import org.json.JSONObject;
 import com.zdn.CommandParser.CommandE;
 import com.zdn.CommandParser.Property;
 import com.zdn.activity.MainActivity;
+import com.zdn.logic.InternetComponent;
 import com.zdn.logic.MainControl;
 import com.zdn.event.EventDefine;
 
@@ -119,10 +120,9 @@ public class MyReceiver extends BroadcastReceiver {
 				
 			Message msg_cmd = MainControl.getInstance().obtainMessage(); 
 			msg_cmd.what = EventDefine.JPUSH_SERVER_COMMAND;
-			
-			CommandE e_c = new CommandE("JPUSH_SERVER_COMMAND");
-			
-			e_c.AddAProperty( new Property("EventDefine", Integer.toString( EventDefine.JPUSH_SERVER_COMMAND ) ));
+
+			CommandE e_c = InternetComponent.packA_CommonExpCommandE_ToMainControl("JPUSH_SERVER_COMMAND", EventDefine.JPUSH_SERVER_COMMAND  );
+
 			e_c.AddAProperty( new Property("Command",  bundle.getString(JPushInterface.EXTRA_MESSAGE) ));
 			e_c.AddAProperty( new Property("Extra",  ExtraStr  ));
 
