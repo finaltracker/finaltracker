@@ -6,13 +6,15 @@ import java.util.List;
 
 import android.content.Context;
 
+import com.adn.db.DBHelper;
 import com.adn.db.DBManager;
 import com.zdn.logic.MainControl;
 
 public class friendTeamDataManager {
 
 	List<friendTeamData> Teams = new ArrayList<friendTeamData>();
-	
+	//regist a db name "friendMemberDataBasic"
+
 	public List<friendTeamData> getFriendTeamDataList() { return this.Teams; }
 	
 	//return index , -1 not find
@@ -25,7 +27,11 @@ public class friendTeamDataManager {
 				return i;
 			}
 		}
+		
+
 		return -1;
+		
+		
 	}
 	public friendTeamData getFriendTeamData( String teamName )
 	{
@@ -180,33 +186,38 @@ public class friendTeamDataManager {
 	public void constructTeamInfoFromDb( Context context )
 	{
 	
-		DBManager dbm = new DBManager( context );
+		DBHelper getDbHelper = DBManager.GetDbHelper( friendMemberDataBasic.class );
 		
-		ArrayList<friendMemberData> miList = dbm.searchAllData();
+		ArrayList<Object> miList = getDbHelper.searchAllData();
 		
 		
 		for( int i = 0 ; i < miList.size() ; i++ )
 		{
-			friendMemberData dbMi = miList.get(i);
-			dbMi.rebuildFriendMemberData(); // first rebuilt it
-			addA_FriendMemberData( dbMi );
+			friendMemberDataBasic dbMi = (friendMemberDataBasic)(miList.get(i));
+			friendMemberData fmd = new friendMemberData(dbMi);
+			fmd.rebuildFriendMemberData(); // first rebuilt it
+			addA_FriendMemberData( fmd );
 				
 		}
-		dbm.closeDB();
+		getDbHelper.closeDB();
 
 	}
 	
 	public void updateDataToDb( Context context )
 	{
-		DBManager dbm = new DBManager( context );
-		dbm.clearData();
+		DBHelper getDbHelper = DBManager.GetDbHelper( friendMemberDataBasic.class );
+		
+		getDbHelper.clearData();
 		
 		for( int i = 0 ; i < getTeamNum(); i++  )
 		{
-			dbm.add(  Teams.get(i).member );
+			for( int j = 0 ; j < Teams.get(i).member.size() ; j++ )
+			{
+				getDbHelper.add(  Teams.get(i).member.get(j).basic );
+			}
 			
 		}
-		dbm.closeDB();
+		getDbHelper.closeDB();
 	}
 	
 	public void cloneToAnother( friendTeamDataManager another )

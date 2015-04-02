@@ -27,6 +27,12 @@ public class friendMemberData {
 		picture = null;
 	}
 	
+	public friendMemberData(friendMemberDataBasic basic )
+	{
+		this.basic =basic;
+		picture = null;
+	}
+	
 	//从数据库得到basic后要填充其它内容时调用此函数
 	public void rebuildFriendMemberData()
 	{
