@@ -223,7 +223,7 @@ public class friendTeamDataManager {
 	public void cloneToAnother( friendTeamDataManager another )
 	{
 		another.Teams.clear();
-		Collections.copy(this.Teams, another.Teams );;
+		Collections.copy(this.Teams, another.Teams );
 
 	}
 	

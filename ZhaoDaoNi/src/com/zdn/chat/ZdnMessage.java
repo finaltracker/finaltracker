@@ -1,6 +1,11 @@
 package com.zdn.chat;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import com.adn.db.DBHelper;
+import com.adn.db.DBManager;
 
 public class ZdnMessage {
 	public final static int MSG_TYPE_TEXT 	= 0;
@@ -39,6 +44,27 @@ public class ZdnMessage {
 		this.isSend = isSend;
 		this.sendSucces = sendSucces;
 		this.time = time;
+	}
+	
+	public ZdnMessage( ZdnMessageDbAdapt mAda) 
+	{
+		type = Integer.parseInt(mAda.type);
+		state = Integer.parseInt(mAda.state);
+		fromUserName = mAda.fromUserName;
+		fromUserAvatar = mAda.fromUserAvatar;
+		toUserName = mAda.toUserName;
+		toUserAvatar = mAda.toUserAvatar;
+		content = mAda.content;
+		isSend = Boolean.parseBoolean( mAda.isSend );
+		sendSucces = Boolean.parseBoolean( mAda.sendSucces );
+		SimpleDateFormat sdf =  new SimpleDateFormat("yyyy-MM-dd");
+		try {
+			time = sdf.parse( mAda.time );
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			time = new Date("2000-01-01");
+		}
 	}
 
 	public Long getId() {
@@ -127,6 +153,17 @@ public class ZdnMessage {
 
 	public void setTime(Date time) {
 		this.time = time;
+	}
+	
+	public void SaveToDb( )
+	{
+		ZdnMessageDbAdapt zmda = new ZdnMessageDbAdapt(this);
+		
+		DBHelper getDbHelper = DBManager.GetDbHelper( ZdnMessageDbAdapt.class );
+		
+		getDbHelper.add(  zmda );
+		
+		getDbHelper.closeDB();
 	}
 
 }
