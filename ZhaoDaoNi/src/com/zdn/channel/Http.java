@@ -33,6 +33,8 @@ import org.apache.http.protocol.HTTP;
 
 import com.zdn.CommandParser.CommandE;
 import com.zdn.CommandParser.ExpCommandE;
+import com.zdn.CommandParser.Property;
+import com.zdn.logic.InternetComponent;
 
 import android.util.Log;
 
@@ -75,12 +77,16 @@ final public class Http {
      */
     
     //CommandE 0 位置必须是URL 地址
-    public static String httpReq( ExpCommandE command ) {
+    public static ExpCommandE httpReq( ExpCommandE command ) {
 
         final HttpResponse resp;
         String ResString = null;
         final ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
        
+        ExpCommandE e_r = InternetComponent.packA_CommonExpCommandE_ToMainControl( "SEND_MESSAGE_TO_SERVER_RSP",Integer.parseInt(command.GetExpPropertyContext("EventDefine")) + 1 );
+		
+		int retStatus = 0; // 0 成功
+		
         String url = command.GetExpPropertyContext("URL");
     	Log.d("HTTP", "httpReq : " );
         for( int i = 0 ; i < command.GetExpPropertyNum() ; i++ )
@@ -103,7 +109,9 @@ final public class Http {
             entity = new UrlEncodedFormEntity(params,HTTP.UTF_8);
         } catch (final UnsupportedEncodingException e) {
             // this should never happen.
+        	retStatus = -1 ; // internal error
             throw new IllegalStateException(e);
+            
         }
         Log.i(TAG, "connect url = " + url);
         final HttpPost post = new HttpPost(url);
@@ -120,21 +128,28 @@ final public class Http {
                     BufferedReader ireader = new BufferedReader(new InputStreamReader(istream));
                     ResString = ireader.readLine().trim();
 					Log.e(TAG, "Http Resp = " + ResString );
+					retStatus = 0 ;
                 }
             }
             else
             {
+            	retStatus = 2;
             	Log.e(TAG, "getStatusCode = " + resp.getStatusLine().getStatusCode() );
             }
            
         } catch (final IOException e) {
+        	retStatus = 3;
             Log.e(TAG, "getHttpClient().execute(post)", e);
             return null;
         } finally {
+        	retStatus = 4;
             Log.v(TAG, "getAuthtoken completing");
         }
         
-        return ResString;
+        e_r.AddAProperty( new Property("HTTP_REQ_RSP",ResString ) );
+		e_r.AddAProperty( new Property("STATUS", Integer.toString( retStatus) ));
+        
+		return e_r;
     }
 
 

@@ -196,18 +196,16 @@ public class InternetComponent implements ServerInterfaceCmd {
 			if(SEND_MESSAGE_TO_SERVER == msg.what )
 			{
 				ExpCommandE e = (ExpCommandE) msg.obj;
-				String reponse = Http.httpReq( e );
+				ExpCommandE reponse = Http.httpReq( e );
 			
-			
+				reponse.setUserData( e.getUserData() );
+				
 				Message msg_rsp = MainControl.getInstance().obtainMessage(); 
 				msg_rsp.what = MainControl.SEND_MESSAGE_TO_SERVER_RSP;
 		        //��Message�����arg1�����ֵ����Ϊi
-				CommandE e_r = packA_CommonExpCommandE_ToMainControl( "SEND_MESSAGE_TO_SERVER_RSP",Integer.parseInt(e.GetExpPropertyContext("EventDefine")) + 1 );
-				e_r.AddAProperty( new Property("HTTP_REQ_RSP",reponse ) );
-				
 				
 	
-				msg_rsp.obj = e_r;   
+				msg_rsp.obj = reponse;   
 		        
 				MainControl.getInstance().sendMessage(msg_rsp);
 			}

@@ -12,6 +12,7 @@ import com.zdn.activity.searchFriendResultForAddActivity;
 import com.zdn.basicStruct.friendMemberData;
 import com.zdn.basicStruct.friendMemberDataBasic;
 import com.zdn.chat.ZdnMessage;
+import com.zdn.chat.ZdnMessageDbAdapt;
 import com.zdn.data.dataManager;
 import com.zdn.event.EventDefine;
 import com.zdn.logic.InternetComponent;
@@ -130,13 +131,13 @@ public class MainControl extends HandlerThread {
 
 				break;
 			}
-			JSONObject  jason_obj = null;
+			JSONObject  json_obj = null;
 			int queueRsp = -1;
 			String username= "";
 			try {
-				jason_obj = new JSONObject(rep);
-				queueRsp = jason_obj.getInt("status");
-				username = jason_obj.getString("username");
+				json_obj = new JSONObject(rep);
+				queueRsp = json_obj.getInt("status");
+				username = json_obj.getString("username");
 				
 			} catch (JSONException e1) {
 
@@ -211,14 +212,14 @@ public class MainControl extends HandlerThread {
 			}
 			else
 			{
-				JSONObject  jason_obj = null;
+				JSONObject  json_obj = null;
 				int queueRsp = -1;
 				String error = "";
 				
 				try {
-					jason_obj = new JSONObject(rep);
-					queueRsp = jason_obj.getInt("status");
-					error    = jason_obj.getString("error");
+					json_obj = new JSONObject(rep);
+					queueRsp = json_obj.getInt("status");
+					error    = json_obj.getString("error");
 				} catch (JSONException e1) {
 
 					Log.d("MainControl" , "server response error: " + e1.getMessage() );
@@ -304,6 +305,26 @@ public class MainControl extends HandlerThread {
 				//
 				break;
 			
+			case 302:
+				Log.d("MainControl" , "jpush server call me ,new message comming " );
+				String Extra = e.GetPropertyContext("Extra");
+				JSONObject json_obj;
+				String from ;
+				String id;
+				try {
+				json_obj = new JSONObject(Extra);
+				from = json_obj.getString("from");
+				id = json_obj.getString("id");
+				
+				} catch (JSONException e1) {
+
+					Log.d("MainControl" , "server response error: " + e1.getMessage() );
+					e1.printStackTrace();
+					break ;
+				}
+				//TO DO 
+				getMessageToServer( from , id );
+				break;
 				
 			default:
 				Log.d("MainControl" , "jpush server call me  , but command undefine" );
@@ -333,20 +354,20 @@ public class MainControl extends HandlerThread {
 			}
 			else
 			{
-				JSONObject  jason_obj = null;
+				JSONObject  json_obj = null;
 				String error = "";
 				Log.d("MainControl" , "GET_FRIEND_LIST_RSP: " );
 				try {
-					jason_obj = new JSONObject(rep);
+					json_obj = new JSONObject(rep);
 					
-					int status = jason_obj.getInt("status");
+					int status = json_obj.getInt("status");
 					if( status != 0 )
 					{
 						Log.d("MainControl", "GET_FRIEND_LIST_RSP status = " + status );
 					}
-					dataManager.self.preferencesPara.saveFriendListVersion(jason_obj.getInt("server_friend_version"));
+					dataManager.self.preferencesPara.saveFriendListVersion(json_obj.getInt("server_friend_version"));
 					
-					dataManager.updateFriendListFromServer( jason_obj.getInt("update_type") , jason_obj.getJSONArray("friends") , mMainActivity );
+					dataManager.updateFriendListFromServer( json_obj.getInt("update_type") , json_obj.getJSONArray("friends") , mMainActivity );
 					//send it to PeopleActivity
 					if( PeopleActivity.getInstance() != null )
 					{
@@ -462,16 +483,16 @@ public class MainControl extends HandlerThread {
 				}
 				else
 				{
-					JSONObject  jason_obj = null;
+					JSONObject  json_obj = null;
 					try {
-						jason_obj = new JSONObject(rep);
+						json_obj = new JSONObject(rep);
 						
 						//send it to searchFriendResultForAddActivity
 						if( searchFriendResultForAddActivity.getInstance() != null )
 						{
 							Message m = searchFriendResultForAddActivity.getInstance().handler.obtainMessage();
 							m.what = searchFriendResultForAddActivity.UPDATE_VIEW_FROM_REMOT;
-							m.obj = jason_obj;
+							m.obj = json_obj;
 							searchFriendResultForAddActivity.getInstance().handler.sendMessage(m);
 						}
 						else
@@ -494,10 +515,38 @@ public class MainControl extends HandlerThread {
 			break;
 		case EventDefine.SEND_MESSAGE_RSP:
 			{
+				Log.d("MainControl" , "SEND_MESSAGE_RSP: " );
 				
+				ExpCommandE Exp_e = (ExpCommandE)(e);
+				String rep = Exp_e.GetPropertyContext("HTTP_REQ_RSP");
+				String status = Exp_e.GetPropertyContext("STATUS");
+				ZdnMessage m = (ZdnMessage) Exp_e.getUserData();
+				if(  0 != Integer.parseInt(status))
+				{
+					//no internet connection or server no response 
+					m.setState( ZdnMessage.MSG_STATE_FAIL);
+				}
+				else
+				{
+					m.setState( ZdnMessage.MSG_STATE_SUCCESS );
+					
+				}
+
+				m.SaveToDb();
 			}
 			break;
 		
+		case EventDefine.GET_MESSAGE_REQ:
+			Log.d("MainControl" , "SEND_MESSAGE_REQ: " );
+			mInternetCom.getTip( e );
+			
+			break;
+		case EventDefine.GET_MESSAGE_RSP:
+			{
+				Log.d("MainControl" , "GET_MESSAGE_RSP: " );
+				getMessageRspHandle( e);
+			}
+			break;
 		default:
 			break;
 		}
@@ -554,24 +603,24 @@ public class MainControl extends HandlerThread {
 	private JSONObject parseHttpReqRsp( CommandE e  )
 	{
 		String rep = e.GetPropertyContext("HTTP_REQ_RSP");
-		JSONObject  jason_obj = null;
+		JSONObject  json_obj = null;
 		try {
-			jason_obj = new JSONObject(rep);
+			json_obj = new JSONObject(rep);
 		} catch (JSONException e1) {
 
 			Log.d("MainControl" , "server response error: " + e1.getMessage() );
 			e1.printStackTrace();
 		}
 		
-		return jason_obj;
+		return json_obj;
 	}
 	
 	private int parseHttpReqRspStatus( CommandE e  )
 	{
 		int queueRsp = -1;
-		JSONObject  jason_obj = parseHttpReqRsp(e);
+		JSONObject  json_obj = parseHttpReqRsp(e);
 		try {
-			queueRsp = jason_obj.getInt("status");
+			queueRsp = json_obj.getInt("status");
 		} catch (JSONException e1) {
 	
 			Log.d("MainControl" , "server response error: " + e1.getMessage() );
@@ -610,6 +659,48 @@ public class MainControl extends HandlerThread {
 		}
 		
 		return ret;
+	}
+	
+	//handle
+	private void getMessageRspHandle(CommandE e)
+	{
+		String rep = e.GetPropertyContext("HTTP_REQ_RSP");
+		String status = e.GetPropertyContext("STATUS");
+		
+		if(  0 != Integer.parseInt(status))
+		{
+			Log.e( this.getClass().getSimpleName(),"get tip status = " + status );
+			return ;
+		}
+		
+		ZdnMessageDbAdapt zdnMd = null;
+		JSONObject  json_obj = null;
+		try {
+			json_obj = new JSONObject(rep);
+			
+			
+			String	type             = "0";  //0-text
+			String	state            = "1"; //success
+			String	fromUserName     = getStringFromJasonObj(json_obj,"friend_mobile");
+			String	fromUserAvatar   = "";
+			String	toUserName       = getStringFromJasonObj(json_obj,"mobile");
+			String	toUserAvatar     = "";
+			String	content          = getStringFromJasonObj(json_obj,"message");
+			String	isSend           = "true";
+			String	sendSucces       = "true";
+			String	time             = getStringFromJasonObj(json_obj,"create_time");
+
+					
+			zdnMd = new ZdnMessageDbAdapt( type, state,fromUserName,fromUserAvatar,toUserName,toUserAvatar,content,isSend,sendSucces,time);
+			zdnMd.SaveToDb();
+			//to do notify UI
+			
+			
+		} catch (JSONException e1) {
+
+			Log.d("MainControl" , "get tip response error: " + e1.getMessage() );
+			e1.printStackTrace();
+		}
 	}
 	
 	private CommandE packGetFriendListCommandE()
@@ -760,10 +851,12 @@ public class MainControl extends HandlerThread {
 
 	static public void sendMessageToServer( ZdnMessage sendMsg ,String targetTo ) {
 
-			CommandE e = InternetComponent.packA_CommonExpCommandE_ToServer( 
+			ExpCommandE e = InternetComponent.packA_CommonExpCommandE_ToServer( 
 					EventDefine.SEND_MESSAGE_REQ , 
 					InternetComponent.WEBSITE_ADDRESS_SEND_TIP 
 					);
+			e.setUserData( sendMsg );
+			
 			ObjectConvertTool.messagePackToCommandForSendToServer(sendMsg, e, targetTo );
 		
 			Message m = MainControl.getInstance().handler.obtainMessage();
@@ -771,5 +864,20 @@ public class MainControl extends HandlerThread {
 	        
 			MainControl.getInstance().handler.sendMessage(m);
 		}
+	
+	static public void getMessageToServer( String from , String msgId ) {
 
+		ExpCommandE e = InternetComponent.packA_CommonExpCommandE_ToServer( 
+				EventDefine.GET_MESSAGE_REQ , 
+				InternetComponent.WEBSITE_ADDRESS_GET_TIP 
+				);
+		e.AddAProperty(new Property("friend_moible", from ));
+		e.AddAProperty(new Property("mesg_id", msgId ));
+		
+		
+		Message m = MainControl.getInstance().handler.obtainMessage();
+		m.obj = e;   //
+        
+		MainControl.getInstance().handler.sendMessage(m);
+	}
 }
