@@ -21,6 +21,8 @@ import android.widget.Toast;
 
 import com.zdn.R;
 import com.zdn.CommandParser.CommandE;
+import com.zdn.basicStruct.SendMessageRspEvent;
+import com.zdn.basicStruct.getMessageRspEvent;
 import com.zdn.chat.ZdnMessage;
 import com.zdn.chat.MessageAdapter;
 import com.zdn.chat.MessageInputToolBox;
@@ -30,6 +32,7 @@ import com.zdn.event.EventDefine;
 import com.zdn.logic.InternetComponent;
 import com.zdn.logic.MainControl;
 import com.zdn.util.ObjectConvertTool;
+import de.greenrobot.event.EventBus;
 
 public class chatActivity extends FragmentActivity {
 	
@@ -46,8 +49,15 @@ public class chatActivity extends FragmentActivity {
 		targetTo = bundle.getString("targetTo");
 		setContentView(R.layout.chat_activity);
 		
+		EventBus.getDefault().register(this );  
 		initMessageInputToolBox();
 				initListView();
+	}
+	@Override
+	protected void onDestroy() {
+		EventBus.getDefault().unregister(this); 
+		super.onDestroy();
+		
 	}
 	
 	/**
@@ -211,4 +221,17 @@ public class chatActivity extends FragmentActivity {
 		}).start();
 	}
 	
+	public void onEvent(Object event)
+	{
+		if( event instanceof SendMessageRspEvent )
+		{
+			adapter.notifyDataSetChanged();
+		}
+		else if( event instanceof getMessageRspEvent )
+		{
+			getMessageRspEvent e = (getMessageRspEvent) event;
+			adapter.getData().add(e.m);
+			adapter.notifyDataSetChanged();
+		}
+	}
 }

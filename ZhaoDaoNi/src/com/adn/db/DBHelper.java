@@ -33,6 +33,8 @@ public class DBHelper  extends SQLiteOpenHelper{
 		this.dbClass = c;
 		this.ClassFs = c.getFields();
 		dbFmdb = getWritableDatabase();
+		
+		onCreate(dbFmdb); // create table
 	}
 	//数据第一次创建的时候会调用onCreate
 	@Override
@@ -48,7 +50,7 @@ public class DBHelper  extends SQLiteOpenHelper{
 		 variableCombin +=")";
 		 
 		 db.execSQL("CREATE TABLE IF NOT EXISTS " + table +  variableCombin );
-		 Log.i(TAG, "create table");
+		 Log.i(TAG, "create table:" + table );
 	}
 	//数据库第一次创建时onCreate方法会被调用，我们可以执行创建表的语句，当系统发现版本变化之后，会调用onUpgrade方法，我们可以执行修改表结构等语句
 	@Override

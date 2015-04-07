@@ -9,14 +9,18 @@ import com.zdn.CommandParser.Property;
 import com.zdn.activity.MainActivity;
 import com.zdn.activity.PeopleActivity;
 import com.zdn.activity.searchFriendResultForAddActivity;
+import com.zdn.basicStruct.SendMessageRspEvent;
 import com.zdn.basicStruct.friendMemberData;
 import com.zdn.basicStruct.friendMemberDataBasic;
+import com.zdn.basicStruct.getMessageRspEvent;
 import com.zdn.chat.ZdnMessage;
 import com.zdn.chat.ZdnMessageDbAdapt;
 import com.zdn.data.dataManager;
 import com.zdn.event.EventDefine;
 import com.zdn.logic.InternetComponent;
 import com.zdn.util.ObjectConvertTool;
+
+import de.greenrobot.event.EventBus;
 
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -531,6 +535,9 @@ public class MainControl extends HandlerThread {
 					m.setState( ZdnMessage.MSG_STATE_SUCCESS );
 					
 				}
+				SendMessageRspEvent smre = new SendMessageRspEvent();
+				smre.m = m;
+				EventBus.getDefault().post( smre );  // dispatch message to anyone who care about it
 
 				m.SaveToDb();
 			}
@@ -693,8 +700,11 @@ public class MainControl extends HandlerThread {
 					
 			zdnMd = new ZdnMessageDbAdapt( type, state,fromUserName,fromUserAvatar,toUserName,toUserAvatar,content,isSend,sendSucces,time);
 			zdnMd.SaveToDb();
-			//to do notify UI
+			ZdnMessage zdnm = new ZdnMessage(zdnMd);
+			getMessageRspEvent gmre = new  getMessageRspEvent();
+			gmre.m = zdnm;
 			
+			EventBus.getDefault().post( gmre ); // publish event to listener
 			
 		} catch (JSONException e1) {
 

@@ -5,9 +5,12 @@ import com.zdn.AsyncTaskBase;
 import com.zdn.R;
 import com.zdn.sort.ClearEditText;
 import com.zdn.adapter.FriendListAdapter;
+import com.zdn.basicStruct.SendMessageRspEvent;
 import com.zdn.data.dataManager;
 import com.zdn.view.FriendListView;
 import com.zdn.view.LoadingView;
+
+import de.greenrobot.event.EventBus;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -55,14 +58,14 @@ public class PeopleActivity extends zdnBasicActivity implements ExpandableListVi
 		//ImageView homeIcon = (ImageView)findViewById(android.R.id.);
 		//TextView actionTitle = (TextView)findViewById(com.android.internal.R.id.action_bar_title);
 		//homeIcon.setImageDrawable( getResources().getDrawable(R.drawable.add));
-	
+		EventBus.getDefault().register(this );  
 		super.onCreate(savedInstanceState);
 		
 	}
 	
 	@Override
 	protected void onDestroy() {
-		// TODO Auto-generated method stub
+		EventBus.getDefault().unregister(this); 
 		super.onDestroy();
 	}
 
@@ -313,5 +316,9 @@ public class PeopleActivity extends zdnBasicActivity implements ExpandableListVi
 		return super.onOptionsItemSelected(item);
 	}
 
+	public void onEvent(SendMessageRspEvent event)
+	{
+		
+	}
 
 }
