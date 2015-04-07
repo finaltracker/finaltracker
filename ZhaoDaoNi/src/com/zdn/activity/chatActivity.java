@@ -10,9 +10,12 @@ import java.util.Random;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
 import android.support.v4.app.FragmentActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -28,6 +31,7 @@ import com.zdn.chat.MessageAdapter;
 import com.zdn.chat.MessageInputToolBox;
 import com.zdn.chat.OnOperationListener;
 import com.zdn.chat.Option;
+import com.zdn.data.dataManager;
 import com.zdn.event.EventDefine;
 import com.zdn.logic.InternetComponent;
 import com.zdn.logic.MainControl;
@@ -40,18 +44,22 @@ public class chatActivity extends FragmentActivity {
 	private ListView 			listView;
 	private MessageAdapter 		adapter;
 	private String              targetTo; // the message will sent to whom
-	
+	int teamPosition;
+	int memberPosition;
 	@SuppressLint("UseSparseArrays")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Bundle bundle=this.getIntent().getExtras(); 
 		targetTo = bundle.getString("targetTo");
+		teamPosition = bundle.getInt("teamPosition");
+		memberPosition = bundle.getInt("memberPosition");
 		setContentView(R.layout.chat_activity);
 		
 		EventBus.getDefault().register(this );  
 		initMessageInputToolBox();
 				initListView();
+		
 	}
 	@Override
 	protected void onDestroy() {
@@ -233,5 +241,39 @@ public class chatActivity extends FragmentActivity {
 			adapter.getData().add(e.m);
 			adapter.notifyDataSetChanged();
 		}
+	}
+	
+	@Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        super.onOptionsItemSelected(item);
+        switch(item.getItemId())//得到被点击的item的itemId
+        {
+        case R.id.guyDetail: //
+        	Intent intent = new Intent(this, friendInformationDetailActivity.class);
+        	 
+    		intent.putExtra("teamPosition", teamPosition);
+    		intent.putExtra("memberPosition", memberPosition);
+    		// 调用startActivityForResult方法  
+    		startActivity(intent); 
+            break;
+
+        }
+        return true;
+    }
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		 super.onCreateOptionsMenu(menu);
+		getMenuInflater().inflate(R.menu.chat_activity_menu, menu);
+		return true;
+		
+	}
+	@Override
+	protected void onResume() {
+		if( null == dataManager.getFrilendList().getMemberData(teamPosition, memberPosition) )
+		{ // no this friend/circle in friend list
+			finish(); 
+		}
+		super.onResume();
 	}
 }

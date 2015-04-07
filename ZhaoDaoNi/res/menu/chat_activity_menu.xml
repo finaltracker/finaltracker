@@ -1,0 +1,12 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.spirit.zdn.MainActivity" >
+
+    <item
+        android:id="@+id/guyDetail"
+        android:icon="@drawable/u30"
+        android:showAsAction="ifRoom"
+        android:title="@string/guy_detail"/>
+
+
+</menu>

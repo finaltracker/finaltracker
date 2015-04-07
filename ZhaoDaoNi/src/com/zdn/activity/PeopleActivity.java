@@ -252,18 +252,11 @@ public class PeopleActivity extends zdnBasicActivity implements ExpandableListVi
 		Bundle b = new Bundle();  
 		
 		b.putString("targetTo", dataManager.getFrilendList().getMemberData(groupPosition, childPosition).basic.getPhoneNumber() );
-		// 调用Bundle对象的putString方法,采用 key-value的形式保存数据  
-		/*
-		b.putInt("teamPosition", groupPosition );  
-		b.putInt("memberPosition",childPosition  );  
-		// 将数据载体BUndle对象放入Intent对象中.  
-		 * */
-		 
+		b.putInt("teamPosition", groupPosition );
+		b.putInt("memberPosition", childPosition );
+		
 		intent.putExtras(b);  
-		// 调用startActivityForResult方法  
-		// startActivityForResult(intent,requestCode);  
-		// intent,数据载体  
-		// requestCode 请求的Code,这里一般 大于等于0的整型数据就可以.  
+		
 		startActivity(intent);  
 		
 		
