@@ -20,7 +20,7 @@ public class SelfMobileData {
 	
 	public SelfMobileData()
 	{
-		selfInfo = new friendMemberData();
+		selfInfo = new friendMemberData("mySelf");
 		imsi ="";
 		context = null;
 	}

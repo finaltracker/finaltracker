@@ -130,7 +130,7 @@ public class friendTeamDataManager {
 		
 		if( null == fmd )
 		{
-			fmd = new friendMemberData();
+			fmd = new friendMemberData(PhoneNumber); // PhoneNumber as tag
 			fmd.basic.memberName = memberName;
 			ftd.member.add(fmd);
 		

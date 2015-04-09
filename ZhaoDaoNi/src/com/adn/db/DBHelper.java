@@ -2,13 +2,17 @@ package com.adn.db;
 
 
 import java.lang.reflect.Field;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.text.format.Time;
 import android.util.Log;
 
 /**
@@ -24,14 +28,14 @@ public class DBHelper  extends SQLiteOpenHelper{
 	private Field[]ClassFs = null;
 	private SQLiteDatabase dbFmdb;
 	private Class dbClass = null ;
-	
+
 	public DBHelper(Context context,Class c) {
 		//Context context, String name, CursorFactory factory, int version
 		//factory输入null,使用默认值
 		super(context, DB_NAME, null, DB_VERSION);
 		table = c.getSimpleName();
 		this.dbClass = c;
-		this.ClassFs = c.getFields();
+		this.ClassFs = c.getDeclaredFields();
 		dbFmdb = getWritableDatabase();
 		
 		onCreate(dbFmdb); // create table
@@ -45,13 +49,57 @@ public class DBHelper  extends SQLiteOpenHelper{
 		 
 		 for (Field field : ClassFs )
 		 {
-			 variableCombin +="," + field.getName() + " STRING";
+			 //Log.d( this.getClass().getSimpleName(),field.getType().getSimpleName() );
+			 variableCombin +="," + field.getName() + " " + "STRING";
 		 }
 		 variableCombin +=")";
 		 
 		 db.execSQL("CREATE TABLE IF NOT EXISTS " + table +  variableCombin );
 		 Log.i(TAG, "create table:" + table );
 	}
+	
+	private Object stringToType(Class<?> toWhatType , String in )
+	{
+		
+		if( toWhatType == String.class )
+		{
+			return in;
+		}
+		else if( toWhatType == int.class )
+		{
+			return Integer.parseInt(in);
+		}
+		else if( toWhatType == long.class)
+		{ // no support
+			return null;
+		}
+		
+		else if( toWhatType == Integer.class )
+		{// no support
+			return null;
+		}
+		else if( toWhatType == Boolean.class )
+		{
+			if( in.equals("1") )
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else if( toWhatType == Date.class )
+		{
+			
+			 // no support
+			return null;
+
+		}
+		
+		return null;
+	}
+	
 	//数据库第一次创建时onCreate方法会被调用，我们可以执行创建表的语句，当系统发现版本变化之后，会调用onUpgrade方法，我们可以执行修改表结构等语句
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -88,7 +136,7 @@ public class DBHelper  extends SQLiteOpenHelper{
 	            	{
 	                	Object object = ClassFs[i].get(mi);
 
-	                	newObjArray[i] = (String)object ;
+	                	newObjArray[i] = object ;
 	            	}
 	                //db.execSQL("INSERT INTO info VALUES(null,?,?,?,?)", new Object[] { info.teamName, info.memberName, info.phoneNumber, info.nickName , info.comment , info.pictureAddress });
 	                dbFmdb.execSQL( execSqlStrAll , newObjArray);
@@ -134,7 +182,7 @@ public class DBHelper  extends SQLiteOpenHelper{
 	            	{
 	                	Object object = ClassFs[i].get(mi);
 
-	                	newObjArray[i] = (String)object ;
+	                	newObjArray[i] = object ;
 	            	}
 	                //db.execSQL("INSERT INTO info VALUES(null,?,?,?,?)", new Object[] { info.teamName, info.memberName, info.phoneNumber, info.nickName , info.comment , info.pictureAddress });
 	                dbFmdb.execSQL( execSqlStrAll , newObjArray);
@@ -161,8 +209,8 @@ public class DBHelper  extends SQLiteOpenHelper{
 	     * 
 	     * @param name
 	     */
-	    public ArrayList<Object> searchData(final String name   ) {
-	        String sql = "SELECT * FROM "+table+" WHERE name =" + "'" + name + "'";
+	    public ArrayList<Object> searchData(final String what , String value ) {
+	        String sql = "SELECT * FROM "+table+" WHERE "+what+" =" + "'" + value + "'";
 	        return ExecSQLForMemberInfo(sql);
 	    }
 
@@ -198,6 +246,7 @@ public class DBHelper  extends SQLiteOpenHelper{
 	        	 Object fmd = null;
 				try {
 					fmd = dbClass.newInstance();
+					Log.d(this.getClass().getSimpleName() , fmd.toString() );
 				} catch (InstantiationException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -210,7 +259,9 @@ public class DBHelper  extends SQLiteOpenHelper{
 	             	String value = null;
 	             	
 	             	try {
-						field.set( fmd, c.getString(c.getColumnIndex( field.getName())) );
+	             		
+	             		Object middle = stringToType( field.getType() ,c.getString(c.getColumnIndex( field.getName())) );
+						field.set( fmd, middle );
 					} catch (IllegalAccessException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();

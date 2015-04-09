@@ -16,24 +16,30 @@ public class ZdnMessage {
 	public final static int MSG_STATE_SUCCESS 	= 1;
 	public final static int MSG_STATE_FAIL 		= 2;
 	
-	private Long id;
-	private Integer type;		// 0-text | 1-photo | 2-face | more type ... TODO://
-	private Integer state; 		// 0-sending | 1-success | 2-fail
-	private String fromUserName;
-	private String fromUserAvatar;
-	private String toUserName;
-	private String toUserAvatar;
-	private String content;
+	public int type;		// 0-text | 1-photo | 2-face | more type ... TODO://
+	public int state; 		// 0-sending | 1-success | 2-fail
+	public String fromUserName;
+	public String fromUserAvatar;
+	public String toUserName;
+	public String toUserAvatar;
+	public String content;
+	public String groupTag;
+	
 
-	private Boolean isSend;
-	private Boolean sendSucces;
-	private Date time;
+	public Boolean isSend;
+	public Boolean sendSucces;
+	public String dateTime; // yyyy-MM-dd-HH  example:dateTime=(new SimpleDateFormat("yyyy-MM-dd")).format(ddate);  
 
-	public ZdnMessage(Integer type, Integer state, String fromUserName,
+    public ZdnMessage()
+    {
+    }
+	public ZdnMessage(String groupTag , Integer type, Integer state, String fromUserName,
 			String fromUserAvatar, String toUserName, String toUserAvatar,
 			//     内容                                  是否是发送数据（主叫�?发�?结果
 			String content, Boolean isSend, Boolean sendSucces, Date time) {
 		super();
+
+		
 		this.type = type;
 		this.state = state;
 		this.fromUserName = fromUserName;
@@ -43,9 +49,29 @@ public class ZdnMessage {
 		this.content = content;
 		this.isSend = isSend;
 		this.sendSucces = sendSucces;
-		this.time = time;
+		this.dateTime = (new SimpleDateFormat("yyyy-MM-dd-HH")).format(time); 
+		this.groupTag = groupTag;
 	}
-	
+	public ZdnMessage(String groupTag , Integer type, Integer state, String fromUserName,
+			String fromUserAvatar, String toUserName, String toUserAvatar,
+			//     内容                                  是否是发送数据（主叫�?发�?结果
+			String content, Boolean isSend, Boolean sendSucces, String time) {
+		super();
+
+		
+		this.type = type;
+		this.state = state;
+		this.fromUserName = fromUserName;
+		this.fromUserAvatar = fromUserAvatar;
+		this.toUserName = toUserName;
+		this.toUserAvatar = toUserAvatar;
+		this.content = content;
+		this.isSend = isSend;
+		this.sendSucces = sendSucces;
+		this.dateTime = time; 
+		this.groupTag = groupTag;
+	}
+	/*
 	public ZdnMessage( ZdnMessageDbAdapt mAda) 
 	{
 		type = Integer.parseInt(mAda.type);
@@ -59,22 +85,14 @@ public class ZdnMessage {
 		sendSucces = Boolean.parseBoolean( mAda.sendSucces );
 		SimpleDateFormat sdf =  new SimpleDateFormat("yyyy-MM-dd");
 		try {
-			time = sdf.parse( mAda.time );
+			dateTime = sdf.parse( mAda.time );
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			time = new Date("2000-01-01");
+			dateTime = new Date("2000-01-01");
 		}
 	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
+*/
 	public Integer getType() {
 		return type;
 	}
@@ -148,13 +166,27 @@ public class ZdnMessage {
 	}
 
 	public Date getTime() {
-		return time;
+		Date ret = null;
+		try {
+			ret =  new SimpleDateFormat("yyyy-MM-dd-HH").parse(dateTime);
+		} catch (ParseException e) {
+			 try {
+				ret =new SimpleDateFormat("yyyy-MM-dd-HH").parse("2000-01-01-00");
+			} catch (ParseException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		}
+		
+		return ret;
 	}
 
 	public void setTime(Date time) {
-		this.time = time;
+		this.dateTime = (new SimpleDateFormat("yyyy-MM-dd-HH")).format(time); 
 	}
 	
+	/*
 	public void SaveToDb( )
 	{
 		ZdnMessageDbAdapt zmda = new ZdnMessageDbAdapt(this);
@@ -165,5 +197,15 @@ public class ZdnMessage {
 		
 		getDbHelper.closeDB();
 	}
-
+*/
+	public void SaveToDb( )
+	{
+		//ZdnMessageDbAdapt zmda = new ZdnMessageDbAdapt(this);
+		
+		DBHelper getDbHelper = DBManager.GetDbHelper( ZdnMessage.class );
+		
+		getDbHelper.add(  this );
+		
+		getDbHelper.closeDB();
+	}
 }

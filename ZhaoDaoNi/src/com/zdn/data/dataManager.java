@@ -12,7 +12,7 @@ import com.zdn.basicStruct.friendTeamDataManager;
 public class dataManager {
 
 	static friendTeamDataManager   allFriend = null;  //friend list
-	static Context mainContext = null;
+	static public Context mainContext = null;
 	static public SelfMobileData self = null; // myself info
 	
 	public dataManager() {

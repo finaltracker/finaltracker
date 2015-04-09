@@ -1,7 +1,5 @@
 package com.zdn.basicStruct;
 
-import com.zdn.CommandParser.CommandE;
-import com.zdn.CommandParser.Property;
 import com.zdn.logic.MainControl;
 import com.zdn.data.dataManager;
 
@@ -15,6 +13,7 @@ public class friendMemberDataBasic {
 	//for reflect: only string type to be define, all public field will be save to db
 
 	// public for java reflect
+	public String   tag;  // unique tag
 	public String   teamName; 
 	public String 	memberName;
 	public String   phoneNumber;  // todo
@@ -23,7 +22,16 @@ public class friendMemberDataBasic {
 	public String   pictureAddress;
 	
 	
-	
+	public void setTag( String tag )
+    {
+        this.tag = tag;
+    }
+
+    public String getTag( )
+	{
+		return this.tag;
+	}
+    
 	public void setTeamName( String teamName )
 	{
 		this.teamName = teamName;

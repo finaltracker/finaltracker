@@ -26,7 +26,7 @@ public class InternetComponent implements ServerInterfaceCmd {
 	static public String WEBSITE_ADDRESS_UPDATE_FRIEND = WEBSITE_ADDRESS_BASE + "friend/update_friend/";
 	static public String WEBSITE_ADDRESS_DELETE_FRIEND = WEBSITE_ADDRESS_BASE + "friend/delete_friend/";
 	
-	static public String WEBSITE_ADDRESS_SEND_TIP = WEBSITE_ADDRESS_BASE + "tips/send_tip";
+	static public String WEBSITE_ADDRESS_SEND_TIP = WEBSITE_ADDRESS_BASE + "tips/send_tip/";
 	static public String WEBSITE_ADDRESS_GET_TIP = WEBSITE_ADDRESS_BASE + "tips/get_tip/";
 	
 	

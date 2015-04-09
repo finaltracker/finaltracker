@@ -1,7 +1,15 @@
 package com.zdn.basicStruct;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.adn.db.DBHelper;
+import com.adn.db.DBManager;
+import com.zdn.chat.ZdnMessage;
+import com.zdn.data.dataManager;
 import com.zdn.util.ImgUtil;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 
 //define member struct
@@ -18,20 +26,45 @@ public class friendMemberData {
 	
 	public friendMemberDataBasic basic;
 	public Bitmap	picture;
-	
+	private List<ZdnMessage> message = null;
 
 
-	public friendMemberData()
+	public friendMemberData( String tag )
 	{
+		message = new ArrayList<ZdnMessage>();
 		basic = new friendMemberDataBasic();
 		picture = null;
+		basic.setTag(tag);
+		
+		constructMessageFromDb( dataManager.mainContext );
 	}
 	
+	public void constructMessageFromDb( Context context )
+	{
+	
+		DBHelper getDbHelper = DBManager.GetDbHelper( ZdnMessage.class );
+		
+		ArrayList<Object> miList = getDbHelper.searchData("groupTag" , basic.tag );
+		
+		
+		
+		for( int i = 0 ; i < miList.size() ; i++ )
+		{
+			ZdnMessage m = (ZdnMessage)(miList.get(i));
+			
+			message.add(m);
+				
+		}
+		getDbHelper.closeDB();
+
+	}
 	public friendMemberData(friendMemberDataBasic basic )
 	{
+		message = new ArrayList<ZdnMessage>();
 		this.basic =basic;
 		picture = null;
 	}
+	
 	
 	//从数据库得到basic后要填充其它内容时调用此函数
 	public void rebuildFriendMemberData()

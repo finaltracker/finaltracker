@@ -14,7 +14,6 @@ import com.zdn.basicStruct.friendMemberData;
 import com.zdn.basicStruct.friendMemberDataBasic;
 import com.zdn.basicStruct.getMessageRspEvent;
 import com.zdn.chat.ZdnMessage;
-import com.zdn.chat.ZdnMessageDbAdapt;
 import com.zdn.data.dataManager;
 import com.zdn.event.EventDefine;
 import com.zdn.logic.InternetComponent;
@@ -680,29 +679,39 @@ public class MainControl extends HandlerThread {
 			return ;
 		}
 		
-		ZdnMessageDbAdapt zdnMd = null;
 		JSONObject  json_obj = null;
 		try {
 			json_obj = new JSONObject(rep);
 			
 			
-			String	type             = "0";  //0-text
-			String	state            = "1"; //success
+			int		type             = 0;  //0-text
+			int		state            = 1; //success
 			String	fromUserName     = getStringFromJasonObj(json_obj,"friend_mobile");
 			String	fromUserAvatar   = "";
 			String	toUserName       = getStringFromJasonObj(json_obj,"mobile");
 			String	toUserAvatar     = "";
 			String	content          = getStringFromJasonObj(json_obj,"message");
-			String	isSend           = "true";
-			String	sendSucces       = "true";
+			boolean	isSend           = true;
+			boolean	sendSucces       = true;
 			String	time             = getStringFromJasonObj(json_obj,"create_time");
 
 					
-			zdnMd = new ZdnMessageDbAdapt( type, state,fromUserName,fromUserAvatar,toUserName,toUserAvatar,content,isSend,sendSucces,time);
-			zdnMd.SaveToDb();
-			ZdnMessage zdnm = new ZdnMessage(zdnMd);
+			ZdnMessage zdn_m = new ZdnMessage( fromUserName , 
+												type,
+												state,
+												fromUserName,
+												fromUserAvatar,
+												toUserName,
+												toUserAvatar,
+												content,
+												isSend,
+												sendSucces,
+												time
+												);
+			
+			zdn_m.SaveToDb();
 			getMessageRspEvent gmre = new  getMessageRspEvent();
-			gmre.m = zdnm;
+			gmre.m = zdn_m;
 			
 			EventBus.getDefault().post( gmre ); // publish event to listener
 			
