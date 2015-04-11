@@ -91,7 +91,7 @@ final public class Http {
     	Log.d("HTTP", "httpReq : " );
         for( int i = 0 ; i < command.GetExpPropertyNum() ; i++ )
         {
-        	Log.d("HTTP", command.GetExpProperty(i).GetPropertyName() + " " + command.GetProperty(i).GetPropertyContext() );
+        	Log.d("HTTP", command.GetExpProperty(i).GetPropertyName() + " " + command.GetExpProperty(i).GetPropertyContext() );
         }
         for( int i = 0 ; i < command.GetPropertyNum() ; i++ )
         {

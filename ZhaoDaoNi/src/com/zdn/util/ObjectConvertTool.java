@@ -22,7 +22,7 @@ public class ObjectConvertTool {
 	{
 		e.AddAProperty(new Property("mobile",dataManager.self.preferencesPara.getPhoneNumber() ) );
 		e.AddAProperty(new Property("friend_mobile",targetMobile ) );
-		e.AddAProperty(new Property("create_time",targetMobile ) );
+		e.AddAProperty(new Property("create_time",in.getTimeString() ) );
 		e.AddAProperty(new Property("message",in.getContent() ) );
 		e.AddAProperty(new Property("audio_url","" ) );
 		e.AddAProperty(new Property("photo_url","") );

@@ -28,7 +28,7 @@ public class ZdnMessage {
 
 	public Boolean isSend;
 	public Boolean sendSucces;
-	public String dateTime; // yyyy-MM-dd-HH  example:dateTime=(new SimpleDateFormat("yyyy-MM-dd")).format(ddate);  
+	public String dateTime; // yyyy-MM-dd-HH-mm example:dateTime=(new SimpleDateFormat("yyyy-MM-dd")).format(ddate);  
 
     public ZdnMessage()
     {
@@ -49,7 +49,7 @@ public class ZdnMessage {
 		this.content = content;
 		this.isSend = isSend;
 		this.sendSucces = sendSucces;
-		this.dateTime = (new SimpleDateFormat("yyyy-MM-dd-HH")).format(time); 
+		this.dateTime = (new SimpleDateFormat("yyyy-MM-dd-HH-mm")).format(time); 
 		this.belogTag = groupTag;
 	}
 	public ZdnMessage(String belogTag , Integer type, Integer state, String fromUserName,
@@ -88,7 +88,7 @@ public class ZdnMessage {
 		content = mAda.content;
 		isSend = Boolean.parseBoolean( mAda.isSend );
 		sendSucces = Boolean.parseBoolean( mAda.sendSucces );
-		SimpleDateFormat sdf =  new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat sdf =  new SimpleDateFormat("yyyy-MM-dd-HH-mm");
 		try {
 			dateTime = sdf.parse( mAda.time );
 		} catch (ParseException e) {
@@ -173,10 +173,10 @@ public class ZdnMessage {
 	public Date getTime() {
 		Date ret = null;
 		try {
-			ret =  new SimpleDateFormat("yyyy-MM-dd-HH").parse(dateTime);
+			ret =  new SimpleDateFormat("yyyy-MM-dd-HH-mm").parse(dateTime);
 		} catch (ParseException e) {
 			 try {
-				ret =new SimpleDateFormat("yyyy-MM-dd-HH").parse("2000-01-01-00");
+				ret =new SimpleDateFormat("yyyy-MM-dd-HH-mm").parse("2000-01-01-00-00");
 			} catch (ParseException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -186,9 +186,14 @@ public class ZdnMessage {
 		
 		return ret;
 	}
+	
+	public String getTimeString() {
+		
+		return dateTime;
+	}
 
 	public void setTime(Date time) {
-		this.dateTime = (new SimpleDateFormat("yyyy-MM-dd-HH")).format(time); 
+		this.dateTime = (new SimpleDateFormat("yyyy-MM-dd-HH-mm")).format(time); 
 	}
 	
 	/*

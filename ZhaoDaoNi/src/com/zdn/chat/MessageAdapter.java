@@ -92,7 +92,7 @@ public class MessageAdapter extends BaseAdapter {
 		}
 		
 		try {
-			String dateString = DateFormat.format("yyyy-MM-dd h:mmaa", message.getTime()).toString();
+			String dateString = DateFormat.format("yyyy-MM-dd h:mm", message.getTime()).toString();
 			String [] t = dateString.split(" ");
 			viewHolder.sendDateTextView.setText(t[0]);
 			viewHolder.sendTimeTextView.setText(t[1]);

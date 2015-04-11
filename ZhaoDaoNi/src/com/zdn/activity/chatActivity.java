@@ -12,6 +12,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
@@ -41,12 +42,14 @@ import de.greenrobot.event.EventBus;
 
 public class chatActivity extends FragmentActivity {
 	
+	private int 				INIT_SHOW_MESSAGE_MAX	= 50;
 	private MessageInputToolBox box;
 	private ListView 			listView;
 	private MessageAdapter 		adapter;
 	private String              targetTo; // the message will sent to whom
-	int teamPosition;
-	int memberPosition;
+	int teamPosition = 0;
+	int memberPosition = 0;
+	friendMemberData fdm = null;
 	@SuppressLint("UseSparseArrays")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +58,7 @@ public class chatActivity extends FragmentActivity {
 		targetTo = bundle.getString("targetTo");
 		teamPosition = bundle.getInt("teamPosition");
 		memberPosition = bundle.getInt("memberPosition");
+		fdm = dataManager.getFrilendList().getMemberData(teamPosition, memberPosition);
 		setContentView(R.layout.chat_activity);
 		
 		EventBus.getDefault().register(this );  
@@ -189,9 +193,32 @@ public class chatActivity extends FragmentActivity {
 		messages.add(message6);
 		messages.add(message7);
 		*/
+		
+		int messageListSize = fdm.getMessageList().size();
+		
+		int startIndex = 0;
+		
+		if( messageListSize > INIT_SHOW_MESSAGE_MAX ) 
+		{
+			startIndex = messageListSize - INIT_SHOW_MESSAGE_MAX;
+		}
+		for( int i = startIndex ; i<messageListSize  ;i++  )
+		{
+			messages.add(fdm.getMessageList().get( i ) );
+		}
+		
 		adapter = new MessageAdapter(this, messages);
 		listView.setAdapter(adapter);
 		adapter.notifyDataSetChanged();
+		//setSelection work ok require that listView load data finished
+		new Handler().postDelayed(new Runnable()  {
+			@Override
+			public void run() {
+				listView.setSelection(listView.getBottom());
+				
+			}
+			}, 100);
+		
 		
 		listView.setOnTouchListener(new OnTouchListener() {
 			@Override
@@ -238,8 +265,7 @@ public class chatActivity extends FragmentActivity {
 		{
 			SendMessageRspEvent e = (SendMessageRspEvent)event;
 			
-			adapter.getData().add( e.m );
-			listView.setSelection(listView.getBottom()); 
+			adapter.notifyDataSetChanged();
 		}
 		else if( event instanceof getMessageRspEvent )
 		{
@@ -248,7 +274,7 @@ public class chatActivity extends FragmentActivity {
 			if( fmd.basic.getPhoneNumber().equals(e.m.getBelogTag() ))
 			{
 				adapter.getData().add(e.m);
-				adapter.notifyDataSetChanged();
+				listView.setSelection(listView.getBottom());
 			}
 		}
 	}

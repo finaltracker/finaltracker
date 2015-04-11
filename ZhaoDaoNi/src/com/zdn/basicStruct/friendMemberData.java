@@ -38,6 +38,14 @@ public class friendMemberData {
 		
 		constructMessageFromDb( dataManager.mainContext );
 	}
+
+    public friendMemberData(friendMemberDataBasic basic )
+	{
+		message = new ArrayList<ZdnMessage>();
+		this.basic =basic;
+        constructMessageFromDb( dataManager.mainContext );
+		picture = null;
+	}
 	
 	public void constructMessageFromDb( Context context )
 	{
@@ -58,12 +66,7 @@ public class friendMemberData {
 		getDbHelper.closeDB();
 
 	}
-	public friendMemberData(friendMemberDataBasic basic )
-	{
-		message = new ArrayList<ZdnMessage>();
-		this.basic =basic;
-		picture = null;
-	}
+	
 	
 	
 	//从数据库得到basic后要填充其它内容时调用此函数
