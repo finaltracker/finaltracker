@@ -667,6 +667,18 @@ public class MainControl extends HandlerThread {
 		return ret;
 	}
 	
+	static private void addMessageToFriendData( ZdnMessage m )
+	{
+		ZdnMessage zdn_m ;
+		
+		
+		friendMemberData fmd = dataManager.getFrilendList().getMemberDataByPhoneNumber( m.getBelogTag() );
+		
+		if( fmd != null )
+		{
+			fmd.getMessageList().add( m );
+		}
+	}
 	//handle
 	private void getMessageRspHandle(CommandE e)
 	{
@@ -710,6 +722,8 @@ public class MainControl extends HandlerThread {
 												);
 			
 			zdn_m.SaveToDb();
+			//add the message to friend's data
+			addMessageToFriendData(zdn_m);
 			getMessageRspEvent gmre = new  getMessageRspEvent();
 			gmre.m = zdn_m;
 			
@@ -870,6 +884,9 @@ public class MainControl extends HandlerThread {
 
 	static public void sendMessageToServer( ZdnMessage sendMsg ,String targetTo ) {
 
+		
+			addMessageToFriendData(sendMsg);
+			
 			ExpCommandE e = InternetComponent.packA_CommonExpCommandE_ToServer( 
 					EventDefine.SEND_MESSAGE_REQ , 
 					InternetComponent.WEBSITE_ADDRESS_SEND_TIP 
@@ -890,7 +907,7 @@ public class MainControl extends HandlerThread {
 				EventDefine.GET_MESSAGE_REQ , 
 				InternetComponent.WEBSITE_ADDRESS_GET_TIP 
 				);
-		e.AddAProperty(new Property("friend_moible", from ));
+		e.AddAProperty(new Property("friend_mobile", from ));
 		e.AddAProperty(new Property("mesg_id", msgId ));
 		
 		

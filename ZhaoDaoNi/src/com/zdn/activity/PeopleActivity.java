@@ -6,6 +6,8 @@ import com.zdn.R;
 import com.zdn.sort.ClearEditText;
 import com.zdn.adapter.FriendListAdapter;
 import com.zdn.basicStruct.SendMessageRspEvent;
+import com.zdn.basicStruct.friendMemberData;
+import com.zdn.basicStruct.getMessageRspEvent;
 import com.zdn.data.dataManager;
 import com.zdn.view.FriendListView;
 import com.zdn.view.LoadingView;
@@ -34,7 +36,8 @@ public class PeopleActivity extends zdnBasicActivity implements ExpandableListVi
 	private ClearEditText mSearchView;
 	private FriendListAdapter mFriendListAdapter;
 	static public PeopleActivity me;
-	
+
+	static public PeopleActivity getInstance() { return me; }
 	
 	public PeopleActivity()
 	{
@@ -69,7 +72,19 @@ public class PeopleActivity extends zdnBasicActivity implements ExpandableListVi
 		super.onDestroy();
 	}
 
-	static public PeopleActivity getInstance() { return me; }
+	
+	public void onEvent(Object event)
+	{
+		
+		if( event instanceof SendMessageRspEvent )
+		{
+			mFriendListAdapter.notifyDataSetChanged();
+		}
+		else if( event instanceof getMessageRspEvent )
+		{
+			mFriendListAdapter.notifyDataSetChanged();
+		}
+	}
 	
 	private void findView() {
 		mSearchView=(ClearEditText) findViewById( R.id.ll_constact_serach );
@@ -309,9 +324,6 @@ public class PeopleActivity extends zdnBasicActivity implements ExpandableListVi
 		return super.onOptionsItemSelected(item);
 	}
 
-	public void onEvent(SendMessageRspEvent event)
-	{
-		
-	}
+	
 
 }

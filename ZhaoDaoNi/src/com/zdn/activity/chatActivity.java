@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.zdn.R;
 import com.zdn.CommandParser.CommandE;
 import com.zdn.basicStruct.SendMessageRspEvent;
+import com.zdn.basicStruct.friendMemberData;
 import com.zdn.basicStruct.getMessageRspEvent;
 import com.zdn.chat.ZdnMessage;
 import com.zdn.chat.MessageAdapter;
@@ -88,19 +89,19 @@ public class chatActivity extends FragmentActivity {
 				listView.setSelection(listView.getBottom()); 
 				
 				//Just demo
-				createReplayMsg(message);
+				//createReplayMsg(message);
 			}
 			
 			@Override
 			public void selectedFace(String content) {
 				
 				System.out.println("===============" + content);
-				ZdnMessage message = new ZdnMessage("Jerry",ZdnMessage.MSG_TYPE_FACE, ZdnMessage.MSG_STATE_SUCCESS, "Tomcat", "avatar", "Jerry", "avatar", content, true, true, new Date());
+				ZdnMessage message = new ZdnMessage(targetTo,ZdnMessage.MSG_TYPE_FACE, ZdnMessage.MSG_STATE_SUCCESS, "Tomcat", "avatar", targetTo, "avatar", content, true, true, new Date());
 				adapter.getData().add(message);
 				listView.setSelection(listView.getBottom());
 				
 				//Just demo
-				createReplayMsg(message);
+				//createReplayMsg(message);
 			}
 			
 			
@@ -166,7 +167,9 @@ public class chatActivity extends FragmentActivity {
 	
 	private void initListView(){
 		listView = (ListView) findViewById(R.id.messageListview);
+		List<ZdnMessage> messages = new ArrayList<ZdnMessage>();
 		
+		/*
 		//create Data
 		ZdnMessage message = new ZdnMessage("Jerry",ZdnMessage.MSG_TYPE_TEXT, ZdnMessage.MSG_STATE_SUCCESS, "Tom", "avatar", "Jerry", "avatar", "Hi", false, true, new Date(System.currentTimeMillis() - (1000 * 60 * 60 * 24) * 8));
 		ZdnMessage message1 = new ZdnMessage("Jerry",ZdnMessage.MSG_TYPE_TEXT, ZdnMessage.MSG_STATE_SUCCESS, "Tom", "avatar", "Jerry", "avatar", "Hello World", true, true, new Date(System.currentTimeMillis() - (1000 * 60 * 60 * 24)* 8));
@@ -177,7 +180,6 @@ public class chatActivity extends FragmentActivity {
 		ZdnMessage message6 = new ZdnMessage("Jerry",ZdnMessage.MSG_TYPE_TEXT, ZdnMessage.MSG_STATE_FAIL, "Tom", "avatar", "Jerry", "avatar", "test send fail", true, false, new Date(System.currentTimeMillis() - (1000 * 60 * 60 * 24) * 6));
 		ZdnMessage message7 = new ZdnMessage("Jerry",ZdnMessage.MSG_TYPE_TEXT, ZdnMessage.MSG_STATE_SENDING, "Tom", "avatar", "Jerry", "avatar", "test sending", true, true, new Date(System.currentTimeMillis() - (1000 * 60 * 60 * 24) * 6));
 		
-		List<ZdnMessage> messages = new ArrayList<ZdnMessage>();
 		messages.add(message);
 		messages.add(message1);
 		messages.add(message2);
@@ -186,7 +188,7 @@ public class chatActivity extends FragmentActivity {
 		messages.add(message5);
 		messages.add(message6);
 		messages.add(message7);
-		
+		*/
 		adapter = new MessageAdapter(this, messages);
 		listView.setAdapter(adapter);
 		adapter.notifyDataSetChanged();
@@ -231,15 +233,23 @@ public class chatActivity extends FragmentActivity {
 	
 	public void onEvent(Object event)
 	{
+		
 		if( event instanceof SendMessageRspEvent )
 		{
-			adapter.notifyDataSetChanged();
+			SendMessageRspEvent e = (SendMessageRspEvent)event;
+			
+			adapter.getData().add( e.m );
+			listView.setSelection(listView.getBottom()); 
 		}
 		else if( event instanceof getMessageRspEvent )
 		{
+			friendMemberData  fmd = dataManager.getFrilendList().getMemberData(teamPosition, memberPosition);
 			getMessageRspEvent e = (getMessageRspEvent) event;
-			adapter.getData().add(e.m);
-			adapter.notifyDataSetChanged();
+			if( fmd.basic.getPhoneNumber().equals(e.m.getBelogTag() ))
+			{
+				adapter.getData().add(e.m);
+				adapter.notifyDataSetChanged();
+			}
 		}
 	}
 	

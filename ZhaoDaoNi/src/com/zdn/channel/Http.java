@@ -142,8 +142,7 @@ final public class Http {
             Log.e(TAG, "getHttpClient().execute(post)", e);
             return null;
         } finally {
-        	retStatus = 4;
-            Log.v(TAG, "getAuthtoken completing");
+        	Log.v(TAG, "getAuthtoken completing");
         }
         
         e_r.AddAProperty( new Property("HTTP_REQ_RSP",ResString ) );

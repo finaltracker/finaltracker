@@ -168,6 +168,22 @@ public class friendTeamDataManager {
 			return null;
 		}
 	}
+	
+	public friendMemberData getMemberDataByPhoneNumber( String phoneNumber )
+	{
+		
+		for( int i = 0 ; i < Teams.size() ; i++ )
+		{
+			friendMemberData fmd = Teams.get(i).getFriendMemberData(phoneNumber);
+			
+			if(fmd != null )
+			{
+				return fmd;
+			}
+		}
+		
+		return null;
+	}
 	public friendMemberData getMemberData( int teamIndex , int memberIndex )
 	{
 		if(teamIndex >= Teams.size() )

@@ -44,7 +44,7 @@ public class friendMemberData {
 	
 		DBHelper getDbHelper = DBManager.GetDbHelper( ZdnMessage.class );
 		
-		ArrayList<Object> miList = getDbHelper.searchData("groupTag" , basic.tag );
+		ArrayList<Object> miList = getDbHelper.searchData("belogTag" , basic.tag );
 		
 		
 		
@@ -80,6 +80,11 @@ public class friendMemberData {
 		
 		picture = one.picture;
 		basic = one.basic;
+	}
+	
+	public List<ZdnMessage> getMessageList()
+	{
+		return this.message;
 	}
 	
 }

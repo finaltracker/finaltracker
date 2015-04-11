@@ -1,9 +1,12 @@
 package com.zdn.adapter;
 
+import java.util.List;
+
 import com.zdn.R;
 import com.zdn.basicStruct.friendMemberData;
 import com.zdn.basicStruct.friendTeamData;
 import com.zdn.basicStruct.friendTeamDataManager;
+import com.zdn.chat.ZdnMessage;
 import com.zdn.logic.MainControl;
 import com.zdn.view.FriendListView;
 import android.content.Context;
@@ -116,7 +119,18 @@ public class FriendListAdapter extends BaseExpandableListAdapter
 		holder.iconView.setImageBitmap(md.picture);
 		 
 		holder.nameView.setText( md.basic.getNickName() );
-		holder.feelView.setText("爱生活..爱Android...");
+		List<ZdnMessage> mList = md.getMessageList();
+		if( mList.size() > 0 )
+		{
+			String theLastMessage = mList.get(mList.size()-1).getContent();
+			holder.feelView.setText(theLastMessage);
+		}
+		else
+		{
+			holder.feelView.setText("");
+		}
+		
+		
 		return convertView;
 	}
 

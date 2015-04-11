@@ -23,7 +23,7 @@ public class ZdnMessage {
 	public String toUserName;
 	public String toUserAvatar;
 	public String content;
-	public String groupTag;
+	public String belogTag;
 	
 
 	public Boolean isSend;
@@ -50,9 +50,9 @@ public class ZdnMessage {
 		this.isSend = isSend;
 		this.sendSucces = sendSucces;
 		this.dateTime = (new SimpleDateFormat("yyyy-MM-dd-HH")).format(time); 
-		this.groupTag = groupTag;
+		this.belogTag = groupTag;
 	}
-	public ZdnMessage(String groupTag , Integer type, Integer state, String fromUserName,
+	public ZdnMessage(String belogTag , Integer type, Integer state, String fromUserName,
 			String fromUserAvatar, String toUserName, String toUserAvatar,
 			//     内容                                  是否是发送数据（主叫�?发�?结果
 			String content, Boolean isSend, Boolean sendSucces, String time) {
@@ -69,7 +69,12 @@ public class ZdnMessage {
 		this.isSend = isSend;
 		this.sendSucces = sendSucces;
 		this.dateTime = time; 
-		this.groupTag = groupTag;
+		this.belogTag = belogTag;
+	}
+	
+	public String getBelogTag()
+	{
+		return this.belogTag;
 	}
 	/*
 	public ZdnMessage( ZdnMessageDbAdapt mAda) 
