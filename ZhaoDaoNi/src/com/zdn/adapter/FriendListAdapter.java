@@ -2,11 +2,13 @@ package com.zdn.adapter;
 
 import java.util.List;
 
+import com.lidroid.xutils.BitmapUtils;
 import com.zdn.R;
 import com.zdn.basicStruct.friendMemberData;
 import com.zdn.basicStruct.friendTeamData;
 import com.zdn.basicStruct.friendTeamDataManager;
 import com.zdn.chat.ZdnMessage;
+import com.zdn.logic.InternetComponent;
 import com.zdn.logic.MainControl;
 import com.zdn.view.FriendListView;
 import android.content.Context;
@@ -116,7 +118,11 @@ public class FriendListAdapter extends BaseExpandableListAdapter
 		
 		friendMemberData md = (friendMemberData)getChild(groupPosition,childPosition);
 
-		holder.iconView.setImageBitmap(md.picture);
+		BitmapUtils bitmapUtils = new BitmapUtils(mContext);
+		
+		bitmapUtils.display( holder.iconView, InternetComponent.WEBSITE_ADDRESS_BASE + md.basic.getPictureAddress());
+
+
 		 
 		holder.nameView.setText( md.basic.getNickName() );
 		List<ZdnMessage> mList = md.getMessageList();

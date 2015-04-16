@@ -3,8 +3,7 @@ package com.zdn.logic;
 import com.zdn.CommandParser.CommandE;
 import com.zdn.CommandParser.ExpCommandE;
 import com.zdn.CommandParser.Property;
-import com.zdn.logic.MainControl;
-import com.zdn.channel.Http;
+import com.zdn.channel.xUtilsHttp;
 import com.zdn.data.dataManager;
 import com.zdn.event.EventDefine;
 import com.zdn.interf.ServerInterfaceCmd;
@@ -195,19 +194,8 @@ public class InternetComponent implements ServerInterfaceCmd {
 			
 			if(SEND_MESSAGE_TO_SERVER == msg.what )
 			{
-				ExpCommandE e = (ExpCommandE) msg.obj;
-				ExpCommandE reponse = Http.httpReq( e );
-			
-				reponse.setUserData( e.getUserData() );
-				
-				Message msg_rsp = MainControl.getInstance().obtainMessage(); 
-				msg_rsp.what = MainControl.SEND_MESSAGE_TO_SERVER_RSP;
-		        //��Message�����arg1�����ֵ����Ϊi
-				
-	
-				msg_rsp.obj = reponse;   
-		        
-				MainControl.getInstance().sendMessage(msg_rsp);
+			    ExpCommandE e = (ExpCommandE) msg.obj;
+				xUtilsHttp.httpReq( e );
 			}
 			super.handleMessage(msg);
 		}

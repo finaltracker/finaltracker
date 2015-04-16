@@ -41,6 +41,7 @@ public class PeopleActivity extends zdnBasicActivity implements ExpandableListVi
 	
 	public PeopleActivity()
 	{
+		
 		me = this;
 	}
 	@Override
@@ -221,7 +222,6 @@ public class PeopleActivity extends zdnBasicActivity implements ExpandableListVi
 		dbm.closeDB();
 		*/
 		
-
 		mFriendListAdapter.updateListView( dataManager.getFrilendList() );
 	}
 	
