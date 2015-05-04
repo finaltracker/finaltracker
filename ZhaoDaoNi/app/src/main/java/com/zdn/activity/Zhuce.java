@@ -24,7 +24,7 @@ import android.widget.Toast;
 
 /***
  * 
- * ×¢²á
+ * æ³¨å†Œ
  * 
  * @author toshiba
  * 
@@ -103,13 +103,13 @@ public class Zhuce extends Activity {
 				
 				if(Id.isEmpty() || passWord.isEmpty() )
 				{
-					Toast.makeText(getApplicationContext(), "ÓÃ»§Ãû»òÃÜÂë²»ÄÜÎª¿Õ",Toast.LENGTH_SHORT).show();
+					Toast.makeText(getApplicationContext(), "ç”¨æˆ·åæˆ–å¯†ç ä¸èƒ½ä¸ºç©º",Toast.LENGTH_SHORT).show();
 					return ;
 				}
 				MainControl.registReq(Id, passWord);
 				
 				//still stay this activity until response back
-				Toast.makeText(getApplicationContext(),"×¢²áÏûÏ¢ÒÑ·¢³ö",Toast.LENGTH_SHORT).show();
+				Toast.makeText(getApplicationContext(),"æ³¨å†Œæ¶ˆæ¯å·²å‘å‡º",Toast.LENGTH_SHORT).show();
 			}
 			
 		}

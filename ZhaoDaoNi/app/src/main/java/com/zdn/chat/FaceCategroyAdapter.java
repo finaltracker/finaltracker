@@ -11,10 +11,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 
-/**
- * 表情种类对应�?pagerAdapter
- * @author 仇加�? *
- */
+
 public class FaceCategroyAdapter extends FragmentPagerAdapter implements IconTabProvider{
 	
 	private OnOperationListener onOperationListener;

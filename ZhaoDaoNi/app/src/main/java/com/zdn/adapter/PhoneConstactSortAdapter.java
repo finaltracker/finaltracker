@@ -30,7 +30,7 @@ public class PhoneConstactSortAdapter extends BaseAdapter implements SectionInde
 	}
 	
 	/**
-	 * 当ListView数据发生变化�?调用此方法来更新ListView
+	 * 当ListView数据发生变化?调用此方法来更新ListView
 	 * @param list
 	 */
 	public void updateListView(List<SortModel> list){
@@ -76,10 +76,10 @@ public class PhoneConstactSortAdapter extends BaseAdapter implements SectionInde
 			viewHolder = (ViewHolder) view.getTag();
 		}
 		
-		//根据position获取分类的首字母的Char ascii�?
+		//根据position获取分类的首字母的Char
 		int section = getSectionForPosition(position);
 		
-		//如果当前位置等于该分类首字母的Char的位�?，则认为是第�?��出现
+		//如果当前位置等于该分类首字母的 Char的位
 		if(position == getPositionForSection(section)){
 			viewHolder.tvLetter.setVisibility(View.VISIBLE);
 			viewHolder.tvLetter.setText(mContent.getSortLetters());
@@ -108,7 +108,7 @@ public class PhoneConstactSortAdapter extends BaseAdapter implements SectionInde
 
 
 	/**
-	 * 根据ListView的当前位置获取分类的首字母的Char ascii�?
+	 * 根据ListView的当前位置获取分类的首字母的Char ascii�?
 	 */
 	public int getSectionForPosition(int position) {
 		return list.get(position).getSortLetters().charAt(0);
@@ -130,7 +130,7 @@ public class PhoneConstactSortAdapter extends BaseAdapter implements SectionInde
 	}
 	
 	/**
-	 * 提取英文的首字母，非英文字母�?代替�?
+	 * 提取英文的首字母，非英文字母�?代替�?
 	 * 
 	 * @param str
 	 * @return

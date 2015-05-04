@@ -112,7 +112,7 @@ public class friendInformationDetailActivity extends zdnBasicActivity {
         	public void onClick(View v) {
         		//send delete friend request
         		dataManager.getFrilendList().removeA_Friend( fmd.basic.getTeamName(), fmd.basic.getPhoneNumber() );
-        		Toast.makeText( friendInformationDetailActivity.this, "É¾³ıºÃÓÑÏûÏ¢ÒÔ·¢³ö" , Toast.LENGTH_SHORT).show();
+				Toast.makeText( friendInformationDetailActivity.this, "åˆ é™¤å¥½å‹æ¶ˆæ¯ä»¥å‘å‡º" , Toast.LENGTH_SHORT).show();
         		friendInformationDetailActivity.this.finish();
         	}
         	});
@@ -124,7 +124,7 @@ public class friendInformationDetailActivity extends zdnBasicActivity {
 		switch( resultCode)
 		{
 		case (friendInformationCommentActivity.FRIEND_INFORMATION_COMMENT_ACTIVITY):
-			String newComment = data.getExtras().getString("newComment");//µÃµ½ĞÂActivity ¹Ø±Õºó·µ»ØµÄÊı¾İ
+			String newComment = data.getExtras().getString("newComment");//å¾—åˆ°æ–°Activity å…³é—­åè¿”å›çš„æ•°æ®
 			commentTextView.setText( newComment );
 			Log.i(this.getClass().getName(), "user new comment " + newComment );
 			
@@ -132,7 +132,7 @@ public class friendInformationDetailActivity extends zdnBasicActivity {
 			break;
 		
 		case (friendInformationGroupActivity.FRIEND_INFORMATION_GROUP_ACTIVITY):
-			String newGroup = data.getExtras().getString("newGroup");//µÃµ½ĞÂActivity ¹Ø±Õºó·µ»ØµÄÊı¾İ
+			String newGroup = data.getExtras().getString("newGroup");//å¾—åˆ°æ–°Activity å…³é—­åè¿”å›çš„æ•°æ®
 			groupTextView.setText( newGroup );
 			Log.i(this.getClass().getName(), "user new group " + newGroup );
 			

@@ -85,13 +85,13 @@ public class PushSetActivity extends InstrumentedActivity implements OnClickList
 		EditText tagEdit = (EditText) findViewById(R.id.et_tag);
 		String tag = tagEdit.getText().toString().trim();
 		
-        // �?�� tag 的有效�?
+        //
 		if (TextUtils.isEmpty(tag)) {
 			Toast.makeText(PushSetActivity.this,R.string.error_tag_empty, Toast.LENGTH_SHORT).show();
 			return;
 		}
 		
-		// ","隔开的多�?转换�?Set
+		// ","隔开
 		String[] sArray = tag.split(",");
 		Set<String> tagSet = new LinkedHashSet<String>();
 		for (String sTagItme : sArray) {
@@ -125,20 +125,20 @@ public class PushSetActivity extends InstrumentedActivity implements OnClickList
 	
 	
 	/**
-	 *设置通知提示方式 - 基础属�?
+	 *设置通知提示方式 - 基础属性
 	 */
 	private void setStyleBasic(){
 		BasicPushNotificationBuilder builder = new BasicPushNotificationBuilder(PushSetActivity.this);
 		builder.statusBarDrawable = R.drawable.ic_launcher;
 		builder.notificationFlags = Notification.FLAG_AUTO_CANCEL;  //设置为点击后自动消失
-		builder.notificationDefaults = Notification.DEFAULT_SOUND;  //设置为铃声（ Notification.DEFAULT_SOUND）或者震动（ Notification.DEFAULT_VIBRATE�? 
+		builder.notificationDefaults = Notification.DEFAULT_SOUND;  //设置为铃声（ Notification.DEFAULT_SOUND）或者震动（ Notification.DEFAULT_VIBRATE�? 
 		JPushInterface.setPushNotificationBuilder(1, builder);
 		Toast.makeText(PushSetActivity.this, "Basic Builder - 1", Toast.LENGTH_SHORT).show();
 	}
 	
 	
 	/**
-	 *设置通知栏样�?- 定义通知栏Layout
+	 *设置通知栏样�?- 定义通知栏Layout
 	 */
 	private void setStyleCustom(){
 		CustomPushNotificationBuilder builder = new CustomPushNotificationBuilder(PushSetActivity.this,R.layout.customer_notitfication_layout,R.id.icon, R.id.title, R.id.text);

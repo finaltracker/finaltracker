@@ -35,7 +35,7 @@ public class ZdnMessage {
     }
 	public ZdnMessage(String groupTag , Integer type, Integer state, String fromUserName,
 			String fromUserAvatar, String toUserName, String toUserAvatar,
-			//     内容                                  是否是发送数据（主叫�?发�?结果
+			//     内容   是否是发送数据
 			String content, Boolean isSend, Boolean sendSucces, Date time) {
 		super();
 
@@ -54,7 +54,7 @@ public class ZdnMessage {
 	}
 	public ZdnMessage(String belogTag , Integer type, Integer state, String fromUserName,
 			String fromUserAvatar, String toUserName, String toUserAvatar,
-			//     内容                                  是否是发送数据（主叫�?发�?结果
+
 			String content, Boolean isSend, Boolean sendSucces, String time) {
 		super();
 

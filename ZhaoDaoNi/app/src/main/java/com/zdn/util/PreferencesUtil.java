@@ -8,27 +8,27 @@ import android.util.Log;
 public class PreferencesUtil {
 	private Context context;
 	private final String preferenceFileName = "zdnPreference";
-	//¹¹Ôì·½·¨ÖĞ´«ÈëÉÏÏÂÎÄ¶ÔÏó
+	//æ„é€ æ–¹æ³•ä¸­ä¼ å…¥ä¸Šä¸‹æ–‡å¯¹è±¡
 	public PreferencesUtil(Context context) {
 		super();
 		this.context = context;
 	}
 
 	/**
-	 * ±£´æ²ÎÊı
-	 * @param name ĞÕÃû
-	 * @param age ÄêÁä
+	 * ä¿å­˜å‚æ•°
+	 * @param name å§“å
+	 * @param age å¹´é¾„
 	 */
 	public void saveFriendListVersion(int friendListVersion ){
 		Log.d("PreferencesUtil" , "save friendListVersion = " + friendListVersion );
 		SharedPreferences sharedPreferences = context.getSharedPreferences( preferenceFileName, Context.MODE_PRIVATE);
 		Editor editor = sharedPreferences.edit();
 		editor.putInt("friendListVersion", friendListVersion);
-		editor.commit();	//Êı¾İÌá½»µ½xmlÎÄ¼şÖĞ
+		editor.commit();	//æ•°æ®æäº¤åˆ°xmlæ–‡ä»¶ä¸­
 	}
 	
 	/**
-	 * »ñÈ¡¸÷ÏîÅäÖÃ²ÎÊı
+	 * è·å–å„é¡¹é…ç½®å‚æ•°
 	 * @return params
 	 */
 	public int getFriendListVersion(){
@@ -44,7 +44,7 @@ public class PreferencesUtil {
 		SharedPreferences sharedPreferences = context.getSharedPreferences( preferenceFileName, Context.MODE_PRIVATE);
 		Editor editor = sharedPreferences.edit();
 		editor.putString("phone", phone);
-		editor.commit();	//Êı¾İÌá½»µ½xmlÎÄ¼şÖĞ
+		editor.commit();	//æ•°æ®æäº¤åˆ°xmlæ–‡ä»¶ä¸­
 	}
 	
 
@@ -58,7 +58,7 @@ public class PreferencesUtil {
 		SharedPreferences sharedPreferences = context.getSharedPreferences( preferenceFileName, Context.MODE_PRIVATE);
 		Editor editor = sharedPreferences.edit();
 		editor.putString("PassWord", PassWord);
-		editor.commit();	//Êı¾İÌá½»µ½xmlÎÄ¼şÖĞ
+		editor.commit();	//æ•°æ®æäº¤åˆ°xmlæ–‡ä»¶ä¸­
 	}
 	
 

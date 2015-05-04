@@ -40,7 +40,7 @@ public class searchFriendResultForAddAdapter extends BaseAdapter{
 	}
 	
 	/**
-	 * 当ListView数据发生变化�?调用此方法来更新ListView
+	 * 当ListView数据发生变化�?调用此方法来更新ListView
 	 * @param list
 	 */
 	public void updateListView(friendTeamDataManager new_teams ){
@@ -122,7 +122,7 @@ public class searchFriendResultForAddAdapter extends BaseAdapter{
 	        		{
 	        			searchFriendResultForAddActivity sfrfaa = (searchFriendResultForAddActivity)(mContext);
 	        			sfrfaa.finish();
-	        			Toast.makeText(mContext, "�����ѷ���", Toast.LENGTH_SHORT ).show ();
+	        			Toast.makeText(mContext, "请求已发出", Toast.LENGTH_SHORT ).show ();
 	        		}
 	        	}
 	        	});

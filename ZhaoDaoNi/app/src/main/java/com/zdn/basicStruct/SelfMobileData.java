@@ -37,7 +37,7 @@ public class SelfMobileData {
 		this.imsi = imsi;
 		if(imsi== null || imsi.isEmpty() )
 		{
-			Toast.makeText(context, "«Î≤Â»ÎSIMø®", Toast.LENGTH_SHORT).show();
+			Toast.makeText(context, "ËØ∑ÊèíÂÖ•SIMÂç°", Toast.LENGTH_SHORT).show();
 		}
 		
 	}

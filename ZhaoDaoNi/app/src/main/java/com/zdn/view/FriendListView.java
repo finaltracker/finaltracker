@@ -12,13 +12,13 @@ import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnGroupClickListener;
 /*
-	expandGroup (int groupPos) ;//ÔÚ·Ö×éÁĞ±íÊÓÍ¼ÖĞ Õ¹¿ªÒ»×é£¬
-	setSelectedGroup (int groupPosition) ;//ÉèÖÃÑ¡ÔñÖ¸¶¨µÄ×é¡£
-	setSelectedChild (int groupPosition, int childPosition, boolean shouldExpandGroup);//ÉèÖÃÑ¡ÔñÖ¸¶¨µÄ×ÓÏî¡£
-	getPackedPositionGroup (long packedPosition);//·µ»ØËùÑ¡ÔñµÄ×é
-	getPackedPositionForChild (int groupPosition, int childPosition) ;//·µ»ØËùÑ¡ÔñµÄ×ÓÏî
-	getPackedPositionType (long packedPosition);//·µ»ØËùÑ¡ÔñÏîµÄÀàĞÍ£¨Child,Group£©
-	isGroupExpanded (int groupPosition);//ÅĞ¶Ï´Ë×éÊÇ·ñÕ¹¿ª
+	expandGroup (int groupPos) ;//åœ¨åˆ†ç»„åˆ—è¡¨è§†å›¾ä¸­ å±•å¼€ä¸€ç»„ï¼Œ
+	setSelectedGroup (int groupPosition) ;//è®¾ç½®é€‰æ‹©æŒ‡å®šçš„ç»„ã€‚
+	setSelectedChild (int groupPosition, int childPosition, boolean shouldExpandGroup);//è®¾ç½®é€‰æ‹©æŒ‡å®šçš„å­é¡¹ã€‚
+	getPackedPositionGroup (long packedPosition);//è¿”å›æ‰€é€‰æ‹©çš„ç»„
+	getPackedPositionForChild (int groupPosition, int childPosition) ;//è¿”å›æ‰€é€‰æ‹©çš„å­é¡¹
+	getPackedPositionType (long packedPosition);//è¿”å›æ‰€é€‰æ‹©é¡¹çš„ç±»å‹ï¼ˆChild,Groupï¼‰
+	isGroupExpanded (int groupPosition);//åˆ¤æ–­æ­¤ç»„æ˜¯å¦å±•å¼€
 */
 
 public class FriendListView extends ExpandableListView implements OnGroupClickListener {
@@ -37,17 +37,12 @@ public class FriendListView extends ExpandableListView implements OnGroupClickLi
 		registerListener();
 	}
 	
-	/**
-	 * Adapter æ¥å£ . åˆ—è¡¨å¿…é¡»å®ç°æ­¤æ¥å?.
-	 */
+
 
 	private static final int MAX_ALPHA = 255;
 
 	private ExpandableListAdapter mAdapter;
 
-	/**
-	 * ç”¨äºåœ¨åˆ—è¡¨å¤´æ˜¾ç¤ºçš?View,mHeaderViewVisible ä¸?true æ‰å¯è§?
-	 */
 
 	private void registerListener() {
 		setOnGroupClickListener(this);
@@ -58,12 +53,7 @@ public class FriendListView extends ExpandableListView implements OnGroupClickLi
 		super.setAdapter(adapter);
 		mAdapter = (ExpandableListAdapter) adapter;
 	}
-	/*
 
-	/**
-	 * 
-	 * ç‚¹å‡»äº?Group è§¦å‘çš„äº‹ä»?, è¦æ ¹æ®æ ¹æ®å½“å‰ç‚¹å‡?Group çš„çŠ¶æ€æ¥
-	 */
 	@Override
 	public boolean onGroupClick(ExpandableListView parent, View v,
 			int groupPosition, long id) {
@@ -72,7 +62,8 @@ public class FriendListView extends ExpandableListView implements OnGroupClickLi
         }
 		else
 		{
-//µÚ¶ş¸ö²ÎÊıfalse±íÊ¾Õ¹¿ªÊ±ÊÇ·ñ´¥·¢Ä¬ÈÏ¹ö¶¯¶¯»­
+//ç¬¬äºŒä¸ªå‚æ•°falseè¡¨ç¤ºå±•å¼€æ—¶æ˜¯å¦è§¦å‘é»˜è®¤æ»šåŠ¨åŠ¨ç”»
+
             parent.expandGroup(groupPosition,false);
             //parent.smoothScrollToPosition (groupPosition);
 

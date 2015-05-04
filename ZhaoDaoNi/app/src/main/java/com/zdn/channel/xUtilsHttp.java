@@ -35,7 +35,7 @@ final public class xUtilsHttp {
      * @return String request response (or null)
      */
     
-    //CommandE 0 位置必须是URL 地址
+    //CommandE 0 浣嶇疆蹇呴』鏄疷RL 鍦板潃
     public static void httpReq( ExpCommandE command ) {
 
     	RequestParams params = new RequestParams();

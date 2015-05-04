@@ -29,12 +29,12 @@ public class AddFriendActivity extends zdnBasicActivity  {
 
 	private Button[] bottomBtns = new Button[2];
 
-	// ×¼±¸°´Å¥²»Ñ¡ÖĞµÄÍ¼Æ¬Êı×é
+	// å‡†å¤‡æŒ‰é’®ä¸é€‰ä¸­çš„å›¾ç‰‡æ•°ç»„
 	private int[] allBottomsImgs = { R.drawable.movie, R.drawable.video_store };
-	// Ñ¡ÖĞµÄÍ¼Æ¬Êı×é
+	// é€‰ä¸­çš„å›¾ç‰‡æ•°ç»„
 	private int[] allBottomsImgsSelected = { R.drawable.movie_press,
 			R.drawable.video_store_press };
-	// ÕıÔÚ°´µÄÍ¼Æ¬Êı×é
+	// æ­£åœ¨æŒ‰çš„å›¾ç‰‡æ•°ç»„
 	private int[] allBottomsImgsSelecting = { R.drawable.movie,
 			R.drawable.video_store };
 
@@ -97,7 +97,7 @@ public class AddFriendActivity extends zdnBasicActivity  {
         detailItemView =  VideoView.findViewById(R.id.add_friend_detail_add_webchat );
         detailItemView.setOnClickListener(new View.OnClickListener() {
         	public void onClick(View v) {
-        		Toast.makeText( AddFriendActivity.this, "Ìí¼ÓÎ¢ĞÅºÃÓÑ",
+        		Toast.makeText( AddFriendActivity.this, "æ·»åŠ å¾®ä¿¡å¥½å‹",
         			     Toast.LENGTH_SHORT).show();
         	}
         	});
@@ -105,7 +105,7 @@ public class AddFriendActivity extends zdnBasicActivity  {
         detailItemView =  VideoView.findViewById(R.id.add_friend_detail_add_qq );
         detailItemView.setOnClickListener(new View.OnClickListener() {
         	public void onClick(View v) {
-        		Toast.makeText( AddFriendActivity.this, "Ìí¼ÓQQºÃÓÑ",
+        		Toast.makeText( AddFriendActivity.this, "æ·»åŠ QQå¥½å‹",
         			     Toast.LENGTH_SHORT).show();
         	}
         	});
@@ -113,7 +113,7 @@ public class AddFriendActivity extends zdnBasicActivity  {
         detailItemView =  VideoView.findViewById(R.id.create_circle );
         detailItemView.setOnClickListener(new View.OnClickListener() {
         	public void onClick(View v) {
-        		Toast.makeText( AddFriendActivity.this, "´´½¨È¦×Ó",
+        		Toast.makeText( AddFriendActivity.this, "åˆ›å»ºåœˆå­",
         			     Toast.LENGTH_SHORT).show();
         	}
         	});
@@ -133,19 +133,19 @@ public class AddFriendActivity extends zdnBasicActivity  {
 	}
 
 	public void initPager(int selectedBtn) {
-		// ·Ö±ğÈ¡µÃÕâĞ©×é¼ş
+		// åˆ†åˆ«å–å¾—è¿™äº›ç»„ä»¶
 		bottomBtns[0] = (Button) findViewById(R.id.title_movie_bt);
 		bottomBtns[1] = (Button) findViewById(R.id.title_video_bt);
 
-		// Ñ­»·Îªµ×²¿°´Å¥¼ÓÈë¼àÌı
+		// å¾ªç¯ä¸ºåº•éƒ¨æŒ‰é’®åŠ å…¥ç›‘å¬
 		for (int i = 0; i < bottomBtns.length; i++) {
-			// ÁÙÊ±¶¨Òå¼¸¸ö±äÁ¿, ·ÀÖ¹iÒ»Ö±×ÔÔö
+			// ä¸´æ—¶å®šä¹‰å‡ ä¸ªå˜é‡, é˜²æ­¢iä¸€ç›´è‡ªå¢
 			final int temp = i;
 			if (i == selectedBtn) {
-				// Ñ¡ÖĞµÄ
+				// é€‰ä¸­çš„
 				bottomBtns[i].setBackgroundResource(allBottomsImgsSelected[i]);
 			} else {
-				// Ã»ÓĞÑ¡ÖĞµÄ
+				// æ²¡æœ‰é€‰ä¸­çš„
 				bottomBtns[i].setBackgroundResource(allBottomsImgs[i]);
 			}
 
@@ -170,11 +170,11 @@ public class AddFriendActivity extends zdnBasicActivity  {
 							pageNo = temp;
 							if(pageNo == 0 )
 							{
-								searchContext.setHint("ÇëÊäÈëºÃÓÑºÅÂë/ÊÖ»úºÅ");
+								searchContext.setHint("è¯·è¾“å…¥å¥½å‹å·ç /æ‰‹æœºå·");
 							}
 							else
 							{
-								searchContext.setHint("ÇëÊäÈ¦×ÓºÅÂë");
+								searchContext.setHint("è¯·è¾“åœˆå­å·ç ");
 							}
 							
 							for( int i = 0 ; i < 2 ; i++ )

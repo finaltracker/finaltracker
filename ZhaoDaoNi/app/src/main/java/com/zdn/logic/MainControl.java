@@ -35,7 +35,7 @@ public class MainControl extends HandlerThread {
 	
 	
 	final public int   STATE_NULL	= 0;
-	final public int   STATE_WAIT_QUEUE_REGSIT_RESULT	= STATE_NULL + 1; //²éÑ¯ÊÇ·ñ×æ²áÁË
+	final public int   STATE_WAIT_QUEUE_REGSIT_RESULT	= STATE_NULL + 1; //æŸ¥è¯¢æ˜¯å¦ç¥–å†Œäº†
 	final public int   STATE_WAIT_UI_LOGIN				= STATE_WAIT_QUEUE_REGSIT_RESULT + 1; // wait UI launch login procedure
 	final public int   STATE_WAIT_SERVER_REGSIT_RESULT			= STATE_WAIT_UI_LOGIN + 1; // wait UI launch login procedure
 	final public int   STATE_LOGIN_NORMAL			= STATE_WAIT_SERVER_REGSIT_RESULT + 1; // LOGIN_NORMAL
@@ -158,7 +158,7 @@ public class MainControl extends HandlerThread {
 			}
 			else if( queueRsp == EventDefine.IS_REQIST_RSP_HAS_REGIST )
 			{// 
-				// ÇëÇóºÃÓÑÁĞ±í
+				// è¯·æ±‚å¥½å‹åˆ—è¡¨
 				dataManager.self.preferencesPara.savePhoneNumber( username );
 				mInternetCom.getFriendList(packGetFriendListCommandE() );
 				
@@ -205,7 +205,7 @@ public class MainControl extends HandlerThread {
 		switch (RcvCommand)
 		{
 		case EventDefine.REGIST_RSP:
-			//»ñµÃ×¢²á½á¹û
+			//è·å¾—æ³¨å†Œç»“æœ
 			String rep = e.GetPropertyContext("HTTP_REQ_RSP");
 			
 			
@@ -277,18 +277,18 @@ public class MainControl extends HandlerThread {
 			
 			if( queueRsp == 0 )
 			{
-				Log.d("MainControl" , "add a friend £¬server accept!" );
+				Log.d("MainControl" , "add a friend ï¼Œserver accept!" );
 				//request OK , only need wait the friend feedback
 			}
 			else if (queueRsp == 34 )
 			{
-				Log.d("MainControl" , "add a friend £¬server response: friend have not exist!" );
+				Log.d("MainControl" , "add a friend ï¼Œserver response: friend have not exist!" );
 				//TODO
-				//·¢ËÍ¶ÌĞÅÌáĞÑ
+				//å‘é€çŸ­ä¿¡æé†’
 			}
 			else
 			{
-				Log.d("MainControl" , "add a friend £¬user do not exist" );
+				Log.d("MainControl" , "add a friend ï¼Œuser do not exist" );
 			}
 			
 			break;
@@ -347,7 +347,7 @@ public class MainControl extends HandlerThread {
 		case EventDefine.GET_FRIEND_LIST_RSP:
 		{
 			//update UI
-			//»ñµÃ×¢²á½á¹û
+			//è·å¾—æ³¨å†Œç»“æœ
 			String rep = e.GetPropertyContext("HTTP_REQ_RSP");
 			
 			
@@ -400,7 +400,7 @@ public class MainControl extends HandlerThread {
 			{
 				Log.d("MainControl" , "ADD_A_FRIEND_ANSWER_RSP: " );
 				int queueRsp = parseHttpReqRspStatus(e);
-				// ÇëÇóºÃÓÑÁĞ±í
+				// è¯·æ±‚å¥½å‹åˆ—è¡¨
 				mInternetCom.getFriendList( packGetFriendListCommandE() );
 				
 				if( queueRsp == 0 )
@@ -453,7 +453,7 @@ public class MainControl extends HandlerThread {
 					}
 					else
 					{
-						// ÇëÇóºÃÓÑÁĞ±í
+						// è¯·æ±‚å¥½å‹åˆ—è¡¨
 						mInternetCom.getFriendList( packGetFriendListCommandE() );
 						
 					}
@@ -461,7 +461,7 @@ public class MainControl extends HandlerThread {
 				}
 				else
 				{
-					// ÇëÇóºÃÓÑÁĞ±í
+					// è¯·æ±‚å¥½å‹åˆ—è¡¨
 					mInternetCom.getFriendList( packGetFriendListCommandE() );
 					
 				}
@@ -476,7 +476,7 @@ public class MainControl extends HandlerThread {
 			{
 				Log.d("MainControl" , "SEARCH_FRIEND_OR_CIRCLE_RSP: " );
 				//update UI
-				//»ñµÃ×¢²á½á¹û
+				//è·å¾—æ³¨å†Œç»“æœ
 				String rep = e.GetPropertyContext("HTTP_REQ_RSP");
 				
 				
@@ -810,7 +810,7 @@ public class MainControl extends HandlerThread {
 		e.AddAProperty(new Property("password",passWord ) );
 		e.AddAProperty(new Property("confirmpass",passWord ) );
 		e.AddAProperty(new Property("imsi",dataManager.self.getImsi() ) );
-		e.AddAProperty(new Property("nick_name","Ğ¡ÃÔºı" ) );
+		e.AddAProperty(new Property("nick_name","å°è¿·ç³Š" ) );
 		
 		m.obj = e;
 		MainControl.getInstance().handler.sendMessage(m);

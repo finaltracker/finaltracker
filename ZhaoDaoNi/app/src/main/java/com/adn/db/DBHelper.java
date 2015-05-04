@@ -16,7 +16,7 @@ import android.text.format.Time;
 import android.util.Log;
 
 /**
- * DBHelper driver SQLiteOpenHelper£¬it is a database base class
+ * DBHelper driver SQLiteOpenHelper it is a database base class
 
  */
 public class DBHelper  extends SQLiteOpenHelper{
@@ -193,7 +193,7 @@ public class DBHelper  extends SQLiteOpenHelper{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} finally {
-	            dbFmdb.endTransaction();// ½áÊøÊÂÎñ
+	            dbFmdb.endTransaction();// ç»“æŸäº‹åŠ¡
 	        }
 	    }
 

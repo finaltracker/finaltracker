@@ -54,16 +54,16 @@ public class friendInformationCommentActivity extends zdnBasicActivity {
 		{
 			//send a intent back to main friend information activity
 			
-			//数据是使用Intent返回
+			//鏁版嵁鏄娇鐢↖ntent杩斿洖
             Intent intent = new Intent();
             //Bundle extras = new Bundle();
             //extras.putString("newComment", newComment);
-            //把返回数据存入Intent
+            //鎶婅繑鍥炴暟鎹瓨鍏ntent
             //intent.putExtras(extras);
             intent.putExtra("newComment", newComment );
-            //设置返回数据
+            //璁剧疆杩斿洖鏁版嵁
             this.setResult( FRIEND_INFORMATION_COMMENT_ACTIVITY , intent);
-            //关闭Activity
+            //鍏抽棴Activity
             
 			this.finish();
 			

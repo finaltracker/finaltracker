@@ -2,7 +2,7 @@ package com.zdn.sort;
 
 public class SortModel {
 
-	private String name;   //显示的数�?
+	private String name;
 	private String sortLetters;  //显示数据拼音的首字母
 	private String PhoneNumber;
 	

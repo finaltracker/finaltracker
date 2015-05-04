@@ -18,7 +18,7 @@ import android.widget.TextView;
 public class SideBar extends View {
 	// 触摸事件
 	private OnTouchingLetterChangedListener onTouchingLetterChangedListener;
-	// 26个字�?
+	// 26个字符?
 	public static String[] b = { "?","#","A", "B", "C", "D", "E", "F", "G", "H", "I",
 			"J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V",
 			"W", "X", "Y", "Z"};
@@ -57,12 +57,12 @@ public class SideBar extends View {
 			paint.setTypeface(Typeface.DEFAULT_BOLD);
 			paint.setAntiAlias(true);
 			paint.setTextSize(40);
-			// 选中的状�?
+			// 选中的状态?
 			if (i == choose) {
 				paint.setColor(getResources().getColor(R.color.yellow));
 				paint.setFakeBoldText(true);
 			}
-			// x坐标等于中间-字符串宽度的�?��.
+			// x坐标等于中间-字符串宽度的
 			float xPos = width / 2 - paint.measureText(b[i]) / 2;
 			float yPos = singleHeight * i + singleHeight;
 			canvas.drawText(b[i], xPos, yPos, paint);
@@ -79,7 +79,7 @@ public class SideBar extends View {
 		final float y = event.getY();// 点击y坐标
 		final int oldChoose = choose;
 		final OnTouchingLetterChangedListener listener = onTouchingLetterChangedListener;
-		final int c = (int) (y / getHeight() * b.length);// 点击y坐标�?��总高度的比例*b数组的长度就等于点击b中的个数.
+		final int c = (int) (y / getHeight() * b.length);// 点击y坐标总高度的比例*b数组的长度就等于点击b中的个数.
 
 		switch (action) {
 		case MotionEvent.ACTION_UP:
@@ -115,7 +115,7 @@ public class SideBar extends View {
 	}
 
 	/**
-	 * 向外公开的方�?
+	 * 向外公开的方法
 	 * 
 	 * @param onTouchingLetterChangedListener
 	 */

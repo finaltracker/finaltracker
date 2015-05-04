@@ -104,7 +104,7 @@ public class SettingActivity extends InstrumentedActivity implements OnClickList
 		int startime = startTime.getCurrentHour();
 		int endtime = endTime.getCurrentHour();
 		if (startime > endtime) {
-			Toast.makeText(SettingActivity.this, "�?��时间不能大于结束时间", Toast.LENGTH_SHORT).show();
+			Toast.makeText(SettingActivity.this, "开始时间不能大于结束时间", Toast.LENGTH_SHORT).show();
 			return;
 		}
 		StringBuffer daysSB = new StringBuffer();

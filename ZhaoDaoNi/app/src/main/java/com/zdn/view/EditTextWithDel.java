@@ -58,7 +58,7 @@ public class EditTextWithDel extends EditText {
                 setDrawable();
         }
         
-        //ÉèÖÃÉ¾³ýÍ¼Æ¬
+        //è®¾ç½®åˆ é™¤å›¾ç‰‡
         private void setDrawable() {
                 if(length() < 1)
                         setCompoundDrawablesWithIntrinsicBounds(null, null, imgInable, null);
@@ -66,7 +66,7 @@ public class EditTextWithDel extends EditText {
                         setCompoundDrawablesWithIntrinsicBounds(null, null, imgAble, null);
         }
         
-         // ´¦ÀíÉ¾³ýÊÂ¼þ
+         // å¤„ç†åˆ é™¤äº‹ä»¶
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (imgAble != null && event.getAction() == MotionEvent.ACTION_UP) {

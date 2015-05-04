@@ -280,23 +280,23 @@ public class chatActivity extends FragmentActivity {
 	}
 	
 	@Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        super.onOptionsItemSelected(item);
-        switch(item.getItemId())//得到被点击的item的itemId
-        {
-        case R.id.guyDetail: //
-        	Intent intent = new Intent(this, friendInformationDetailActivity.class);
-        	 
-    		intent.putExtra("teamPosition", teamPosition);
-    		intent.putExtra("memberPosition", memberPosition);
-    		// 调用startActivityForResult方法  
-    		startActivity(intent); 
-            break;
+	public boolean onOptionsItemSelected(MenuItem item) {
+		super.onOptionsItemSelected(item);
+		switch(item.getItemId())//寰楀埌琚偣鍑荤殑item鐨刬temId
+		{
+			case R.id.guyDetail: //
+				Intent intent = new Intent(this, friendInformationDetailActivity.class);
 
-        }
-        return true;
-    }
-	
+				intent.putExtra("teamPosition", teamPosition);
+				intent.putExtra("memberPosition", memberPosition);
+				// 璋冪敤startActivityForResult鏂规硶
+				startActivity(intent);
+				break;
+
+		}
+		return true;
+	}
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		 super.onCreateOptionsMenu(menu);

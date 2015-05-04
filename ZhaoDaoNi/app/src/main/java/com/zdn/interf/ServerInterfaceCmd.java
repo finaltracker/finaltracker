@@ -6,29 +6,29 @@ import com.zdn.CommandParser.CommandE;
 
 public interface ServerInterfaceCmd {
 
-	/* Á÷³Ì¹ÜÀí */
+	/* æµç¨‹ç®¡ç† */
 	public int registReq( CommandE e  );
 	
-	//ÊÇ·ñÒÑ¾­×¢²áÁË
+	//æ˜¯å¦å·²ç»æ³¨å†Œäº†
 	public void isRegist( String imsi );
 	
 	public void login( CommandE e );
-	//Ôö¼ÓÒ»¸öºÃÓÑ
+	//å¢åŠ ä¸€ä¸ªå¥½å‹
 	public int addA_Friend( CommandE e );
-	//ºÃÓÑ¼ÓÎÒµÄ»Ø¸´
+	//å¥½å‹åŠ æˆ‘çš„å›å¤
 	public void friendAddMeAnswer( CommandE e );
-	//»ñÈ¡ºÃÓÑÁĞ±í
+	//è·å–å¥½å‹åˆ—è¡¨
 	public void getFriendList( CommandE e );
-	//¸üĞÂºÃÓÑĞÅÏ¢
+	//æ›´æ–°å¥½å‹ä¿¡æ¯
 	public void updateFriendInfomation( CommandE e);
 	
-	//É¾³ıÒ»¸öºÃÓÑ
+	//åˆ é™¤ä¸€ä¸ªå¥½å‹
 	public void deleteFriend( CommandE e );
 	
-	//Ïò·şÎñÆ÷·¢ËÍ×Ô¼ºµÄGPSĞÅÏ¢
+	//å‘æœåŠ¡å™¨å‘é€è‡ªå·±çš„GPSä¿¡æ¯
 	public void updateGpsInfo( String phoneNumber , int longitude, int latitude );
 	
-	//Ïò·şÎñÆ÷ÇëÇófriendµÄGPSĞÅÏ¢
+	//å‘æœåŠ¡å™¨è¯·æ±‚friendçš„GPSä¿¡æ¯
 	public void requestFriendGpsInfo( String phoneNumber , int longitude, int latitude );
 	
 	public void searchFirendOrCircle(  CommandE e );

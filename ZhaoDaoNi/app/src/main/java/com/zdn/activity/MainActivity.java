@@ -169,7 +169,7 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
      MenuItem removeItem=menu.findItem(REMOVE_TODO);
      removeItem.setTitle(removeTitle);
      
-     //Ö»ÓĞµ±ÔÚÌí¼ÓµÄ×´Ì¬ÏÂ£¨addingNew=true£©»òÕßListView±»selectedµÄÇé¿öÏÂREMOVE_TODO²Ëµ¥Ïî²Å¿É¼û
+    //åªæœ‰å½“åœ¨æ·»åŠ çš„çŠ¶æ€ä¸‹ï¼ˆaddingNew=trueï¼‰æˆ–è€…ListViewè¢«selectedçš„æƒ…å†µä¸‹REMOVE_TODOèœå•é¡¹æ‰å¯è§
      removeItem.setVisible(addingNew||idx>-1);
      */
      return true;
@@ -295,7 +295,7 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 			else if (msg.what == EVENT_UI_REGIST_RESULT) 
 			{ 
 				if( Zhuce.getInstance() != null )
-				{ // ï¿½ï¿½×¢ï¿½ï¿½ï¿½ï¿½æ´¦ï¿½ï¿?
+				{ // ï¿½ï¿½×¢ï¿½ï¿½ï¿½ï¿½æ´¦ï¿½ï¿½?
 					Zhuce.getInstance().registFeedback(msg.arg1 , (String)msg.obj );
 				}
 			} 
@@ -396,18 +396,18 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 
     class DropDownListenser implements OnNavigationListener
     {
-        // ?????SpinnerAdapter????¦Ì????????
+
         String[] listNames = getResources().getStringArray(R.array.plannets_array);
 
-        /* ????????????????????Activity?§Ö??????????????Fragment */
+
         public boolean onNavigationItemSelected(int itemPosition, long itemId)
         {
-            // ?????????Fragment
+
         	/*
             StudentInfo student = new StudentInfo();
             FragmentManager manager = getFragmentManager();
             FragmentTransaction transaction = manager.beginTransaction();
-            // ??Activity?§Ö??????I????????Fragment
+
             transaction.replace(R.id.context, student, listNames[itemPosition]);
             transaction.commit();
             */

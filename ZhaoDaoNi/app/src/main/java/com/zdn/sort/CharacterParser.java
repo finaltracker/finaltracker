@@ -1,13 +1,13 @@
 /*
  * Filename	CharacterParser.java
- * Company	上海乐问-浦东分公司�?
+ * Company
  * @author	LuRuihui
  * @version	0.1
  */
 package com.zdn.sort;
 
 /**
- * Java汉字转换为拼�?
+ * Java汉字转换为拼音
  * 
  */
 public class CharacterParser {
@@ -73,7 +73,7 @@ public class CharacterParser {
 		this.resource = resource;
 	}
 
-	/** * 汉字转成ASCII�?* * @param chs * @return */
+	/** * 汉字转成ASCII  */
 	private int getChsAscii(String chs) {
 		int asc = 0;
 		try {

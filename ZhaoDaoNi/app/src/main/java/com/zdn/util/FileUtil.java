@@ -101,7 +101,7 @@ public class FileUtil {
     }
 
     /*
-     * 采用了新的办法获取APK图标，之前的失败是因为android中存在的�?��BUG,通过
+     * 采用了新的办法获取APK图标，之前的失败是因为android中存在的BUG,通过
      * appInfo.publicSourceDir = apkPath;来修正这个问题，详情参见:
      * http://code.google.com/p/android/issues/detail?id=9151
      */
@@ -184,10 +184,10 @@ public class FileUtil {
                 // 获取SDCard上每个block的SIZE
                 long nBlocSize = statfs.getBlockSize();
 
-                // 获取可供程序使用的Block的数�?
+                // 获取可供程序使用的Block的数
                 long nAvailaBlock = statfs.getAvailableBlocks();
 
-                // 获取剩下的所有Block的数�?包括预留的一般程序无法使用的�?
+                // 获取剩下的所有Block的数包括预留的一般程序无法使用的
                 long nFreeBlock = statfs.getFreeBlocks();
 
                 SDCardInfo info = new SDCardInfo();

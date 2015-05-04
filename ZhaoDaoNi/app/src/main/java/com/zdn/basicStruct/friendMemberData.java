@@ -69,7 +69,7 @@ public class friendMemberData {
 	
 	
 	
-	//从数据库得到basic后要填充其它内容时调用此函数
+	//浠庢暟鎹簱寰楀埌basic鍚庤濉厖鍏跺畠鍐呭鏃惰皟鐢ㄦ鍑芥暟
 	public void rebuildFriendMemberData()
 	{
 		picture = null;

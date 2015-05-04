@@ -30,7 +30,7 @@ public class SystemMethod {
 	}
 	
 	/**
-	 * 图片变圆�?
+	 *
 	 * @param bitmap
 	 * @param pixels
 	 * @return

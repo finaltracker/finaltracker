@@ -11,17 +11,17 @@ import android.view.View;
 public class GifView extends View{
 private long movieStart;
 private Movie movie;
-    //´Ë´¦±ØĞëÖØĞ´¸Ã¹¹Ôì·½·¨
+    //æ­¤å¤„å¿…é¡»é‡å†™è¯¥æ„é€ æ–¹æ³•
 public GifView(Context context,AttributeSet attributeSet) {
 	super(context,attributeSet);
-	//ÒÔÎÄ¼şÁ÷£¨InputStream£©¶ÁÈ¡½øgifÍ¼Æ¬×ÊÔ´
+	//ä»¥æ–‡ä»¶æµï¼ˆInputStreamï¼‰è¯»å–è¿›gifå›¾ç‰‡èµ„æº
 		movie=Movie.decodeStream(getResources().openRawResource(R.drawable.fly_bird));
 	}
 	 
 	@Override
 		protected void onDraw(Canvas canvas) {
 		long curTime=android.os.SystemClock.uptimeMillis();
-		//µÚÒ»´Î²¥·Å
+		//ç¬¬ä¸€æ¬¡æ’­æ”¾
 		if (movieStart == 0) {
 		movieStart = curTime;
 		}
@@ -30,7 +30,7 @@ public GifView(Context context,AttributeSet attributeSet) {
 		int relTime = (int) ((curTime-movieStart)%duraction);
 		movie.setTime(relTime);
 		movie.draw(canvas, 0, 0);
-		//Ç¿ÖÆÖØ»æ
+		//å¼ºåˆ¶é‡ç»˜
 		invalidate();
 		}
 		super.onDraw(canvas);

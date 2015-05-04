@@ -46,13 +46,13 @@ public class friendInformationGroupActivity extends zdnBasicActivity {
 
 		//send a intent back to main friend information activity
 		
-		//数据是使用Intent返回
+		//鏁版嵁鏄娇鐢↖ntent杩斿洖
         Intent intent = new Intent();
-        //把返回数据存入Intent
+        //鎶婅繑鍥炴暟鎹瓨鍏ntent
         intent.putExtra("newGroup", fimga.getSelectedGroup() );
-        //设置返回数据
+        //璁剧疆杩斿洖鏁版嵁
         this.setResult( FRIEND_INFORMATION_GROUP_ACTIVITY , intent);
-        //关闭Activity
+        //鍏抽棴Activity
         
 		this.finish();
 	}

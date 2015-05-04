@@ -34,7 +34,7 @@ public class ExampleUtil {
         return false;
     }
     
-    // 校验Tag Alias 只能是数�?英文字母和中�?
+    // 校验Tag Alias 只能是数 英文字母和中文
     public static boolean isValidTagAndAlias(String s) {
         Pattern p = Pattern.compile("^[\u4E00-\u9FA50-9a-zA-Z_-]{0,}$");
         Matcher m = p.matcher(s);
@@ -62,7 +62,7 @@ public class ExampleUtil {
         return appKey;
     }
     
-    // 取得版本�?
+    // 取得版本
     public static String GetVersion(Context context) {
 		try {
 			PackageInfo manager = context.getPackageManager().getPackageInfo(

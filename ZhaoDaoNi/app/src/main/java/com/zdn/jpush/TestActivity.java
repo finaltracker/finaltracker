@@ -13,7 +13,7 @@ public class TestActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         TextView tv = new TextView(this);
-        tv.setText("用户自定义打�?��Activity");
+        tv.setText("用户自定义Activity");
         Intent intent = getIntent();
         if (null != intent) {
 	        Bundle bundle = getIntent().getExtras();
