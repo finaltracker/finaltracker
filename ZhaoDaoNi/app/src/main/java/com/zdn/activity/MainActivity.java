@@ -1,22 +1,21 @@
 package com.zdn.activity;
 
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 import com.qq.test.SDManager;
 import com.zdn.R;
-import com.zdn.CommandParser.CommandE;
-import com.zdn.CommandParser.Property;
+
 import com.zdn.data.dataManager;
-import com.zdn.event.EventDefine;
 import com.zdn.fragment.NavigationDrawerFragment;
 import com.zdn.jpush.ExampleUtil;
 import com.zdn.logic.MainControl;
 
 
 import android.app.ActionBar;
-import android.app.ActionBar.OnNavigationListener;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -31,6 +30,7 @@ import android.os.HandlerThread;
 import android.os.Message;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -39,14 +39,18 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.SpinnerAdapter;
 import android.widget.Toast;
+
+import br.liveo.interfaces.NavigationLiveoListener;
+import br.liveo.navigationliveo.NavigationLiveo;
 import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
 
-public class MainActivity extends Activity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+public class MainActivity extends NavigationLiveo implements NavigationLiveoListener {
 
 	//for receive customer msg from jpush server
 	private MessageReceiver mMessageReceiver;
-	
+	public List<String> mListNameItem;
+
 	public static final String MESSAGE_RECEIVED_ACTION = "com.spirit.zdn.MESSAGE_RECEIVED_ACTION";
 	public static final String KEY_TITLE = "title";
 	public static final String KEY_MESSAGE = "message";
@@ -76,48 +80,90 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 	{
 		me = this; // 
 	}
+
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
-		
+	public void onUserInformation() {
+		//User information here
+		this.mUserName.setText("Rudson Lima");
+		this.mUserEmail.setText("rudsonlive@gmail.com");
+		this.mUserPhoto.setImageResource(R.drawable.ic_rudsonlive);
+		this.mUserBackground.setImageResource(R.drawable.ic_user_background); // TODO dig10
+
+
+
+	}
+
+	@Override
+	public void onInt(Bundle savedInstanceState) {
+		//Creation of the list items is here
+
+		// set listener {required}
+		this.setNavigationListener(this);
+
+		if (savedInstanceState == null) {
+			//First item of the position selected from the list
+			this.setDefaultStartPositionNavigation(1);
+		}
+
+		// name of the list items
+		mListNameItem = new ArrayList<>();
+		mListNameItem.add(0, "inbox");
+		mListNameItem.add(1, "starred");
+		mListNameItem.add(2, "sent_mail");
+		mListNameItem.add(3, "drafts");
+		mListNameItem.add(4, "more_markers"); //This item will be a subHeader
+		mListNameItem.add(5, "trash");
+		mListNameItem.add(6, "spam");
+
+		// icons list items
+		List<Integer> mListIconItem = new ArrayList<>();
+		mListIconItem.add(0, R.drawable.ic_inbox_black_24dp);
+		mListIconItem.add(1, R.drawable.ic_star_black_24dp); //Item no icon set 0
+		mListIconItem.add(2, R.drawable.ic_send_black_24dp); //Item no icon set 0
+		mListIconItem.add(3, R.drawable.ic_drafts_black_24dp);
+		mListIconItem.add(4, 0); //When the item is a subHeader the value of the icon 0
+		mListIconItem.add(5, R.drawable.ic_delete_black_24dp);
+		mListIconItem.add(6, R.drawable.ic_report_black_24dp);
+
+		//{optional} - Among the names there is some subheader, you must indicate it here
+		List<Integer> mListHeaderItem = new ArrayList<>();
+		mListHeaderItem.add(4);
+
+		//{optional} - Among the names there is any item counter, you must indicate it (position) and the value here
+		SparseIntArray mSparseCounterItem = new SparseIntArray(); //indicate all items that have a counter
+		mSparseCounterItem.put(0, 7);
+		mSparseCounterItem.put(1, 123);
+		mSparseCounterItem.put(6, 250);
+
+		//If not please use the FooterDrawer use the setFooterVisible(boolean visible) method with value false
+		this.setFooterInformationDrawer("settings", R.drawable.ic_settings_black_24dp);
+
+		this.setNavigationAdapter(mListNameItem, mListIconItem, mListHeaderItem, mSparseCounterItem);
+/*
 		getActionBar().setDisplayShowTitleEnabled(false);
 		getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-		SpinnerAdapter mSpinnerAdapter = ArrayAdapter.createFromResource(this, 
+		SpinnerAdapter mSpinnerAdapter = ArrayAdapter.createFromResource(this,
 				R.array.plannets_array, android.R.layout.simple_spinner_dropdown_item);
-                getActionBar().setListNavigationCallbacks(mSpinnerAdapter, new DropDownListenser());
-		
-		mNavigationDrawerFragment = (NavigationDrawerFragment) getFragmentManager()
-				.findFragmentById(R.id.navigation_drawer);
+		getActionBar().setListNavigationCallbacks(mSpinnerAdapter, new DropDownListenser());
+*/
+
 		mTitle = getTitle();
 
-		// Set up the drawer.
-		mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
-				(DrawerLayout) findViewById(R.id.drawer_layout));
 
-		
 		//for test
-			SDManager manager = new SDManager(this);
-			manager.moveUserIcon();
+		SDManager manager = new SDManager(this);
+		manager.moveUserIcon();
 
 		control = new MainControl("MainControl" , this );
 		this.setTag( dataManager.self.getImsi());
 		control.start();
 
 		registerMessageReceiver();  // used for receive msg
-		
+
 	}
+
 	static public MainActivity getInstance() { return me; }
-	@Override
-	//list item clicked 
-	public void onNavigationDrawerItemSelected(int position) {
-		// update the main content by replacing fragments
-		FragmentManager fragmentManager = getFragmentManager();
-		fragmentManager
-				.beginTransaction()
-				.replace(R.id.container,
-						PlaceholderFragment.newInstance(position + 1)).commit();
-	}
+
 
 	public void onSectionAttached(int number) {
 		switch (number) {
@@ -132,49 +178,30 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 			break;
 		}
 	}
-
 	public void restoreActionBar() {
-		/*
-		ActionBar actionBar = getActionBar();
-		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-		actionBar.setDisplayShowTitleEnabled(true);
-		actionBar.setTitle(mTitle);
-		*/
-		ActionBar actionBar = getActionBar();
+		android.support.v7.app.ActionBar actionBar = getSupportActionBar();
 		actionBar.setDisplayShowTitleEnabled(false);
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-		SpinnerAdapter mSpinnerAdapter = ArrayAdapter.createFromResource(this, 
+		SpinnerAdapter mSpinnerAdapter = ArrayAdapter.createFromResource(this,
 				R.array.plannets_array, android.R.layout.simple_spinner_dropdown_item);
-		actionBar.setListNavigationCallbacks(mSpinnerAdapter, new DropDownListenser());
+		//actionBar.setListNavigationCallbacks(mSpinnerAdapter, new DropDownListenser());
 	}
-
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		if (!mNavigationDrawerFragment.isDrawerOpen()) {
+		//if (!mNavigationDrawerFragment.isDrawerOpen()) {
 			// Only show items in the action bar relevant to this screen
 			// if the drawer is not showing. Otherwise, let the drawer
 			// decide what to show in the action bar.
+			super.onCreateOptionsMenu(menu);
 			getMenuInflater().inflate(R.menu.main, menu);
+			menu.findItem(R.id.contact_friend).setVisible(true);
+			menu.findItem(R.id.action_add).setVisible(true);
+			menu.findItem(R.id.action_settings).setVisible(true);
 			restoreActionBar();
 			return true;
-		}
-		return super.onCreateOptionsMenu(menu);
+		//}
+		//return super.onCreateOptionsMenu(menu);
 	}
-	
-	@Override
-    public boolean onPrepareOptionsMenu(Menu menu){
-     
-     super.onPrepareOptionsMenu(menu);
-     /*
-     MenuItem removeItem=menu.findItem(REMOVE_TODO);
-     removeItem.setTitle(removeTitle);
-     
-    //只有当在添加的状态下（addingNew=true）或者ListView被selected的情况下REMOVE_TODO菜单项才可见
-     removeItem.setVisible(addingNew||idx>-1);
-     */
-     return true;
-     
-    }
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -206,6 +233,47 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 		}
 
 		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	public void onItemClickNavigation(int position, int layoutContainerId) {
+		//Toast.makeText(this, "onItemClickNavigation", Toast.LENGTH_SHORT).show();
+		FragmentManager fragmentManager = getFragmentManager();
+		fragmentManager
+				.beginTransaction()
+				.replace(R.id.container,
+						PlaceholderFragment.newInstance(position + 1)).commit();
+	}
+
+	@Override
+	public void onPrepareOptionsMenuNavigation(Menu menu, int position, boolean visible) {
+		//hide the menu when the navigation is opens
+		/*
+		switch (position) {
+			case 0:
+				menu.findItem(R.id.contact_friend).setVisible(!visible);
+				menu.findItem(R.id.action_add).setVisible(!visible);
+				menu.findItem(R.id.action_settings).setVisible(!visible);
+				break;
+
+			case 1:
+				menu.findItem(R.id.contact_friend).setVisible(!visible);
+				menu.findItem(R.id.action_add).setVisible(!visible);
+				menu.findItem(R.id.action_settings).setVisible(!visible);
+				break;
+		}
+		*/
+	}
+
+	@Override
+	public void onClickFooterItemNavigation(View v) {
+		Toast.makeText(this, "onClickFooterItemNavigation", Toast.LENGTH_SHORT).show();
+	}
+
+	@Override
+	public void onClickUserPhotoNavigation(View v) {
+		//user photo onClick
+		Toast.makeText(this, "onClickUserPhotoNavigation", Toast.LENGTH_SHORT).show();
 	}
 
 	/**
@@ -394,7 +462,7 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
      */
 
 
-    class DropDownListenser implements OnNavigationListener
+    class DropDownListenser implements ActionBar.OnNavigationListener
     {
 
         String[] listNames = getResources().getStringArray(R.array.plannets_array);

@@ -4,17 +4,18 @@
 
     <item android:id="@+id/contact_friend"
           android:icon="@drawable/contact_friend"
-          android:title="Contract"
-		  android:showAsAction="ifRoom|withText" />
+           android:showAsAction="always"
+            android:title="@string/Contract"
+        />
     <item
         android:id="@+id/action_add"
-        android:showAsAction="ifRoom"
+        android:showAsAction="always"
         android:icon="@drawable/ic_add_contact_holo_dark"
         android:title="@string/action_add"/>
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
-        android:showAsAction="never"
+        android:showAsAction="always"
         android:title="@string/action_settings"/>
 
 </menu>

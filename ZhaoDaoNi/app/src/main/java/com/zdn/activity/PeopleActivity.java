@@ -250,6 +250,7 @@ public class PeopleActivity extends zdnBasicActivity implements ExpandableListVi
 		case R.id.action_settings:
 			
 			break;
+
 		case R.id.action_add:
 			startActivity( new Intent("com.zdn.activity.AddFriendActivity.ACTION") );
 			break;
