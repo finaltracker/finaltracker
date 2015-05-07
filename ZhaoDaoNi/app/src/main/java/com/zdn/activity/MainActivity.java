@@ -10,7 +10,7 @@ import com.qq.test.SDManager;
 import com.zdn.R;
 
 import com.zdn.data.dataManager;
-import com.zdn.fragment.NavigationDrawerFragment;
+import com.zdn.fragment.MapFragment;
 import com.zdn.jpush.ExampleUtil;
 import com.zdn.logic.MainControl;
 
@@ -24,11 +24,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
-import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.util.SparseIntArray;
 import android.view.LayoutInflater;
@@ -45,7 +45,7 @@ import br.liveo.navigationliveo.NavigationLiveo;
 import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
 
-public class MainActivity extends NavigationLiveo implements NavigationLiveoListener {
+public class MainActivity extends NavigationLiveo implements NavigationLiveoListener , MapFragment.OnFragmentInteractionListener {
 
 	//for receive customer msg from jpush server
 	private MessageReceiver mMessageReceiver;
@@ -60,11 +60,6 @@ public class MainActivity extends NavigationLiveo implements NavigationLiveoList
 	public static final int EVENT_UI_LOG_IN_START		=	1;
 	public static final int EVENT_UI_REGIST_RESULT		=	EVENT_UI_LOG_IN_START+1;
 	public static final int MSG_SET_TAGS				=  EVENT_UI_REGIST_RESULT +1 ;
-	/**
-	 * Fragment managing the behaviors, interactions and presentation of the
-	 * navigation drawer.
-	 */
-	private NavigationDrawerFragment mNavigationDrawerFragment;
 
 	/**
 	 * Used to store the last screen title. For use in
@@ -87,7 +82,7 @@ public class MainActivity extends NavigationLiveo implements NavigationLiveoList
 		this.mUserName.setText("Rudson Lima");
 		this.mUserEmail.setText("rudsonlive@gmail.com");
 		this.mUserPhoto.setImageResource(R.drawable.ic_rudsonlive);
-		this.mUserBackground.setImageResource(R.drawable.ic_user_background); // TODO dig10
+		this.mUserBackground.setImageResource(R.drawable.ic_user_background);
 
 
 
@@ -178,6 +173,7 @@ public class MainActivity extends NavigationLiveo implements NavigationLiveoList
 			break;
 		}
 	}
+
 	public void restoreActionBar() {
 		android.support.v7.app.ActionBar actionBar = getSupportActionBar();
 		actionBar.setDisplayShowTitleEnabled(false);
@@ -192,13 +188,18 @@ public class MainActivity extends NavigationLiveo implements NavigationLiveoList
 			// Only show items in the action bar relevant to this screen
 			// if the drawer is not showing. Otherwise, let the drawer
 			// decide what to show in the action bar.
-			super.onCreateOptionsMenu(menu);
-			getMenuInflater().inflate(R.menu.main, menu);
-			menu.findItem(R.id.contact_friend).setVisible(true);
-			menu.findItem(R.id.action_add).setVisible(true);
-			menu.findItem(R.id.action_settings).setVisible(true);
-			restoreActionBar();
-			return true;
+			//
+		super.onCreateOptionsMenu(menu);
+		getMenuInflater().inflate(R.menu.main, menu);
+		MenuItem it = menu.findItem(R.id.contact_friend);
+		it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+		it =menu.findItem(R.id.action_add).setVisible(true);
+		it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+		it =menu.findItem(R.id.action_settings).setVisible(true);
+		it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+		restoreActionBar();
+
+		return true;
 		//}
 		//return super.onCreateOptionsMenu(menu);
 	}
@@ -241,28 +242,19 @@ public class MainActivity extends NavigationLiveo implements NavigationLiveoList
 		FragmentManager fragmentManager = getFragmentManager();
 		fragmentManager
 				.beginTransaction()
-				.replace(R.id.container,
-						PlaceholderFragment.newInstance(position + 1)).commit();
+				.replace(layoutContainerId,
+						new MapFragment() ).commit();
 	}
 
 	@Override
 	public void onPrepareOptionsMenuNavigation(Menu menu, int position, boolean visible) {
 		//hide the menu when the navigation is opens
-		/*
-		switch (position) {
-			case 0:
-				menu.findItem(R.id.contact_friend).setVisible(!visible);
-				menu.findItem(R.id.action_add).setVisible(!visible);
-				menu.findItem(R.id.action_settings).setVisible(!visible);
-				break;
 
-			case 1:
-				menu.findItem(R.id.contact_friend).setVisible(!visible);
-				menu.findItem(R.id.action_add).setVisible(!visible);
-				menu.findItem(R.id.action_settings).setVisible(!visible);
-				break;
-		}
-		*/
+		menu.findItem(R.id.contact_friend).setVisible(true);
+		menu.findItem(R.id.action_add).setVisible(true);
+		menu.findItem(R.id.action_settings).setVisible(true);
+
+
 	}
 
 	@Override
@@ -274,6 +266,11 @@ public class MainActivity extends NavigationLiveo implements NavigationLiveoList
 	public void onClickUserPhotoNavigation(View v) {
 		//user photo onClick
 		Toast.makeText(this, "onClickUserPhotoNavigation", Toast.LENGTH_SHORT).show();
+	}
+
+	@Override
+	public void onFragmentInteraction(Uri uri) {
+
 	}
 
 	/**
@@ -305,6 +302,7 @@ public class MainActivity extends NavigationLiveo implements NavigationLiveoList
 				Bundle savedInstanceState) {
 			View rootView = inflater.inflate(R.layout.fragment_main, container,
 					false);
+
 			return rootView;
 		}
 
