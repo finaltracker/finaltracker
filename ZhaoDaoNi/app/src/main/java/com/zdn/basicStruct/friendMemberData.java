@@ -3,8 +3,8 @@ package com.zdn.basicStruct;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.adn.db.DBHelper;
-import com.adn.db.DBManager;
+import com.zdn.db.DBHelper;
+import com.zdn.db.DBManager;
 import com.zdn.chat.ZdnMessage;
 import com.zdn.data.dataManager;
 import com.zdn.util.ImgUtil;

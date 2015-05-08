@@ -4,8 +4,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import com.adn.db.DBHelper;
-import com.adn.db.DBManager;
+import com.zdn.db.DBHelper;
+import com.zdn.db.DBManager;
 
 public class ZdnMessage {
 	public static int MSG_TYPE_TEXT 	= 0;

@@ -1,6 +1,6 @@
 package com.zdn;
 
-import com.adn.db.DBManager;
+import com.zdn.db.DBManager;
 import com.zdn.util.FileUtil;
 
 import cn.jpush.android.api.JPushInterface;
