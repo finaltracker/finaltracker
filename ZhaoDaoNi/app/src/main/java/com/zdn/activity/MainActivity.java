@@ -174,14 +174,14 @@ public class MainActivity extends NavigationLiveo implements NavigationLiveoList
 		}
 	}
 
-	public void restoreActionBar() {
-		android.support.v7.app.ActionBar actionBar = getSupportActionBar();
-		actionBar.setDisplayShowTitleEnabled(false);
-		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-		SpinnerAdapter mSpinnerAdapter = ArrayAdapter.createFromResource(this,
-				R.array.plannets_array, android.R.layout.simple_spinner_dropdown_item);
-		//actionBar.setListNavigationCallbacks(mSpinnerAdapter, new DropDownListenser());
-	}
+//	public void restoreActionBar() {
+//		android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+//		actionBar.setDisplayShowTitleEnabled(false);
+//		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+//		SpinnerAdapter mSpinnerAdapter = ArrayAdapter.createFromResource(this,
+//				R.array.plannets_array, android.R.layout.simple_spinner_dropdown_item);
+//		//actionBar.setListNavigationCallbacks(mSpinnerAdapter, new DropDownListenser());
+//	}
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		//if (!mNavigationDrawerFragment.isDrawerOpen()) {
@@ -197,7 +197,7 @@ public class MainActivity extends NavigationLiveo implements NavigationLiveoList
 		it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 		it =menu.findItem(R.id.action_settings).setVisible(true);
 		it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-		restoreActionBar();
+	//	restoreActionBar();
 
 		return true;
 		//}
