@@ -17,10 +17,12 @@ import com.zdn.chat.ZdnMessage;
 import com.zdn.data.dataManager;
 import com.zdn.event.EventDefine;
 import com.zdn.logic.InternetComponent;
+import com.zdn.receiver.NetworkReceiver;
 import com.zdn.util.ObjectConvertTool;
 
 import de.greenrobot.event.EventBus;
 
+import android.content.BroadcastReceiver;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
@@ -45,7 +47,7 @@ public class MainControl extends HandlerThread {
 	final public int COMMAND_NULL	= 0;
 	
 	static public final int SEND_MESSAGE_TO_SERVER_RSP = 1;
-
+	private NetworkReceiver networkReceiver = null;
 	
 	
 	public MainControl(String name ,MainActivity ma ) {
@@ -55,7 +57,8 @@ public class MainControl extends HandlerThread {
 		dataManager.init(mMainActivity);
 
 		me = this;
-		
+		networkReceiver=new NetworkReceiver( ma );
+
 	}
 
 
