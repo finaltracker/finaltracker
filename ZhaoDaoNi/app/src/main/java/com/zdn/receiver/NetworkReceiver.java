@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
 
 
 import com.zdn.basicStruct.networkStatusEvent;
@@ -17,6 +18,7 @@ public class NetworkReceiver  extends BroadcastReceiver {
 	private Context context;
 	private static boolean gprsConnect;
 	private static boolean wifiConnect;
+	private boolean registed = false;
 
 	public NetworkReceiver( Context context )
 	{
@@ -43,17 +45,15 @@ public class NetworkReceiver  extends BroadcastReceiver {
 			wifiConnect = false;
 		}
 
-		IntentFilter intentfilter = new IntentFilter();
-		intentfilter.addAction(android.net.ConnectivityManager.CONNECTIVITY_ACTION);
 
-		context.registerReceiver( this, intentfilter);
+		regist();
 
 
 	}
 
 	@Override
 	protected void finalize() throws Throwable {
-		context.unregisterReceiver(this);
+		unregist();
 		super.finalize();
 	}
 
@@ -87,7 +87,7 @@ public class NetworkReceiver  extends BroadcastReceiver {
 
 	}
 
-	static boolean isConnect()
+	static public boolean isConnect()
 	{
 		if( gprsConnect || wifiConnect )
 		{
@@ -109,4 +109,25 @@ public class NetworkReceiver  extends BroadcastReceiver {
 		return wifiConnect;
 	}
 
+	public void regist()
+	{
+		if( !registed )
+		{
+			Log.d("NetworkReceiver", "registerReceiver");
+			IntentFilter intentfilter = new IntentFilter();
+			intentfilter.addAction(android.net.ConnectivityManager.CONNECTIVITY_ACTION);
+			context.registerReceiver(this, intentfilter);
+			registed = true;
+		}
+	}
+	public void unregist()
+	{
+		if( registed )
+		{
+			Log.d("NetworkReceiver","unregisterReceiver"  );
+
+			context.unregisterReceiver(this);
+			registed = false;
+		}
+	}
 }

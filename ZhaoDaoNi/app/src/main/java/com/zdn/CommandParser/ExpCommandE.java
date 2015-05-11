@@ -67,7 +67,7 @@ public class ExpCommandE extends CommandE
 	}
 	
 
-	public void AddAExpProperty( Property CmdProperty)
+	public void AddAExpProperty( Property CmdProperty )
 	{
 		ExpPropertyList.add(CmdProperty);
 	}

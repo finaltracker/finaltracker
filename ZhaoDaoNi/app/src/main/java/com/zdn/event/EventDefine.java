@@ -1,7 +1,8 @@
 package com.zdn.event;
 
 public class EventDefine {
-	public static final int CHECK_REGIST_REQ	= 1;
+	public static final int COMMAND_NETWORK_STATE	= 1;
+	public static final int CHECK_REGIST_REQ = COMMAND_NETWORK_STATE+1;
 	public static final int CHECK_REGIST_RSP	= CHECK_REGIST_REQ+1;
 	public static final int REGIST_REQ			= CHECK_REGIST_RSP+1;
 	public static final int REGIST_RSP			= REGIST_REQ+1;

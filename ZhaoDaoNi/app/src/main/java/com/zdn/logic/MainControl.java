@@ -13,16 +13,16 @@ import com.zdn.basicStruct.SendMessageRspEvent;
 import com.zdn.basicStruct.friendMemberData;
 import com.zdn.basicStruct.friendMemberDataBasic;
 import com.zdn.basicStruct.getMessageRspEvent;
+import com.zdn.basicStruct.networkStatusEvent;
 import com.zdn.chat.ZdnMessage;
 import com.zdn.data.dataManager;
 import com.zdn.event.EventDefine;
-import com.zdn.logic.InternetComponent;
 import com.zdn.receiver.NetworkReceiver;
 import com.zdn.util.ObjectConvertTool;
 
 import de.greenrobot.event.EventBus;
 
-import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
@@ -30,7 +30,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 public class MainControl extends HandlerThread {
-	MainActivity		mMainActivity;
+	Context mContext;
 	
 	InternetComponent 	mInternetCom = null ;
 	static public  MainControl me = null;
@@ -41,8 +41,11 @@ public class MainControl extends HandlerThread {
 	final public int   STATE_WAIT_UI_LOGIN				= STATE_WAIT_QUEUE_REGSIT_RESULT + 1; // wait UI launch login procedure
 	final public int   STATE_WAIT_SERVER_REGSIT_RESULT			= STATE_WAIT_UI_LOGIN + 1; // wait UI launch login procedure
 	final public int   STATE_LOGIN_NORMAL			= STATE_WAIT_SERVER_REGSIT_RESULT + 1; // LOGIN_NORMAL
+	final public int   STATE_OUT_OF_NETWORK           = STATE_LOGIN_NORMAL + 1;   // 没有网络
 
-	
+	int    preState = 0;
+	int    state = 0;
+
 	String TAG = "MainControl";
 	final public int COMMAND_NULL	= 0;
 	
@@ -50,32 +53,73 @@ public class MainControl extends HandlerThread {
 	private NetworkReceiver networkReceiver = null;
 	
 	
-	public MainControl(String name ,MainActivity ma ) {
+	public MainControl(String name ,Context ma ) {
 		super(name);
 		
-		mMainActivity = ma;
-		dataManager.init(mMainActivity);
+		mContext = ma;
+		dataManager.init(mContext);
 
 		me = this;
 		networkReceiver=new NetworkReceiver( ma );
 
+		EventBus.getDefault().register(this);
+
 	}
 
 
-	int    state = 0;
+
 	static public MainControl getInstance()
 	{
 		return me;
 	}
 	@Override
-	public synchronized void start() {
+	public synchronized void start(){
 		super.start();
 		mInternetCom = new InternetComponent( this.getLooper() );
-		CommandE e = new  CommandE("COMMAND_ULL");
-		e.AddAProperty(new Property("EventDefine","0") );
+
+	}
+
+    private void setState( int newState )
+    {
+        preState = state;
+        state = newState;
+		Log.d( "MainControl","setState " + newState );
+        
+    }
+	private void restart()
+	{
+		setState( STATE_NULL );
+		ExpCommandE e = new  ExpCommandE("COMMAND_NULL");
+		e.AddAExpProperty(new Property("EventDefine", "0"));
 		control( e );
 	}
-	
+
+	public void onEvent(Object event) {
+
+		if( event instanceof networkStatusEvent)
+		{ // 网络状态改变
+			networkStatusEvent e = (networkStatusEvent)event;
+			ExpCommandE command_e = new ExpCommandE("COMMAND_NETWORK_STATE");
+			command_e.AddAExpProperty(new Property("EventDefine", Integer.toString(EventDefine.COMMAND_NETWORK_STATE)));
+
+			if( (false == e.getwifiConnect()) &&  ( false == e.getGprsConnect() ))
+			{ // no connect
+				command_e.AddAProperty(new Property("CONNECT", "false"));
+				control(command_e);
+				Toast.makeText( this.mContext , "out of network",Toast.LENGTH_SHORT).show();
+			}
+			else
+			{
+				command_e.AddAProperty(new Property("CONNECT", "true"));
+
+			}
+
+			control( command_e );
+
+		}
+
+
+	}
 	public void go()
 	{
 		
@@ -110,17 +154,47 @@ public class MainControl extends HandlerThread {
 	private boolean commonStateHandle(CommandE e  )
 	{
 		boolean ret = false;
-		
-		
+
+		int RcvCommand = Integer.parseInt(((ExpCommandE )e).GetExpPropertyContext("EventDefine"));
+
+		switch (RcvCommand) {
+			case EventDefine.COMMAND_NETWORK_STATE:
+				String state = e.GetPropertyContext("CONNECT");
+
+				if( state.equals("true") )
+				{
+					if(	 STATE_LOGIN_NORMAL == preState	 )
+					{ // just do state change
+						setState( STATE_LOGIN_NORMAL );
+					}
+					else
+					{
+						restart();
+					}
+				}
+				else
+				{
+					//just do state change
+					setState( STATE_OUT_OF_NETWORK );
+				}
+				ret = true;
+				break;
+		}
 		return ret;
 	}
 	
 
 	private void stateNull( CommandE e  )
 	{
-		mInternetCom.isRegist( dataManager.self.getImsi() );
-		state = STATE_WAIT_QUEUE_REGSIT_RESULT;
-		
+		if ( NetworkReceiver.isConnect() )
+		{
+			mInternetCom.isRegist(dataManager.self.getImsi());
+			setState(STATE_WAIT_QUEUE_REGSIT_RESULT);
+		}
+		else
+		{ // no network
+			setState( STATE_OUT_OF_NETWORK );
+		}
 	}
 
 	private void stateWaitQueueRegsitResult( CommandE e  )
@@ -157,7 +231,7 @@ public class MainControl extends HandlerThread {
 				Message m = MainActivity.getInstance().handler.obtainMessage();
 				m.what = MainActivity.EVENT_UI_LOG_IN_START;
 				MainActivity.getInstance().handler.sendMessage( m );
-				state = STATE_WAIT_UI_LOGIN;
+				setState(STATE_WAIT_UI_LOGIN);
 			}
 			else if( queueRsp == EventDefine.IS_REQIST_RSP_HAS_REGIST )
 			{// 
@@ -165,7 +239,7 @@ public class MainControl extends HandlerThread {
 				dataManager.self.preferencesPara.savePhoneNumber( username );
 				mInternetCom.getFriendList(packGetFriendListCommandE() );
 				
-				state = STATE_LOGIN_NORMAL;
+				setState( STATE_LOGIN_NORMAL );
 				//TODO
 			}
 			else
@@ -192,7 +266,7 @@ public class MainControl extends HandlerThread {
 			dataManager.self.preferencesPara.savePassWord(  e.GetProperty("password").GetPropertyContext() );
 			
 			mInternetCom.registReq( e );
-			state = STATE_WAIT_SERVER_REGSIT_RESULT;
+			setState(STATE_WAIT_SERVER_REGSIT_RESULT);
 		break;
 		default:
 		break;
@@ -241,13 +315,13 @@ public class MainControl extends HandlerThread {
 				{
 					case 0: // success
 						Log.d("MainControl","regist success" );
-						Toast.makeText( mMainActivity, "regist success", Toast.LENGTH_SHORT).show();
-						state = STATE_LOGIN_NORMAL;
+						Toast.makeText(mContext, "regist success", Toast.LENGTH_SHORT).show();
+						setState(STATE_LOGIN_NORMAL);
 						break;
 						
 					default:
 						Log.d("MainControl","regist a account server response:" + queueRsp );
-						state = STATE_WAIT_UI_LOGIN;
+						setState(STATE_WAIT_UI_LOGIN);
 						break; //exception
 				}
 
@@ -373,7 +447,7 @@ public class MainControl extends HandlerThread {
 					}
 					dataManager.self.preferencesPara.saveFriendListVersion(json_obj.getInt("server_friend_version"));
 					
-					dataManager.updateFriendListFromServer( json_obj.getInt("update_type") , json_obj.getJSONArray("friends") , mMainActivity );
+					dataManager.updateFriendListFromServer( json_obj.getInt("update_type") , json_obj.getJSONArray("friends") , mContext);
 					//send it to PeopleActivity
 					if( PeopleActivity.getInstance() != null )
 					{
@@ -599,7 +673,8 @@ public class MainControl extends HandlerThread {
 	// RcvCommand  command
 	public void control( CommandE e )
 	{
-		Log.d("MainControl", "control:RcvCommand " + e.GetPropertyContext("EventDefine") );
+		ExpCommandE expE = (ExpCommandE)e;
+		Log.d("MainControl", "control:RcvCommand " + expE.GetExpPropertyContext("EventDefine") );
 		
 		
 		if( !commonStateHandle(e) )
@@ -645,7 +720,7 @@ public class MainControl extends HandlerThread {
 		int ret = -1;
 		
 		try {
-			ret = obj.getInt( what );
+			ret = obj.getInt(what);
 		} catch (JSONException e1) {
 	
 			Log.d("MainControl" , "getIntFromJasonObj what = " + what + "error: " + e1.getMessage() );
@@ -675,11 +750,11 @@ public class MainControl extends HandlerThread {
 		ZdnMessage zdn_m ;
 		
 		
-		friendMemberData fmd = dataManager.getFrilendList().getMemberDataByPhoneNumber( m.getBelogTag() );
+		friendMemberData fmd = dataManager.getFrilendList().getMemberDataByPhoneNumber(m.getBelogTag());
 		
 		if( fmd != null )
 		{
-			fmd.getMessageList().add( m );
+			fmd.getMessageList().add(m);
 		}
 	}
 	//handle
@@ -738,7 +813,17 @@ public class MainControl extends HandlerThread {
 			e1.printStackTrace();
 		}
 	}
-	
+
+	@Override
+	public boolean quit() {
+
+		if( networkReceiver != null )
+		{
+			networkReceiver.unregist();
+		}
+		return super.quit();
+	}
+
 	private CommandE packGetFriendListCommandE()
 	{
 
@@ -766,7 +851,7 @@ public class MainControl extends HandlerThread {
 			PeopleActivity.getInstance().update();
 		}
 		
-		dataManager.getFrilendList().updateDataToDb( mMainActivity );
+		dataManager.getFrilendList().updateDataToDb(mContext);
 		
 
 	}
@@ -782,7 +867,7 @@ public class MainControl extends HandlerThread {
 			PeopleActivity.getInstance().update();
 		}
 		
-		dataManager.getFrilendList().updateDataToDb( mMainActivity );
+		dataManager.getFrilendList().updateDataToDb(mContext);
 
 	}
 	
@@ -919,4 +1004,5 @@ public class MainControl extends HandlerThread {
         
 		MainControl.getInstance().handler.sendMessage(m);
 	}
+
 }

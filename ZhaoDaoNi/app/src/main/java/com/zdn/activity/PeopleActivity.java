@@ -62,14 +62,12 @@ public class PeopleActivity extends zdnBasicActivity implements ExpandableListVi
 		//ImageView homeIcon = (ImageView)findViewById(android.R.id.);
 		//TextView actionTitle = (TextView)findViewById(com.android.internal.R.id.action_bar_title);
 		//homeIcon.setImageDrawable( getResources().getDrawable(R.drawable.add));
-		EventBus.getDefault().register(this );  
 		super.onCreate(savedInstanceState);
 		
 	}
 	
 	@Override
 	protected void onDestroy() {
-		EventBus.getDefault().unregister(this); 
 		super.onDestroy();
 	}
 
@@ -85,6 +83,8 @@ public class PeopleActivity extends zdnBasicActivity implements ExpandableListVi
 		{
 			mFriendListAdapter.notifyDataSetChanged();
 		}
+
+        super.onEvent( event );
 	}
 	
 	private void findView() {
@@ -235,7 +235,7 @@ public class PeopleActivity extends zdnBasicActivity implements ExpandableListVi
 	     //只有当在添加的状态下（addingNew=true）或者ListView被selected的情况下REMOVE_TODO菜单项才可见
 	    // removeItem.setVisible(addingNew||idx>-1);
 	     
-	  return true;
+	  	return true;
 	     
 	    }
 	 

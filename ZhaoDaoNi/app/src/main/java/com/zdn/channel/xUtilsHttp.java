@@ -7,12 +7,15 @@ import com.zdn.logic.MainControl;
 
 import android.os.Message;
 import android.util.Log;
+import android.widget.Toast;
+
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.lidroid.xutils.http.client.HttpRequest;
+import com.zdn.receiver.NetworkReceiver;
 
 
 /**
@@ -71,45 +74,55 @@ final public class xUtilsHttp {
         	params.addBodyParameter(command.GetProperty(i).GetPropertyName(), command.GetProperty(i).GetPropertyContext());
         }
         
+        if(NetworkReceiver.isConnect() ) {
 
-        HttpUtils http = new HttpUtils();
-        http.send(HttpRequest.HttpMethod.POST, url , params,
-            new RequestCallBack<String>() {
 
-                @Override
-                public void onStart() {
-                    
-                }
+            HttpUtils http = new HttpUtils();
+            http.send(HttpRequest.HttpMethod.POST, url, params,
+                    new RequestCallBack<String>() {
 
-                @Override
-                public void onLoading(long total, long current, boolean isUploading) {
-                    if (isUploading) {
-                    	
-                    } else {
-                        
-                    }
-                }
+                        @Override
+                        public void onStart() {
 
-                @Override
-                public void onSuccess(ResponseInfo<String> responseInfo) {
-                    //ExpCommandE
-                	Log.d("HTTP", "httpReqRsp  result: " + responseInfo.result );
-                	reponse.AddAProperty( new Property("HTTP_REQ_RSP",responseInfo.result ) );
-                	reponse.AddAProperty( new Property("STATUS", "0" ));
-                	MainControl.getInstance().sendMessage(msg_rsp);
-            		
-                    
-                }
+                        }
 
-                @Override
-                public void onFailure(HttpException error, String msg) {
-                	Log.d("HTTP", "httpReqRsp : error" );
-                	reponse.AddAProperty( new Property("HTTP_REQ_RSP","error" ) );
-                	reponse.AddAProperty( new Property("STATUS", "1" ));
-                	MainControl.getInstance().sendMessage(msg_rsp);
-                }
-        });   
-        
+                        @Override
+                        public void onLoading(long total, long current, boolean isUploading) {
+                            if (isUploading) {
+
+                            } else {
+
+                            }
+                        }
+
+                        @Override
+                        public void onSuccess(ResponseInfo<String> responseInfo) {
+                            //ExpCommandE
+                            Log.d("HTTP", "httpReqRsp  result: " + responseInfo.result);
+                            reponse.AddAProperty(new Property("HTTP_REQ_RSP", responseInfo.result));
+                            reponse.AddAProperty(new Property("STATUS", "0"));
+                            MainControl.getInstance().sendMessage(msg_rsp);
+
+
+                        }
+
+                        @Override
+                        public void onFailure(HttpException error, String msg) {
+                            Log.d("HTTP", "httpReqRsp : error");
+                            reponse.AddAProperty(new Property("HTTP_REQ_RSP", "error"));
+                            reponse.AddAProperty(new Property("STATUS", "1"));
+                            MainControl.getInstance().sendMessage(msg_rsp);
+                        }
+                    });
+        }
+        else
+        {
+            Log.d("xUtilsHttp", "no network");
+
+            reponse.AddAProperty(new Property("HTTP_REQ_RSP", "error"));
+            reponse.AddAProperty(new Property("STATUS", "2"));
+            MainControl.getInstance().sendMessage(msg_rsp);
+        }
         
         
     }

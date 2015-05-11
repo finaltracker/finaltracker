@@ -15,10 +15,10 @@ public class networkStatusEvent {
         this.wifiConnect = wifiConnect;
     }
 
-    void setGprsConnect( boolean gprsConnect ) { this.gprsConnect = gprsConnect; }
-    void sewifiConnect( boolean wifiConnect ) { this.wifiConnect = wifiConnect; }
+    public void setGprsConnect( boolean gprsConnect ) { this.gprsConnect = gprsConnect; }
+    public  void sewifiConnect( boolean wifiConnect ) { this.wifiConnect = wifiConnect; }
 
-    boolean getGprsConnect() { return gprsConnect ; }
-    boolean getwifiConnect() { return wifiConnect ; }
+    public boolean getGprsConnect() { return gprsConnect ; }
+    public  boolean getwifiConnect() { return wifiConnect ; }
 
 }

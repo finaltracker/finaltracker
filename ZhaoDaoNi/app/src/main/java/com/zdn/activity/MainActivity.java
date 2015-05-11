@@ -9,6 +9,7 @@ import java.util.Set;
 import com.qq.test.SDManager;
 import com.zdn.R;
 
+import com.zdn.basicStruct.networkStatusEvent;
 import com.zdn.data.dataManager;
 import com.zdn.fragment.MapFragment;
 import com.zdn.jpush.ExampleUtil;
@@ -24,6 +25,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -44,6 +46,7 @@ import br.liveo.interfaces.NavigationLiveoListener;
 import br.liveo.navigationliveo.NavigationLiveo;
 import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
+import de.greenrobot.event.EventBus;
 
 public class MainActivity extends NavigationLiveo implements NavigationLiveoListener , MapFragment.OnFragmentInteractionListener {
 
@@ -65,12 +68,12 @@ public class MainActivity extends NavigationLiveo implements NavigationLiveoList
 	 * Used to store the last screen title. For use in
 	 * {@link #restoreActionBar()}.
 	 */
-	MainControl control ;
 	
 
 	private CharSequence mTitle;
 	public static boolean isForeground = false;
-	
+	MainControl control ;
+
 	public MainActivity()
 	{
 		me = this; // 
@@ -149,12 +152,14 @@ public class MainActivity extends NavigationLiveo implements NavigationLiveoList
 		SDManager manager = new SDManager(this);
 		manager.moveUserIcon();
 
+
 		control = new MainControl("MainControl" , this );
-		this.setTag( dataManager.self.getImsi());
+		this.setTag(dataManager.self.getImsi());
 		control.start();
 
 		registerMessageReceiver();  // used for receive msg
 
+		EventBus.getDefault().register(this);
 	}
 
 	static public MainActivity getInstance() { return me; }
@@ -199,11 +204,29 @@ public class MainActivity extends NavigationLiveo implements NavigationLiveoList
 		it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 	//	restoreActionBar();
 
+
+		setTitle( getResources().getString(R.string.titleName) );
+
 		return true;
 		//}
 		//return super.onCreateOptionsMenu(menu);
 	}
+	public void updateTilteAccrodingToNetworkState( boolean connect )
+	{
+		View toolbar = this.findViewById(R.id.toolbar);
+		if( connect )
+		{
+			//
+			toolbar.setBackgroundColor( Color.parseColor("#00BFFF") );
+			setTitle(getResources().getString(R.string.titleName));
 
+		}
+		else
+		{
+			toolbar.setBackgroundColor( Color.parseColor("#FF0000") );
+			setTitle(getResources().getString(R.string.networkNoConnect ));
+		}
+	}
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle action bar item clicks here. The action bar will
@@ -243,7 +266,7 @@ public class MainActivity extends NavigationLiveo implements NavigationLiveoList
 		fragmentManager
 				.beginTransaction()
 				.replace(layoutContainerId,
-						new MapFragment() ).commit();
+						new MapFragment()).commit();
 	}
 
 	@Override
@@ -318,6 +341,7 @@ public class MainActivity extends NavigationLiveo implements NavigationLiveoList
 	@Override
 	protected void onDestroy() {
 
+		EventBus.getDefault().unregister(this);
 		unregisterReceiver(mMessageReceiver);
 		if(control!= null)
 		{
@@ -326,15 +350,25 @@ public class MainActivity extends NavigationLiveo implements NavigationLiveoList
 		
 		super.onDestroy();
 	}
-	
-	
+
+	public void onEvent(Object event)
+	{
+
+		if( event instanceof networkStatusEvent )
+		{
+			networkStatusEvent e = (networkStatusEvent)event;
+
+			updateTilteAccrodingToNetworkState( e.getwifiConnect() || e.getGprsConnect()  );
+		}
+
+	}
 	
 	HandlerThread uIhandlerThread = null ;
 
 	
 	private void setTag( String tag ){
        
-		// ","����Ķ�� ת���� Set
+		// ","??????? ????? Set
 		String[] sArray = tag.split(",");
 		Set<String> tagSet = new LinkedHashSet<String>();
 		for (String sTagItme : sArray) {
@@ -345,7 +379,7 @@ public class MainActivity extends NavigationLiveo implements NavigationLiveoList
 			tagSet.add(sTagItme);
 		}
 		
-		//����JPush API����Tag
+		//????JPush API????Tag
 		handler.sendMessage(handler.obtainMessage(MSG_SET_TAGS, tagSet));
 
 	} 
@@ -361,7 +395,7 @@ public class MainActivity extends NavigationLiveo implements NavigationLiveoList
 			else if (msg.what == EVENT_UI_REGIST_RESULT) 
 			{ 
 				if( Zhuce.getInstance() != null )
-				{ // ��ע����洦��?
+				{ // ???????洦???
 					Zhuce.getInstance().registFeedback(msg.arg1 , (String)msg.obj );
 				}
 			} 

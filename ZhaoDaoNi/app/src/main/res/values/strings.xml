@@ -124,7 +124,8 @@
         <item>朋友圈</item>
         <item>同学圈</item>
     </string-array>
-
+    <string name="titleName">找到你</string>
+    <string name="networkNoConnect">网络无连接</string>
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
