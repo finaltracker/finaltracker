@@ -1,6 +1,5 @@
 package com.zdn.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -8,11 +7,12 @@ import com.zdn.R;
 import com.zdn.view.EditTextWithDel;
 
 
-public class friendInformationCommentActivity extends zdnBasicActivity {
+public class commonNewInputActivity extends zdnBasicActivity {
 	
 	EditTextWithDel	commentView;
 
 	static public final int FRIEND_INFORMATION_COMMENT_ACTIVITY		= 1;
+
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -25,7 +25,7 @@ public class friendInformationCommentActivity extends zdnBasicActivity {
 
 	private void findView()
 	{
-		commentView = (EditTextWithDel) this.findViewById(R.id.newComment );
+		commentView = (EditTextWithDel) this.findViewById(R.id.newInput);
 	}
 	
 	private void init()
@@ -57,10 +57,10 @@ public class friendInformationCommentActivity extends zdnBasicActivity {
 			//数据是使用Intent返回
             Intent intent = new Intent();
             //Bundle extras = new Bundle();
-            //extras.putString("newComment", newComment);
+            //extras.putString("newInput", newComment);
             //把返回数据存入Intent
             //intent.putExtras(extras);
-            intent.putExtra("newComment", newComment );
+            intent.putExtra("newInput", newComment );
             //设置返回数据
             this.setResult( FRIEND_INFORMATION_COMMENT_ACTIVITY , intent);
             //关闭Activity

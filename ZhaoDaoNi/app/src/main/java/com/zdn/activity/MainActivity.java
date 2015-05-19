@@ -12,6 +12,7 @@ import com.zdn.R;
 import com.zdn.basicStruct.networkStatusEvent;
 import com.zdn.data.dataManager;
 import com.zdn.fragment.MapFragment;
+import com.zdn.fragment.myInfomationFragment;
 import com.zdn.jpush.ExampleUtil;
 import com.zdn.logic.MainControl;
 
@@ -64,11 +65,16 @@ public class MainActivity extends NavigationLiveo implements NavigationLiveoList
 	public static final int EVENT_UI_REGIST_RESULT		=	EVENT_UI_LOG_IN_START+1;
 	public static final int MSG_SET_TAGS				=  EVENT_UI_REGIST_RESULT +1 ;
 
-	/**
-	 * Used to store the last screen title. For use in
-	 * {@link #restoreActionBar()}.
-	 */
-	
+
+	private static final int INBOX	=	0;
+	private static final int STARRED	=	INBOX+1;
+	private static final int SENT_MAIL	=	STARRED+1;
+	private static final int DRAFTS	=	SENT_MAIL+1;
+	private static final int MORE_MARKERS	=	DRAFTS+1;
+	private static final int TRASH	=	MORE_MARKERS+1;
+	private static final int SPAM	=	TRASH+1;
+	private static final int PERSONAL_INFORMATION	=	SPAM+1;
+
 
 	private CharSequence mTitle;
 	public static boolean isForeground = false;
@@ -82,9 +88,15 @@ public class MainActivity extends NavigationLiveo implements NavigationLiveoList
 	@Override
 	public void onUserInformation() {
 		//User information here
-		this.mUserName.setText("Rudson Lima");
-		this.mUserEmail.setText("rudsonlive@gmail.com");
-		this.mUserPhoto.setImageResource(R.drawable.ic_rudsonlive);
+		init();
+		String nickName = dataManager.self.selfInfo.basic.getNickName();
+		if( (null == nickName ) || (nickName.isEmpty()) )
+		{
+			nickName = "无名";
+		}
+		this.mUserName.setText( nickName );
+		//this.mUserEmail.setText("rudsonlive@gmail.com");
+		this.mUserPhoto.setImageResource(R.drawable.ic_myphoto);
 		this.mUserBackground.setImageResource(R.drawable.ic_user_background);
 
 
@@ -100,7 +112,7 @@ public class MainActivity extends NavigationLiveo implements NavigationLiveoList
 
 		if (savedInstanceState == null) {
 			//First item of the position selected from the list
-			this.setDefaultStartPositionNavigation(1);
+			this.setDefaultStartPositionNavigation(0);
 		}
 
 		// name of the list items
@@ -112,6 +124,7 @@ public class MainActivity extends NavigationLiveo implements NavigationLiveoList
 		mListNameItem.add(4, "more_markers"); //This item will be a subHeader
 		mListNameItem.add(5, "trash");
 		mListNameItem.add(6, "spam");
+		mListNameItem.add(7, "personal information");
 
 		// icons list items
 		List<Integer> mListIconItem = new ArrayList<>();
@@ -122,6 +135,7 @@ public class MainActivity extends NavigationLiveo implements NavigationLiveoList
 		mListIconItem.add(4, 0); //When the item is a subHeader the value of the icon 0
 		mListIconItem.add(5, R.drawable.ic_delete_black_24dp);
 		mListIconItem.add(6, R.drawable.ic_report_black_24dp);
+		mListIconItem.add(7, R.drawable.ic_report_black_24dp);
 
 		//{optional} - Among the names there is some subheader, you must indicate it here
 		List<Integer> mListHeaderItem = new ArrayList<>();
@@ -145,6 +159,11 @@ public class MainActivity extends NavigationLiveo implements NavigationLiveoList
 		getActionBar().setListNavigationCallbacks(mSpinnerAdapter, new DropDownListenser());
 */
 
+
+	}
+
+	private void init()
+	{
 		mTitle = getTitle();
 
 
@@ -161,7 +180,6 @@ public class MainActivity extends NavigationLiveo implements NavigationLiveoList
 
 		EventBus.getDefault().register(this);
 	}
-
 	static public MainActivity getInstance() { return me; }
 
 
@@ -205,7 +223,7 @@ public class MainActivity extends NavigationLiveo implements NavigationLiveoList
 	//	restoreActionBar();
 
 
-		setTitle( getResources().getString(R.string.titleName) );
+		setTitle(getResources().getString(R.string.titleName));
 
 		return true;
 		//}
@@ -263,10 +281,21 @@ public class MainActivity extends NavigationLiveo implements NavigationLiveoList
 	public void onItemClickNavigation(int position, int layoutContainerId) {
 		//Toast.makeText(this, "onItemClickNavigation", Toast.LENGTH_SHORT).show();
 		FragmentManager fragmentManager = getFragmentManager();
-		fragmentManager
-				.beginTransaction()
-				.replace(layoutContainerId,
-						new MapFragment()).commit();
+		if( position == MainActivity.PERSONAL_INFORMATION  )
+		{
+			fragmentManager
+					.beginTransaction()
+					.replace(br.liveo.navigationliveo.R.id.container,
+							myInfomationFragment.newInstance("","") ).commit();
+
+		}
+		else
+		{
+			fragmentManager
+					.beginTransaction()
+					.replace(layoutContainerId,
+							new MapFragment()).commit();
+		}
 	}
 
 	@Override
@@ -288,7 +317,8 @@ public class MainActivity extends NavigationLiveo implements NavigationLiveoList
 	@Override
 	public void onClickUserPhotoNavigation(View v) {
 		//user photo onClick
-		Toast.makeText(this, "onClickUserPhotoNavigation", Toast.LENGTH_SHORT).show();
+		chooseNavigationPosition(PERSONAL_INFORMATION);
+
 	}
 
 	@Override
@@ -517,6 +547,30 @@ public class MainActivity extends NavigationLiveo implements NavigationLiveoList
             return true;
         }
     }
-    
-	
+
+	long waitTime = 2000;
+	long touchTime = 0;
+	@Override
+	public void onBackPressed()
+	{
+
+		if (getCurrentPosition() != 0)
+		{
+			chooseNavigationPosition(0);
+		}
+
+		else
+		{
+			long currentTime = System.currentTimeMillis();
+			if ((currentTime - touchTime) >= waitTime)
+			{
+				Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
+				touchTime = currentTime;
+			}
+			else
+			{
+				finish();
+			}
+		}
+	}
 }

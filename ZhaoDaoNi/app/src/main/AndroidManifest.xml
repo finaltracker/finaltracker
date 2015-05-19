@@ -65,8 +65,9 @@
 		<activity android:name="com.zdn.activity.CircleActivity"
 		    android:theme="@style/circle_bottom" >
         </activity>
-        <activity android:name="com.zdn.activity.QQconstactActivity" >
-        </activity>
+        <activity
+            android:name="com.zdn.cropimage.CropImage"></activity
+            >
         <activity android:name="com.zdn.activity.ContactActivity"    
                   android:label="@string/app_name">    
             <intent-filter>    
@@ -124,7 +125,7 @@
             </intent-filter>    
         </activity> 
         
-        <activity android:name="com.zdn.activity.friendInformationCommentActivity"    
+        <activity android:name=".activity.commonNewInputActivity"
                   android:label="@string/app_name">    
             <intent-filter>    
                 <action android:name="com.zdn.activity.friendInformationCommentActivity.ACTION"/>    

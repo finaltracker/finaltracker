@@ -7,13 +7,13 @@ public class Property
 	 * 
 	 */
 	String PropertyName;
-	String Context;
+	Object Context;
 	
 	public Property()
 	{
 		
 	}
-	public Property( String P_Name , String P_Cotext )
+	public Property( String P_Name , Object P_Cotext )
 	{
 		PropertyName = P_Name;
 		Context = P_Cotext;
@@ -33,9 +33,9 @@ public class Property
 		
 	}
 	
-	public String GetPropertyContext()
+	public Object GetPropertyContext()
 	{
-		return Context;		
+		return Context;
 	}
 	
 }

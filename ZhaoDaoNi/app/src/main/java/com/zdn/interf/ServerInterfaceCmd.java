@@ -4,6 +4,8 @@ import android.os.Message;
 
 import com.zdn.CommandParser.CommandE;
 
+import java.io.File;
+
 public interface ServerInterfaceCmd {
 
 	/* 流程管理 */
@@ -36,6 +38,8 @@ public interface ServerInterfaceCmd {
 	public void sendTip( CommandE e ,Message m );
 	
 	public void getTip( CommandE e );
-	
-	
+
+	public void uploadFile( CommandE e );
+
+
 }

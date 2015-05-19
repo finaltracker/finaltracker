@@ -727,4 +727,10 @@ public abstract class NavigationLiveo extends AppCompatActivity {
             super.onBackPressed();
         }
     }
+
+    public void chooseNavigationPosition(int position) {
+        mNavigationListener.onItemClickNavigation(position, R.id.container);
+        setCheckedItemNavigation(position, true);
+        setCurrentPosition(position);
+    }
 }

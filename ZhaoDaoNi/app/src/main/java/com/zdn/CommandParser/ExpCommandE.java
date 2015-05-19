@@ -101,7 +101,7 @@ public class ExpCommandE extends CommandE
 		
 		return null;
 	}
-	public String GetExpPropertyContext(String ProtertyName )
+	public Object GetExpPropertyContext(String ProtertyName)
 	{
 		for( int i = 0 ;i < ExpPropertyList.size() ; i++ )
 		{

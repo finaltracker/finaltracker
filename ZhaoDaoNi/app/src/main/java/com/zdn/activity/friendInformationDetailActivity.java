@@ -1,6 +1,5 @@
 package com.zdn.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,7 +12,6 @@ import android.widget.Toast;
 import com.zdn.R;
 import com.zdn.basicStruct.friendMemberData;
 import com.zdn.data.dataManager;
-import com.zdn.activity.friendInformationCommentActivity;
 
 public class friendInformationDetailActivity extends zdnBasicActivity {
 	
@@ -86,7 +84,7 @@ public class friendInformationDetailActivity extends zdnBasicActivity {
 		commentLineView.setOnClickListener( new View.OnClickListener() {
         	public void onClick(View v) {
         		//start comment edit activity
-        		Intent intent = new Intent( friendInformationDetailActivity.this, friendInformationCommentActivity.class );  
+        		Intent intent = new Intent( friendInformationDetailActivity.this, commonNewInputActivity.class );
         		Bundle b = new Bundle();  
         		b.putString("comment", commentTextView.getText().toString() );  
         		intent.putExtras(b);  
@@ -123,8 +121,8 @@ public class friendInformationDetailActivity extends zdnBasicActivity {
 		
 		switch( resultCode)
 		{
-		case (friendInformationCommentActivity.FRIEND_INFORMATION_COMMENT_ACTIVITY):
-			String newComment = data.getExtras().getString("newComment");//得到新Activity 关闭后返回的数据
+		case (commonNewInputActivity.FRIEND_INFORMATION_COMMENT_ACTIVITY):
+			String newComment = data.getExtras().getString("newInput");//得到新Activity 关闭后返回的数据
 			commentTextView.setText( newComment );
 			Log.i(this.getClass().getName(), "user new comment " + newComment );
 			

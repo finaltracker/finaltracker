@@ -140,7 +140,7 @@ public class CommandE
 		
 		return null;
 	}
-	public String GetPropertyContext(String ProtertyName )
+	public Object GetPropertyContext(String ProtertyName )
 	{
 		for( int i = 0 ;i < PropertyList.size() ; i++ )
 		{

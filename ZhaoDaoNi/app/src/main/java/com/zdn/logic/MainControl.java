@@ -29,6 +29,8 @@ import android.os.Message;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.io.File;
+
 public class MainControl extends HandlerThread {
 	Context mContext;
 	
@@ -155,11 +157,11 @@ public class MainControl extends HandlerThread {
 	{
 		boolean ret = false;
 
-		int RcvCommand = Integer.parseInt(((ExpCommandE )e).GetExpPropertyContext("EventDefine"));
+		int RcvCommand = Integer.parseInt( (String)((ExpCommandE )e).GetExpPropertyContext("EventDefine"));
 
 		switch (RcvCommand) {
 			case EventDefine.COMMAND_NETWORK_STATE:
-				String state = e.GetPropertyContext("CONNECT");
+				String state = (String)(e.GetPropertyContext("CONNECT"));
 
 				if( state.equals("true") )
 				{
@@ -199,12 +201,12 @@ public class MainControl extends HandlerThread {
 
 	private void stateWaitQueueRegsitResult( CommandE e  )
 	{
-		int RcvCommand = Integer.parseInt(((ExpCommandE )e).GetExpPropertyContext("EventDefine"));
+		int RcvCommand = Integer.parseInt((String)((ExpCommandE )e).GetExpPropertyContext("EventDefine"));
 		
 		switch (RcvCommand)
 		{
 		case EventDefine.CHECK_REGIST_RSP:
-			String rep = e.GetPropertyContext("HTTP_REQ_RSP");
+			String rep = (String)e.GetPropertyContext("HTTP_REQ_RSP");
 			if( rep == null || ( rep.isEmpty()) )
 			{
 				Log.d("MainControl", "HTTP_REQ_RSP = null" );
@@ -257,13 +259,13 @@ public class MainControl extends HandlerThread {
 
 	private void stateWaitUiLogin( CommandE e  )
 	{
-		int RcvCommand = Integer.parseInt(((ExpCommandE )e).GetExpPropertyContext("EventDefine"));
+		int RcvCommand = Integer.parseInt((String)((ExpCommandE )e).GetExpPropertyContext("EventDefine"));
 		
 		switch (RcvCommand)
 		{
 		case EventDefine.REGIST_REQ:
-			dataManager.self.preferencesPara.savePhoneNumber(  e.GetProperty("mobile").GetPropertyContext() );
-			dataManager.self.preferencesPara.savePassWord(  e.GetProperty("password").GetPropertyContext() );
+			dataManager.self.preferencesPara.savePhoneNumber( (String) e.GetProperty("mobile").GetPropertyContext() );
+			dataManager.self.preferencesPara.savePassWord( (String) e.GetProperty("password").GetPropertyContext() );
 			
 			mInternetCom.registReq( e );
 			setState(STATE_WAIT_SERVER_REGSIT_RESULT);
@@ -277,13 +279,13 @@ public class MainControl extends HandlerThread {
 
 	private void stateWaitServerRegistResult( CommandE e )
 	{
-		int RcvCommand = Integer.parseInt(((ExpCommandE )e).GetExpPropertyContext("EventDefine"));
+		int RcvCommand = Integer.parseInt((String)((ExpCommandE )e).GetExpPropertyContext("EventDefine"));
 		
 		switch (RcvCommand)
 		{
 		case EventDefine.REGIST_RSP:
 			//获得注册结果
-			String rep = e.GetPropertyContext("HTTP_REQ_RSP");
+			String rep = (String) e.GetPropertyContext("HTTP_REQ_RSP");
 			
 			
 			if( rep == null || ( rep.isEmpty()) )
@@ -337,7 +339,7 @@ public class MainControl extends HandlerThread {
 	private void stateLoginNormal( CommandE e )
 	{
 		ExpCommandE exp_e = (ExpCommandE)e;
-		int RcvCommand = Integer.parseInt(exp_e.GetExpPropertyContext("EventDefine"));
+		int RcvCommand = Integer.parseInt((String)exp_e.GetExpPropertyContext("EventDefine"));
 		
 
 		switch( RcvCommand )
@@ -374,7 +376,7 @@ public class MainControl extends HandlerThread {
 		case EventDefine.JPUSH_SERVER_COMMAND:
 		{
 		
-			int cmd =  Integer.parseInt(e.GetPropertyContext("Command"));
+			int cmd =  Integer.parseInt( (String) e.GetPropertyContext("Command"));
 			
 			switch (cmd )
 			{
@@ -387,7 +389,7 @@ public class MainControl extends HandlerThread {
 			
 			case 302:
 				Log.d("MainControl" , "jpush server call me ,new message comming " );
-				String Extra = e.GetPropertyContext("Extra");
+				String Extra = (String) e.GetPropertyContext("Extra");
 				JSONObject json_obj;
 				String from ;
 				String id;
@@ -425,7 +427,7 @@ public class MainControl extends HandlerThread {
 		{
 			//update UI
 			//获得注册结果
-			String rep = e.GetPropertyContext("HTTP_REQ_RSP");
+			String rep = (String)e.GetPropertyContext("HTTP_REQ_RSP");
 			
 			
 			if( rep == null || ( rep.isEmpty()) )
@@ -500,7 +502,7 @@ public class MainControl extends HandlerThread {
 			
 		case EventDefine.UPDATE_FRIEND_INFORMATION_RSP:
 			{
-				Log.d("MainControl" , "UPDATE_FRIEND_INFORMATION_RSP: " );
+				Log.d("MainControl", "UPDATE_FRIEND_INFORMATION_RSP: ");
 				int queueRsp = parseHttpReqRspStatus(e);
 				
 				if( queueRsp == 0 )
@@ -539,14 +541,14 @@ public class MainControl extends HandlerThread {
 				else
 				{
 					// 请求好友列表
-					mInternetCom.getFriendList( packGetFriendListCommandE() );
+					mInternetCom.getFriendList(packGetFriendListCommandE());
 					
 				}
 			}
 			break;	
 		case EventDefine.SEARCH_FRIEND_OR_CIRCLE_REQ:
 			Log.d("MainControl" , "SEARCH_FRIEND_OR_CIRCLE_REQ: " );
-			mInternetCom.searchFirendOrCircle( e );
+			mInternetCom.searchFirendOrCircle(e);
 			
 			break;
 		case EventDefine.SEARCH_FRIEND_OR_CIRCLE_RSP:
@@ -554,7 +556,7 @@ public class MainControl extends HandlerThread {
 				Log.d("MainControl" , "SEARCH_FRIEND_OR_CIRCLE_RSP: " );
 				//update UI
 				//获得注册结果
-				String rep = e.GetPropertyContext("HTTP_REQ_RSP");
+				String rep = (String)e.GetPropertyContext("HTTP_REQ_RSP");
 				
 				
 				if( rep == null || ( rep.isEmpty()) )
@@ -598,8 +600,8 @@ public class MainControl extends HandlerThread {
 				Log.d("MainControl" , "SEND_MESSAGE_RSP: " );
 				
 				ExpCommandE Exp_e = (ExpCommandE)(e);
-				String rep = Exp_e.GetPropertyContext("HTTP_REQ_RSP");
-				String status = Exp_e.GetPropertyContext("STATUS");
+				String rep = (String)Exp_e.GetPropertyContext("HTTP_REQ_RSP");
+				String status =(String) Exp_e.GetPropertyContext("STATUS");
 				ZdnMessage m = (ZdnMessage) Exp_e.getUserData();
 				if(  0 != Integer.parseInt(status))
 				{
@@ -621,15 +623,26 @@ public class MainControl extends HandlerThread {
 		
 		case EventDefine.GET_MESSAGE_REQ:
 			Log.d("MainControl" , "SEND_MESSAGE_REQ: " );
-			mInternetCom.getTip( e );
+			mInternetCom.getTip(e);
 			
 			break;
 		case EventDefine.GET_MESSAGE_RSP:
 			{
-				Log.d("MainControl" , "GET_MESSAGE_RSP: " );
-				getMessageRspHandle( e);
+				Log.d("MainControl", "GET_MESSAGE_RSP: ");
+				getMessageRspHandle(e);
 			}
 			break;
+		case EventDefine.UPLOAD_FILE_REQ:
+			Log.d("MainControl" , "UPLOAD_FILE_REQ: " );
+			mInternetCom.uploadFile(e);
+
+			break;
+		case EventDefine.UPLOAD_FILE_RSP:
+		{
+			Log.d("MainControl", "UPLOAD_FILE_RSP: ");
+
+		}
+		break;
 		default:
 			break;
 		}
@@ -686,7 +699,7 @@ public class MainControl extends HandlerThread {
 	
 	private JSONObject parseHttpReqRsp( CommandE e  )
 	{
-		String rep = e.GetPropertyContext("HTTP_REQ_RSP");
+		String rep = (String)e.GetPropertyContext("HTTP_REQ_RSP");
 		JSONObject  json_obj = null;
 		try {
 			json_obj = new JSONObject(rep);
@@ -760,8 +773,8 @@ public class MainControl extends HandlerThread {
 	//handle
 	private void getMessageRspHandle(CommandE e)
 	{
-		String rep = e.GetPropertyContext("HTTP_REQ_RSP");
-		String status = e.GetPropertyContext("STATUS");
+		String rep = (String)e.GetPropertyContext("HTTP_REQ_RSP");
+		String status = (String)e.GetPropertyContext("STATUS");
 		
 		if(  0 != Integer.parseInt(status))
 		{
@@ -911,10 +924,10 @@ public class MainControl extends HandlerThread {
 	//result 0 :disagree
 	static public void addA_FriendConfirm( String result , String targetUser  )
 	{
-		CommandE e = InternetComponent.packA_CommonExpCommandE_ToServer( 
-				EventDefine.ADD_A_FRIEND_ANSWER_REQ , 
-				InternetComponent.WEBSITE_ADDRESS_ADD_A_FRIEND_ANSWER_REQ 
-				);
+		CommandE e = InternetComponent.packA_CommonExpCommandE_ToServer(
+				EventDefine.ADD_A_FRIEND_ANSWER_REQ,
+				InternetComponent.WEBSITE_ADDRESS_ADD_A_FRIEND_ANSWER_REQ
+		);
 		
 		e.AddAProperty(new Property("nok",result ) );
 		e.AddAProperty(new Property("friend_mobile",targetUser ) );
@@ -945,7 +958,7 @@ public class MainControl extends HandlerThread {
 					EventDefine.UPDATE_FRIEND_INFORMATION_REQ , 
 					InternetComponent.WEBSITE_ADDRESS_UPDATE_FRIEND 
 					);
-		ObjectConvertTool.friendMemberDataPackToCommandE(fmdBasic,e);
+		ObjectConvertTool.friendMemberDataPackToCommandE(fmdBasic, e);
 		
 		Message m = MainControl.getInstance().handler.obtainMessage();
 		m.obj = e;   //
@@ -966,6 +979,21 @@ public class MainControl extends HandlerThread {
 		Message m = MainControl.getInstance().handler.obtainMessage();
 		m.obj = e;   //
         
+		MainControl.getInstance().handler.sendMessage(m);
+
+	}
+	static public void uploadFile( String uploadWhat ,File uploadFile ) {
+
+		CommandE e = InternetComponent.packA_CommonExpCommandE_ToServer(
+				EventDefine.UPLOAD_FILE_REQ ,
+				InternetComponent.WEBSITE_ADDRESS_UPLOAD_FILE
+		);
+		e.AddAProperty(new Property( uploadWhat , uploadFile));
+
+
+		Message m = MainControl.getInstance().handler.obtainMessage();
+		m.obj = e;   //
+
 		MainControl.getInstance().handler.sendMessage(m);
 
 	}

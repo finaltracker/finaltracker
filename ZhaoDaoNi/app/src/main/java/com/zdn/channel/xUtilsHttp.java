@@ -7,7 +7,6 @@ import com.zdn.logic.MainControl;
 
 import android.os.Message;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.exception.HttpException;
@@ -16,6 +15,8 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.lidroid.xutils.http.client.HttpRequest;
 import com.zdn.receiver.NetworkReceiver;
+
+import java.io.File;
 
 
 /**
@@ -39,12 +40,13 @@ final public class xUtilsHttp {
      */
     
     //CommandE 0 位置必须是URL 地址
+    //需要上传文件的是 uploadFile不为空，否则为null
     public static void httpReq( ExpCommandE command ) {
 
     	RequestParams params = new RequestParams();
     	
     	ExpCommandE e = command;
-		final ExpCommandE reponse = InternetComponent.packA_CommonExpCommandE_ToMainControl( "SEND_MESSAGE_TO_SERVER_RSP",Integer.parseInt(command.GetExpPropertyContext("EventDefine")) + 1 );
+		final ExpCommandE reponse = InternetComponent.packA_CommonExpCommandE_ToMainControl( "SEND_MESSAGE_TO_SERVER_RSP",Integer.parseInt( (String) command.GetExpPropertyContext("EventDefine")) + 1 );
 	
 		reponse.setUserData( e.getUserData() );
 		
@@ -57,7 +59,7 @@ final public class xUtilsHttp {
         
 		
         
-        String url = command.GetExpPropertyContext("URL");
+        String url = (String) command.GetExpPropertyContext("URL");
 
         Log.d("HTTP", "httpReq : " );
         for( int i = 0 ; i < command.GetExpPropertyNum() ; i++ )
@@ -71,9 +73,24 @@ final public class xUtilsHttp {
         
         for( int i = 0 ; i < command.GetPropertyNum() ; i++ )
         {
-        	params.addBodyParameter(command.GetProperty(i).GetPropertyName(), command.GetProperty(i).GetPropertyContext());
+            String PropertyName = command.GetProperty(i).GetPropertyName();
+            Object PropertyContext = command.GetProperty(i).GetPropertyContext();
+            if( PropertyContext instanceof String )
+            {
+                params.addBodyParameter(PropertyName, (String) PropertyContext);
+            }
+            else if(  PropertyContext instanceof File  )
+            {
+                params.addBodyParameter( PropertyName , (File)PropertyContext );
+            }
+            else
+            {
+                Log.e("HTTP","no support context type " + PropertyContext.getClass().getSimpleName() );
+            }
+
         }
-        
+
+
         if(NetworkReceiver.isConnect() ) {
 
 

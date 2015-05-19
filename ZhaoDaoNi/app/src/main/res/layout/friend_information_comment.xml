@@ -10,7 +10,7 @@
     	android:orientation="horizontal" >
 
         <com.zdn.view.EditTextWithDel
-            android:id="@+id/newComment"
+            android:id="@+id/newInput"
             style="@style/friend_information_detail_newComment_Style"
             android:text="">
             
@@ -19,8 +19,8 @@
 		
         <ImageView
 	        android:id="@+id/pen"
-	        android:layout_toRightOf="@id/newComment"
-	        android:layout_alignBottom="@id/newComment"
+	        android:layout_toRightOf="@id/newInput"
+	        android:layout_alignBottom="@id/newInput"
 	        android:layout_alignParentRight ="true"
 	        android:layout_width="40.0dip"
 	        android:layout_height="40.0dip"

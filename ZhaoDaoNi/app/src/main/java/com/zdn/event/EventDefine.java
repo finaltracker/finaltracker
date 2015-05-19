@@ -22,6 +22,8 @@ public class EventDefine {
 	public static final int SEND_MESSAGE_RSP		= SEND_MESSAGE_REQ+1;
 	public static final int GET_MESSAGE_REQ		= SEND_MESSAGE_RSP+1;
 	public static final int GET_MESSAGE_RSP		= GET_MESSAGE_REQ+1;
+	public static final int UPLOAD_FILE_REQ		= GET_MESSAGE_RSP+1;
+	public static final int UPLOAD_FILE_RSP		= UPLOAD_FILE_REQ+1;
 	
 	/*jpush*/
 	

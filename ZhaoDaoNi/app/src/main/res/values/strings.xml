@@ -128,4 +128,6 @@
     <string name="networkNoConnect">网络无连接</string>
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="from_camera">照相</string>
+    <string name="from_album">从相册中选择</string>
 </resources>

@@ -12,6 +12,8 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 
+import java.io.File;
+
 public class InternetComponent implements ServerInterfaceCmd {
 	/* web site address define */
 	//static public String WEBSITE_ADDRESS_BASE	= "http://10.4.65.41/";
@@ -27,6 +29,7 @@ public class InternetComponent implements ServerInterfaceCmd {
 	
 	static public String WEBSITE_ADDRESS_SEND_TIP = WEBSITE_ADDRESS_BASE + "tips/send_tip/";
 	static public String WEBSITE_ADDRESS_GET_TIP = WEBSITE_ADDRESS_BASE + "tips/get_tip/";
+	static public String WEBSITE_ADDRESS_UPLOAD_FILE = WEBSITE_ADDRESS_BASE + "user/upload_avatar/";
 	
 	
 	public ThreadTaskHandler handler;
@@ -55,7 +58,7 @@ public class InternetComponent implements ServerInterfaceCmd {
 		Message msg = handler.obtainMessage(); 
 		msg.what = ThreadTaskHandler.SEND_MESSAGE_TO_SERVER;
         
-		CommandE e = packA_CommonExpCommandE_ToServer(EventDefine.CHECK_REGIST_REQ,WEBSITE_ADDRESS_CHECK_REGIST_REQ);
+		CommandE e = packA_CommonExpCommandE_ToServer(EventDefine.CHECK_REGIST_REQ, WEBSITE_ADDRESS_CHECK_REGIST_REQ);
 
 		e.AddAProperty(new Property("imsi",imsi ) );
         msg.obj = e;   //
@@ -180,7 +183,18 @@ public class InternetComponent implements ServerInterfaceCmd {
 		
 	}
 
-	
+	@Override
+	public void uploadFile(CommandE e) {
+		Message msg = handler.obtainMessage();
+		msg.what = ThreadTaskHandler.SEND_MESSAGE_TO_SERVER;
+
+		msg.obj = e;   //
+
+		handler.sendMessage(msg);
+
+	}
+
+
 	class ThreadTaskHandler extends Handler {
 		
 		static public final int SEND_MESSAGE_TO_SERVER = 1;
@@ -195,7 +209,7 @@ public class InternetComponent implements ServerInterfaceCmd {
 			if(SEND_MESSAGE_TO_SERVER == msg.what )
 			{
 			    ExpCommandE e = (ExpCommandE) msg.obj;
-				xUtilsHttp.httpReq( e );
+				xUtilsHttp.httpReq( e  );
 			}
 			super.handleMessage(msg);
 		}
