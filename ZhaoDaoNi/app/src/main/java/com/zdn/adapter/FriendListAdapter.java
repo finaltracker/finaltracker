@@ -10,6 +10,7 @@ import com.zdn.basicStruct.friendTeamDataManager;
 import com.zdn.chat.ZdnMessage;
 import com.zdn.logic.InternetComponent;
 import com.zdn.logic.MainControl;
+import com.zdn.util.FileUtil;
 import com.zdn.view.FriendListView;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -19,6 +20,7 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+
 public class FriendListAdapter extends BaseExpandableListAdapter 
 		 {
 
@@ -26,13 +28,15 @@ public class FriendListAdapter extends BaseExpandableListAdapter
 	private Context mContext;
 	private static final String verifingFriend = "待验证好友";
 	private friendTeamDataManager teams = null;
-
+	private String friendsAvatorDir ;
+	private BitmapUtils bitmapUtils = null;
 	
 
 	public FriendListAdapter(Context context, 
 			FriendListView mIphoneTreeView, View searchView) {
 		this.mContext = context;
-
+		friendsAvatorDir = FileUtil.makePath( FileUtil.getBaseDirector() , context.getString(R.string.friendsAvator) );
+		bitmapUtils = new BitmapUtils(mContext , friendsAvatorDir );
 
 	}
 
@@ -93,7 +97,7 @@ public class FriendListAdapter extends BaseExpandableListAdapter
 			holder = (ChildHolder) convertView.getTag();
 		}
 		
-		friendTeamData ft = (friendTeamData)getGroup( groupPosition );
+		friendTeamData ft = (friendTeamData)getGroup(groupPosition);
 		if( ft.teamName.equals( verifingFriend ) )
 		{
 			holder.nameView.setCompoundDrawables(null,null,null,null);
@@ -118,9 +122,8 @@ public class FriendListAdapter extends BaseExpandableListAdapter
 		
 		friendMemberData md = (friendMemberData)getChild(groupPosition,childPosition);
 
-		BitmapUtils bitmapUtils = new BitmapUtils(mContext);
-		
-		bitmapUtils.display( holder.iconView, InternetComponent.WEBSITE_ADDRESS_BASE + md.basic.getPictureAddress());
+
+		bitmapUtils.display( holder.iconView, InternetComponent.WEBSITE_ADDRESS_BASE_NO_SEPARATOR + md.basic.getPictureAddress());
 
 
 		 

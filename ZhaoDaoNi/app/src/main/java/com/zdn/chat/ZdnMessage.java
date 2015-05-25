@@ -196,18 +196,7 @@ public class ZdnMessage {
 		this.dateTime = (new SimpleDateFormat("yyyy-MM-dd-HH-mm")).format(time); 
 	}
 	
-	/*
-	public void SaveToDb( )
-	{
-		ZdnMessageDbAdapt zmda = new ZdnMessageDbAdapt(this);
-		
-		DBHelper getDbHelper = DBManager.GetDbHelper( ZdnMessageDbAdapt.class );
-		
-		getDbHelper.add(  zmda );
-		
-		getDbHelper.closeDB();
-	}
-*/
+	
 	public void SaveToDb( )
 	{
 		//ZdnMessageDbAdapt zmda = new ZdnMessageDbAdapt(this);

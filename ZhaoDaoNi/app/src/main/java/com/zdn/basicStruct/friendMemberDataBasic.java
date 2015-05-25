@@ -88,10 +88,13 @@ public class friendMemberDataBasic {
 		return this.comment;
 	}
 	
-	public void setPictureAddress( String pictureAddress )
+	public void setPictureAddress( String pictureAddress , boolean silence)
 	{
 		this.pictureAddress = pictureAddress;
-		dataChangeNotifyToMainControl( friendMemberData.PICTURE_ADDRESS );
+		if( !silence )
+		{
+			dataChangeNotifyToMainControl( friendMemberData.PICTURE_ADDRESS );
+		}
 	}
 	
 	

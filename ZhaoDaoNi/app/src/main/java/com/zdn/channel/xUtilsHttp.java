@@ -64,11 +64,11 @@ final public class xUtilsHttp {
         Log.d("HTTP", "httpReq : " );
         for( int i = 0 ; i < command.GetExpPropertyNum() ; i++ )
         {
-        	Log.d("HTTP", command.GetExpProperty(i).GetPropertyName() + " " + command.GetExpProperty(i).GetPropertyContext() );
+        	Log.d("HTTP", "GetExpProperty:" + command.GetExpProperty(i).GetPropertyName() + " " + command.GetExpProperty(i).GetPropertyContext() );
         }
         for( int i = 0 ; i < command.GetPropertyNum() ; i++ )
         {
-        	Log.d("HTTP", command.GetProperty(i).GetPropertyName() + " " + command.GetProperty(i).GetPropertyContext() );
+        	Log.d("HTTP", "GetProperty:" + command.GetProperty(i).GetPropertyName() + " " + command.GetProperty(i).GetPropertyContext() );
         }
         
         for( int i = 0 ; i < command.GetPropertyNum() ; i++ )
@@ -81,6 +81,7 @@ final public class xUtilsHttp {
             }
             else if(  PropertyContext instanceof File  )
             {
+                Log.e("HTTP","this is a file " + PropertyContext );
                 params.addBodyParameter( PropertyName , (File)PropertyContext );
             }
             else

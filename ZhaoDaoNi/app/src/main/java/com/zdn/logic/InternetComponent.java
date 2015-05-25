@@ -11,13 +11,15 @@ import com.zdn.interf.ServerInterfaceCmd;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 
 import java.io.File;
 
 public class InternetComponent implements ServerInterfaceCmd {
 	/* web site address define */
-	//static public String WEBSITE_ADDRESS_BASE	= "http://10.4.65.41/";
-	static public String WEBSITE_ADDRESS_BASE	= "http://10.4.65.32/";
+	static public String WEBSITE_ADDRESS_BASE_NO_SEPARATOR	= "http://10.4.65.32";
+	static public String WEBSITE_ADDRESS_BASE	= WEBSITE_ADDRESS_BASE_NO_SEPARATOR +"/";
+	//static public String WEBSITE_ADDRESS_MEDIA_BASE = WEBSITE_ADDRESS_BASE + "media/";
 	static public String WEBSITE_ADDRESS_CHECK_REGIST_REQ = WEBSITE_ADDRESS_BASE + "user/check_register/";
 	static public String WEBSITE_ADDRESS_REGIST_REQ = WEBSITE_ADDRESS_BASE + "user/register/";
 	static public String WEBSITE_ADDRESS_ADD_A_FRIEND_REQ = WEBSITE_ADDRESS_BASE + "friend/add_friend/";
@@ -44,6 +46,7 @@ public class InternetComponent implements ServerInterfaceCmd {
 	
 	@Override
 	public int registReq( CommandE e   ) {
+		Log.i( this.getClass().getSimpleName() , "call registReq");
 		Message msg = handler.obtainMessage(); 
 		msg.what = ThreadTaskHandler.SEND_MESSAGE_TO_SERVER;
         
@@ -55,13 +58,14 @@ public class InternetComponent implements ServerInterfaceCmd {
 
 	@Override
 	public void isRegist(String imsi) {
+		Log.i( this.getClass().getSimpleName() , "call isRegist");
+
 		Message msg = handler.obtainMessage(); 
 		msg.what = ThreadTaskHandler.SEND_MESSAGE_TO_SERVER;
         
 		CommandE e = packA_CommonExpCommandE_ToServer(EventDefine.CHECK_REGIST_REQ, WEBSITE_ADDRESS_CHECK_REGIST_REQ);
 
-		e.AddAProperty(new Property("imsi",imsi ) );
-        msg.obj = e;   //
+		msg.obj = e;   //
         
         handler.sendMessage(msg);
 
@@ -69,6 +73,8 @@ public class InternetComponent implements ServerInterfaceCmd {
 
 	@Override
 	public int addA_Friend(CommandE e ) {
+		Log.i( this.getClass().getSimpleName() , "call addA_Friend");
+
 		Message msg = handler.obtainMessage(); 
 		msg.what = ThreadTaskHandler.SEND_MESSAGE_TO_SERVER;
         
@@ -81,6 +87,8 @@ public class InternetComponent implements ServerInterfaceCmd {
 
 	@Override
 	public void friendAddMeAnswer(CommandE e) {
+		Log.i( this.getClass().getSimpleName() , "call friendAddMeAnswer");
+
 		Message msg = handler.obtainMessage(); 
 		msg.what = ThreadTaskHandler.SEND_MESSAGE_TO_SERVER;
         
@@ -94,6 +102,8 @@ public class InternetComponent implements ServerInterfaceCmd {
 	
 	@Override
 	public void updateGpsInfo(String phoneNumber, int longitude, int latitude) {
+		Log.i( this.getClass().getSimpleName() , "call updateGpsInfo");
+
 		// TODO Auto-generated method stub
 		
 	}
@@ -101,6 +111,8 @@ public class InternetComponent implements ServerInterfaceCmd {
 	@Override
 	public void requestFriendGpsInfo(String phoneNumber, int longitude,
 			int latitude) {
+		Log.i( this.getClass().getSimpleName() , "call requestFriendGpsInfo");
+
 		// TODO Auto-generated method stub
 		
 	}
@@ -108,7 +120,8 @@ public class InternetComponent implements ServerInterfaceCmd {
 	@Override
 	public void getFriendList( CommandE e )
 	{
-		
+		Log.i( this.getClass().getSimpleName() , "call getFriendList");
+
 		Message msg = handler.obtainMessage(); 
 		msg.what = ThreadTaskHandler.SEND_MESSAGE_TO_SERVER;
         
@@ -121,7 +134,8 @@ public class InternetComponent implements ServerInterfaceCmd {
 	
 	@Override
 	public void searchFirendOrCircle( CommandE e ) {
-		Message msg = handler.obtainMessage(); 
+		Log.i( this.getClass().getSimpleName() , "call searchFirendOrCircle");
+		Message msg = handler.obtainMessage();
 		msg.what = ThreadTaskHandler.SEND_MESSAGE_TO_SERVER;
         
 		msg.obj = e;   //
@@ -133,6 +147,7 @@ public class InternetComponent implements ServerInterfaceCmd {
 
 	@Override
 	public void updateFriendInfomation(CommandE e) {
+		Log.i( this.getClass().getSimpleName() , "call updateFriendInfomation");
 		Message msg = handler.obtainMessage(); 
 		msg.what = ThreadTaskHandler.SEND_MESSAGE_TO_SERVER;
         
@@ -145,6 +160,7 @@ public class InternetComponent implements ServerInterfaceCmd {
 
 	@Override
 	public void deleteFriend(CommandE e) {
+		Log.i( this.getClass().getSimpleName() , "call deleteFriend");
 		Message msg = handler.obtainMessage(); 
 		msg.what = ThreadTaskHandler.SEND_MESSAGE_TO_SERVER;
         
@@ -157,12 +173,14 @@ public class InternetComponent implements ServerInterfaceCmd {
 
 	@Override
 	public void login(CommandE e) {
+		Log.i( this.getClass().getSimpleName() , "call login");
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void sendTip(CommandE e , Message m ) {
+		Log.i( this.getClass().getSimpleName() , "call sendTip");
 		Message msg = handler.obtainMessage(); 
 		msg.what = ThreadTaskHandler.SEND_MESSAGE_TO_SERVER;
         
@@ -174,6 +192,7 @@ public class InternetComponent implements ServerInterfaceCmd {
 
 	@Override
 	public void getTip(CommandE e) {
+		Log.i( this.getClass().getSimpleName() , "call getTip");
 		Message msg = handler.obtainMessage(); 
 		msg.what = ThreadTaskHandler.SEND_MESSAGE_TO_SERVER;
         
@@ -185,6 +204,7 @@ public class InternetComponent implements ServerInterfaceCmd {
 
 	@Override
 	public void uploadFile(CommandE e) {
+		Log.i( this.getClass().getSimpleName() , "call uploadFile");
 		Message msg = handler.obtainMessage();
 		msg.what = ThreadTaskHandler.SEND_MESSAGE_TO_SERVER;
 

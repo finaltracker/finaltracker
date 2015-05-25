@@ -10,6 +10,7 @@ import com.zdn.activity.MainActivity;
 import com.zdn.activity.PeopleActivity;
 import com.zdn.activity.searchFriendResultForAddActivity;
 import com.zdn.basicStruct.SendMessageRspEvent;
+import com.zdn.basicStruct.commonEvent;
 import com.zdn.basicStruct.friendMemberData;
 import com.zdn.basicStruct.friendMemberDataBasic;
 import com.zdn.basicStruct.getMessageRspEvent;
@@ -216,10 +217,13 @@ public class MainControl extends HandlerThread {
 			JSONObject  json_obj = null;
 			int queueRsp = -1;
 			String username= "";
+			String avatarUrl = "";
 			try {
 				json_obj = new JSONObject(rep);
 				queueRsp = json_obj.getInt("status");
 				username = json_obj.getString("username");
+				avatarUrl= json_obj.getString("avatar_url");
+
 				
 			} catch (JSONException e1) {
 
@@ -238,7 +242,12 @@ public class MainControl extends HandlerThread {
 			else if( queueRsp == EventDefine.IS_REQIST_RSP_HAS_REGIST )
 			{// 
 				// 请求好友列表
-				dataManager.self.preferencesPara.savePhoneNumber( username );
+				dataManager.self.selfInfo.basic.setPictureAddress(avatarUrl , true );
+				//update ui
+				commonEvent avatorupdate = new commonEvent(commonEvent. EVENT_TYPE_MY_AVATAR_UPDATE );
+				EventBus.getDefault().post(avatorupdate);
+
+				dataManager.self.preferencesPara.savePhoneNumber(username);
 				mInternetCom.getFriendList(packGetFriendListCommandE() );
 				
 				setState( STATE_LOGIN_NORMAL );
@@ -639,7 +648,32 @@ public class MainControl extends HandlerThread {
 			break;
 		case EventDefine.UPLOAD_FILE_RSP:
 		{
-			Log.d("MainControl", "UPLOAD_FILE_RSP: ");
+			int uploadRspRsp = parseHttpReqRspStatus(e);
+
+			if( uploadRspRsp == 0 )
+			{
+				JSONObject  json_obj = null;
+				try {
+					String rep = (String)e.GetPropertyContext("HTTP_REQ_RSP");
+					json_obj = new JSONObject(rep);
+					String newVatarorUrl = getStringFromJasonObj( json_obj, "avatar_url");
+					dataManager.self.selfInfo.basic.setPictureAddress( newVatarorUrl , true);
+					commonEvent avatorupdate = new commonEvent(commonEvent.EVENT_TYPE_MY_AVATAR_UPDATE);
+					EventBus.getDefault().post(avatorupdate);
+
+					Log.d("MainControl", "UPLOAD_FILE_RSP: ");
+				}
+				catch (JSONException e1) {
+
+					Log.d("MainControl" , "UPLOAD_FILE_RSP error: " + e1.getMessage() );
+					e1.printStackTrace();
+				}
+			}
+			else
+			{
+				Log.e("MainControl", "UPLOAD_FILE_RSP: fail! ");
+			}
+
 
 		}
 		break;

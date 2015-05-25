@@ -25,7 +25,7 @@ public class friendMemberData {
 	static public int   	PICTURE_ADDRESS	= 0x20;
 	
 	public friendMemberDataBasic basic;
-	public Bitmap	picture;
+	//public Bitmap	picture;
 	private List<ZdnMessage> message = null;
 
 
@@ -33,7 +33,7 @@ public class friendMemberData {
 	{
 		message = new ArrayList<ZdnMessage>();
 		basic = new friendMemberDataBasic();
-		picture = null;
+		//picture = null;
 		basic.setTag(tag);
 		
 		constructMessageFromDb( dataManager.mainContext );
@@ -44,7 +44,7 @@ public class friendMemberData {
 		message = new ArrayList<ZdnMessage>();
 		this.basic =basic;
         constructMessageFromDb( dataManager.mainContext );
-		picture = null;
+		//picture = null;
 	}
 	
 	public void constructMessageFromDb( Context context )
@@ -72,16 +72,16 @@ public class friendMemberData {
 	//从数据库得到basic后要填充其它内容时调用此函数
 	public void rebuildFriendMemberData()
 	{
-		picture = null;
+		//picture = null;
 		if(basic.pictureAddress != null && !basic.pictureAddress.isEmpty() )
 		{
-			picture = ImgUtil.getInstance().loadBitmapFromCache(basic.pictureAddress);
+			//picture = ImgUtil.getInstance().loadBitmapFromCache(basic.pictureAddress);
 		}
 	}
 	public void clone( friendMemberData one )
 	{
 		
-		picture = one.picture;
+		//picture = one.picture;
 		basic = one.basic;
 	}
 	

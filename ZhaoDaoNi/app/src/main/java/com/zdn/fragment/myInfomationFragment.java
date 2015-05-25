@@ -8,22 +8,21 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.lidroid.xutils.BitmapUtils;
 import com.zdn.R;
 import com.zdn.activity.commonNewInputActivity;
-import com.zdn.activity.friendInformationGroupActivity;
 import com.zdn.cropimage.ChooseDialog;
 import com.zdn.cropimage.CropHelper;
 import com.zdn.data.dataManager;
+import com.zdn.logic.InternetComponent;
 import com.zdn.logic.MainControl;
+import com.zdn.util.FileUtil;
 import com.zdn.util.OSUtils;
 
 import java.io.File;
@@ -93,7 +92,7 @@ public class myInfomationFragment extends Fragment {
         // Inflate the layout for this fragment
         rootView =  inflater.inflate(R.layout.my_information, container, false);
 
-        rootView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT ));
+        rootView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         mCropHelper=new CropHelper( this, OSUtils.getSdCardDirectory()+"/head.png");
         mDialog=new ChooseDialog( this, mCropHelper);
         init();
@@ -107,7 +106,15 @@ public class myInfomationFragment extends Fragment {
         erweimaView = (ImageView)( rootView.findViewById( R.id.myInformationErweimaView ) );
         changeHeadmap = (TextView)(rootView.findViewById(R.id.changePhotoHeadMap));
         nichengline = (LinearLayout)(rootView.findViewById( R.id.nichengLine) );
-        mymajia.setImageDrawable( getResources().getDrawable(R.drawable.ic_myphoto) );
+        //mymajia.setImageDrawable( getResources().getDrawable(R.drawable.ic_mylocalphoto)
+        String myPhotoUrl = dataManager.self.selfInfo.basic.getPictureAddress();
+
+
+        BitmapUtils avatorBitmapUtils = null;
+        String myAvatorDir ;
+        myAvatorDir = FileUtil.makePath(FileUtil.getBaseDirector(), getString(R.string.friendsAvator));
+        avatorBitmapUtils = new BitmapUtils(this.getActivity() , myAvatorDir );
+        avatorBitmapUtils.display(mymajia, InternetComponent.WEBSITE_ADDRESS_BASE_NO_SEPARATOR + myPhotoUrl);
         String nickName = dataManager.self.selfInfo.basic.getNickName();
         if( (null == nickName ) || (nickName.isEmpty()) )
         {
@@ -155,10 +162,10 @@ public class myInfomationFragment extends Fragment {
                 }
                 case CropHelper.HEAD_SAVE_PHOTO: {
                     if (data != null && data.getParcelableExtra("data") != null) {
-                        mymajia.setImageBitmap((Bitmap) data.getParcelableExtra("data"));
                         mCropHelper.savePhoto(data, OSUtils.getSdCardDirectory() + "/myHead.png");
+                        mymajia.setImageBitmap((Bitmap) data.getParcelableExtra("data"));
                         File uFile = new File( OSUtils.getSdCardDirectory() + "/myHead.png");
-                        MainControl.uploadFile("avatar", uFile );
+                        MainControl.uploadFile("avatar_url", uFile );
                     }
                     break;
                 }
