@@ -6,15 +6,19 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.lidroid.xutils.BitmapUtils;
 import com.qq.test.SDManager;
 import com.zdn.R;
 
+import com.zdn.basicStruct.commonEvent;
 import com.zdn.basicStruct.networkStatusEvent;
 import com.zdn.data.dataManager;
 import com.zdn.fragment.MapFragment;
 import com.zdn.fragment.myInfomationFragment;
 import com.zdn.jpush.ExampleUtil;
+import com.zdn.logic.InternetComponent;
 import com.zdn.logic.MainControl;
+import com.zdn.util.FileUtil;
 
 
 import android.app.ActionBar;
@@ -39,8 +43,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
 import br.liveo.interfaces.NavigationLiveoListener;
@@ -74,11 +76,12 @@ public class MainActivity extends NavigationLiveo implements NavigationLiveoList
 	private static final int TRASH	=	MORE_MARKERS+1;
 	private static final int SPAM	=	TRASH+1;
 	private static final int PERSONAL_INFORMATION	=	SPAM+1;
-
+	private BitmapUtils avatorBitmapUtils = null;
 
 	private CharSequence mTitle;
 	public static boolean isForeground = false;
 	MainControl control ;
+
 
 	public MainActivity()
 	{
@@ -96,7 +99,22 @@ public class MainActivity extends NavigationLiveo implements NavigationLiveoList
 		}
 		this.mUserName.setText( nickName );
 		//this.mUserEmail.setText("rudsonlive@gmail.com");
-		this.mUserPhoto.setImageResource(R.drawable.ic_myphoto);
+
+		String myAvatorDir ;
+		myAvatorDir = FileUtil.makePath(FileUtil.getBaseDirector(), getString(R.string.friendsAvator));
+		avatorBitmapUtils = new BitmapUtils(this , myAvatorDir );
+
+
+		String myPhotoUrl = dataManager.self.selfInfo.basic.getPictureAddress();
+
+		if( myPhotoUrl != null && (!myPhotoUrl.isEmpty()) )
+		{
+			Log.i( this.getClass().getSimpleName() , "myAvator url :" +  InternetComponent.WEBSITE_ADDRESS_BASE_NO_SEPARATOR + myPhotoUrl );
+			avatorBitmapUtils.display(mUserPhoto, InternetComponent.WEBSITE_ADDRESS_BASE_NO_SEPARATOR + myPhotoUrl );
+		}
+		else {
+			this.mUserPhoto.setImageResource(R.drawable.ic_mylocalphoto);
+		}
 		this.mUserBackground.setImageResource(R.drawable.ic_user_background);
 
 
@@ -389,6 +407,21 @@ public class MainActivity extends NavigationLiveo implements NavigationLiveoList
 			networkStatusEvent e = (networkStatusEvent)event;
 
 			updateTilteAccrodingToNetworkState( e.getwifiConnect() || e.getGprsConnect()  );
+		}
+
+		else if( event instanceof commonEvent)
+		{
+			commonEvent e =  (commonEvent)event;
+			if( e.getCommonType() == commonEvent.EVENT_TYPE_MY_AVATAR_UPDATE ) {
+				String myPhotoUrl = dataManager.self.selfInfo.basic.getPictureAddress();
+
+				avatorBitmapUtils.clearCache(InternetComponent.WEBSITE_ADDRESS_BASE_NO_SEPARATOR + myPhotoUrl);
+				avatorBitmapUtils.clearDiskCache(InternetComponent.WEBSITE_ADDRESS_BASE_NO_SEPARATOR + myPhotoUrl);
+				avatorBitmapUtils.clearMemoryCache(InternetComponent.WEBSITE_ADDRESS_BASE_NO_SEPARATOR + myPhotoUrl);
+				avatorBitmapUtils.display(mUserPhoto, InternetComponent.WEBSITE_ADDRESS_BASE_NO_SEPARATOR + myPhotoUrl);
+
+
+			}
 		}
 
 	}
