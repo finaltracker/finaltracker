@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.view.Window;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -60,7 +61,6 @@ public class chatActivity extends FragmentActivity {
 		memberPosition = bundle.getInt("memberPosition");
 		fdm = dataManager.getFrilendList().getMemberData(teamPosition, memberPosition);
 		setContentView(R.layout.chat_activity);
-		
 		EventBus.getDefault().register(this );  
 		initMessageInputToolBox();
 				initListView();

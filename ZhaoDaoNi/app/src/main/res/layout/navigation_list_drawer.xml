@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="200dp"
+    android:layout_height="match_parent"
+    android:layout_gravity="start"
+    android:background="@color/nliveo_white"
+    android:fitsSystemWindows="true"
+    tools:ignore="MissingPrefix">
+
+    <RelativeLayout
+        android:id="@+id/layoutHeader"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_width="match_parent"
+        android:background="@color/nliveo_white"
+        android:layout_height="150dp">
+
+        <com.zdn.view.RoundedImageView
+            android:id="@+id/navigationUserPhoto"
+            android:layout_width="@dimen/userPhoto_layout_width"
+            android:layout_height="@dimen/userPhoto_layout_height"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="@dimen/userPhoto_layout_marginLeft"
+            android:layout_marginLeft="@dimen/userPhoto_layout_marginLeft"
+            android:layout_marginTop="@dimen/userPhoto_layout_marginTop"
+        />
+
+        <TextView
+            android:id="@+id/navigation_name"
+            fontPath="fonts/Roboto-Medium.ttf"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="26dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:textColor="#000000"
+            android:text="@string/clear"
+            android:textSize="@dimen/default_textSize"
+            android:layout_below="@id/navigationUserPhoto"
+            />
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/contentList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:cacheColorHint="@color/nliveo_transparent"
+        android:choiceMode="singleChoice"
+        android:fitsSystemWindows="true"
+        android:divider="@color/nliveo_transparent"
+        android:background="@color/nliveo_white"
+        android:layout_below="@id/layoutHeader"
+        android:dividerHeight="0dp" />
+
+
+
+
+</RelativeLayout>

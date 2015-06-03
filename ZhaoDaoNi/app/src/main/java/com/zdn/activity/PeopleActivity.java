@@ -54,6 +54,7 @@ public class PeopleActivity extends zdnBasicActivity implements ExpandableListVi
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
+
 		setContentView(R.layout.fragment_constact);
 		//mBaseView = inflate(R.layout.fragment_constact, null);
 		findView();

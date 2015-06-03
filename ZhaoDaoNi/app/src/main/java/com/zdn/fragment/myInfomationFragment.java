@@ -35,7 +35,7 @@ import java.io.File;
  * Use the {@link myInfomationFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class myInfomationFragment extends Fragment {
+public class myInfomationFragment extends mainActivityFragmentBase {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -74,6 +74,7 @@ public class myInfomationFragment extends Fragment {
 
     public myInfomationFragment() {
         // Required empty public constructor
+        setFragmentIndex( mainActivityFragmentBase.PERSION_INFORMATION_FRAGMENT );
     }
 
     @Override

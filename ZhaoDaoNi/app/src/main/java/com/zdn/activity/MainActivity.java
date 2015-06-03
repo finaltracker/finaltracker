@@ -10,11 +10,13 @@ import com.lidroid.xutils.BitmapUtils;
 import com.qq.test.SDManager;
 import com.zdn.R;
 
+import com.zdn.adapter.navigationListDrawerItemAdapter;
 import com.zdn.basicStruct.commonEvent;
 import com.zdn.basicStruct.networkStatusEvent;
 import com.zdn.data.dataManager;
 import com.zdn.fragment.MapFragment;
 import com.zdn.fragment.myInfomationFragment;
+import com.zdn.fragment.navigationFragment;
 import com.zdn.jpush.ExampleUtil;
 import com.zdn.logic.InternetComponent;
 import com.zdn.logic.MainControl;
@@ -36,6 +38,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.util.SparseIntArray;
 import android.view.LayoutInflater;
@@ -51,7 +54,9 @@ import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
 import de.greenrobot.event.EventBus;
 
-public class MainActivity extends NavigationLiveo implements NavigationLiveoListener , MapFragment.OnFragmentInteractionListener {
+import static com.zdn.adapter.navigationListDrawerItemAdapter.*;
+
+public class MainActivity extends FragmentActivity implements navigationFragment.navigationChanged {
 
 	//for receive customer msg from jpush server
 	private MessageReceiver mMessageReceiver;
@@ -76,18 +81,41 @@ public class MainActivity extends NavigationLiveo implements NavigationLiveoList
 	private static final int TRASH	=	MORE_MARKERS+1;
 	private static final int SPAM	=	TRASH+1;
 	private static final int PERSONAL_INFORMATION	=	SPAM+1;
+	private static final int MAIN_MAP = PERSONAL_INFORMATION+1;
 	private BitmapUtils avatorBitmapUtils = null;
 
 	private CharSequence mTitle;
 	public static boolean isForeground = false;
 	MainControl control ;
-
+	List<navigationListDrawerItemAdapter.navigationListContextHolder> nlch;
+	private int selectFragmentIndex = 0;
 
 	public MainActivity()
 	{
 		me = this; // 
 	}
 
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		setContentView(R.layout.main_activity);
+		init();
+
+		super.onCreate(savedInstanceState);
+
+		nlch = new ArrayList<navigationListDrawerItemAdapter.navigationListContextHolder>();
+		nlch.add(new navigationListDrawerItemAdapter.navigationListContextHolder("inbox", R.drawable.ic_inbox_black_24dp));
+		nlch.add( new navigationListDrawerItemAdapter.navigationListContextHolder("starred",R.drawable.ic_star_black_24dp) );
+		nlch.add(new navigationListDrawerItemAdapter.navigationListContextHolder("sent_mail", R.drawable.ic_send_black_24dp));
+		nlch.add(new navigationListDrawerItemAdapter.navigationListContextHolder("drafts", R.drawable.ic_drafts_black_24dp));
+		nlch.add(new navigationListDrawerItemAdapter.navigationListContextHolder("trash", R.drawable.ic_delete_black_24dp));
+		nlch.add( new navigationListDrawerItemAdapter.navigationListContextHolder("spam",R.drawable.ic_report_black_24dp) );
+		//for test only
+		onItemClickNavigation(MainActivity.MAIN_MAP);
+		showNavigation();
+
+	}
+/*
 	@Override
 	public void onUserInformation() {
 		//User information here
@@ -175,11 +203,11 @@ public class MainActivity extends NavigationLiveo implements NavigationLiveoList
 		SpinnerAdapter mSpinnerAdapter = ArrayAdapter.createFromResource(this,
 				R.array.plannets_array, android.R.layout.simple_spinner_dropdown_item);
 		getActionBar().setListNavigationCallbacks(mSpinnerAdapter, new DropDownListenser());
-*/
+* /
 
 
 	}
-
+*/
 	private void init()
 	{
 		mTitle = getTitle();
@@ -197,6 +225,8 @@ public class MainActivity extends NavigationLiveo implements NavigationLiveoList
 		registerMessageReceiver();  // used for receive msg
 
 		EventBus.getDefault().register(this);
+
+
 	}
 	static public MainActivity getInstance() { return me; }
 
@@ -253,14 +283,14 @@ public class MainActivity extends NavigationLiveo implements NavigationLiveoList
 		if( connect )
 		{
 			//
-			toolbar.setBackgroundColor( Color.parseColor("#00BFFF") );
-			setTitle(getResources().getString(R.string.titleName));
+			toolbar.setBackgroundColor(Color.parseColor("#00BFFF"));
+			//TODO setTitle(getResources().getString(R.string.titleName));
 
 		}
 		else
 		{
-			toolbar.setBackgroundColor( Color.parseColor("#FF0000") );
-			setTitle(getResources().getString(R.string.networkNoConnect ));
+			toolbar.setBackgroundColor(Color.parseColor("#FF0000"));
+			//TODO setTitle(getResources().getString(R.string.networkNoConnect));
 		}
 	}
 	@Override
@@ -295,28 +325,38 @@ public class MainActivity extends NavigationLiveo implements NavigationLiveoList
 		return super.onOptionsItemSelected(item);
 	}
 
-	@Override
-	public void onItemClickNavigation(int position, int layoutContainerId) {
-		//Toast.makeText(this, "onItemClickNavigation", Toast.LENGTH_SHORT).show();
+	public void showNavigation()
+	{
 		FragmentManager fragmentManager = getFragmentManager();
-		if( position == MainActivity.PERSONAL_INFORMATION  )
+		FragmentTransaction ft = fragmentManager.beginTransaction();
+		ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+		ft.add(R.id.simple_fragment,new navigationFragment(this, nlch, this, selectFragmentIndex)).commit();
+	}
+	//@Override
+	public void onItemClickNavigation(int position ) {
+		//Toast.makeText(this, "onItemClickNavigation", Toast.LENGTH_SHORT).show();
+		selectFragmentIndex = position;
+		FragmentManager fragmentManager = getFragmentManager();
+		switch( position )
 		{
-			fragmentManager
-					.beginTransaction()
-					.replace(br.liveo.navigationliveo.R.id.container,
-							myInfomationFragment.newInstance("","") ).commit();
+			case MainActivity.PERSONAL_INFORMATION:
+				fragmentManager
+						.beginTransaction()
+						.replace(R.id.simple_fragment,
+								myInfomationFragment.newInstance("","") ).commit();
+				break;
+			case MainActivity.MAIN_MAP:
+				fragmentManager
+						.beginTransaction()
+						.replace(R.id.simple_fragment,
+								new MapFragment()).commit();
+			default:
+				break;
+		}
 
-		}
-		else
-		{
-			fragmentManager
-					.beginTransaction()
-					.replace(layoutContainerId,
-							new MapFragment()).commit();
-		}
 	}
 
-	@Override
+	//@Override
 	public void onPrepareOptionsMenuNavigation(Menu menu, int position, boolean visible) {
 		//hide the menu when the navigation is opens
 
@@ -326,7 +366,7 @@ public class MainActivity extends NavigationLiveo implements NavigationLiveoList
 
 
 	}
-
+/*
 	@Override
 	public void onClickFooterItemNavigation(View v) {
 		Toast.makeText(this, "onClickFooterItemNavigation", Toast.LENGTH_SHORT).show();
@@ -343,7 +383,7 @@ public class MainActivity extends NavigationLiveo implements NavigationLiveoList
 	public void onFragmentInteraction(Uri uri) {
 
 	}
-
+*/
 	/**
 	 * A placeholder fragment containing a simple view.
 	 */
@@ -408,7 +448,7 @@ public class MainActivity extends NavigationLiveo implements NavigationLiveoList
 
 			updateTilteAccrodingToNetworkState( e.getwifiConnect() || e.getGprsConnect()  );
 		}
-
+/*
 		else if( event instanceof commonEvent)
 		{
 			commonEvent e =  (commonEvent)event;
@@ -423,6 +463,7 @@ public class MainActivity extends NavigationLiveo implements NavigationLiveoList
 
 			}
 		}
+		*/
 
 	}
 	
@@ -586,7 +627,7 @@ public class MainActivity extends NavigationLiveo implements NavigationLiveoList
 	@Override
 	public void onBackPressed()
 	{
-
+/*
 		if (getCurrentPosition() != 0)
 		{
 			chooseNavigationPosition(0);
@@ -605,5 +646,7 @@ public class MainActivity extends NavigationLiveo implements NavigationLiveoList
 				finish();
 			}
 		}
+
+		*/
 	}
 }

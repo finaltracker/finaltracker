@@ -13,18 +13,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.baidu.mapapi.SDKInitializer;
+import com.baidu.mapapi.map.BaiduMap;
+import com.baidu.mapapi.map.MapStatus;
+import com.baidu.mapapi.map.MapStatusUpdate;
+import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
+import com.baidu.mapapi.model.LatLng;
 import com.zdn.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link MapFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link MapFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class MapFragment extends Fragment {
+public class MapFragment extends mainActivityFragmentBase {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -35,54 +32,6 @@ public class MapFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private OnFragmentInteractionListener mListener;
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.main, menu);
-        menu.findItem(R.id.contact_friend).setVisible(true);
-        menu.findItem(R.id.action_add).setVisible(true);
-        menu.findItem(R.id.action_settings).setVisible(true);
-    }
-
-    @Override
-    public void onPrepareOptionsMenu(Menu menu) {
-        super.onPrepareOptionsMenu(menu);
-        menu.findItem(R.id.contact_friend).setVisible(true);
-        menu.findItem(R.id.action_add).setVisible(true);
-        menu.findItem(R.id.action_settings).setVisible(true);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-
-
-        int id = item.getItemId();
-        switch(id)
-        {
-            case R.id.action_settings:
-
-                break;
-            case R.id.action_add:
-                startActivity( new Intent("com.zdn.activity.AddFriendActivity.ACTION") );
-                break;
-
-            case R.id.contact_friend:
-
-                startActivity( new Intent("com.zdn.activity.PeopleActivity.ACTION") );
-
-                break;
-            default:
-
-                break;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     /**
      * Use this factory method to create a new instance of
@@ -104,6 +53,7 @@ public class MapFragment extends Fragment {
 
     public MapFragment() {
         // Required empty public constructor
+        setFragmentIndex(mainActivityFragmentBase.MAP_FRAGMENT );
     }
 
     @Override
@@ -133,31 +83,37 @@ public class MapFragment extends Fragment {
         //获取地图控件引用
         mMapView = (MapView) rootView.findViewById(R.id.bmapView);
 
+        BaiduMap mBaidumap = mMapView.getMap();
+
+//设定中心点坐标
+
+        LatLng cenpt = new LatLng(31.10,121.006983);
+        //定义地图状态
+        MapStatus mMapStatus = new MapStatus.Builder()
+                .target(cenpt)
+                .zoom(10)
+                .build();
+        //定义MapStatusUpdate对象，以便描述地图状态将要发生的变化
+
+
+        MapStatusUpdate mMapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mMapStatus);
+        //改变地图状态
+        mBaidumap.setMapStatus(mMapStatusUpdate);
+
         return rootView;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        try {
-            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
+
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+
     }
 
     /**
@@ -170,10 +126,7 @@ public class MapFragment extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri);
-    }
+
 
     @Override
     public void onStart() {
