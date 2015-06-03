@@ -23,7 +23,6 @@ android {
 }
 
 dependencies {
-    compile project(':library')
     compile 'com.android.support:appcompat-v7:22.1.0+'
     compile files('libs/eventbus.jar')
     compile files('libs/jpush-sdk-release1.6.4.jar')

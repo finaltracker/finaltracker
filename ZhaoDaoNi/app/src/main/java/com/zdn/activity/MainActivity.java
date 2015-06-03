@@ -48,8 +48,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import br.liveo.interfaces.NavigationLiveoListener;
-import br.liveo.navigationliveo.NavigationLiveo;
 import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
 import de.greenrobot.event.EventBus;
@@ -279,6 +277,7 @@ public class MainActivity extends FragmentActivity implements navigationFragment
 	}
 	public void updateTilteAccrodingToNetworkState( boolean connect )
 	{
+		/*
 		View toolbar = this.findViewById(R.id.toolbar);
 		if( connect )
 		{
@@ -292,6 +291,7 @@ public class MainActivity extends FragmentActivity implements navigationFragment
 			toolbar.setBackgroundColor(Color.parseColor("#FF0000"));
 			//TODO setTitle(getResources().getString(R.string.networkNoConnect));
 		}
+		*/
 	}
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
