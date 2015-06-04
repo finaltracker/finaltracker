@@ -104,6 +104,7 @@
 	    <item name="android:layout_height">50.0dip</item>
         <item name="android:layout_marginRight">10dp</item>
 	</style>
+
 	
 	<style name = "add_friend_detail_image_view">
 	    <item name="android:layout_marginLeft">10dp</item>

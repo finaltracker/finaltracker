@@ -1,14 +1,8 @@
 package com.zdn.fragment;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -41,19 +35,11 @@ public class MapFragment extends mainActivityFragmentBase {
      * @param param2 Parameter 2.
      * @return A new instance of fragment MapFragment.
      */
-    // TODO: Rename and change types and number of parameters
-    public static MapFragment newInstance(String param1, String param2) {
-        MapFragment fragment = new MapFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
-    public MapFragment() {
-        // Required empty public constructor
-        setFragmentIndex(mainActivityFragmentBase.MAP_FRAGMENT );
+    public MapFragment( menuStateChange msc )
+    {
+        super(msc , mainActivityFragmentBase.MAP_FRAGMENT );
+
     }
 
     @Override
@@ -99,6 +85,8 @@ public class MapFragment extends mainActivityFragmentBase {
         MapStatusUpdate mMapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mMapStatus);
         //改变地图状态
         mBaidumap.setMapStatus(mMapStatusUpdate);
+
+        initCommonView(rootView);
 
         return rootView;
     }

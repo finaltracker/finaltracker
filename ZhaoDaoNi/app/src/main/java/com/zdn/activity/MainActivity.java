@@ -15,6 +15,7 @@ import com.zdn.basicStruct.commonEvent;
 import com.zdn.basicStruct.networkStatusEvent;
 import com.zdn.data.dataManager;
 import com.zdn.fragment.MapFragment;
+import com.zdn.fragment.mainActivityFragmentBase;
 import com.zdn.fragment.myInfomationFragment;
 import com.zdn.fragment.navigationFragment;
 import com.zdn.jpush.ExampleUtil;
@@ -54,7 +55,7 @@ import de.greenrobot.event.EventBus;
 
 import static com.zdn.adapter.navigationListDrawerItemAdapter.*;
 
-public class MainActivity extends FragmentActivity implements navigationFragment.navigationChanged {
+public class MainActivity extends FragmentActivity implements navigationFragment.navigationChanged ,mainActivityFragmentBase.menuStateChange {
 
 	//for receive customer msg from jpush server
 	private MessageReceiver mMessageReceiver;
@@ -87,6 +88,7 @@ public class MainActivity extends FragmentActivity implements navigationFragment
 	MainControl control ;
 	List<navigationListDrawerItemAdapter.navigationListContextHolder> nlch;
 	private int selectFragmentIndex = 0;
+	navigationFragment navigationf = null; // 记录导航fragment
 
 	public MainActivity()
 	{
@@ -103,14 +105,13 @@ public class MainActivity extends FragmentActivity implements navigationFragment
 
 		nlch = new ArrayList<navigationListDrawerItemAdapter.navigationListContextHolder>();
 		nlch.add(new navigationListDrawerItemAdapter.navigationListContextHolder("inbox", R.drawable.ic_inbox_black_24dp));
-		nlch.add( new navigationListDrawerItemAdapter.navigationListContextHolder("starred",R.drawable.ic_star_black_24dp) );
+		nlch.add(new navigationListDrawerItemAdapter.navigationListContextHolder("starred", R.drawable.ic_star_black_24dp));
 		nlch.add(new navigationListDrawerItemAdapter.navigationListContextHolder("sent_mail", R.drawable.ic_send_black_24dp));
 		nlch.add(new navigationListDrawerItemAdapter.navigationListContextHolder("drafts", R.drawable.ic_drafts_black_24dp));
 		nlch.add(new navigationListDrawerItemAdapter.navigationListContextHolder("trash", R.drawable.ic_delete_black_24dp));
-		nlch.add( new navigationListDrawerItemAdapter.navigationListContextHolder("spam",R.drawable.ic_report_black_24dp) );
-		//for test only
+		nlch.add(new navigationListDrawerItemAdapter.navigationListContextHolder("spam", R.drawable.ic_report_black_24dp));
+
 		onItemClickNavigation(MainActivity.MAIN_MAP);
-		showNavigation();
 
 	}
 /*
@@ -330,7 +331,21 @@ public class MainActivity extends FragmentActivity implements navigationFragment
 		FragmentManager fragmentManager = getFragmentManager();
 		FragmentTransaction ft = fragmentManager.beginTransaction();
 		ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-		ft.add(R.id.simple_fragment,new navigationFragment(this, nlch, this, selectFragmentIndex)).commit();
+		navigationf = new navigationFragment(this, nlch, this, selectFragmentIndex);
+		ft.add(R.id.simple_fragment,navigationf ).commit();
+	}
+	public boolean hideNavigation()
+	{
+		FragmentManager fragmentManager = getFragmentManager();
+		FragmentTransaction ft = fragmentManager.beginTransaction();
+		if( navigationf != null )
+		{
+			ft.remove(navigationf).commit();
+			navigationf = null;
+			return true;
+		}
+
+		return false;
 	}
 	//@Override
 	public void onItemClickNavigation(int position ) {
@@ -349,7 +364,7 @@ public class MainActivity extends FragmentActivity implements navigationFragment
 				fragmentManager
 						.beginTransaction()
 						.replace(R.id.simple_fragment,
-								new MapFragment()).commit();
+								new MapFragment( this)).commit();
 			default:
 				break;
 		}
@@ -384,48 +399,7 @@ public class MainActivity extends FragmentActivity implements navigationFragment
 
 	}
 */
-	/**
-	 * A placeholder fragment containing a simple view.
-	 */
-	public static class PlaceholderFragment extends Fragment {
-		/**
-		 * The fragment argument representing the section number for this
-		 * fragment.
-		 */
-		private static final String ARG_SECTION_NUMBER = "section_number";
 
-		/**
-		 * Returns a new instance of this fragment for the given section number.
-		 */
-		public static PlaceholderFragment newInstance(int sectionNumber) {
-			PlaceholderFragment fragment = new PlaceholderFragment();
-			Bundle args = new Bundle();
-			args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-			fragment.setArguments(args);
-			return fragment;
-		}
-
-		public PlaceholderFragment() {
-		}
-
-		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container,
-				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_main, container,
-					false);
-
-			return rootView;
-		}
-
-		@Override
-		public void onAttach(Activity activity) {
-			super.onAttach(activity);
-			((MainActivity) activity).onSectionAttached(getArguments().getInt(
-					ARG_SECTION_NUMBER));
-		}
-	}
-	
-	
 	@Override
 	protected void onDestroy() {
 
@@ -535,6 +509,25 @@ public class MainActivity extends FragmentActivity implements navigationFragment
 		registerReceiver(mMessageReceiver, filter);
 	}
 
+	@Override
+	public void onMenuClick(int menuId) {
+		switch( menuId )
+		{
+			case R.id.navigationButton:
+				showNavigation();
+				break;
+			case R.id.back_button:
+				break;
+			default:
+				break;
+		}
+	}
+
+	@Override
+	public void menuFragmentClick() {
+		hideNavigation();
+	}
+
 	public class MessageReceiver extends BroadcastReceiver {
 
 		@Override
@@ -627,6 +620,10 @@ public class MainActivity extends FragmentActivity implements navigationFragment
 	@Override
 	public void onBackPressed()
 	{
+		if( hideNavigation() )
+		{	//试图先隐藏导航栏
+			return;
+		}
 /*
 		if (getCurrentPosition() != 0)
 		{
