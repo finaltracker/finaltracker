@@ -45,6 +45,7 @@ import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -89,7 +90,6 @@ public class MainActivity extends FragmentActivity implements navigationFragment
 	List<navigationListDrawerItemAdapter.navigationListContextHolder> nlch;
 	private int selectFragmentIndex = 0;
 	navigationFragment navigationf = null; // 记录导航fragment
-
 	public MainActivity()
 	{
 		me = this; // 
@@ -331,17 +331,23 @@ public class MainActivity extends FragmentActivity implements navigationFragment
 		FragmentManager fragmentManager = getFragmentManager();
 		FragmentTransaction ft = fragmentManager.beginTransaction();
 		ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-		navigationf = new navigationFragment(this, nlch, this, selectFragmentIndex);
+		if( navigationf == null ) {
+			navigationf = new navigationFragment(this, nlch, this, selectFragmentIndex);
+		}
+
 		ft.add(R.id.simple_fragment,navigationf ).commit();
+
+
 	}
 	public boolean hideNavigation()
 	{
-		FragmentManager fragmentManager = getFragmentManager();
-		FragmentTransaction ft = fragmentManager.beginTransaction();
-		if( navigationf != null )
+		if( navigationf != null  && navigationf.isVisible() )
 		{
+			FragmentManager fragmentManager = getFragmentManager();
+			FragmentTransaction ft = fragmentManager.beginTransaction();
+
 			ft.remove(navigationf).commit();
-			navigationf = null;
+			//navigationf = null;
 			return true;
 		}
 
@@ -624,12 +630,6 @@ public class MainActivity extends FragmentActivity implements navigationFragment
 		{	//试图先隐藏导航栏
 			return;
 		}
-/*
-		if (getCurrentPosition() != 0)
-		{
-			chooseNavigationPosition(0);
-		}
-
 		else
 		{
 			long currentTime = System.currentTimeMillis();
@@ -644,6 +644,31 @@ public class MainActivity extends FragmentActivity implements navigationFragment
 			}
 		}
 
-		*/
+	}
+
+	@Override
+	public boolean dispatchTouchEvent(MotionEvent ev) {
+		switch(ev.getAction()){
+			case MotionEvent.ACTION_DOWN: {
+				if( navigationf != null &&  navigationf.isVisible()) {
+					float x = ev.getRawX();
+
+					Log.d(this.getClass().getSimpleName(), "dispatchTouchEvent getRawX" + x);
+
+					if (x > navigationf.getFragmentWidth() ) {
+						hideNavigation();
+					}
+				}
+				break;
+			}
+			case MotionEvent.ACTION_UP:
+				break;
+			default:
+				break;
+			}
+
+		return super.dispatchTouchEvent(ev);
+
+
 	}
 }

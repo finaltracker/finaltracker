@@ -72,12 +72,14 @@ public class mainActivityFragmentBase extends Fragment {
             }
         });
 
+        /*
         rootView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 msc.menuFragmentClick();
             }
-        });
+        })
+        */;
     }
 
     public void  setBackGroundColor( int color )

@@ -135,4 +135,8 @@ public class navigationFragment extends Fragment {
 
     }
 
+    public int getFragmentWidth()
+    {
+        return this.rootView.getWidth();
+    }
 }
