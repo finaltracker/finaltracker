@@ -74,6 +74,7 @@ public class navigationListDrawerItemAdapter extends BaseAdapter{
 				@Override
 				public boolean onTouch(View v, MotionEvent event) {
 					viewHolder.itemDrawer.setBackgroundColor(mContext.getResources().getColor(R.color.gray));
+					nc.onItemClickNavigation( position );
 					return false;
 				}
 			});

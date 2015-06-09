@@ -36,6 +36,10 @@ public class MapFragment extends mainActivityFragmentBase {
      * @return A new instance of fragment MapFragment.
      */
 
+    public MapFragment()
+    {
+        super( null , mainActivityFragmentBase.MAP_FRAGMENT );
+    }
     public MapFragment( menuStateChange msc )
     {
         super(msc , mainActivityFragmentBase.MAP_FRAGMENT );
@@ -68,6 +72,11 @@ public class MapFragment extends mainActivityFragmentBase {
 
         //获取地图控件引用
         mMapView = (MapView) rootView.findViewById(R.id.bmapView);
+        View back_button =   rootView.findViewById(R.id.back_button);
+        if( back_button != null )
+        {
+            back_button.setVisibility(View.INVISIBLE );
+        }
 
         BaiduMap mBaidumap = mMapView.getMap();
 

@@ -21,6 +21,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
@@ -28,6 +29,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.widget.ImageView;
+
+import com.lidroid.xutils.bitmap.core.AsyncDrawable;
 
 public class RoundedImageView extends ImageView {
 
@@ -57,7 +60,22 @@ public class RoundedImageView extends ImageView {
             return;
         }
 
-        Bitmap b = ((BitmapDrawable) drawable).getBitmap();
+        Bitmap b = null;
+        if(drawable instanceof BitmapDrawable){
+            b =  ((BitmapDrawable)drawable).getBitmap() ;
+        }else if(drawable instanceof AsyncDrawable){
+            b = Bitmap
+                    .createBitmap(
+                            getWidth(),
+                            getHeight(),
+                            drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888
+                                    : Bitmap.Config.RGB_565);
+            Canvas canvas1 = new Canvas(b);
+            // canvas.setBitmap(bitmap);
+            drawable.setBounds(0, 0, getWidth(),
+                    getHeight());
+            drawable.draw(canvas1);
+        }
         Bitmap bitmap = b.copy(Bitmap.Config.ARGB_8888, true);
 
         int w = getWidth();
