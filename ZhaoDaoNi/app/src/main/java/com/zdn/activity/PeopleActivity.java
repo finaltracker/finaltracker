@@ -222,53 +222,6 @@ public class PeopleActivity extends zdnBasicActivity implements ExpandableListVi
 		return false;
 	}
 
-	 @Override
-	    public boolean onPrepareOptionsMenu(Menu menu){
-	     
-	     super.onPrepareOptionsMenu(menu);
-	     Log.d(this.getClass().getName(), "R.id.home = " + android.R.id.home );
-	     MenuItem menuItem=menu.findItem( android.R.id.home );
-	     if( menuItem !=null )
-	     {
-	    	 menuItem.setIcon(R.drawable.add);
-	     }
-	     
-	     //只有当在添加的状态下（addingNew=true）或者ListView被selected的情况下REMOVE_TODO菜单项才可见
-	    // removeItem.setVisible(addingNew||idx>-1);
-	     
-	  	return true;
-	     
-	    }
-	 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		switch(id)
-		{
-		case R.id.action_settings:
-			
-			break;
-
-		case R.id.action_add:
-			startActivity( new Intent("com.zdn.activity.AddFriendActivity.ACTION") );
-			break;
-			
-		case R.id.contact_friend:
-			
-			startActivity( new Intent("com.zdn.activity.PeopleActivity.ACTION") );
-			
-			break;
-		default:
-			
-			break;
-		}
-
-		return super.onOptionsItemSelected(item);
-	}
-
 	
 
 }

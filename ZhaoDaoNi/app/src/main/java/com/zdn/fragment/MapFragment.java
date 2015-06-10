@@ -79,6 +79,7 @@ public class MapFragment extends mainActivityFragmentBase {
         }
 
         BaiduMap mBaidumap = mMapView.getMap();
+        mBaidumap.setTrafficEnabled( false );
 
 //设定中心点坐标
 

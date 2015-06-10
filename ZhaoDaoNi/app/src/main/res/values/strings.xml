@@ -30,6 +30,7 @@
     <string name="tv_xieyi_url">使用条款和隐私政策</string>
     <string name="nagivation">导航</string>
     <string name="back">返回</string>
+    <string name="friends">好友</string>
     <string name="tv_tips_password">密码由6-16位数字,字母或符号组成,不能是9位一下纯数字组成</string>
     <string name="tv_tips_name">建议填写你的真实姓名,让你的朋友更容易人出你,此昵称以后可以随时修改</string>
     <string name="et_name_hint">昵称</string>
