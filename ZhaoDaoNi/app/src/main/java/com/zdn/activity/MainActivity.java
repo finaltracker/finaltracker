@@ -6,22 +6,20 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.lidroid.xutils.BitmapUtils;
 import com.qq.test.SDManager;
 import com.zdn.R;
 
 import com.zdn.adapter.navigationListDrawerItemAdapter;
-import com.zdn.basicStruct.commonEvent;
 import com.zdn.basicStruct.networkStatusEvent;
+import com.zdn.com.headerCtrl;
 import com.zdn.data.dataManager;
 import com.zdn.fragment.MapFragment;
+import com.zdn.fragment.PeopleFragment;
 import com.zdn.fragment.mainActivityFragmentBase;
 import com.zdn.fragment.myInfomationFragment;
 import com.zdn.fragment.navigationFragment;
 import com.zdn.jpush.ExampleUtil;
 import com.zdn.logic.MainControl;
-import android.app.ActionBar;
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
@@ -35,7 +33,6 @@ import android.os.HandlerThread;
 import android.os.Message;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -45,7 +42,7 @@ import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
 import de.greenrobot.event.EventBus;
 
-public class MainActivity extends FragmentActivity implements navigationFragment.navigationChanged ,mainActivityFragmentBase.menuStateChange {
+public class MainActivity extends FragmentActivity implements navigationFragment.navigationChanged ,headerCtrl.menuStateChange {
 
 	//for receive customer msg from jpush server
 	private MessageReceiver mMessageReceiver;
@@ -70,6 +67,7 @@ public class MainActivity extends FragmentActivity implements navigationFragment
 	private static final int SPAM	=	TRASH+1;
 	public static final int PERSONAL_INFORMATION	=	SPAM+1;
 	public static final int MAIN_MAP = PERSONAL_INFORMATION+1;
+    public static final int FRIEND_LIST = MAIN_MAP+1;
 
 	public static boolean isForeground = false;
 	MainControl control ;
@@ -227,6 +225,13 @@ public class MainActivity extends FragmentActivity implements navigationFragment
 						.beginTransaction()
 						.replace(R.id.simple_fragment,
 								new MapFragment( this)).commit();
+                break;
+            case MainActivity.FRIEND_LIST:
+                fragmentManager
+                        .beginTransaction()
+                        .replace(R.id.simple_fragment,
+                                new PeopleFragment( this )).commit();
+                break;
 			default:
 				break;
 		}
@@ -336,7 +341,11 @@ public class MainActivity extends FragmentActivity implements navigationFragment
 				showNavigation();
 				break;
 			case R.id.back_button:
+                onBackPressed();
 				break;
+            case R.id.friendList:
+                onItemClickNavigation( MainActivity.FRIEND_LIST );
+                break;
 			default:
 				break;
 		}

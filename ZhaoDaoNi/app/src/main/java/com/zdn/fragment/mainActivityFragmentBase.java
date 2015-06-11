@@ -19,25 +19,31 @@ import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.model.LatLng;
 import com.zdn.R;
+import com.zdn.basicStruct.networkStatusEvent;
+import com.zdn.com.headerCtrl;
+
+import de.greenrobot.event.EventBus;
 
 public class mainActivityFragmentBase extends Fragment {
     int fragmentIndex = - 1;
     static final public int MAP_FRAGMENT   =   0;
-    static final public int PERSION_INFORMATION_FRAGMENT   =   1;
+    static final public int PERSION_INFORMATION_FRAGMENT   =   MAP_FRAGMENT + 1;
+    static final public int FRIEND_LIST_FRAGMENT   =   PERSION_INFORMATION_FRAGMENT + 1;
 
     private View rootView = null;
     private LinearLayout zdnHeaderLayout = null;
     private ImageView navigationButton = null;
     private TextView headerTitle = null;
-
-    private menuStateChange msc = null;
+    private ImageView ShowFriendListButton = null;
+    private headerCtrl.menuStateChange msc = null;
+    headerCtrl hc = null;
 
     public mainActivityFragmentBase()
     {
 
     }
 
-    public mainActivityFragmentBase( menuStateChange msc , int fragmentIndex )
+    public mainActivityFragmentBase( headerCtrl.menuStateChange msc , int fragmentIndex )
     {
         this.msc = msc;
         this.fragmentIndex = fragmentIndex;
@@ -57,62 +63,44 @@ public class mainActivityFragmentBase extends Fragment {
     {
         this.rootView = rootView;
         zdnHeaderLayout = (LinearLayout) rootView.findViewById(R.id.header);
-        navigationButton = (ImageView)rootView.findViewById(R.id.navigationButton);
-        headerTitle = ( TextView )rootView.findViewById(R.id.headerTitle);
+        hc = new headerCtrl( zdnHeaderLayout , msc );
 
-        navigationButton.setOnClickListener( new View.OnClickListener()
-        {
 
-            @Override
-            public void onClick(View v) {
-                if( msc != null )
-                {
-                    msc.onMenuClick( R.id.navigationButton );
-                }
-            }
-        });
-
-        /*
-        rootView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                msc.menuFragmentClick();
-            }
-        })
-        */;
     }
 
     public void  setBackGroundColor( int color )
     {
-        if( zdnHeaderLayout != null )
-        {
-            zdnHeaderLayout.setBackgroundColor( color );
-        }
+        hc.setBackGroundColor(color);
     }
 
     public void setTitle( String title )
     {
-        if( headerTitle != null )
-        {
-            headerTitle.setText(title);
-        }
+        hc.setTitle( title );
     }
 
     public void setNavigationImage( int srcId )
     {
-        if( navigationButton != null )
-        {
-            navigationButton.setBackgroundResource( srcId);
-        }
-
-
+        hc.setNavigationImage(srcId);
     }
 
-    public interface menuStateChange
+
+
+    public void onEvent(Object event)
     {
-        public void onMenuClick(  int menuId );
 
-        public void menuFragmentClick();
+    }
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        EventBus.getDefault().register(this);
+        return null;
+
     }
 
+    @Override
+    public void onDestroyView() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroyView();
+
+    }
 }

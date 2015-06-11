@@ -1,76 +1,61 @@
-package com.zdn.activity;
+package com.zdn.fragment;
 
 
 import com.zdn.AsyncTaskBase;
 import com.zdn.R;
+import com.zdn.activity.chatActivity;
+import com.zdn.basicStruct.commonEvent;
+import com.zdn.com.headerCtrl;
 import com.zdn.sort.ClearEditText;
 import com.zdn.adapter.FriendListAdapter;
 import com.zdn.basicStruct.SendMessageRspEvent;
-import com.zdn.basicStruct.friendMemberData;
 import com.zdn.basicStruct.getMessageRspEvent;
 import com.zdn.data.dataManager;
 import com.zdn.view.FriendListView;
 import com.zdn.view.LoadingView;
 
-import de.greenrobot.event.EventBus;
-
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 
-public class PeopleActivity extends zdnBasicActivity implements ExpandableListView.OnChildClickListener  {
+public class PeopleFragment extends mainActivityFragmentBase implements ExpandableListView.OnChildClickListener  {
 	//private Context this;
 	//private View mBaseView;
 	static public final int  UPDATE_VIEW_FROM_REMOT		= 1 ;
 	private FriendListView mIphoneTreeView;
 	private ClearEditText mSearchView;
 	private FriendListAdapter mFriendListAdapter;
-	static public PeopleActivity me;
+	View rootView = null;
 
-	static public PeopleActivity getInstance() { return me; }
-	
-	public PeopleActivity()
+
+	public PeopleFragment(  headerCtrl.menuStateChange msc  )
 	{
-		
-		me = this;
+		super(msc , mainActivityFragmentBase.FRIEND_LIST_FRAGMENT );
 	}
 	@Override
 	protected void finalize() throws Throwable {
 		// TODO Auto-generated method stub
-		me = null;
 		super.finalize();
 	}
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+							 Bundle savedInstanceState) {
 
-		setContentView(R.layout.fragment_constact);
-		//mBaseView = inflate(R.layout.fragment_constact, null);
+		rootView =  inflater.inflate( R.layout.fragment_constact, container, false);
 		findView();
 		init();
-		
-		//ImageView homeIcon = (ImageView)findViewById(android.R.id.);
-		//TextView actionTitle = (TextView)findViewById(com.android.internal.R.id.action_bar_title);
-		//homeIcon.setImageDrawable( getResources().getDrawable(R.drawable.add));
-		super.onCreate(savedInstanceState);
-		
+
+		super.onCreateView(inflater, container, savedInstanceState);
+
+		return rootView;
+
 	}
-	
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-	}
+
 
 	
 	public void onEvent(Object event)
@@ -84,13 +69,29 @@ public class PeopleActivity extends zdnBasicActivity implements ExpandableListVi
 		{
 			mFriendListAdapter.notifyDataSetChanged();
 		}
+		else if( event instanceof commonEvent )
+		{
+			commonEvent ce = (commonEvent) event;
+			if( ce.getCommonType() == commonEvent.UPDATE_FRIEND_LIST_VIEW_FROM_REMOT )
+			{
+				update();
+			}
+		}
 
         super.onEvent( event );
 	}
 	
 	private void findView() {
-		mSearchView=(ClearEditText) findViewById( R.id.ll_constact_serach );
-		mIphoneTreeView = (FriendListView) findViewById( R.id.iphone_tree_view );
+		//mSearchView=(ClearEditText) rootView.findViewById(R.id.ll_constact_serach);
+		mIphoneTreeView = (FriendListView) rootView.findViewById(R.id.iphone_tree_view);
+		initCommonView(rootView);
+
+		View navigationButton = rootView.findViewById(R.id.navigationButton );
+		navigationButton.setVisibility( View.INVISIBLE );
+
+
+		View friendList = rootView.findViewById(R.id.friendList );
+		friendList.setVisibility( View.INVISIBLE );
 		
 	}
 
@@ -100,10 +101,10 @@ public class PeopleActivity extends zdnBasicActivity implements ExpandableListVi
 
 		mIphoneTreeView.setGroupIndicator(null);//set icon in front of group
 
-		mFriendListAdapter = new FriendListAdapter(this, mIphoneTreeView,null);
+		mFriendListAdapter = new FriendListAdapter(this.getActivity(), mIphoneTreeView,null);
 		updateAdapterInit();
 		mIphoneTreeView.setAdapter(mFriendListAdapter);
-
+/*
 		mSearchView.addTextChangedListener(new TextWatcher() {
 
 					@Override
@@ -130,6 +131,7 @@ public class PeopleActivity extends zdnBasicActivity implements ExpandableListVi
 						
 					}
 				});
+		*/
 		
 		new AsyncTaskLoading(null).execute(0);
 	}
@@ -161,7 +163,7 @@ public class PeopleActivity extends zdnBasicActivity implements ExpandableListVi
 
 	}
 
-	
+
 	
 	public void updateAdapterInit()
 	{
@@ -171,29 +173,11 @@ public class PeopleActivity extends zdnBasicActivity implements ExpandableListVi
 	
 	public void update()
 	{
-		if( !isDestroyed() )
-		{
-			mFriendListAdapter.updateListView( dataManager.getFrilendList()  );
-		}
+		mFriendListAdapter.updateListView( dataManager.getFrilendList()  );
+
 	}
 	// "update_type: " 	1  	update all
 	// 					2 	part update 
-	
-	public Handler handler = new Handler() {
-		public void handleMessage(Message msg) {
-			if ( msg.what == UPDATE_VIEW_FROM_REMOT ) {
-				//	
-				if(PeopleActivity.this.isDestroyed() )
-				{
-					Log.e( PeopleActivity.this.getClass().getSimpleName() , "PeopleActivity is destroyed!" );
-				}
-				else
-				{
-					update();
-				}
-			} 
-		}
-	};
 
 
 	@Override
@@ -205,7 +189,7 @@ public class PeopleActivity extends zdnBasicActivity implements ExpandableListVi
 		//for test
 		
 		
-		Intent intent = new Intent(this, chatActivity.class);  
+		Intent intent = new Intent(this.getActivity(), chatActivity.class);
 		
 		// 创建Bundle对象用来存放数据,Bundle对象可以理解为数据的载体  
 		Bundle b = new Bundle();  

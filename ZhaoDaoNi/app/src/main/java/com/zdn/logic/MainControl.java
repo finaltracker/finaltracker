@@ -7,7 +7,6 @@ import com.zdn.CommandParser.CommandE;
 import com.zdn.CommandParser.ExpCommandE;
 import com.zdn.CommandParser.Property;
 import com.zdn.activity.MainActivity;
-import com.zdn.activity.PeopleActivity;
 import com.zdn.activity.searchFriendResultForAddActivity;
 import com.zdn.basicStruct.SendMessageRspEvent;
 import com.zdn.basicStruct.commonEvent;
@@ -460,18 +459,9 @@ public class MainControl extends HandlerThread {
 					
 					dataManager.updateFriendListFromServer( json_obj.getInt("update_type") , json_obj.getJSONArray("friends") , mContext);
 					//send it to PeopleActivity
-					if( PeopleActivity.getInstance() != null )
-					{
-						Message m = PeopleActivity.getInstance().handler.obtainMessage();
-						m.what = PeopleActivity.UPDATE_VIEW_FROM_REMOT ;
-						m.obj = null;
-						
-						PeopleActivity.getInstance().handler.sendMessage(m);
-					}
-					else
-					{
-						Log.e("MainControl" , "PeopleActivity.getInstance() == null " );
-					}
+
+					EventBus.getDefault().post( new commonEvent( commonEvent.UPDATE_FRIEND_LIST_VIEW_FROM_REMOT));
+					
 				} catch (JSONException e1) {
 
 					Log.d("MainControl" , "server response error: " + e1.getMessage() );
@@ -890,13 +880,10 @@ public class MainControl extends HandlerThread {
 	{
 		
 		//send a message to server : notify a friend member'sdata changed
-		updateFriendInfo( fmdb );
+		updateFriendInfo(fmdb);
 
 		//modify friend list view
-		if( PeopleActivity.getInstance() != null )
-		{
-			PeopleActivity.getInstance().update();
-		}
+		EventBus.getDefault().post( new commonEvent( commonEvent.UPDATE_FRIEND_LIST_VIEW_FROM_REMOT ));
 		
 		dataManager.getFrilendList().updateDataToDb(mContext);
 		
@@ -909,10 +896,7 @@ public class MainControl extends HandlerThread {
 		deleteA_Friend(fmd);
 		
 		//modify friend list view
-		if( PeopleActivity.getInstance() != null )
-		{
-			PeopleActivity.getInstance().update();
-		}
+		EventBus.getDefault().post( new commonEvent(commonEvent.UPDATE_FRIEND_LIST_VIEW_FROM_REMOT));
 		
 		dataManager.getFrilendList().updateDataToDb(mContext);
 

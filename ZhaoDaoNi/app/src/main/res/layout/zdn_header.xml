@@ -47,7 +47,7 @@
             android:text="@string/titleName"
             />
         <ImageView
-            android:id="@+id/contract"
+            android:id="@+id/friendList"
             android:layout_height="match_parent"
             android:layout_width="40dp"
             android:layout_alignParentRight="true"

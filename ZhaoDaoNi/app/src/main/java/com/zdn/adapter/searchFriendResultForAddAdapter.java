@@ -7,7 +7,6 @@ import org.json.JSONObject;
 
 import com.zdn.R;
 
-import com.zdn.activity.PeopleActivity;
 import com.zdn.activity.searchFriendResultForAddActivity;
 import com.zdn.basicStruct.friendMemberData;
 import com.zdn.basicStruct.friendMemberDataBasic;
@@ -41,7 +40,7 @@ public class searchFriendResultForAddAdapter extends BaseAdapter{
 	
 	/**
 	 * 当ListView数据发生变化�?调用此方法来更新ListView
-	 * @param list
+
 	 */
 	public void updateListView(friendTeamDataManager new_teams ){
 		

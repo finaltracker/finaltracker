@@ -14,6 +14,7 @@ import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.model.LatLng;
 import com.zdn.R;
+import com.zdn.com.headerCtrl;
 
 public class MapFragment extends mainActivityFragmentBase {
     // TODO: Rename parameter arguments, choose names that match
@@ -27,20 +28,12 @@ public class MapFragment extends mainActivityFragmentBase {
     private String mParam2;
 
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment MapFragment.
-     */
 
     public MapFragment()
     {
         super( null , mainActivityFragmentBase.MAP_FRAGMENT );
     }
-    public MapFragment( menuStateChange msc )
+    public MapFragment( headerCtrl.menuStateChange msc )
     {
         super(msc , mainActivityFragmentBase.MAP_FRAGMENT );
 
@@ -98,6 +91,7 @@ public class MapFragment extends mainActivityFragmentBase {
 
         initCommonView(rootView);
 
+        super.onCreateView( inflater , container , savedInstanceState );
         return rootView;
     }
 
