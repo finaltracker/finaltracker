@@ -41,7 +41,7 @@ import com.zdn.logic.MainControl;
 import com.zdn.util.ObjectConvertTool;
 import de.greenrobot.event.EventBus;
 
-public class chatActivity extends FragmentActivity {
+public class chatActivity extends zdnBasicActivity {
 	
 	private int 				INIT_SHOW_MESSAGE_MAX	= 50;
 	private MessageInputToolBox box;
@@ -54,21 +54,30 @@ public class chatActivity extends FragmentActivity {
 	@SuppressLint("UseSparseArrays")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		Bundle bundle=this.getIntent().getExtras(); 
+		Bundle bundle=this.getIntent().getExtras();
 		targetTo = bundle.getString("targetTo");
 		teamPosition = bundle.getInt("teamPosition");
 		memberPosition = bundle.getInt("memberPosition");
 		fdm = dataManager.getFrilendList().getMemberData(teamPosition, memberPosition);
 		setContentView(R.layout.chat_activity);
-		EventBus.getDefault().register(this );  
+		//EventBus.getDefault().register(this );
 		initMessageInputToolBox();
 				initListView();
-		
+
+		View navigationButton = findViewById(R.id.navigationButton );
+		navigationButton.setVisibility(View.INVISIBLE);
+
+
+		View friendList = findViewById(R.id.friendList );
+		friendList.setVisibility(View.INVISIBLE);
+
+		super.onCreate(savedInstanceState);
+
+
 	}
 	@Override
 	protected void onDestroy() {
-		EventBus.getDefault().unregister(this); 
+		//EventBus.getDefault().unregister(this);
 		super.onDestroy();
 		
 	}

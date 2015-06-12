@@ -29,6 +29,7 @@ public class headerCtrl {
         this.header = header;
         this.msc = msc;
 
+
         navigationButton = (ImageView)header.findViewById(R.id.navigationButton);
         headerTitle = ( TextView )header.findViewById(R.id.headerTitle);
 

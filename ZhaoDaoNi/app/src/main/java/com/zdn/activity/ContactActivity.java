@@ -12,9 +12,10 @@ public class ContactActivity extends zdnBasicActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-		super.onCreate(savedInstanceState);
-		
+
 		setContentView(R.layout.contact_activity);
+		super.onCreate(savedInstanceState);
+
 	}
 
 }

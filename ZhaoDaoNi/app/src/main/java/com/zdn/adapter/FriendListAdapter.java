@@ -84,6 +84,7 @@ public class FriendListAdapter extends BaseExpandableListAdapter
 		if (convertView == null) {
 			convertView = LayoutInflater.from(mContext).inflate(
 					R.layout.fragment_constact_child, null);
+			//convertView.getBackground().setAlpha(20);
 			holder = new ChildHolder();
 			holder.nameView = (TextView) convertView
 					.findViewById(R.id.contact_list_item_name);

@@ -87,16 +87,19 @@ public class PeopleFragment extends mainActivityFragmentBase implements Expandab
 		initCommonView(rootView);
 
 		View navigationButton = rootView.findViewById(R.id.navigationButton );
-		navigationButton.setVisibility( View.INVISIBLE );
+		navigationButton.setVisibility(View.INVISIBLE);
 
 
 		View friendList = rootView.findViewById(R.id.friendList );
-		friendList.setVisibility( View.INVISIBLE );
-		
+		friendList.setVisibility(View.INVISIBLE);
+
+		//rootView.getBackground().setAlpha( 200 );//0~255透
+
+
 	}
 
 	private void init() {
-		
+
 		mIphoneTreeView.setOnChildClickListener( this );
 
 		mIphoneTreeView.setGroupIndicator(null);//set icon in front of group

@@ -42,7 +42,7 @@ import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
 import de.greenrobot.event.EventBus;
 
-public class MainActivity extends FragmentActivity implements navigationFragment.navigationChanged ,headerCtrl.menuStateChange {
+public class MainActivity extends zdnBasicActivity implements navigationFragment.navigationChanged ,headerCtrl.menuStateChange {
 
 	//for receive customer msg from jpush server
 	private MessageReceiver mMessageReceiver;
@@ -111,8 +111,6 @@ public class MainActivity extends FragmentActivity implements navigationFragment
 		control.start();
 
 		registerMessageReceiver();  // used for receive msg
-
-		EventBus.getDefault().register(this);
 
 
 	}
@@ -229,7 +227,7 @@ public class MainActivity extends FragmentActivity implements navigationFragment
             case MainActivity.FRIEND_LIST:
                 fragmentManager
                         .beginTransaction()
-                        .replace(R.id.simple_fragment,
+                        .add(R.id.simple_fragment,
                                 new PeopleFragment( this )).commit();
                 break;
 			default:
@@ -242,7 +240,6 @@ public class MainActivity extends FragmentActivity implements navigationFragment
 	@Override
 	protected void onDestroy() {
 
-		EventBus.getDefault().unregister(this);
 		unregisterReceiver(mMessageReceiver);
 		if(control!= null)
 		{

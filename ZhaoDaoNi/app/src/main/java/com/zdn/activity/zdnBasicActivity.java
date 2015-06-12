@@ -2,6 +2,7 @@ package com.zdn.activity;
 
 import com.zdn.R;
 import com.zdn.basicStruct.networkStatusEvent;
+import com.zdn.com.headerCtrl;
 import com.zdn.receiver.NetworkReceiver;
 
 import android.app.Activity;
@@ -10,17 +11,21 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import de.greenrobot.event.EventBus;
 
-public class zdnBasicActivity extends Activity {
+public class zdnBasicActivity extends FragmentActivity implements headerCtrl.menuStateChange {
 
+	private LinearLayout zdnHeaderLayout = null;
+	headerCtrl hc = null;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 
@@ -29,6 +34,12 @@ public class zdnBasicActivity extends Activity {
 
 
 		super.onCreate(savedInstanceState);
+
+		zdnHeaderLayout = (LinearLayout) findViewById(R.id.header);
+		if( zdnHeaderLayout != null )
+		{
+			hc = new headerCtrl( zdnHeaderLayout , this );
+		}
 
 	}
 
@@ -56,4 +67,22 @@ public class zdnBasicActivity extends Activity {
 
 	}
 
+	@Override
+	public void onMenuClick(int menuId) {
+		switch( menuId )
+		{
+
+			case R.id.back_button:
+				onBackPressed();
+				break;
+
+			default:
+				break;
+		}
+	}
+
+	@Override
+	public void menuFragmentClick() {
+
+	}
 }

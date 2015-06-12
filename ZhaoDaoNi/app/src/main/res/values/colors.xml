@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+    <resources>
     <color name="GhostWhite">#fff8f8ff</color>
     <color name="white">#ffffffff</color>
     <color name="Transpant">#00000000</color>
