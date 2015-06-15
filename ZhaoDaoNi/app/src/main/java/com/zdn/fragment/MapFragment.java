@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import com.baidu.mapapi.SDKInitializer;
 import com.baidu.mapapi.map.BaiduMap;
@@ -14,7 +15,9 @@ import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.model.LatLng;
 import com.zdn.R;
+import com.zdn.adapter.recentChatAdapter;
 import com.zdn.com.headerCtrl;
+import com.zdn.data.dataManager;
 
 public class MapFragment extends mainActivityFragmentBase {
     // TODO: Rename parameter arguments, choose names that match
@@ -22,10 +25,12 @@ public class MapFragment extends mainActivityFragmentBase {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     MapView mMapView = null;
-
+    ListView recentChatFriend = null;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private recentChatAdapter m_recentChatAdapt;
 
 
 
@@ -88,6 +93,12 @@ public class MapFragment extends mainActivityFragmentBase {
         MapStatusUpdate mMapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mMapStatus);
         //改变地图状态
         mBaidumap.setMapStatus(mMapStatusUpdate);
+
+        //recent chat view handle
+        recentChatFriend = (ListView)rootView.findViewById( R.id.recentChatFriend  );
+        m_recentChatAdapt = new recentChatAdapter( this.getActivity() , dataManager.getFrilendList().getFriendTeamData("我的好友") );
+        recentChatFriend.setAdapter( m_recentChatAdapt );
+        m_recentChatAdapt.notifyDataSetChanged();
 
         initCommonView(rootView);
 
