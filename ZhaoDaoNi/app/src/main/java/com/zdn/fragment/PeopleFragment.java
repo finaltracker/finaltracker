@@ -86,12 +86,9 @@ public class PeopleFragment extends mainActivityFragmentBase implements Expandab
 		mIphoneTreeView = (FriendListView) rootView.findViewById(R.id.iphone_tree_view);
 		initCommonView(rootView);
 
-		View navigationButton = rootView.findViewById(R.id.navigationButton );
-		navigationButton.setVisibility(View.INVISIBLE);
-
-
-		View friendList = rootView.findViewById(R.id.friendList );
-		friendList.setVisibility(View.INVISIBLE);
+		rootView.findViewById(R.id.navigationButton).setVisibility(View.INVISIBLE);
+		rootView.findViewById(R.id.friendList).setVisibility(View.INVISIBLE);
+		rootView.findViewById(R.id.addFriend).setVisibility(View.INVISIBLE);
 
 		//rootView.getBackground().setAlpha( 200 );//0~255透
 

@@ -46,15 +46,29 @@
             android:textStyle="bold"
             android:text="@string/titleName"
             />
+
+
         <ImageView
-            android:id="@+id/friendList"
+            android:id="@+id/addFriend"
             android:layout_height="match_parent"
             android:layout_width="40dp"
             android:layout_alignParentRight="true"
             android:layout_alignBottom="@id/navigationButton"
             android:layout_alignTop="@id/navigationButton"
+            android:src="@drawable/add"
+            android:contentDescription="add a friend"
+            />
+
+        <ImageView
+            android:id="@+id/friendList"
+            android:layout_height="match_parent"
+            android:layout_width="40dp"
+            android:layout_alignBottom="@id/navigationButton"
+            android:layout_alignTop="@id/navigationButton"
+            android:layout_toLeftOf="@id/addFriend"
             android:src="@drawable/contact_friend"
-            android:contentDescription="@string/friends"/>
+            android:contentDescription="@string/friends"
+            />
     </RelativeLayout>
 
 </LinearLayout>

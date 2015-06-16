@@ -8,21 +8,36 @@ import com.zdn.data.dataManager;
 
 public class friendTeamData {
 	public String   teamName;
+	//private int 	index ;
 	public List<friendMemberData>	member;
 	//public List<friendMemberDataExt>	memberExt;
 
 
-	public friendTeamData()
+	public friendTeamData( )
 	{
+		//index = 0;
 		member = new ArrayList<friendMemberData>();
 	}
-	
+
+
 	public void addFriendMemberData( friendMemberData one )
 	{
 		member.add(one);
 	}
 	
 
+    public int findFriendMember( String phoneNumber )
+    {
+        for( int i = 0 ; i < member.size() ; i++ )
+        {
+            if(member.get(i).basic.phoneNumber.equals( phoneNumber ))
+            {
+                return i;
+            }
+        }
+
+        return -1;
+    }
 	public friendMemberData getFriendMemberData ( String phoneNumber )
 	{
 		friendMemberData  fmd = null;

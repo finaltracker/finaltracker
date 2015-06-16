@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -14,12 +13,10 @@ import com.lidroid.xutils.BitmapUtils;
 import com.zdn.R;
 import com.zdn.basicStruct.friendMemberData;
 import com.zdn.basicStruct.friendTeamData;
-import com.zdn.basicStruct.friendTeamDataManager;
 import com.zdn.chat.ZdnMessage;
+import com.zdn.data.dataManager;
 import com.zdn.logic.InternetComponent;
-import com.zdn.logic.MainControl;
 import com.zdn.util.FileUtil;
-import com.zdn.view.FriendListView;
 
 import java.util.List;
 
@@ -32,6 +29,7 @@ public class recentChatAdapter extends BaseAdapter
 	private  Context mContext;
 	private BitmapUtils bitmapUtils = null;
 	private String friendsAvatorDir ;
+
 
 	public recentChatAdapter(Context context,friendTeamData	ftd)
 	{
@@ -100,6 +98,8 @@ public class recentChatAdapter extends BaseAdapter
 			 holder.feelView.setText("");
 		 }
 
+		 convertView.setTag(R.id.INDEX_IN_ALL_FRIEND_LIST, dataManager.getFrilendList().findAfriendTeam( ftd.teamName ));
+		 convertView.setTag(R.id.INDEX_IN_ONE_FRIEND_TEAM, dataManager.getFrilendList().getFriendTeamData(ftd.teamName).findFriendMember( ftd.member.get(position).basic.getPhoneNumber() ) );
 
 		 return convertView;
 	 }

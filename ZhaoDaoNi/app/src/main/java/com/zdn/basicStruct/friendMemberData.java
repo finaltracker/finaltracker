@@ -26,11 +26,13 @@ public class friendMemberData {
 	
 	public friendMemberDataBasic basic;
 	//public Bitmap	picture;
+	//private int index;
 	private List<ZdnMessage> message = null;
 
 
 	public friendMemberData( String tag )
 	{
+		//index = 0;
 		message = new ArrayList<ZdnMessage>();
 		basic = new friendMemberDataBasic();
 		//picture = null;
@@ -46,7 +48,8 @@ public class friendMemberData {
         constructMessageFromDb( dataManager.mainContext );
 		//picture = null;
 	}
-	
+
+
 	public void constructMessageFromDb( Context context )
 	{
 	

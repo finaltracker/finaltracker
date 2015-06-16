@@ -114,6 +114,7 @@ public class FriendListAdapter extends BaseExpandableListAdapter
         	});
 
 
+
 		}
 		else
 		{
@@ -139,9 +140,10 @@ public class FriendListAdapter extends BaseExpandableListAdapter
 		{
 			holder.feelView.setText("");
 		}
-		
-		
-		return convertView;
+
+
+
+        return convertView;
 	}
 
 	@Override

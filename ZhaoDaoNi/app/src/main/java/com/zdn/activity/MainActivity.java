@@ -348,8 +348,11 @@ public class MainActivity extends zdnBasicActivity implements navigationFragment
                 onBackPressed();
 				break;
             case R.id.friendList:
-                onItemClickNavigation( MainActivity.FRIEND_LIST );
+                onItemClickNavigation(MainActivity.FRIEND_LIST);
                 break;
+			case R.id.addFriend:
+				startActivity( new Intent("com.zdn.activity.AddFriendActivity.ACTION") );
+				break;
 			default:
 				break;
 		}

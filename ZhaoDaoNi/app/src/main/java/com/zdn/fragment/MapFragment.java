@@ -1,6 +1,7 @@
 package com.zdn.fragment;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -8,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
@@ -20,12 +22,13 @@ import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.model.LatLng;
 import com.zdn.R;
 import com.zdn.activity.MainActivity;
+import com.zdn.activity.chatActivity;
 import com.zdn.adapter.recentChatAdapter;
 import com.zdn.com.headerCtrl;
 import com.zdn.data.dataManager;
 import com.zdn.util.OSUtils;
 
-public class MapFragment extends mainActivityFragmentBase {
+public class MapFragment extends mainActivityFragmentBase implements AdapterView.OnItemClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -47,7 +50,7 @@ public class MapFragment extends mainActivityFragmentBase {
     }
     public MapFragment( headerCtrl.menuStateChange msc )
     {
-        super(msc , mainActivityFragmentBase.MAP_FRAGMENT );
+        super(msc, mainActivityFragmentBase.MAP_FRAGMENT);
 
     }
 
@@ -105,6 +108,7 @@ public class MapFragment extends mainActivityFragmentBase {
 
         //recent chat view handle
         recentChatFriend = (ListView)rootView.findViewById( R.id.recentChatFriend  );
+        recentChatFriend.setOnItemClickListener(this);
         m_recentChatAdapt = new recentChatAdapter( this.getActivity() , dataManager.getFrilendList().getFriendTeamData("我的好友") );
         recentChatFriend.setAdapter( m_recentChatAdapt );
         m_recentChatAdapt.notifyDataSetChanged();
@@ -211,6 +215,24 @@ public class MapFragment extends mainActivityFragmentBase {
         RelativeLayout.LayoutParams paramTest = (RelativeLayout.LayoutParams) recentChatFriend.getLayoutParams();
         paramTest.width = recentChatFriendViewWidth;
         recentChatFriend.setLayoutParams(paramTest);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Intent intent = new Intent(this.getActivity(), chatActivity.class);
+
+        // 创建Bundle对象用来存放数据,Bundle对象可以理解为数据的载体
+
+        Bundle b = new Bundle();
+        int groupPosition = (int) view.getTag( R.id.INDEX_IN_ALL_FRIEND_LIST );
+        int childPosition = (int) view.getTag( R.id.INDEX_IN_ONE_FRIEND_TEAM );
+        b.putString("targetTo", dataManager.getFrilendList().getMemberData(groupPosition, childPosition).basic.getPhoneNumber() );
+        b.putInt("teamPosition", groupPosition );
+        b.putInt("memberPosition", childPosition );
+
+        intent.putExtras(b);
+
+        startActivity( intent );
     }
 
 

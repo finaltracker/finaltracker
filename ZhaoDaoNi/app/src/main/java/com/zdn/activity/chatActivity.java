@@ -64,12 +64,9 @@ public class chatActivity extends zdnBasicActivity {
 		initMessageInputToolBox();
 				initListView();
 
-		View navigationButton = findViewById(R.id.navigationButton );
-		navigationButton.setVisibility(View.INVISIBLE);
-
-
-		View friendList = findViewById(R.id.friendList );
-		friendList.setVisibility(View.INVISIBLE);
+		findViewById(R.id.navigationButton).setVisibility(View.INVISIBLE);
+		findViewById(R.id.friendList).setVisibility(View.INVISIBLE);
+		findViewById(R.id.addFriend).setVisibility(View.INVISIBLE);
 
 		super.onCreate(savedInstanceState);
 
@@ -223,7 +220,7 @@ public class chatActivity extends zdnBasicActivity {
 		new Handler().postDelayed(new Runnable()  {
 			@Override
 			public void run() {
-				listView.setSelection(listView.getBottom());
+				listView.setSelection( listView.getBottom() );
 				
 			}
 			}, 100);

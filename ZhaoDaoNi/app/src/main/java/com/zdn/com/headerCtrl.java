@@ -3,6 +3,7 @@ package com.zdn.com;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.zdn.R;
@@ -23,46 +24,32 @@ public class headerCtrl {
     private ImageView backoff = null;
     private TextView headerTitle = null;
     private ImageView ShowFriendListButton = null;
+    private ImageView addFriend = null;
+
 
     public headerCtrl( LinearLayout header ,  menuStateChange msc )
     {
         this.header = header;
         this.msc = msc;
 
+        RelativeLayout rl = (RelativeLayout)(header.findViewById(R.id.title_bar));
+        int buttonCount = rl.getChildCount();
 
-        navigationButton = (ImageView)header.findViewById(R.id.navigationButton);
-        headerTitle = ( TextView )header.findViewById(R.id.headerTitle);
-
-        navigationButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                if (headerCtrl.this.msc != null) {
-                    headerCtrl.this.msc.onMenuClick(R.id.navigationButton);
-                }
-            }
-        });
-
-        backoff = (ImageView)header.findViewById(R.id.back_button);
-        backoff.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (headerCtrl.this.msc != null) {
-                    headerCtrl.this.msc.onMenuClick(R.id.back_button);
-                }
-            }
-        });
-
-        ShowFriendListButton = (ImageView)header.findViewById(R.id.friendList);
-        ShowFriendListButton.setOnClickListener( new View.OnClickListener()
+        for( int i = 0 ; i < buttonCount ; i++ )
         {
-            @Override
-            public void onClick(View v) {
-                if ( headerCtrl.this.msc != null) {
-                    headerCtrl.this.msc.onMenuClick(R.id.friendList );
+            final View button = rl.getChildAt(i);
+
+            button.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    if (headerCtrl.this.msc != null) {
+                        headerCtrl.this.msc.onMenuClick( button.getId());
+                    }
                 }
-            }
-        });
+            });
+        }
+
     }
 
     public void  setBackGroundColor( int color )
