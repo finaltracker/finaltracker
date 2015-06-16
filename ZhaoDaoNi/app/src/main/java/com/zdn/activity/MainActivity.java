@@ -20,6 +20,8 @@ import com.zdn.fragment.myInfomationFragment;
 import com.zdn.fragment.navigationFragment;
 import com.zdn.jpush.ExampleUtil;
 import com.zdn.logic.MainControl;
+import com.zdn.util.OSUtils;
+
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
@@ -74,6 +76,11 @@ public class MainActivity extends zdnBasicActivity implements navigationFragment
 	List<navigationListDrawerItemAdapter.navigationListContextHolder> nlch;
 	private int selectFragmentIndex = 0;
 	navigationFragment navigationf = null; // 记录导航fragment
+	private ArrayList<MyOnTouchListener> onTouchListeners = new ArrayList<MyOnTouchListener>(
+			10);
+
+
+
 	public MainActivity()
 	{
 		me = this; // 
@@ -105,7 +112,7 @@ public class MainActivity extends zdnBasicActivity implements navigationFragment
 		SDManager manager = new SDManager(this);
 		manager.moveUserIcon();
 
-
+		OSUtils.InitOs(this);
 		control = new MainControl("MainControl" , this );
 		this.setTag(dataManager.self.getImsi());
 		control.start();
@@ -455,8 +462,23 @@ public class MainActivity extends zdnBasicActivity implements navigationFragment
 				break;
 			}
 
+		for (MyOnTouchListener listener : onTouchListeners) {
+			listener.onTouch(ev);
+		}
 		return super.dispatchTouchEvent(ev);
 
 
+	}
+
+	public void registerMyOnTouchListener(MyOnTouchListener myOnTouchListener) {
+		onTouchListeners.add(myOnTouchListener);
+	}
+
+	public void unregisterMyOnTouchListener(MyOnTouchListener myOnTouchListener) {
+		onTouchListeners.remove(myOnTouchListener);
+	}
+
+	public interface MyOnTouchListener {
+		public boolean onTouch(MotionEvent ev);
 	}
 }

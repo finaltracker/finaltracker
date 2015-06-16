@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.lidroid.xutils.BitmapUtils;
@@ -70,6 +71,9 @@ public class recentChatAdapter extends BaseAdapter
 			 holder.feelView = (TextView) convertView
 					 .findViewById(R.id.cpntact_list_item_state);
 			 holder.iconView = (ImageView) convertView.findViewById(R.id.icon);
+			 RelativeLayout.LayoutParams paramTest = (RelativeLayout.LayoutParams) holder.iconView.getLayoutParams();
+			 paramTest.leftMargin = 0;;
+			 holder.iconView.setLayoutParams(paramTest);
 			 holder.acceptButton = (ImageView) convertView.findViewById(R.id.accept_button);
 			 holder.acceptButton.setVisibility(View.GONE);
 			 convertView.setTag(holder);

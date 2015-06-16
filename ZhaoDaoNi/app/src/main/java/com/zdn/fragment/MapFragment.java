@@ -2,10 +2,14 @@ package com.zdn.fragment;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import com.baidu.mapapi.SDKInitializer;
 import com.baidu.mapapi.map.BaiduMap;
@@ -15,9 +19,11 @@ import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.model.LatLng;
 import com.zdn.R;
+import com.zdn.activity.MainActivity;
 import com.zdn.adapter.recentChatAdapter;
 import com.zdn.com.headerCtrl;
 import com.zdn.data.dataManager;
+import com.zdn.util.OSUtils;
 
 public class MapFragment extends mainActivityFragmentBase {
     // TODO: Rename parameter arguments, choose names that match
@@ -29,10 +35,11 @@ public class MapFragment extends mainActivityFragmentBase {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private int recentChatFriendViewWidth = 0;
 
     private recentChatAdapter m_recentChatAdapt;
-
-
+    MainActivity.MyOnTouchListener myOnTouchListener;
+    private GestureDetector mGestureDetector;
 
     public MapFragment()
     {
@@ -51,6 +58,8 @@ public class MapFragment extends mainActivityFragmentBase {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        mGestureDetector = new GestureDetector(this.getActivity(), new LearnGestureListener());
+
         //setHasOptionsMenu(true);
 
         //在使用SDK各组件之前初始化context信息，传入ApplicationContext
@@ -100,7 +109,28 @@ public class MapFragment extends mainActivityFragmentBase {
         recentChatFriend.setAdapter( m_recentChatAdapt );
         m_recentChatAdapt.notifyDataSetChanged();
 
+        RelativeLayout.LayoutParams paramTest = (RelativeLayout.LayoutParams) recentChatFriend.getLayoutParams();
+        recentChatFriendViewWidth = paramTest.width;
+
+
         initCommonView(rootView);
+
+        myOnTouchListener = new MainActivity.MyOnTouchListener() {
+
+            @Override
+            public boolean onTouch(MotionEvent ev) {
+                if( MapFragment.this.isVisible() ) {
+                    if (mGestureDetector.onTouchEvent(ev))
+                        return true;
+                    else
+                        return false;
+                }
+
+                return false;
+            }
+        };
+        ((MainActivity) getActivity())
+                .registerMyOnTouchListener(myOnTouchListener);
 
         super.onCreateView( inflater , container , savedInstanceState );
         return rootView;
@@ -167,4 +197,65 @@ public class MapFragment extends mainActivityFragmentBase {
         //在activity执行onDestroy时执行mMapView.onDestroy()，实现地图生命周期管理
         mMapView.onDestroy();
     }
+
+    private void expandRecentChatView()
+    {
+
+        RelativeLayout.LayoutParams paramTest = (RelativeLayout.LayoutParams) recentChatFriend.getLayoutParams();
+        paramTest.width = (int)(OSUtils.getScreenWidth()*2/3);
+        recentChatFriend.setLayoutParams(paramTest);
+    }
+
+    private void shrinkRecentChatView()
+    {
+        RelativeLayout.LayoutParams paramTest = (RelativeLayout.LayoutParams) recentChatFriend.getLayoutParams();
+        paramTest.width = recentChatFriendViewWidth;
+        recentChatFriend.setLayoutParams(paramTest);
+    }
+
+
+    class LearnGestureListener extends GestureDetector.SimpleOnGestureListener{
+        @Override
+        public boolean onSingleTapUp(MotionEvent ev) {
+            Log.d("onSingleTapUp", ev.toString());
+            return true;
+        }
+        @Override
+        public void onShowPress(MotionEvent ev) {
+            Log.d("onShowPress",ev.toString());
+        }
+        @Override
+        public void onLongPress(MotionEvent ev) {
+            Log.d("onLongPress",ev.toString());
+        }
+        @Override
+        public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+            Log.d("onScroll",e1.toString());
+            return true;
+        }
+        @Override
+        public boolean onDown(MotionEvent ev) {
+            Log.d("onDownd",ev.toString());
+            return true;
+        }
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            Log.d("d",e1.toString());
+            Log.d("e2",e2.toString());
+            //TODO....
+            RelativeLayout.LayoutParams paramTest = (RelativeLayout.LayoutParams) recentChatFriend.getLayoutParams();
+
+           if(( e1.getRawX() > ( OSUtils.getScreenWidth() - paramTest.width )) && (e2.getRawX() < ( OSUtils.getScreenWidth() - paramTest.width )  ))
+           {
+               expandRecentChatView();
+           }
+           else if( ( e1.getRawX() < e2.getRawX()  ) &&  (e2.getRawX() > ( OSUtils.getScreenWidth() - paramTest.width )))
+            {
+                shrinkRecentChatView();
+            }
+
+            return true;
+        }
+    }
+
 }
