@@ -79,6 +79,9 @@ public class MainActivity extends zdnBasicActivity implements navigationFragment
 	private ArrayList<MyOnTouchListener> onTouchListeners = new ArrayList<MyOnTouchListener>(
 			10);
 
+    private myInfomationFragment m_myInfomationFragment = null;
+    private MapFragment m_MapFragment = null;
+    private PeopleFragment m_PeopleFragment = null;
 
 
 	public MainActivity()
@@ -210,6 +213,8 @@ public class MainActivity extends zdnBasicActivity implements navigationFragment
 		return false;
 	}
 	//@Override
+
+
 	public void onItemClickNavigation(int position ) {
 		//Toast.makeText(this, "onItemClickNavigation", Toast.LENGTH_SHORT).show();
 		selectFragmentIndex = position;
@@ -219,23 +224,32 @@ public class MainActivity extends zdnBasicActivity implements navigationFragment
 		{
 
 			case MainActivity.PERSONAL_INFORMATION:
+                if( MainActivity.this.m_myInfomationFragment == null  )
+                {
+                    m_myInfomationFragment = myInfomationFragment.newInstance("","");
+                }
 				fragmentManager
 						.beginTransaction()
-						.replace(R.id.simple_fragment,
-								myInfomationFragment.newInstance("","") ).commit();
+						.replace(R.id.simple_fragment,m_myInfomationFragment ).commit();
 
 				break;
 			case MainActivity.MAIN_MAP:
+                if( m_MapFragment == null )
+                {
+                    m_MapFragment = new MapFragment( this );
+                }
 				fragmentManager
 						.beginTransaction()
-						.replace(R.id.simple_fragment,
-								new MapFragment( this)).commit();
+						.replace(R.id.simple_fragment, m_MapFragment ).commit();
                 break;
             case MainActivity.FRIEND_LIST:
+                if( m_PeopleFragment == null )
+                {
+                    m_PeopleFragment = new PeopleFragment( this );
+                }
                 fragmentManager
                         .beginTransaction()
-                        .add(R.id.simple_fragment,
-                                new PeopleFragment( this )).commit();
+                        .add(R.id.simple_fragment,m_PeopleFragment ).commit();
                 break;
 			default:
 				break;
@@ -422,28 +436,29 @@ public class MainActivity extends zdnBasicActivity implements navigationFragment
 		FragmentTransaction ft = fragmentManager.beginTransaction();
 		if( hideNavigation() )
 		{	//试图先隐藏导航栏
-			return;
+
 		}
 		else if( selectFragmentIndex != MainActivity.MAIN_MAP )
 		{
 			onItemClickNavigation( MainActivity.MAIN_MAP );
-		}
-		else
-		{
-			long currentTime = System.currentTimeMillis();
-			if ((currentTime - touchTime) >= waitTime)
-			{
-				Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
-				touchTime = currentTime;
-			}
-			else
-			{
-				finish();
-			}
-		}
 
+		}
+		else {
+            long currentTime = System.currentTimeMillis();
+            if ((currentTime - touchTime) >= waitTime) {
+                Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
+                touchTime = currentTime;
+            } else {
+                finish();
+            }
+
+        }
 	}
 
+	public boolean isMainMapInFront()
+	{
+		return (selectFragmentIndex == MAIN_MAP );
+	}
 	@Override
 	public boolean dispatchTouchEvent(MotionEvent ev) {
 		switch(ev.getAction()){
@@ -465,8 +480,9 @@ public class MainActivity extends zdnBasicActivity implements navigationFragment
 				break;
 			}
 
+
 		for (MyOnTouchListener listener : onTouchListeners) {
-			listener.onTouch(ev);
+				listener.onTouch(ev);
 		}
 		return super.dispatchTouchEvent(ev);
 

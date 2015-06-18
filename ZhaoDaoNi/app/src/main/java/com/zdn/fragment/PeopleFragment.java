@@ -19,11 +19,12 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 
-public class PeopleFragment extends mainActivityFragmentBase implements ExpandableListView.OnChildClickListener  {
+public class PeopleFragment extends mainActivityFragmentBase implements ExpandableListView.OnChildClickListener {
 	//private Context this;
 	//private View mBaseView;
 	static public final int  UPDATE_VIEW_FROM_REMOT		= 1 ;
@@ -196,6 +197,11 @@ public class PeopleFragment extends mainActivityFragmentBase implements Expandab
 		return false;
 	}
 
-	
+
+	@Override
+	public boolean onTouch(View v, MotionEvent event) {
+
+		return super.onTouch(v,event);
+	}
 
 }

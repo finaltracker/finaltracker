@@ -121,11 +121,13 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
 
         initCommonView(rootView);
 
+
         myOnTouchListener = new MainActivity.MyOnTouchListener() {
 
             @Override
             public boolean onTouch(MotionEvent ev) {
-                if( MapFragment.this.isVisible() ) {
+
+                if( ((MainActivity) MapFragment.this.getActivity() ).isMainMapInFront() ) {
                     if (mGestureDetector.onTouchEvent(ev))
                         return true;
                     else
@@ -133,8 +135,11 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
                 }
 
                 return false;
+
             }
+
         };
+
         ((MainActivity) getActivity())
                 .registerMyOnTouchListener(myOnTouchListener);
 
@@ -281,5 +286,14 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
             return false;
         }
     }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+
+        mGestureDetector.onTouchEvent(event);
+
+        return super.onTouch(v,event);
+    }
+
 
 }

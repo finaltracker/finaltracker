@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -24,7 +25,7 @@ import com.zdn.com.headerCtrl;
 
 import de.greenrobot.event.EventBus;
 
-public class mainActivityFragmentBase extends Fragment {
+public class mainActivityFragmentBase extends Fragment  implements View.OnTouchListener {
     int fragmentIndex = - 1;
     static final public int MAP_FRAGMENT   =   0;
     static final public int PERSION_INFORMATION_FRAGMENT   =   MAP_FRAGMENT + 1;
@@ -98,9 +99,21 @@ public class mainActivityFragmentBase extends Fragment {
     }
 
     @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        view.setOnTouchListener(this);
+        super.onViewCreated(view, savedInstanceState);
+    }
+
+    @Override
     public void onDestroyView() {
         EventBus.getDefault().unregister(this);
         super.onDestroyView();
 
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+
+        return true;
     }
 }
