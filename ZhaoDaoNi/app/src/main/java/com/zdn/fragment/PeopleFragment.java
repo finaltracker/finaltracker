@@ -4,6 +4,7 @@ package com.zdn.fragment;
 import com.zdn.AsyncTaskBase;
 import com.zdn.R;
 import com.zdn.activity.chatActivity;
+import com.zdn.activity.friendInformationDetailActivity;
 import com.zdn.basicStruct.commonEvent;
 import com.zdn.com.headerCtrl;
 import com.zdn.sort.ClearEditText;
@@ -184,23 +185,12 @@ public class PeopleFragment extends mainActivityFragmentBase implements Expandab
 	public boolean onChildClick(ExpandableListView parent, View v,
 			int groupPosition, int childPosition, long id) {
 
-		//Intent intent = new Intent(this, friendInformationDetailActivity.class);  
-		
-		//for test
-		
-		
-		Intent intent = new Intent(this.getActivity(), chatActivity.class);
-		
-		// 创建Bundle对象用来存放数据,Bundle对象可以理解为数据的载体  
-		Bundle b = new Bundle();  
-		
-		b.putString("targetTo", dataManager.getFrilendList().getMemberData(groupPosition, childPosition).basic.getPhoneNumber() );
-		b.putInt("teamPosition", groupPosition );
-		b.putInt("memberPosition", childPosition );
-		
-		intent.putExtras(b);  
-		
-		startActivity(intent);  
+		Intent intent = new Intent(this.getActivity(),friendInformationDetailActivity.class);
+
+		intent.putExtra("teamPosition", groupPosition);
+		intent.putExtra("memberPosition", childPosition);
+		// 调用startActivityForResult方法
+		startActivity(intent);
 		
 		
 		return false;

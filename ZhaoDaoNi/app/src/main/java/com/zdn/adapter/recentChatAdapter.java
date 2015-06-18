@@ -22,7 +22,7 @@ import java.util.List;
 
 
 public class recentChatAdapter extends BaseAdapter
-		 {
+{
 
 	private static final String TAG = "recentChatAdapter";
 	private friendTeamData	ftd;   // recentChatList;
@@ -43,7 +43,15 @@ public class recentChatAdapter extends BaseAdapter
 
 	 @Override
 	 public int getCount() {
-		 return ftd.member.size();
+		 if( ftd != null )
+		 {
+			 return ftd.member.size();
+		 }
+		 else
+		 {
+			 return 0;
+		 }
+
 	 }
 
 	 @Override
@@ -98,8 +106,8 @@ public class recentChatAdapter extends BaseAdapter
 			 holder.feelView.setText("");
 		 }
 
-		 convertView.setTag(R.id.INDEX_IN_ALL_FRIEND_LIST, dataManager.getFrilendList().findAfriendTeam( ftd.teamName ));
-		 convertView.setTag(R.id.INDEX_IN_ONE_FRIEND_TEAM, dataManager.getFrilendList().getFriendTeamData(ftd.teamName).findFriendMember( ftd.member.get(position).basic.getPhoneNumber() ) );
+		 convertView.setTag(R.id.INDEX_IN_ALL_FRIEND_LIST, dataManager.getFrilendList().findAfriendTeam( md.basic.getTeamName() ));
+		 convertView.setTag(R.id.INDEX_IN_ONE_FRIEND_TEAM, dataManager.getFrilendList().getFriendTeamData( md.basic.getTeamName()).findFriendMember( ftd.member.get(position).basic.getPhoneNumber() ) );
 
 		 return convertView;
 	 }

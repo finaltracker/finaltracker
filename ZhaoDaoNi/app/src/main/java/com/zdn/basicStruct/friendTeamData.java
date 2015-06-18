@@ -1,12 +1,13 @@
 package com.zdn.basicStruct;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import com.zdn.logic.MainControl;
 import com.zdn.data.dataManager;
 
-public class friendTeamData {
+public class friendTeamData  {
 	public String   teamName;
 	//private int 	index ;
 	public List<friendMemberData>	member;

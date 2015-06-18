@@ -1,11 +1,14 @@
 package com.zdn.basicStruct;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import android.content.Context;
 
+import com.zdn.chat.ZdnMessage;
 import com.zdn.db.DBHelper;
 import com.zdn.db.DBManager;
 
@@ -73,11 +76,11 @@ public class friendTeamDataManager {
 	
 	public void removeA_Friend( String teamName , String phoneNumber )
 	{
-		friendTeamData ftd = getFriendTeamData( teamName );
+		friendTeamData ftd = getFriendTeamData(teamName);
 
 		if(ftd!= null)
 		{
-			ftd.removeA_Frined( phoneNumber );
+			ftd.removeA_Frined(phoneNumber);
 		}
 	}
 	
@@ -220,7 +223,7 @@ public class friendTeamDataManager {
 	
 	public void updateDataToDb( Context context )
 	{
-		DBHelper getDbHelper = DBManager.GetDbHelper( friendMemberDataBasic.class );
+		DBHelper getDbHelper = DBManager.GetDbHelper(friendMemberDataBasic.class);
 		
 		getDbHelper.clearData();
 		
@@ -238,7 +241,7 @@ public class friendTeamDataManager {
 	public void cloneToAnother( friendTeamDataManager another )
 	{
 		another.Teams.clear();
-		Collections.copy(this.Teams, another.Teams );
+		Collections.copy(this.Teams, another.Teams);
 
 	}
 	
@@ -265,5 +268,51 @@ public class friendTeamDataManager {
 			deleteA_FriendTeam( teamName );
 		}
 			
+	}
+
+	public friendTeamData constructRecentChatTeamAccordingTime( int teamMemberSizeLimit )
+	{
+		friendTeamData ftd = new friendTeamData();
+		List<friendMemberData> allFriend = new ArrayList<friendMemberData>();
+
+		int teamCount = this.getTeamNum();
+
+		for( int i = 0 ; i < teamCount ; i++ )
+		{
+           allFriend.addAll(  this.getTeamData(i).member );
+		}
+		Collections.sort(allFriend, new Comparator<friendMemberData>() {
+			@Override
+			public int compare(friendMemberData lhs, friendMemberData rhs) {
+				String date1 = "";
+
+				List<ZdnMessage>  messageList =  lhs.getMessageList();
+				if(  messageList.size() > 0 )
+				{
+					date1 = messageList.get( messageList.size()-1).getTimeString();
+				}
+
+				String date2 = "";
+
+				messageList =  rhs.getMessageList();
+				if(  messageList.size() > 0 )
+				{
+					date2 = messageList.get( messageList.size()-1).getTimeString();
+				}
+
+				return date1.compareTo(date2);
+
+			}
+
+
+		});
+
+        if( allFriend.size() > teamMemberSizeLimit )
+        {
+            allFriend =  allFriend.subList( 0,teamMemberSizeLimit-1 );
+        }
+        ftd.teamName = "recentChat";
+        ftd.member = allFriend;
+		return ftd;
 	}
 }

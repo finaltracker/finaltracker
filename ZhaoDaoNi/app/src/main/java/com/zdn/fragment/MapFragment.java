@@ -24,6 +24,7 @@ import com.zdn.R;
 import com.zdn.activity.MainActivity;
 import com.zdn.activity.chatActivity;
 import com.zdn.adapter.recentChatAdapter;
+import com.zdn.basicStruct.friendTeamData;
 import com.zdn.com.headerCtrl;
 import com.zdn.data.dataManager;
 import com.zdn.util.OSUtils;
@@ -43,6 +44,7 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
     private recentChatAdapter m_recentChatAdapt;
     MainActivity.MyOnTouchListener myOnTouchListener;
     private GestureDetector mGestureDetector;
+    friendTeamData  recentChatTeamData = null;
 
     public MapFragment()
     {
@@ -109,7 +111,7 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
         //recent chat view handle
         recentChatFriend = (ListView)rootView.findViewById( R.id.recentChatFriend  );
         recentChatFriend.setOnItemClickListener(this);
-        m_recentChatAdapt = new recentChatAdapter( this.getActivity() , dataManager.getFrilendList().getFriendTeamData("我的好友") );
+        m_recentChatAdapt = new recentChatAdapter( this.getActivity() , dataManager.getFrilendList().constructRecentChatTeamAccordingTime( 100 ));
         recentChatFriend.setAdapter( m_recentChatAdapt );
         m_recentChatAdapt.notifyDataSetChanged();
 
@@ -253,12 +255,12 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
         @Override
         public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
             Log.d("onScroll",e1.toString());
-            return true;
+            return false;
         }
         @Override
         public boolean onDown(MotionEvent ev) {
             Log.d("onDownd",ev.toString());
-            return true;
+            return false;
         }
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
@@ -276,7 +278,7 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
                 shrinkRecentChatView();
             }
 
-            return true;
+            return false;
         }
     }
 

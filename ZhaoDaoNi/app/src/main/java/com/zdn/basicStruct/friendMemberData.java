@@ -14,7 +14,7 @@ import android.graphics.Bitmap;
 
 //define member struct
 
-public class friendMemberData {
+public class friendMemberData  {
 
 	//define here cause: friendMemberDataBasic will use reflect ,so only string type to be define
 	static public int   	TEAM_NAME 		= 0x01; 
@@ -92,5 +92,7 @@ public class friendMemberData {
 	{
 		return this.message;
 	}
-	
+
+
+
 }

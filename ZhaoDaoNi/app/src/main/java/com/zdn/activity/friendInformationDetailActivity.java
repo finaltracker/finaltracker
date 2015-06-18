@@ -9,9 +9,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.lidroid.xutils.BitmapUtils;
 import com.zdn.R;
 import com.zdn.basicStruct.friendMemberData;
 import com.zdn.data.dataManager;
+import com.zdn.logic.InternetComponent;
+import com.zdn.util.FileUtil;
 
 public class friendInformationDetailActivity extends zdnBasicActivity {
 	
@@ -21,9 +24,11 @@ public class friendInformationDetailActivity extends zdnBasicActivity {
 	TextView	userNameTextView;
 	TextView	commentTextView;
 	TextView    groupTextView;
+	ImageView   maja = null;
 	friendMemberData fmd ;
 	static friendInformationDetailActivity  instance = null;
-	
+	private BitmapUtils bitmapUtils = null;
+	private String friendsAvatorDir ;
 	
 	public friendInformationDetailActivity()
 	{
@@ -53,7 +58,7 @@ public class friendInformationDetailActivity extends zdnBasicActivity {
 		groupTextView = (TextView) this.findViewById( R.id.group );
 		groupLineView = this.findViewById(R.id.groupLine);
 		commentTextView = (TextView) this.findViewById(R.id.comment );
-		
+		maja = (ImageView) this.findViewById(R.id.majia);
 		deleteFriend = (ImageView) this.findViewById( R.id.friend_information_detail_delete_friend );
 	}
 	
@@ -67,6 +72,7 @@ public class friendInformationDetailActivity extends zdnBasicActivity {
 	}
 	private void init()
 	{
+
 		Intent intent = this.getIntent();
 		int teamPosition = intent.getIntExtra("teamPosition",0);
 		int memberPosition = intent.getIntExtra("memberPosition", 0);
@@ -106,14 +112,19 @@ public class friendInformationDetailActivity extends zdnBasicActivity {
         	}
         	});
 
-		deleteFriend.setOnClickListener( new View.OnClickListener() {
-        	public void onClick(View v) {
-        		//send delete friend request
-        		dataManager.getFrilendList().removeA_Friend( fmd.basic.getTeamName(), fmd.basic.getPhoneNumber() );
-				Toast.makeText( friendInformationDetailActivity.this, "删除好友消息以发出" , Toast.LENGTH_SHORT).show();
-        		friendInformationDetailActivity.this.finish();
-        	}
-        	});
+		deleteFriend.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				//send delete friend request
+				dataManager.getFrilendList().removeA_Friend(fmd.basic.getTeamName(), fmd.basic.getPhoneNumber());
+				Toast.makeText(friendInformationDetailActivity.this, "删除好友消息以发出", Toast.LENGTH_SHORT).show();
+				friendInformationDetailActivity.this.finish();
+			}
+		});
+
+		friendsAvatorDir = FileUtil.makePath(FileUtil.getBaseDirector(), this.getString(R.string.friendsAvator));
+		bitmapUtils = new BitmapUtils(this , friendsAvatorDir );
+		bitmapUtils.display(maja, InternetComponent.WEBSITE_ADDRESS_BASE_NO_SEPARATOR +fmd.basic.getPictureAddress());
+
 	}
 
 	@Override
@@ -148,36 +159,6 @@ public class friendInformationDetailActivity extends zdnBasicActivity {
         
         
 		super.onActivityResult(requestCode, resultCode, data);
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		switch(id)
-		{
-		case R.id.action_settings:
-			
-			break;
-		/*
-		case R.id.action_add:
-			startActivity( new Intent("com.zdn.activity.AddFriendActivity.ACTION") );
-			break;
-			
-		case R.id.contact_friend:
-			
-			startActivity( new Intent("com.zdn.activity.PeopleActivity.ACTION") );
-			
-			break;
-			*/
-		default:
-			
-			break;
-		}
-
-		return super.onOptionsItemSelected(item);
 	}
 
 }
