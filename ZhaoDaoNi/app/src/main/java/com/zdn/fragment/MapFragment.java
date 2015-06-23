@@ -111,7 +111,7 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
         //recent chat view handle
         recentChatFriend = (ListView)rootView.findViewById( R.id.recentChatFriend  );
         recentChatFriend.setOnItemClickListener(this);
-        m_recentChatAdapt = new recentChatAdapter( this.getActivity() , dataManager.getFrilendList().constructRecentChatTeamAccordingTime( 100 ));
+        m_recentChatAdapt = new recentChatAdapter( this.getActivity() , dataManager.getFrilendList().getAllRecnetChatList(  ));
         recentChatFriend.setAdapter( m_recentChatAdapt );
         m_recentChatAdapt.notifyDataSetChanged();
 

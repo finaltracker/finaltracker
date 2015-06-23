@@ -1,7 +1,6 @@
 package com.zdn.basicStruct;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import com.zdn.logic.MainControl;
@@ -55,7 +54,7 @@ public class friendTeamData  {
 		
 	}
 
-	public void removeA_Frined( String phoneNumber  )
+	public friendMemberData removeA_Frined( String phoneNumber  )
 	{
 		friendMemberData fmd = getFriendMemberData ( phoneNumber );
 
@@ -63,6 +62,8 @@ public class friendTeamData  {
 		{
 			removeA_Frined(fmd);
 		}
+
+		return fmd;
 	}
 
 	public void removeA_Frined( friendMemberData fmd )

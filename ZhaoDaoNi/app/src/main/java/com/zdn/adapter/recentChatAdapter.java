@@ -25,13 +25,13 @@ public class recentChatAdapter extends BaseAdapter
 {
 
 	private static final String TAG = "recentChatAdapter";
-	private friendTeamData	ftd;   // recentChatList;
+	private List<friendMemberData>	ftd;   // recentChatList;
 	private  Context mContext;
 	private BitmapUtils bitmapUtils = null;
 	private String friendsAvatorDir ;
 
 
-	public recentChatAdapter(Context context,friendTeamData	ftd)
+	public recentChatAdapter(Context context,List<friendMemberData>	ftd)
 	{
 		super();
 		this.mContext = context;
@@ -45,7 +45,7 @@ public class recentChatAdapter extends BaseAdapter
 	 public int getCount() {
 		 if( ftd != null )
 		 {
-			 return ftd.member.size();
+			 return ftd.size();
 		 }
 		 else
 		 {
@@ -56,7 +56,7 @@ public class recentChatAdapter extends BaseAdapter
 
 	 @Override
 	 public Object getItem(int position) {
-		 return ftd.member.get(position);
+		 return ftd.get(position);
 	 }
 
 	 @Override
@@ -107,7 +107,7 @@ public class recentChatAdapter extends BaseAdapter
 		 }
 
 		 convertView.setTag(R.id.INDEX_IN_ALL_FRIEND_LIST, dataManager.getFrilendList().findAfriendTeam( md.basic.getTeamName() ));
-		 convertView.setTag(R.id.INDEX_IN_ONE_FRIEND_TEAM, dataManager.getFrilendList().getFriendTeamData( md.basic.getTeamName()).findFriendMember( ftd.member.get(position).basic.getPhoneNumber() ) );
+		 convertView.setTag(R.id.INDEX_IN_ONE_FRIEND_TEAM, dataManager.getFrilendList().getFriendTeamData( md.basic.getTeamName()).findFriendMember( ftd.get(position).basic.getPhoneNumber() ) );
 
 		 return convertView;
 	 }

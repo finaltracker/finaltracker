@@ -27,7 +27,9 @@ public class friendMemberData  {
 	public friendMemberDataBasic basic;
 	//public Bitmap	picture;
 	//private int index;
+	private coordinate theLastCoordinate;   // 最新的坐标信息
 	private List<ZdnMessage> message = null;
+	private List<gpsChange> gpscList = new ArrayList();
 
 
 	public friendMemberData( String tag )
@@ -35,6 +37,7 @@ public class friendMemberData  {
 		//index = 0;
 		message = new ArrayList<ZdnMessage>();
 		basic = new friendMemberDataBasic();
+		theLastCoordinate = new coordinate();
 		//picture = null;
 		basic.setTag(tag);
 		
@@ -45,11 +48,27 @@ public class friendMemberData  {
 	{
 		message = new ArrayList<ZdnMessage>();
 		this.basic =basic;
-        constructMessageFromDb( dataManager.mainContext );
+		theLastCoordinate = new coordinate();
+        constructMessageFromDb(dataManager.mainContext);
 		//picture = null;
 	}
 
+	void registgpsChangeListener( gpsChange gpsc )
+	{
+		gpscList.add(gpsc);
+	}
 
+	void unRegistgpsChangeListener( gpsChange gpsc )
+	{
+
+		for( int i = 0 ; i < gpscList.size();i++ ) {
+			if (gpscList.get(i) == gpsc)
+			{
+				gpscList.remove(i);
+				break;
+			}
+		}
+	}
 	public void constructMessageFromDb( Context context )
 	{
 	
@@ -71,21 +90,13 @@ public class friendMemberData  {
 	}
 	
 	
-	
-	//从数据库得到basic后要填充其它内容时调用此函数
-	public void rebuildFriendMemberData()
-	{
-		//picture = null;
-		if(basic.pictureAddress != null && !basic.pictureAddress.isEmpty() )
-		{
-			//picture = ImgUtil.getInstance().loadBitmapFromCache(basic.pictureAddress);
-		}
-	}
+
 	public void clone( friendMemberData one )
 	{
 		
 		//picture = one.picture;
 		basic = one.basic;
+		theLastCoordinate = one.theLastCoordinate;
 	}
 	
 	public List<ZdnMessage> getMessageList()
@@ -93,6 +104,18 @@ public class friendMemberData  {
 		return this.message;
 	}
 
-
+	public void updateCoordinate ( coordinate coord )
+	{
+		theLastCoordinate.setCoordinate( coord );
+		for( gpsChange gps :gpscList )
+		{
+			gps.updateGps(coord);
+		}
+	}
+	//gps coordingate change interface
+	public interface gpsChange
+	{
+		void updateGps( coordinate gps );
+	}
 
 }

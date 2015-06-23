@@ -18,7 +18,35 @@ public class friendTeamDataManager {
 	//regist a db name "friendMemberDataBasic"
 
 	public List<friendTeamData> getFriendTeamDataList() { return this.Teams; }
-	
+
+	public List<friendMemberData>	allFriendMemberAccordChatTime = new ArrayList<friendMemberData>();;
+
+    private List<friendsMemberChange> fmcList = new ArrayList();
+
+    void registFriendMemberChangeListener( friendsMemberChange fmc )
+    {
+        fmcList.add( fmc );
+
+        //现有的朋友发送给listener
+        for( friendMemberData fmd : allFriendMemberAccordChatTime )
+        {
+            fmc.addA_Friend( fmd );
+        }
+
+
+    }
+
+    void unRegistFriendMemberChangeListener( friendsMemberChange fmc )
+    {
+
+        for( int i = 0 ; i < fmcList.size();i++ ) {
+            if (fmcList.get(i) == fmc)
+            {
+                fmcList.remove(i);
+                break;
+            }
+        }
+    }
 	//return index , -1 not find
 	public int findAfriendTeam( String teamName  )
 	{
@@ -61,9 +89,10 @@ public class friendTeamDataManager {
 			ftd = new friendTeamData();
 			ftd.teamName = 	fmd.basic.teamName;
 			Teams.add(ftd);
+
 		}
 		
-		friendMemberData f = ftd.getFriendMemberData( fmd.basic.phoneNumber );
+		friendMemberData f = ftd.getFriendMemberData(fmd.basic.phoneNumber);
 		if(f == null )
 		{
 			ftd.addFriendMemberData(fmd);
@@ -72,16 +101,34 @@ public class friendTeamDataManager {
 		{
 			f.clone(fmd);
 		}
+        reConstructRecentChatTeamAccordingTime();
+
+        //notify all of listener
+        for( friendsMemberChange fmc :fmcList )
+        {
+            fmc.addA_Friend( fmd );
+        }
 	}
 	
 	public void removeA_Friend( String teamName , String phoneNumber )
 	{
 		friendTeamData ftd = getFriendTeamData(teamName);
-
-		if(ftd!= null)
+        friendMemberData fmd = null;
+        if(ftd!= null)
 		{
-			ftd.removeA_Frined(phoneNumber);
+            fmd = ftd.removeA_Frined(phoneNumber);
+
 		}
+        reConstructRecentChatTeamAccordingTime();
+
+        //notify all of listener
+        if( ftd != null )
+        {
+            for( friendsMemberChange fmc :fmcList )
+            {
+                fmc.removeA_Friend( fmd );
+            }
+        }
 	}
 	
 	public void deleteA_FriendTeam( String teamName )
@@ -95,6 +142,7 @@ public class friendTeamDataManager {
 				i--;
 			}
 		}
+        reConstructRecentChatTeamAccordingTime();
 	}
 
 
@@ -144,7 +192,8 @@ public class friendTeamDataManager {
 		fmd.basic.phoneNumber = PhoneNumber;
 		fmd.basic.pictureAddress = pictureAddress;
 		
-		fmd.rebuildFriendMemberData();
+		//fmd.rebuildFriendMemberData();
+        reConstructRecentChatTeamAccordingTime();
 		
 	}
 	
@@ -213,7 +262,7 @@ public class friendTeamDataManager {
 		{
 			friendMemberDataBasic dbMi = (friendMemberDataBasic)(miList.get(i));
 			friendMemberData fmd = new friendMemberData(dbMi);
-			fmd.rebuildFriendMemberData(); // first rebuilt it
+			//fmd.rebuildFriendMemberData(); // first rebuilt it
 			addA_FriendMemberData( fmd );
 				
 		}
@@ -270,49 +319,68 @@ public class friendTeamDataManager {
 			
 	}
 
-	public friendTeamData constructRecentChatTeamAccordingTime( int teamMemberSizeLimit )
+    public  List<friendMemberData> getAllRecnetChatList()
+    {
+        return reConstructRecentChatTeamAccordingTime();
+    }
+	public List<friendMemberData> reConstructRecentChatTeamAccordingTime(  )
 	{
-		friendTeamData ftd = new friendTeamData();
-		List<friendMemberData> allFriend = new ArrayList<friendMemberData>();
-
-		int teamCount = this.getTeamNum();
-
-		for( int i = 0 ; i < teamCount ; i++ )
-		{
-           allFriend.addAll(  this.getTeamData(i).member );
-		}
-		Collections.sort(allFriend, new Comparator<friendMemberData>() {
-			@Override
-			public int compare(friendMemberData lhs, friendMemberData rhs) {
-				String date1 = "";
-
-				List<ZdnMessage>  messageList =  lhs.getMessageList();
-				if(  messageList.size() > 0 )
-				{
-					date1 = messageList.get( messageList.size()-1).getTimeString();
-				}
-
-				String date2 = "";
-
-				messageList =  rhs.getMessageList();
-				if(  messageList.size() > 0 )
-				{
-					date2 = messageList.get( messageList.size()-1).getTimeString();
-				}
-
-				return date1.compareTo(date2);
-
-			}
-
-
-		});
-
-        if( allFriend.size() > teamMemberSizeLimit )
+        if( allFriendMemberAccordChatTime.size() == 0 )
         {
-            allFriend =  allFriend.subList( 0,teamMemberSizeLimit-1 );
+            friendTeamData ftd = new friendTeamData();
+            List<friendMemberData> allFriend = new ArrayList<friendMemberData>();
+
+            int teamCount = this.getTeamNum();
+
+            for (int i = 0; i < teamCount; i++) {
+                allFriend.addAll(this.getTeamData(i).member);
+            }
+            Collections.sort(allFriend, new Comparator<friendMemberData>() {
+                @Override
+                public int compare(friendMemberData lhs, friendMemberData rhs) {
+                    String date1 = "";
+
+                    List<ZdnMessage> messageList = lhs.getMessageList();
+                    if (messageList.size() > 0) {
+                        date1 = messageList.get(messageList.size() - 1).getTimeString();
+                    }
+
+                    String date2 = "";
+
+                    messageList = rhs.getMessageList();
+                    if (messageList.size() > 0) {
+                        date2 = messageList.get(messageList.size() - 1).getTimeString();
+                    }
+
+                    return date1.compareTo(date2);
+
+                }
+
+
+            });
+
+            allFriendMemberAccordChatTime = allFriend;
         }
-        ftd.teamName = "recentChat";
-        ftd.member = allFriend;
-		return ftd;
+
+		return allFriendMemberAccordChatTime;
 	}
+
+    public void updateThelastChatMember(  friendMemberData fmd )
+    {
+        for( int i = 0 ; i < allFriendMemberAccordChatTime.size() ; i++ )
+        {
+            if( allFriendMemberAccordChatTime.get(i) == fmd )
+            {
+                allFriendMemberAccordChatTime.remove(i);
+                break;
+            }
+        }
+        allFriendMemberAccordChatTime.add( 0 , fmd );
+    }
+
+    public interface friendsMemberChange
+    {
+        void addA_Friend(  friendMemberData fmd );
+        void removeA_Friend(  friendMemberData fmd );
+    }
 }

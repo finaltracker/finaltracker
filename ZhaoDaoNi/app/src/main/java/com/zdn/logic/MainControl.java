@@ -793,6 +793,7 @@ public class MainControl extends HandlerThread {
 		{
 			fmd.getMessageList().add(m);
 		}
+        dataManager.getFrilendList().updateThelastChatMember(fmd);
 	}
 	//handle
 	private void getMessageRspHandle(CommandE e)
