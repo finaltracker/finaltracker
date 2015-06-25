@@ -35,6 +35,7 @@ import com.zdn.R;
 import com.zdn.activity.MainActivity;
 import com.zdn.activity.chatActivity;
 import com.zdn.adapter.recentChatAdapter;
+import com.zdn.basicStruct.coordinate;
 import com.zdn.basicStruct.friendMemberData;
 import com.zdn.basicStruct.friendTeamData;
 import com.zdn.basicStruct.friendTeamDataManager;
@@ -64,6 +65,7 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
     private GestureDetector mGestureDetector;
     friendTeamData  recentChatTeamData = null;
     friendTeamDataManager.friendsMemberChange fmc = null;
+    friendMemberData.gpsChange gpsc = null;
 
     private Map< String,Overlay> overlayMap = new HashMap();
 
@@ -170,35 +172,34 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
             public void addA_Friend(final friendMemberData fmd) {
                 //定义Maker坐标
                 final friendMemberData localFmd = fmd;
-                final LatLng point = new LatLng( fmd.getLatitude() ,fmd.getLongitude() );
-                BitmapUtils mbu = new BitmapUtils( getActivity() );
+                BitmapUtils mbu = new BitmapUtils( MapFragment.this.getActivity() );
 
-                BitmapLoadCallBack overLayBitmapLoadCallBack = new BitmapLoadCallBack ()
+
+                MapFragmentBitmapLoadCallBack overLayBitmapLoadCallBack = new MapFragmentBitmapLoadCallBack( mBaidumap , fmd );
+
+                mbu.display(MapFragment.this.rootView, InternetComponent.WEBSITE_ADDRESS_BASE_NO_SEPARATOR + localFmd.basic.getPictureAddress(), null, overLayBitmapLoadCallBack);
+
+
+
+                //添加位置移动对应的回调
+                gpsc = new friendMemberData.gpsChange()
                 {
-                   LatLng          mLatLng = point;
 
                     @Override
-                    public void onLoadCompleted(View container, String uri, Bitmap bitmap, BitmapDisplayConfig config, BitmapLoadFrom from) {
-                        BitmapDescriptor mBitMap = BitmapDescriptorFactory.fromBitmap(bitmap);
+                    public void updateGps(friendMemberData ufmd, coordinate gps) {
+                        Overlay ov = overlayMap.get(ufmd.basic.getPhoneNumber() );
+                        if( ov != null )
+                        {
+                            ov.remove();
+                            BitmapUtils mbug = new BitmapUtils( MapFragment.this.getActivity() );
+                            MapFragmentBitmapLoadCallBack overLayBitmapLoadCallBack = new MapFragmentBitmapLoadCallBack( mBaidumap , ufmd );
 
-//构建MarkerOption，用于在地图上添加Marker
-                        OverlayOptions option = new MarkerOptions()
-                                .position(mLatLng)
-                                .icon(mBitMap);
-//在地图上添加Marker，并显示
+                            mbug.display(MapFragment.this.rootView, InternetComponent.WEBSITE_ADDRESS_BASE_NO_SEPARATOR + localFmd.basic.getPictureAddress(), null, overLayBitmapLoadCallBack );
 
-                        Overlay mOverLay = mBaidumap.addOverlay(option);
-                        overlayMap.put( localFmd.basic.getPhoneNumber() ,mOverLay );
-
-                    }
-
-                    @Override
-                    public void onLoadFailed(View container, String uri, Drawable drawable) {
-
+                        }
                     }
                 };
-
-                mbu.display(MapFragment.this.rootView, InternetComponent.WEBSITE_ADDRESS_BASE_NO_SEPARATOR + fmd.basic.getPictureAddress(), null,  overLayBitmapLoadCallBack  );
+                localFmd.registgpsChangeListener(gpsc);
 
             }
 
@@ -207,10 +208,12 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
             public void removeA_Friend(friendMemberData fmd) {
 
                 Overlay ov = overlayMap.remove(fmd.basic.getPhoneNumber() );
+                fmd.unRegistgpsChangeListener( gpsc );
                 ov.remove();
             }
         };
-        super.onCreateView( inflater , container , savedInstanceState );
+        dataManager.getFrilendList().registFriendMemberChangeListener( fmc );
+        super.onCreateView(inflater, container, savedInstanceState );
         return rootView;
     }
 
@@ -273,6 +276,7 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
     public void onDestroyView() {
         super.onDestroyView();
         //在activity执行onDestroy时执行mMapView.onDestroy()，实现地图生命周期管理
+        dataManager.getFrilendList().unRegistFriendMemberChangeListener(fmc );
         mMapView.onDestroy();
     }
 
@@ -364,5 +368,42 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
         return super.onTouch(v,event);
     }
 
+    private class MapFragmentBitmapLoadCallBack extends BitmapLoadCallBack
+    {
+       // LatLng          mLatLng = null;
+       BaiduMap mBaidumap = null;
+       friendMemberData localFmd = null;
 
+
+        public MapFragmentBitmapLoadCallBack(  BaiduMap baidumap,friendMemberData fmd  )
+        {
+            mBaidumap  = baidumap ;
+            localFmd = fmd;
+        }
+        @Override
+        public void onLoadCompleted(View container, String uri, Bitmap bitmap, BitmapDisplayConfig config, BitmapLoadFrom from) {
+
+            BitmapDescriptor mBitMap = BitmapDescriptorFactory.fromBitmap(bitmap);
+
+//构建MarkerOption，用于在地图上添加Marker
+        OverlayOptions option = new MarkerOptions()
+                .position( new LatLng( localFmd.getLatitude() , localFmd.getLongitude() ))
+                .icon(mBitMap);
+//在地图上添加Marker，并显示
+
+        Overlay mOverLay = mBaidumap.addOverlay(option);
+        Bundle mBundle = new Bundle();
+        mBundle.putString( "TeamName",localFmd.basic.getTeamName() );
+        mBundle.putString( "PhoneNumber",localFmd.basic.getPhoneNumber() );
+        mOverLay.setExtraInfo(mBundle);
+
+        overlayMap.put( localFmd.basic.getPhoneNumber() ,mOverLay );
+
+    }
+
+        @Override
+        public void onLoadFailed(View container, String uri, Drawable drawable) {
+
+    }
+    };
 }

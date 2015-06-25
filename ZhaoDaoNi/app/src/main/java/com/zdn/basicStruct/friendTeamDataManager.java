@@ -23,7 +23,7 @@ public class friendTeamDataManager {
 
     private List<friendsMemberChange> fmcList = new ArrayList();
 
-    void registFriendMemberChangeListener( friendsMemberChange fmc )
+    public void registFriendMemberChangeListener( friendsMemberChange fmc )
     {
         fmcList.add( fmc );
 
@@ -36,7 +36,7 @@ public class friendTeamDataManager {
 
     }
 
-    void unRegistFriendMemberChangeListener( friendsMemberChange fmc )
+    public void unRegistFriendMemberChangeListener( friendsMemberChange fmc )
     {
 
         for( int i = 0 ; i < fmcList.size();i++ ) {

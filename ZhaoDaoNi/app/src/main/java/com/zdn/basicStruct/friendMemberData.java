@@ -53,12 +53,12 @@ public class friendMemberData  {
 		//picture = null;
 	}
 
-	void registgpsChangeListener( gpsChange gpsc )
+	public void registgpsChangeListener( gpsChange gpsc )
 	{
 		gpscList.add(gpsc);
 	}
 
-	void unRegistgpsChangeListener( gpsChange gpsc )
+	public void unRegistgpsChangeListener( gpsChange gpsc )
 	{
 
 		for( int i = 0 ; i < gpscList.size();i++ ) {
@@ -109,7 +109,7 @@ public class friendMemberData  {
 		theLastCoordinate.setCoordinate( coord );
 		for( gpsChange gps :gpscList )
 		{
-			gps.updateGps(coord);
+			gps.updateGps( this, coord );
 		}
 	}
 
@@ -125,7 +125,7 @@ public class friendMemberData  {
 	//gps coordingate change interface
 	public interface gpsChange
 	{
-		void updateGps( coordinate gps );
+		void updateGps( friendMemberData fmd , coordinate gps );
 	}
 
 }
