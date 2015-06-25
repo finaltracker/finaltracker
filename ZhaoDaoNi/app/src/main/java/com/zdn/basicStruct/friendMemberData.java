@@ -112,6 +112,16 @@ public class friendMemberData  {
 			gps.updateGps(coord);
 		}
 	}
+
+	public float getLongitude()
+	{
+		return  theLastCoordinate.getLongitude();
+	}
+
+	public float getLatitude()
+	{
+		return theLastCoordinate.getLatitude();
+	}
 	//gps coordingate change interface
 	public interface gpsChange
 	{

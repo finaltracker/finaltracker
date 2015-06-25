@@ -380,7 +380,7 @@ public class friendTeamDataManager {
 
     public interface friendsMemberChange
     {
-        void addA_Friend(  friendMemberData fmd );
-        void removeA_Friend(  friendMemberData fmd );
+        public void addA_Friend(  friendMemberData fmd );
+        public void removeA_Friend(  friendMemberData fmd );
     }
 }

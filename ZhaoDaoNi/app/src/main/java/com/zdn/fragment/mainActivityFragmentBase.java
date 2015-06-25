@@ -31,7 +31,7 @@ public class mainActivityFragmentBase extends Fragment  implements View.OnTouchL
     static final public int PERSION_INFORMATION_FRAGMENT   =   MAP_FRAGMENT + 1;
     static final public int FRIEND_LIST_FRAGMENT   =   PERSION_INFORMATION_FRAGMENT + 1;
 
-    private View rootView = null;
+    protected View rootView = null;
     private LinearLayout zdnHeaderLayout = null;
     private ImageView navigationButton = null;
     private TextView headerTitle = null;

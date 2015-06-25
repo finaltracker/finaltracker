@@ -2,6 +2,8 @@ package com.zdn.fragment;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -15,19 +17,35 @@ import android.widget.RelativeLayout;
 
 import com.baidu.mapapi.SDKInitializer;
 import com.baidu.mapapi.map.BaiduMap;
+import com.baidu.mapapi.map.BitmapDescriptor;
+import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
+import com.baidu.mapapi.map.MarkerOptions;
+import com.baidu.mapapi.map.Overlay;
+import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
+import com.lidroid.xutils.BitmapUtils;
+import com.lidroid.xutils.bitmap.BitmapDisplayConfig;
+import com.lidroid.xutils.bitmap.callback.BitmapLoadCallBack;
+import com.lidroid.xutils.bitmap.callback.BitmapLoadFrom;
 import com.zdn.R;
 import com.zdn.activity.MainActivity;
 import com.zdn.activity.chatActivity;
 import com.zdn.adapter.recentChatAdapter;
+import com.zdn.basicStruct.friendMemberData;
 import com.zdn.basicStruct.friendTeamData;
+import com.zdn.basicStruct.friendTeamDataManager;
 import com.zdn.com.headerCtrl;
 import com.zdn.data.dataManager;
+import com.zdn.logic.InternetComponent;
 import com.zdn.util.OSUtils;
+import com.zdn.xutilExpand.bitmapUtilsExpand;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class MapFragment extends mainActivityFragmentBase implements AdapterView.OnItemClickListener {
     // TODO: Rename parameter arguments, choose names that match
@@ -45,6 +63,9 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
     MainActivity.MyOnTouchListener myOnTouchListener;
     private GestureDetector mGestureDetector;
     friendTeamData  recentChatTeamData = null;
+    friendTeamDataManager.friendsMemberChange fmc = null;
+
+    private Map< String,Overlay> overlayMap = new HashMap();
 
     public MapFragment()
     {
@@ -78,7 +99,7 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
         // Inflate the layout for this fragment
 
         SDKInitializer.initialize( this.getActivity().getApplicationContext());
-        View rootView =  inflater.inflate(R.layout.fragment_map, container, false);
+        final View rootView =  inflater.inflate(R.layout.fragment_map, container, false);
 
         rootView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT ));
 
@@ -90,7 +111,7 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
             back_button.setVisibility(View.INVISIBLE );
         }
 
-        BaiduMap mBaidumap = mMapView.getMap();
+        final BaiduMap mBaidumap = mMapView.getMap();
         mBaidumap.setTrafficEnabled( false );
 
 //设定中心点坐标
@@ -112,7 +133,7 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
         recentChatFriend = (ListView)rootView.findViewById( R.id.recentChatFriend  );
         recentChatFriend.setOnItemClickListener(this);
         m_recentChatAdapt = new recentChatAdapter( this.getActivity() , dataManager.getFrilendList().getAllRecnetChatList(  ));
-        recentChatFriend.setAdapter( m_recentChatAdapt );
+        recentChatFriend.setAdapter(m_recentChatAdapt);
         m_recentChatAdapt.notifyDataSetChanged();
 
         RelativeLayout.LayoutParams paramTest = (RelativeLayout.LayoutParams) recentChatFriend.getLayoutParams();
@@ -143,6 +164,52 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
         ((MainActivity) getActivity())
                 .registerMyOnTouchListener(myOnTouchListener);
 
+        fmc = new friendTeamDataManager.friendsMemberChange() {
+
+            @Override
+            public void addA_Friend(final friendMemberData fmd) {
+                //定义Maker坐标
+                final friendMemberData localFmd = fmd;
+                final LatLng point = new LatLng( fmd.getLatitude() ,fmd.getLongitude() );
+                BitmapUtils mbu = new BitmapUtils( getActivity() );
+
+                BitmapLoadCallBack overLayBitmapLoadCallBack = new BitmapLoadCallBack ()
+                {
+                   LatLng          mLatLng = point;
+
+                    @Override
+                    public void onLoadCompleted(View container, String uri, Bitmap bitmap, BitmapDisplayConfig config, BitmapLoadFrom from) {
+                        BitmapDescriptor mBitMap = BitmapDescriptorFactory.fromBitmap(bitmap);
+
+//构建MarkerOption，用于在地图上添加Marker
+                        OverlayOptions option = new MarkerOptions()
+                                .position(mLatLng)
+                                .icon(mBitMap);
+//在地图上添加Marker，并显示
+
+                        Overlay mOverLay = mBaidumap.addOverlay(option);
+                        overlayMap.put( localFmd.basic.getPhoneNumber() ,mOverLay );
+
+                    }
+
+                    @Override
+                    public void onLoadFailed(View container, String uri, Drawable drawable) {
+
+                    }
+                };
+
+                mbu.display(MapFragment.this.rootView, InternetComponent.WEBSITE_ADDRESS_BASE_NO_SEPARATOR + fmd.basic.getPictureAddress(), null,  overLayBitmapLoadCallBack  );
+
+            }
+
+
+            @Override
+            public void removeA_Friend(friendMemberData fmd) {
+
+                Overlay ov = overlayMap.remove(fmd.basic.getPhoneNumber() );
+                ov.remove();
+            }
+        };
         super.onCreateView( inflater , container , savedInstanceState );
         return rootView;
     }
@@ -209,6 +276,8 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
         mMapView.onDestroy();
     }
 
+
+    /* 右侧好友列表的处理*/
     private void expandRecentChatView()
     {
 
