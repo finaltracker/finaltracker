@@ -171,14 +171,6 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
             @Override
             public void addA_Friend(final friendMemberData fmd) {
                 //定义Maker坐标
-                final friendMemberData localFmd = fmd;
-                BitmapUtils mbu = new BitmapUtils( MapFragment.this.getActivity() );
-
-
-                MapFragmentBitmapLoadCallBack overLayBitmapLoadCallBack = new MapFragmentBitmapLoadCallBack( mBaidumap , fmd );
-
-                mbu.display(MapFragment.this.rootView, InternetComponent.WEBSITE_ADDRESS_BASE_NO_SEPARATOR + localFmd.basic.getPictureAddress(), null, overLayBitmapLoadCallBack);
-
 
 
                 //添加位置移动对应的回调
@@ -191,15 +183,15 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
                         if( ov != null )
                         {
                             ov.remove();
-                            BitmapUtils mbug = new BitmapUtils( MapFragment.this.getActivity() );
-                            MapFragmentBitmapLoadCallBack overLayBitmapLoadCallBack = new MapFragmentBitmapLoadCallBack( mBaidumap , ufmd );
-
-                            mbug.display(MapFragment.this.rootView, InternetComponent.WEBSITE_ADDRESS_BASE_NO_SEPARATOR + localFmd.basic.getPictureAddress(), null, overLayBitmapLoadCallBack );
-
                         }
+                        BitmapUtils mbug = new BitmapUtils( MapFragment.this.getActivity() );
+                        MapFragmentBitmapLoadCallBack overLayBitmapLoadCallBack = new MapFragmentBitmapLoadCallBack( mBaidumap , ufmd );
+
+                        mbug.display(MapFragment.this.rootView, InternetComponent.WEBSITE_ADDRESS_BASE_NO_SEPARATOR + ufmd.basic.getPictureAddress(), null, overLayBitmapLoadCallBack );
+
                     }
                 };
-                localFmd.registgpsChangeListener(gpsc);
+                fmd.registgpsChangeListener(gpsc);
 
             }
 
