@@ -4,8 +4,8 @@ package com.zdn.basicStruct;
  * Created by wanghp1 on 2015/6/19.
  */
 public class coordinate {
-    private float lng;   // 经度
-    private float lat;   // 纬度
+    private double lng;   // 经度
+    private double lat;   // 纬度
 
 
     public coordinate()
@@ -13,7 +13,7 @@ public class coordinate {
         lng = 0;
         lat = 0;
     }
-    public coordinate( float lng  , float lat )
+    public coordinate( double lng  , double lat )
     {
         this.lng = lng;
         this.lat = lat;
@@ -25,12 +25,12 @@ public class coordinate {
         this.lat = coor.lat;
     }
 
-    public float getLongitude()
+    public double getLongitude()
     {
         return  lng;
     }
 
-    public float getLatitude()
+    public double getLatitude()
     {
         return lat;
     }

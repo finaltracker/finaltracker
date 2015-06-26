@@ -901,7 +901,7 @@ public class MainControl extends HandlerThread {
             String	lng               = getStringFromJasonObj(json_obj,"lng");
 
             friendMemberData fmd = dataManager.getFrilendList().getMemberDataByPhoneNumber(friend_mobile);
-            fmd.updateCoordinate( new coordinate(Float.parseFloat(lat) ,Float.parseFloat(lng) ) );
+            fmd.updateCoordinate( new coordinate( Double.parseDouble(lat), Double.parseDouble(lng) ) );
 
         } catch (JSONException e1) {
 
@@ -1073,14 +1073,14 @@ public class MainControl extends HandlerThread {
 		MainControl.getInstance().handler.sendMessage(m);
 
 	}
-	static public void locationUpdate( float lat ,float lng ) {
+	static public void locationUpdate( double lat ,double lng ) {
 
 		CommandE e = InternetComponent.packA_CommonExpCommandE_ToServer(
 				EventDefine.LOCATION_UPLOAD_REQ,
 				InternetComponent.WEBSITE_ADDRESS_LOCATION_UPDATE
 		);
-		e.AddAProperty(new Property( "lat" , Float.toString(lat)));
-		e.AddAProperty(new Property( "lng" , Float.toString(lng)));
+		e.AddAProperty(new Property( "lat" , Double.toString(lat)));
+		e.AddAProperty(new Property( "lng" , Double.toString(lng)));
 
 
 		Message m = MainControl.getInstance().handler.obtainMessage();

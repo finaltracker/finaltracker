@@ -113,12 +113,12 @@ public class friendMemberData  {
 		}
 	}
 
-	public float getLongitude()
+	public double getLongitude()
 	{
 		return  theLastCoordinate.getLongitude();
 	}
 
-	public float getLatitude()
+	public double getLatitude()
 	{
 		return theLastCoordinate.getLatitude();
 	}

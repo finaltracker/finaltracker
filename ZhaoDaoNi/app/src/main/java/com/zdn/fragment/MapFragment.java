@@ -42,6 +42,7 @@ import com.zdn.basicStruct.friendTeamDataManager;
 import com.zdn.com.headerCtrl;
 import com.zdn.data.dataManager;
 import com.zdn.internet.InternetComponent;
+import com.zdn.logic.MainControl;
 import com.zdn.util.OSUtils;
 import com.zdn.xutilExpand.bitmapUtilsExpand;
 
@@ -179,6 +180,13 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
 
                     @Override
                     public void updateGps(friendMemberData ufmd, coordinate gps) {
+                        if(ufmd == dataManager.self.selfInfo )
+                        {
+                            //是自己，发送位置信息到server
+
+                            MainControl.locationUpdate( ufmd.getLatitude() , ufmd.getLongitude() );
+                        }
+                        //draw it on map
                         Overlay ov = overlayMap.get(ufmd.basic.getPhoneNumber() );
                         if( ov != null )
                         {

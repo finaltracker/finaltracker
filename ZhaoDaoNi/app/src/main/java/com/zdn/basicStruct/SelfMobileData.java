@@ -16,6 +16,7 @@ public class SelfMobileData {
 	public PreferencesUtil     preferencesPara;
 	public friendMemberData selfInfo;
 	Context context;
+
 	
 	
 	public SelfMobileData()

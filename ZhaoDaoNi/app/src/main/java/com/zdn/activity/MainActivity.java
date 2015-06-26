@@ -6,10 +6,15 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocationListener;
+import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
 import com.qq.test.SDManager;
 import com.zdn.R;
 
 import com.zdn.adapter.navigationListDrawerItemAdapter;
+import com.zdn.basicStruct.coordinate;
 import com.zdn.basicStruct.networkStatusEvent;
 import com.zdn.com.headerCtrl;
 import com.zdn.data.dataManager;
@@ -76,14 +81,14 @@ public class MainActivity extends zdnBasicActivity implements navigationFragment
 	List<navigationListDrawerItemAdapter.navigationListContextHolder> nlch;
 	private int selectFragmentIndex = 0;
 	navigationFragment navigationf = null; // 记录导航fragment
-	private ArrayList<MyOnTouchListener> onTouchListeners = new ArrayList<MyOnTouchListener>(
-			10);
+	private ArrayList<MyOnTouchListener> onTouchListeners = new ArrayList<MyOnTouchListener>();
 
     private myInfomationFragment m_myInfomationFragment = null;
     private MapFragment m_MapFragment = null;
     private PeopleFragment m_PeopleFragment = null;
 
-
+	public LocationClient mLocationClient = null;
+	public BDLocationListener bdLocationListener = null;
 	public MainActivity()
 	{
 		me = this; // 
@@ -107,7 +112,39 @@ public class MainActivity extends zdnBasicActivity implements navigationFragment
 
 		onItemClickNavigation(MainActivity.MAIN_MAP);
 
-	}
+		//定位相关
+		bdLocationListener = new BDLocationListener()
+		{
+
+			@Override
+			public void onReceiveLocation(BDLocation location) {
+				if (location == null)
+					return ;
+				double lat = location.getLatitude();
+				double lng = location.getLongitude();
+
+                dataManager.self.selfInfo.updateCoordinate( new coordinate(lat,lng) );
+
+				Log.i("MainActivity", "<lat,lng>" + lat + "," + lng);
+				//udpate local and server data
+			}
+		};
+		mLocationClient = new LocationClient(getApplicationContext());     //声明LocationClient类
+		mLocationClient.registerLocationListener(bdLocationListener);    //注册监听函数
+        LocationClientOption option = new LocationClientOption();
+        option.setOpenGps(true); // 打开GPS
+        option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);// 设置定位模式
+        option.setCoorType("bd09ll"); // 返回的定位结果是百度经纬度,默认值gcj02
+        option.setScanSpan(5000); // 设置发起定位请求的间隔时间为5000ms
+        option.setIsNeedAddress(true); // 返回的定位结果包含地址信息
+        option.setNeedDeviceDirect(true); // 返回的定位结果包含手机机头的方向
+
+        mLocationClient.setLocOption(option);
+
+		mLocationClient.start();
+
+
+    }
 
 	private void init()
 	{
@@ -153,37 +190,7 @@ public class MainActivity extends zdnBasicActivity implements navigationFragment
 		}
 
 	}
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		
-		FragmentManager fragmentManager = this.getFragmentManager();
-		FragmentTransaction ft = fragmentManager.beginTransaction();
-		
-		int id = item.getItemId();
-		switch(id)
-		{
-		case R.id.action_settings:
-			
-			break;
-		case R.id.action_add:
-			startActivity( new Intent("com.zdn.activity.AddFriendActivity.ACTION") );
-			break;
-			
-		case R.id.contact_friend:
-			
-			startActivity( new Intent("com.zdn.activity.PeopleActivity.ACTION") );
-			
-			break;
-		default:
-			
-			break;
-		}
 
-		return super.onOptionsItemSelected(item);
-	}
 
 	public void showNavigation()
 	{
@@ -262,6 +269,7 @@ public class MainActivity extends zdnBasicActivity implements navigationFragment
 	protected void onDestroy() {
 
 		unregisterReceiver(mMessageReceiver);
+		mLocationClient.stop();
 		if(control!= null)
 		{
 			control.quit();
