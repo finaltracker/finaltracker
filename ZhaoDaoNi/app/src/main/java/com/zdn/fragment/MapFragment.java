@@ -41,7 +41,7 @@ import com.zdn.basicStruct.friendTeamData;
 import com.zdn.basicStruct.friendTeamDataManager;
 import com.zdn.com.headerCtrl;
 import com.zdn.data.dataManager;
-import com.zdn.logic.InternetComponent;
+import com.zdn.internet.InternetComponent;
 import com.zdn.util.OSUtils;
 import com.zdn.xutilExpand.bitmapUtilsExpand;
 
@@ -201,7 +201,10 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
 
                 Overlay ov = overlayMap.remove(fmd.basic.getPhoneNumber() );
                 fmd.unRegistgpsChangeListener( gpsc );
-                ov.remove();
+                if(ov!=null)
+                {
+                    ov.remove();
+                }
             }
         };
         dataManager.getFrilendList().registFriendMemberChangeListener( fmc );

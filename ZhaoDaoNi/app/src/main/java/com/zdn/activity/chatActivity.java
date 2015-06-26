@@ -36,7 +36,7 @@ import com.zdn.chat.OnOperationListener;
 import com.zdn.chat.Option;
 import com.zdn.data.dataManager;
 import com.zdn.event.EventDefine;
-import com.zdn.logic.InternetComponent;
+import com.zdn.internet.InternetComponent;
 import com.zdn.logic.MainControl;
 import com.zdn.util.ObjectConvertTool;
 import de.greenrobot.event.EventBus;

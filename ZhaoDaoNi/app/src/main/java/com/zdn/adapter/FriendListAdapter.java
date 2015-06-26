@@ -8,7 +8,7 @@ import com.zdn.basicStruct.friendMemberData;
 import com.zdn.basicStruct.friendTeamData;
 import com.zdn.basicStruct.friendTeamDataManager;
 import com.zdn.chat.ZdnMessage;
-import com.zdn.logic.InternetComponent;
+import com.zdn.internet.InternetComponent;
 import com.zdn.logic.MainControl;
 import com.zdn.util.FileUtil;
 import com.zdn.view.FriendListView;

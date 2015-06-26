@@ -1,4 +1,4 @@
-package com.zdn.logic;
+package com.zdn.internet;
 
 import com.zdn.CommandParser.CommandE;
 import com.zdn.CommandParser.ExpCommandE;
@@ -32,7 +32,8 @@ public class InternetComponent implements ServerInterfaceCmd {
 	static public String WEBSITE_ADDRESS_SEND_TIP = WEBSITE_ADDRESS_BASE + "tips/send_tip/";
 	static public String WEBSITE_ADDRESS_GET_TIP = WEBSITE_ADDRESS_BASE + "tips/get_tip/";
 	static public String WEBSITE_ADDRESS_UPLOAD_FILE = WEBSITE_ADDRESS_BASE + "user/upload_avatar/";
-	
+	static public String WEBSITE_ADDRESS_LOCATION_UPDATE = WEBSITE_ADDRESS_BASE + "feed/locate_upload/";
+	static public String WEBSITE_ADDRESS_LOCATION_GET = WEBSITE_ADDRESS_BASE + "feed/locate_get/";
 	
 	public ThreadTaskHandler handler;
 	
@@ -212,6 +213,28 @@ public class InternetComponent implements ServerInterfaceCmd {
 
 		handler.sendMessage(msg);
 
+	}
+
+	@Override
+	public void locationUpdate(CommandE e) {
+		Log.i( this.getClass().getSimpleName() , "call locationUpdate");
+		Message msg = handler.obtainMessage();
+		msg.what = ThreadTaskHandler.SEND_MESSAGE_TO_SERVER;
+
+		msg.obj = e;   //
+
+		handler.sendMessage(msg);
+	}
+
+	@Override
+	public void locationGet(CommandE e) {
+		Log.i( this.getClass().getSimpleName() , "call locationGet");
+		Message msg = handler.obtainMessage();
+		msg.what = ThreadTaskHandler.SEND_MESSAGE_TO_SERVER;
+
+		msg.obj = e;   //
+
+		handler.sendMessage(msg);
 	}
 
 

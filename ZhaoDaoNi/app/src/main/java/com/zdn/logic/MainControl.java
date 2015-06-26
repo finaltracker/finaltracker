@@ -10,6 +10,7 @@ import com.zdn.activity.MainActivity;
 import com.zdn.activity.searchFriendResultForAddActivity;
 import com.zdn.basicStruct.SendMessageRspEvent;
 import com.zdn.basicStruct.commonEvent;
+import com.zdn.basicStruct.coordinate;
 import com.zdn.basicStruct.friendMemberData;
 import com.zdn.basicStruct.friendMemberDataBasic;
 import com.zdn.basicStruct.getMessageRspEvent;
@@ -17,6 +18,7 @@ import com.zdn.basicStruct.networkStatusEvent;
 import com.zdn.chat.ZdnMessage;
 import com.zdn.data.dataManager;
 import com.zdn.event.EventDefine;
+import com.zdn.internet.InternetComponent;
 import com.zdn.receiver.NetworkReceiver;
 import com.zdn.util.ObjectConvertTool;
 
@@ -34,7 +36,7 @@ import java.io.File;
 public class MainControl extends HandlerThread {
 	Context mContext;
 	
-	InternetComponent 	mInternetCom = null ;
+	InternetComponent mInternetCom = null ;
 	static public  MainControl me = null;
 	
 	
@@ -626,16 +628,17 @@ public class MainControl extends HandlerThread {
 			
 			break;
 		case EventDefine.GET_MESSAGE_RSP:
-			{
-				Log.d("MainControl", "GET_MESSAGE_RSP: ");
-				getMessageRspHandle(e);
-			}
-			break;
+        {
+            Log.d("MainControl", "GET_MESSAGE_RSP: ");
+            getMessageRspHandle(e);
+        }
+        break;
 		case EventDefine.UPLOAD_FILE_REQ:
-			Log.d("MainControl" , "UPLOAD_FILE_REQ: " );
-			mInternetCom.uploadFile(e);
-
-			break;
+        {
+            Log.d("MainControl", "UPLOAD_FILE_REQ: ");
+            mInternetCom.uploadFile(e);
+        }
+        break;
 		case EventDefine.UPLOAD_FILE_RSP:
 		{
 			int uploadRspRsp = parseHttpReqRspStatus(e);
@@ -667,9 +670,33 @@ public class MainControl extends HandlerThread {
 
 		}
 		break;
-		default:
-			break;
-		}
+        case EventDefine.LOCATION_UPLOAD_REQ: {
+            Log.d("MainControl", "LOCATION_UPLOAD_REQ: ");
+            mInternetCom.locationUpdate(e);
+        }
+            break;
+        case EventDefine.LOCATION_UPLOAD_RSP:
+        {
+            Log.d("MainControl", "LOCATION_UPLOAD_RSP: ");
+        }
+        break;
+
+        case EventDefine.LOCATION_GET_REQ: {
+            Log.d("MainControl", "LOCATION_GET_REQ: ");
+            mInternetCom.locationUpdate(e);
+        }
+        break;
+
+        case EventDefine.LOCATION_GET_RSP:
+        {
+            Log.d("MainControl", "LOCATION_GET_RSP: ");
+            locationGetRspHandle(e);
+        }
+        break;
+
+        default:
+        break;
+        }
 	
 	}
 	
@@ -772,7 +799,7 @@ public class MainControl extends HandlerThread {
 		String ret = "";
 		
 		try {
-			ret = obj.getString( what );
+			ret = obj.getString(what);
 		} catch (JSONException e1) {
 	
 			Log.d("MainControl" , "getIntFromJasonObj what = " + what + "error: " + e1.getMessage() );
@@ -803,7 +830,7 @@ public class MainControl extends HandlerThread {
 		
 		if(  0 != Integer.parseInt(status))
 		{
-			Log.e( this.getClass().getSimpleName(),"get tip status = " + status );
+			Log.e(this.getClass().getSimpleName(), "get tip status = " + status);
 			return ;
 		}
 		
@@ -852,6 +879,36 @@ public class MainControl extends HandlerThread {
 		}
 	}
 
+    private void locationGetRspHandle(CommandE e)
+    {
+        String rep = (String)e.GetPropertyContext("HTTP_REQ_RSP");
+        String status = (String)e.GetPropertyContext("STATUS");
+
+        if(  0 != Integer.parseInt(status))
+        {
+            Log.e( this.getClass().getSimpleName(),"get tip status = " + status );
+            return ;
+        }
+
+        JSONObject  json_obj = null;
+        try {
+            json_obj = new JSONObject(rep);
+
+
+
+            String	friend_mobile     = getStringFromJasonObj(json_obj,"friend_mobile");
+            String	lat               = getStringFromJasonObj(json_obj,"lat");
+            String	lng               = getStringFromJasonObj(json_obj,"lng");
+
+            friendMemberData fmd = dataManager.getFrilendList().getMemberDataByPhoneNumber(friend_mobile);
+            fmd.updateCoordinate( new coordinate(Float.parseFloat(lat) ,Float.parseFloat(lng) ) );
+
+        } catch (JSONException e1) {
+
+            Log.d("MainControl" , "locationGetRsp error: " + e1.getMessage() );
+            e1.printStackTrace();
+        }
+    }
 	@Override
 	public boolean quit() {
 
@@ -1007,7 +1064,39 @@ public class MainControl extends HandlerThread {
 				EventDefine.UPLOAD_FILE_REQ ,
 				InternetComponent.WEBSITE_ADDRESS_UPLOAD_FILE
 		);
-		e.AddAProperty(new Property( uploadWhat , uploadFile));
+		e.AddAProperty(new Property(uploadWhat, uploadFile));
+
+
+		Message m = MainControl.getInstance().handler.obtainMessage();
+		m.obj = e;   //
+
+		MainControl.getInstance().handler.sendMessage(m);
+
+	}
+	static public void locationUpdate( float lat ,float lng ) {
+
+		CommandE e = InternetComponent.packA_CommonExpCommandE_ToServer(
+				EventDefine.LOCATION_UPLOAD_REQ,
+				InternetComponent.WEBSITE_ADDRESS_LOCATION_UPDATE
+		);
+		e.AddAProperty(new Property( "lat" , Float.toString(lat)));
+		e.AddAProperty(new Property( "lng" , Float.toString(lng)));
+
+
+		Message m = MainControl.getInstance().handler.obtainMessage();
+		m.obj = e;   //
+
+		MainControl.getInstance().handler.sendMessage(m);
+
+	}
+
+	static public void locationGet( String friend_mobile ) {
+
+		CommandE e = InternetComponent.packA_CommonExpCommandE_ToServer(
+				EventDefine.LOCATION_GET_REQ,
+				InternetComponent.WEBSITE_ADDRESS_LOCATION_GET
+		);
+		e.AddAProperty(new Property( "friend_mobile" , friend_mobile));
 
 
 		Message m = MainControl.getInstance().handler.obtainMessage();

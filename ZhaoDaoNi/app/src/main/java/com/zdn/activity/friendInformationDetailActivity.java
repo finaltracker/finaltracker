@@ -13,7 +13,7 @@ import com.lidroid.xutils.BitmapUtils;
 import com.zdn.R;
 import com.zdn.basicStruct.friendMemberData;
 import com.zdn.data.dataManager;
-import com.zdn.logic.InternetComponent;
+import com.zdn.internet.InternetComponent;
 import com.zdn.util.FileUtil;
 
 public class friendInformationDetailActivity extends zdnBasicActivity {

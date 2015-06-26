@@ -2,7 +2,7 @@ package com.zdn.channel;
 
 import com.zdn.CommandParser.ExpCommandE;
 import com.zdn.CommandParser.Property;
-import com.zdn.logic.InternetComponent;
+import com.zdn.internet.InternetComponent;
 import com.zdn.logic.MainControl;
 
 import android.os.Message;

@@ -15,7 +15,7 @@ import com.zdn.basicStruct.friendMemberData;
 import com.zdn.basicStruct.friendTeamData;
 import com.zdn.chat.ZdnMessage;
 import com.zdn.data.dataManager;
-import com.zdn.logic.InternetComponent;
+import com.zdn.internet.InternetComponent;
 import com.zdn.util.FileUtil;
 
 import java.util.List;

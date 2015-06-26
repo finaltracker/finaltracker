@@ -24,6 +24,10 @@ public class EventDefine {
 	public static final int GET_MESSAGE_RSP		= GET_MESSAGE_REQ+1;
 	public static final int UPLOAD_FILE_REQ		= GET_MESSAGE_RSP+1;
 	public static final int UPLOAD_FILE_RSP		= UPLOAD_FILE_REQ+1;
+	public static final int LOCATION_UPLOAD_REQ		= UPLOAD_FILE_RSP+1;
+	public static final int LOCATION_UPLOAD_RSP		= LOCATION_UPLOAD_REQ+1;
+	public static final int LOCATION_GET_REQ		= LOCATION_UPLOAD_RSP+1;
+	public static final int LOCATION_GET_RSP		= LOCATION_GET_REQ+1;
 	
 	/*jpush*/
 	

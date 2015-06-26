@@ -21,7 +21,7 @@ import com.zdn.activity.MainActivity;
 import com.zdn.adapter.navigationListDrawerItemAdapter;
 import com.zdn.basicStruct.commonEvent;
 import com.zdn.data.dataManager;
-import com.zdn.logic.InternetComponent;
+import com.zdn.internet.InternetComponent;
 import com.zdn.sort.ClearEditText;
 import com.zdn.util.FileUtil;
 import com.zdn.view.FriendListView;

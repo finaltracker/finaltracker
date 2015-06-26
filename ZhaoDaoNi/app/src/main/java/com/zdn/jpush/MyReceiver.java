@@ -6,7 +6,7 @@ import org.json.JSONObject;
 import com.zdn.CommandParser.CommandE;
 import com.zdn.CommandParser.Property;
 import com.zdn.activity.MainActivity;
-import com.zdn.logic.InternetComponent;
+import com.zdn.internet.InternetComponent;
 import com.zdn.logic.MainControl;
 import com.zdn.event.EventDefine;
 

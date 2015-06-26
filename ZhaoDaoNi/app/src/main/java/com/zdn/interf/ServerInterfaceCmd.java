@@ -41,5 +41,11 @@ public interface ServerInterfaceCmd {
 
 	public void uploadFile( CommandE e );
 
+    //向服务器更新自己的位置信息
+	public void locationUpdate( CommandE e );
+
+    //获取好友的位置信息
+	public void locationGet( CommandE e );
+
 
 }

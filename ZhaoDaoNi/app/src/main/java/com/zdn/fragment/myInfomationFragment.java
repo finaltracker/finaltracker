@@ -20,7 +20,7 @@ import com.zdn.activity.commonNewInputActivity;
 import com.zdn.cropimage.ChooseDialog;
 import com.zdn.cropimage.CropHelper;
 import com.zdn.data.dataManager;
-import com.zdn.logic.InternetComponent;
+import com.zdn.internet.InternetComponent;
 import com.zdn.logic.MainControl;
 import com.zdn.util.FileUtil;
 import com.zdn.util.OSUtils;
