@@ -1,7 +1,6 @@
 package com.zdn.basicStruct;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -21,11 +20,11 @@ public class friendTeamDataManager {
 
 	public List<friendMemberData>	allFriendMemberAccordChatTime = new ArrayList<friendMemberData>();;
 
-    private List<friendsMemberChange> fmcList = new ArrayList();
+    private List<friendsMemberChange> fmcListListenerList = new ArrayList();
 
     public void registFriendMemberChangeListener( friendsMemberChange fmc )
     {
-        fmcList.add( fmc );
+        fmcListListenerList.add(fmc);
 
         //现有的朋友发送给listener
         for( friendMemberData fmd : allFriendMemberAccordChatTime )
@@ -39,10 +38,10 @@ public class friendTeamDataManager {
     public void unRegistFriendMemberChangeListener( friendsMemberChange fmc )
     {
 
-        for( int i = 0 ; i < fmcList.size();i++ ) {
-            if (fmcList.get(i) == fmc)
+        for( int i = 0 ; i < fmcListListenerList.size();i++ ) {
+            if (fmcListListenerList.get(i) == fmc)
             {
-                fmcList.remove(i);
+                fmcListListenerList.remove(i);
                 break;
             }
         }
@@ -104,7 +103,7 @@ public class friendTeamDataManager {
         reConstructRecentChatTeamAccordingTime();
 
         //notify all of listener
-        for( friendsMemberChange fmc :fmcList )
+        for( friendsMemberChange fmc : fmcListListenerList)
         {
             fmc.addA_Friend( fmd );
         }
@@ -124,7 +123,7 @@ public class friendTeamDataManager {
         //notify all of listener
         if( ftd != null )
         {
-            for( friendsMemberChange fmc :fmcList )
+            for( friendsMemberChange fmc : fmcListListenerList)
             {
                 fmc.removeA_Friend( fmd );
             }

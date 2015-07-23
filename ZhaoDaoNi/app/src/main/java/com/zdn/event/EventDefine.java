@@ -10,7 +10,7 @@ public class EventDefine {
 	public static final int GET_FRIEND_LIST_RSP		= GET_FRIEND_LIST_REQ+1;
 	public static final int ADD_A_FRIEND_ANSWER_REQ	= GET_FRIEND_LIST_RSP+1;
 	public static final int ADD_A_FRIEND_ANSWER_RSP	= ADD_A_FRIEND_ANSWER_REQ+1;
-	public static final int ADD_A_FRIEND_REQ		= ADD_A_FRIEND_ANSWER_RSP+1;
+	public static final int ADD_A_FRIEND_REQ		= ADD_A_FRIEND_ANSWER_RSP+1;    //10
 	public static final int ADD_A_FRIEND_RSP		= ADD_A_FRIEND_REQ+1;
 	public static final int SEARCH_FRIEND_OR_CIRCLE_REQ		= ADD_A_FRIEND_RSP+1;
 	public static final int SEARCH_FRIEND_OR_CIRCLE_RSP		= SEARCH_FRIEND_OR_CIRCLE_REQ+1;
@@ -20,7 +20,7 @@ public class EventDefine {
 	public static final int DELETE_FRIEND_RSP		= DELETE_FRIEND_REQ+1;
 	public static final int SEND_MESSAGE_REQ		= DELETE_FRIEND_RSP+1;
 	public static final int SEND_MESSAGE_RSP		= SEND_MESSAGE_REQ+1;
-	public static final int GET_MESSAGE_REQ		= SEND_MESSAGE_RSP+1;
+	public static final int GET_MESSAGE_REQ		= SEND_MESSAGE_RSP+1; //20
 	public static final int GET_MESSAGE_RSP		= GET_MESSAGE_REQ+1;
 	public static final int UPLOAD_FILE_REQ		= GET_MESSAGE_RSP+1;
 	public static final int UPLOAD_FILE_RSP		= UPLOAD_FILE_REQ+1;

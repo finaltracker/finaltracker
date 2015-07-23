@@ -1,5 +1,6 @@
 package com.zdn.logic;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -19,6 +20,7 @@ import com.zdn.chat.ZdnMessage;
 import com.zdn.data.dataManager;
 import com.zdn.event.EventDefine;
 import com.zdn.internet.InternetComponent;
+import com.zdn.jeo.friendLocationManage;
 import com.zdn.receiver.NetworkReceiver;
 import com.zdn.util.ObjectConvertTool;
 
@@ -88,6 +90,16 @@ public class MainControl extends HandlerThread {
         preState = state;
         state = newState;
 		Log.d( "MainControl","setState " + newState );
+
+		if( newState == STATE_LOGIN_NORMAL )
+		{
+			friendLocationManage.periodRequiredStart();
+
+		}
+		else
+		{
+			friendLocationManage.stopRequireGeo();
+		}
         
     }
 	private void restart()
@@ -207,59 +219,58 @@ public class MainControl extends HandlerThread {
 		
 		switch (RcvCommand)
 		{
-		case EventDefine.CHECK_REGIST_RSP:
-			String rep = (String)e.GetPropertyContext("HTTP_REQ_RSP");
-			if( rep == null || ( rep.isEmpty()) )
-			{
-				Log.d("MainControl", "HTTP_REQ_RSP = null" );
+		case EventDefine.CHECK_REGIST_RSP: {
+            String rep = (String) e.GetPropertyContext("HTTP_REQ_RSP");
+            if (rep == null || (rep.isEmpty())) {
+                Log.d("MainControl", "HTTP_REQ_RSP = null");
 
-				break;
-			}
-			JSONObject  json_obj = null;
-			int queueRsp = -1;
-			String username= "";
-			String avatarUrl = "";
-			try {
-				json_obj = new JSONObject(rep);
-				queueRsp = json_obj.getInt("status");
-				username = json_obj.getString("username");
-				avatarUrl= json_obj.getString("avatar_url");
+                break;
+            }
+            JSONObject json_obj = null;
+            int queueRsp = -1;
+            String username = "";
+            String avatarUrl = "";
+            try {
+                json_obj = new JSONObject(rep);
+                queueRsp = json_obj.getInt("status");
+                username = json_obj.getString("username");
+                avatarUrl = json_obj.getString("avatar_url");
 
-				
-			} catch (JSONException e1) {
 
-				Log.d("MainControl" , "server response error: " + e1.getMessage() );
-				e1.printStackTrace();
-			}
-			
-			if ( queueRsp == EventDefine.IS_REQIST_RSP_NO_REGIST )
-			{
-				//  regist a account
-				Message m = MainActivity.getInstance().handler.obtainMessage();
-				m.what = MainActivity.EVENT_UI_LOG_IN_START;
-				MainActivity.getInstance().handler.sendMessage( m );
-				setState(STATE_WAIT_UI_LOGIN);
-			}
-			else if( queueRsp == EventDefine.IS_REQIST_RSP_HAS_REGIST )
-			{// 
-				// 请求好友列表
-				dataManager.self.selfInfo.basic.setPictureAddress(avatarUrl , true );
-				//update ui
-				commonEvent avatorupdate = new commonEvent(commonEvent. EVENT_TYPE_MY_AVATAR_UPDATE );
-				EventBus.getDefault().post(avatorupdate);
+            } catch (JSONException e1) {
 
-				dataManager.self.preferencesPara.savePhoneNumber(username);
-				mInternetCom.getFriendList(packGetFriendListCommandE() );
-				
-				setState( STATE_LOGIN_NORMAL );
-				//TODO
-			}
-			else
-			{
-				Log.d("MainControl" , "server response error queueRsp =  " + queueRsp );
-			}
-			break;
-		default:
+                Log.d("MainControl", "server response error: " + e1.getMessage());
+                e1.printStackTrace();
+            }
+
+            if (queueRsp == EventDefine.IS_REQIST_RSP_NO_REGIST) {
+                //  regist a account
+                Message m = MainActivity.getInstance().handler.obtainMessage();
+                m.what = MainActivity.EVENT_UI_LOG_IN_START;
+                MainActivity.getInstance().handler.sendMessage(m);
+                setState(STATE_WAIT_UI_LOGIN);
+            } else if (queueRsp == EventDefine.IS_REQIST_RSP_HAS_REGIST) {//
+                // 请求好友列表
+                dataManager.self.selfInfo.basic.setPictureAddress(avatarUrl, true);
+                //update ui
+                commonEvent avatorupdate = new commonEvent(commonEvent.EVENT_TYPE_MY_AVATAR_UPDATE);
+                EventBus.getDefault().post(avatorupdate);
+
+                dataManager.self.preferencesPara.savePhoneNumber(username);
+                mInternetCom.getFriendList(packGetFriendListCommandE());
+
+                setState(STATE_LOGIN_NORMAL);
+                //TODO
+            } else {
+                Log.d("MainControl", "server response error queueRsp =  " + queueRsp);
+            }
+
+            break;
+        }
+        case EventDefine.LOCATION_UPLOAD_REQ:
+            //just ignor it
+            break;
+        default:
 			Log.d("MainControl", "unknow RcvCommand " + RcvCommand );
 			break;
 		}
@@ -332,7 +343,7 @@ public class MainControl extends HandlerThread {
 						break;
 						
 					default:
-						Log.d("MainControl","regist a account server response:" + queueRsp );
+						Log.d("MainControl", "regist a account server response:" + queueRsp);
 						setState(STATE_WAIT_UI_LOGIN);
 						break; //exception
 				}
@@ -459,10 +470,11 @@ public class MainControl extends HandlerThread {
 					}
 					dataManager.self.preferencesPara.saveFriendListVersion(json_obj.getInt("server_friend_version"));
 					
-					dataManager.updateFriendListFromServer( json_obj.getInt("update_type") , json_obj.getJSONArray("friends") , mContext);
+					dataManager.updateFriendListFromServer(json_obj.getInt("update_type"), json_obj.getJSONArray("friends"), mContext);
 					//send it to PeopleActivity
 
-					EventBus.getDefault().post( new commonEvent( commonEvent.UPDATE_FRIEND_LIST_VIEW_FROM_REMOT));
+					EventBus.getDefault().post(new commonEvent(commonEvent.UPDATE_FRIEND_LIST_VIEW_FROM_REMOT));
+
 					
 				} catch (JSONException e1) {
 
@@ -870,7 +882,7 @@ public class MainControl extends HandlerThread {
 			getMessageRspEvent gmre = new  getMessageRspEvent();
 			gmre.m = zdn_m;
 			
-			EventBus.getDefault().post( gmre ); // publish event to listener
+			EventBus.getDefault().post(gmre); // publish event to listener
 			
 		} catch (JSONException e1) {
 
@@ -886,7 +898,7 @@ public class MainControl extends HandlerThread {
 
         if(  0 != Integer.parseInt(status))
         {
-            Log.e( this.getClass().getSimpleName(),"get tip status = " + status );
+            Log.e(this.getClass().getSimpleName(), "get tip status = " + status);
             return ;
         }
 
@@ -894,14 +906,19 @@ public class MainControl extends HandlerThread {
         try {
             json_obj = new JSONObject(rep);
 
+			JSONArray egoArray = json_obj.getJSONArray("geo");
 
+			for( int i = 0 ; i < egoArray.length() ; i++ ) {
+				JSONObject obj;
+				obj = (JSONObject) egoArray.get(i);
 
-            String	friend_mobile     = getStringFromJasonObj(json_obj,"friend_mobile");
-            String	lat               = getStringFromJasonObj(json_obj,"lat");
-            String	lng               = getStringFromJasonObj(json_obj,"lng");
+				String friend_mobile = getStringFromJasonObj(obj, "friend_mobile");
+				String lat = getStringFromJasonObj(obj, "lat");
+				String lng = getStringFromJasonObj(obj, "lng");
 
-            friendMemberData fmd = dataManager.getFrilendList().getMemberDataByPhoneNumber(friend_mobile);
-            fmd.updateCoordinate( new coordinate( Double.parseDouble(lat), Double.parseDouble(lng) ) );
+				friendMemberData fmd = dataManager.getFrilendList().getMemberDataByPhoneNumber(friend_mobile);
+				fmd.updateCoordinate(new coordinate(Double.parseDouble(lng), Double.parseDouble(lat)));
+			}
 
         } catch (JSONException e1) {
 
@@ -965,10 +982,10 @@ public class MainControl extends HandlerThread {
 	/* add a friend */
 	static public void addA_Friend( String phoneNumner ,String attachMentContext )
 	{
-		CommandE e = InternetComponent.packA_CommonExpCommandE_ToServer( 
-				EventDefine.ADD_A_FRIEND_REQ , 
-				InternetComponent.WEBSITE_ADDRESS_ADD_A_FRIEND_REQ 
-				);
+		CommandE e = InternetComponent.packA_CommonExpCommandE_ToServer(
+				EventDefine.ADD_A_FRIEND_REQ,
+				InternetComponent.WEBSITE_ADDRESS_ADD_A_FRIEND_REQ
+		);
 		e.AddAProperty(new Property("friend_mobile",phoneNumner ) );
 		e.AddAProperty(new Property("attament",attachMentContext ) );
 		
@@ -1006,7 +1023,7 @@ public class MainControl extends HandlerThread {
 		);
 		
 		e.AddAProperty(new Property("nok",result ) );
-		e.AddAProperty(new Property("friend_mobile",targetUser ) );
+		e.AddAProperty(new Property("friend_mobile", targetUser));
 
 		Message m = MainControl.getInstance().handler.obtainMessage();
 		m.obj = e;
@@ -1019,7 +1036,7 @@ public class MainControl extends HandlerThread {
 				EventDefine.SEARCH_FRIEND_OR_CIRCLE_REQ , 
 				InternetComponent.WEBSITE_SEARCH_FRIEND_OR_CIRCLE 
 				);
-		e.AddAProperty(new Property("search_str",search_str ) );
+		e.AddAProperty(new Property("search_str", search_str));
 
 		Message m = MainControl.getInstance().handler.obtainMessage();
 		m.obj = e;   //
@@ -1049,7 +1066,7 @@ public class MainControl extends HandlerThread {
 				EventDefine.DELETE_FRIEND_REQ , 
 				InternetComponent.WEBSITE_ADDRESS_DELETE_FRIEND 
 				);
-		ObjectConvertTool.friendMemberDataPackToCommandE(fmd.basic,e);
+		ObjectConvertTool.friendMemberDataPackToCommandE(fmd.basic, e);
 	
 		
 		Message m = MainControl.getInstance().handler.obtainMessage();
@@ -1090,13 +1107,21 @@ public class MainControl extends HandlerThread {
 
 	}
 
-	static public void locationGet( String friend_mobile ) {
+	static public void locationGet( String friend_mobile , boolean one ) {
 
 		CommandE e = InternetComponent.packA_CommonExpCommandE_ToServer(
 				EventDefine.LOCATION_GET_REQ,
 				InternetComponent.WEBSITE_ADDRESS_LOCATION_GET
 		);
-		e.AddAProperty(new Property( "friend_mobile" , friend_mobile));
+		if( one )
+		{
+			e.AddAProperty(new Property( "require_type" , "one"));
+			e.AddAProperty(new Property( "friend_mobile" , friend_mobile));
+		}
+		else
+		{
+			e.AddAProperty(new Property( "require_type" , "all"));
+		}
 
 
 		Message m = MainControl.getInstance().handler.obtainMessage();

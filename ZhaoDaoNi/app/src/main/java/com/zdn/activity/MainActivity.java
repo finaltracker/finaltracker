@@ -123,10 +123,10 @@ public class MainActivity extends zdnBasicActivity implements navigationFragment
 				double lat = location.getLatitude();
 				double lng = location.getLongitude();
 
-                dataManager.self.selfInfo.updateCoordinate( new coordinate(lat,lng) );
+                dataManager.self.selfInfo.updateCoordinate( new coordinate(lng,lat) );
 
 				Log.i("MainActivity", "<lat,lng>" + lat + "," + lng);
-				//udpate local and server data
+				MainControl.locationUpdate( lat , lng );
 			}
 		};
 		mLocationClient = new LocationClient(getApplicationContext());     //声明LocationClient类

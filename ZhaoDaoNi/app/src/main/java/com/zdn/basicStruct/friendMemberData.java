@@ -7,10 +7,8 @@ import com.zdn.db.DBHelper;
 import com.zdn.db.DBManager;
 import com.zdn.chat.ZdnMessage;
 import com.zdn.data.dataManager;
-import com.zdn.util.ImgUtil;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 
 //define member struct
 
@@ -29,7 +27,7 @@ public class friendMemberData  {
 	//private int index;
 	private coordinate theLastCoordinate;   // 最新的坐标信息
 	private List<ZdnMessage> message = null;
-	private List<gpsChange> gpscList = new ArrayList();
+	private List<gpsChange> gpscChangeListenerList = new ArrayList();
 
 
 	public friendMemberData( String tag )
@@ -55,16 +53,16 @@ public class friendMemberData  {
 
 	public void registgpsChangeListener( gpsChange gpsc )
 	{
-		gpscList.add(gpsc);
+		gpscChangeListenerList.add(gpsc);
 	}
 
 	public void unRegistgpsChangeListener( gpsChange gpsc )
 	{
 
-		for( int i = 0 ; i < gpscList.size();i++ ) {
-			if (gpscList.get(i) == gpsc)
+		for( int i = 0 ; i < gpscChangeListenerList.size();i++ ) {
+			if (gpscChangeListenerList.get(i) == gpsc)
 			{
-				gpscList.remove(i);
+				gpscChangeListenerList.remove(i);
 				break;
 			}
 		}
@@ -107,7 +105,7 @@ public class friendMemberData  {
 	public void updateCoordinate ( coordinate coord )
 	{
 		theLastCoordinate.setCoordinate( coord );
-		for( gpsChange gps :gpscList )
+		for( gpsChange gps : gpscChangeListenerList)
 		{
 			gps.updateGps( this, coord );
 		}
