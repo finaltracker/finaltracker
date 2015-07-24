@@ -9,6 +9,7 @@ import com.zdn.chat.ZdnMessage;
 import com.zdn.data.dataManager;
 
 import android.content.Context;
+import android.util.Log;
 
 //define member struct
 
@@ -53,12 +54,14 @@ public class friendMemberData  {
 
 	public void registgpsChangeListener( gpsChange gpsc )
 	{
+		Log.d(this.getClass().getSimpleName(), this.basic.getPhoneNumber() + ": registgpsChangeListener");
 		gpscChangeListenerList.add(gpsc);
 	}
 
 	public void unRegistgpsChangeListener( gpsChange gpsc )
 	{
 
+		Log.d(this.getClass().getSimpleName(), this.basic.getPhoneNumber() + ": unRegistgpsChangeListener");
 		for( int i = 0 ; i < gpscChangeListenerList.size();i++ ) {
 			if (gpscChangeListenerList.get(i) == gpsc)
 			{

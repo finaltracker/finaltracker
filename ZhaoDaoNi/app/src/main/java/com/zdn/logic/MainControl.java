@@ -695,7 +695,7 @@ public class MainControl extends HandlerThread {
 
         case EventDefine.LOCATION_GET_REQ: {
             Log.d("MainControl", "LOCATION_GET_REQ: ");
-            mInternetCom.locationUpdate(e);
+            mInternetCom.locationGet(e);
         }
         break;
 
@@ -715,7 +715,8 @@ public class MainControl extends HandlerThread {
 	private void stateMachineHandle(CommandE e  )
 	{
 
-		Log.d("MainControl", "stateMachineHandle:RcvCommand " + e.GetPropertyContext("EventDefine") );
+		Log.d("MainControl", "stateMachineHandle:RcvCommand " + ((ExpCommandE)e).GetExpPropertyContext("EventDefine") );
+
 
 		switch(state)
 		{

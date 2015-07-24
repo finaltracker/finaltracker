@@ -101,6 +101,7 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
+        Log.d( this.getClass().getSimpleName() ,"onCreateView" );
         SDKInitializer.initialize( this.getActivity().getApplicationContext());
         final View rootView =  inflater.inflate(R.layout.fragment_map, container, false);
 
@@ -150,8 +151,8 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
 
             @Override
             public boolean onTouch(MotionEvent ev) {
-
-                if( ((MainActivity) MapFragment.this.getActivity() ).isMainMapInFront() ) {
+                MainActivity ma =  (MainActivity)MapFragment.this.getActivity();
+                if( ( ma != null ) &&( ma.isMainMapInFront()) ) {
                     if (mGestureDetector.onTouchEvent(ev))
                         return true;
                     else
@@ -184,19 +185,15 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
                         {
                             //是自己，发送位置信息到server
 
-                            MainControl.locationUpdate( ufmd.getLatitude() , ufmd.getLongitude() );
+                            MainControl.locationUpdate(ufmd.getLatitude(), ufmd.getLongitude());
                         }
-                        //draw it on map
-                        Overlay ov = overlayMap.get(ufmd.basic.getPhoneNumber() );
-                        if( ov != null )
+                        if( MapFragment.this.getActivity() != null )
                         {
-                            ov.remove();
+                            BitmapUtils mbug = new BitmapUtils(MapFragment.this.getActivity());
+                            MapFragmentBitmapLoadCallBack overLayBitmapLoadCallBack = new MapFragmentBitmapLoadCallBack( ufmd);
+
+                            mbug.display(MapFragment.this.rootView, InternetComponent.WEBSITE_ADDRESS_BASE_NO_SEPARATOR + ufmd.basic.getPictureAddress(), null, overLayBitmapLoadCallBack);
                         }
-                        BitmapUtils mbug = new BitmapUtils( MapFragment.this.getActivity() );
-                        MapFragmentBitmapLoadCallBack overLayBitmapLoadCallBack = new MapFragmentBitmapLoadCallBack( mBaidumap , ufmd );
-
-                        mbug.display(MapFragment.this.rootView, InternetComponent.WEBSITE_ADDRESS_BASE_NO_SEPARATOR + ufmd.basic.getPictureAddress(), null, overLayBitmapLoadCallBack );
-
                     }
                 };
                 fmd.registgpsChangeListener(gpsc);
@@ -271,6 +268,7 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
 
     @Override
     public void onDestroy() {
+
         super.onDestroy();
 
     }
@@ -278,9 +276,12 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        Log.d(this.getClass().getSimpleName(), "onDestroyView");
         //在activity执行onDestroy时执行mMapView.onDestroy()，实现地图生命周期管理
-        dataManager.getFrilendList().unRegistFriendMemberChangeListener(fmc );
+        overlayMap.clear();
+        dataManager.getFrilendList().unRegistFriendMemberChangeListener(fmc);
         mMapView.onDestroy();
+        mMapView = null;
     }
 
 
@@ -374,13 +375,13 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
     private class MapFragmentBitmapLoadCallBack extends BitmapLoadCallBack
     {
        // LatLng          mLatLng = null;
-       BaiduMap mBaidumap = null;
+
        friendMemberData localFmd = null;
 
 
-        public MapFragmentBitmapLoadCallBack(  BaiduMap baidumap,friendMemberData fmd  )
+        public MapFragmentBitmapLoadCallBack( friendMemberData fmd  )
         {
-            mBaidumap  = baidumap ;
+           // mBaidumap  = baidumap ;
             localFmd = fmd;
         }
         @Override
@@ -394,14 +395,35 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
                 .icon(mBitMap);
 //在地图上添加Marker，并显示
 
-        Overlay mOverLay = mBaidumap.addOverlay(option);
-        Bundle mBundle = new Bundle();
-        mBundle.putString( "TeamName",localFmd.basic.getTeamName() );
-        mBundle.putString( "PhoneNumber",localFmd.basic.getPhoneNumber() );
-        mOverLay.setExtraInfo(mBundle);
+        Overlay ov = overlayMap.get( localFmd.basic.getPhoneNumber() );
 
-        overlayMap.put( localFmd.basic.getPhoneNumber() ,mOverLay );
+        if( ov != null )
+        {
+            ov.remove();
 
+        }
+        MapFragment mf = MapFragment.this;
+        if( ( mf != null )&& (mf.isVisible()) ) {
+
+            Overlay mOverLay = null;
+
+            BaiduMap mBaidumap = mMapView.getMap();
+
+            try {
+                mOverLay = mBaidumap.addOverlay(option);
+            } catch (Exception e) {
+                Log.d(this.getClass().getSimpleName(), "overlayMap.put error");
+            }
+            Bundle mBundle = new Bundle();
+            mBundle.putString("TeamName", localFmd.basic.getTeamName());
+            mBundle.putString("PhoneNumber", localFmd.basic.getPhoneNumber());
+            mOverLay.setExtraInfo(mBundle);
+
+
+            overlayMap.put(localFmd.basic.getPhoneNumber(), mOverLay);
+
+
+        }
     }
 
         @Override
