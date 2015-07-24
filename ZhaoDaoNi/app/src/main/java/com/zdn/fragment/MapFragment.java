@@ -42,6 +42,7 @@ import com.zdn.basicStruct.friendTeamDataManager;
 import com.zdn.com.headerCtrl;
 import com.zdn.data.dataManager;
 import com.zdn.internet.InternetComponent;
+import com.zdn.jeo.friendLocationManage;
 import com.zdn.logic.MainControl;
 import com.zdn.util.OSUtils;
 import com.zdn.xutilExpand.bitmapUtilsExpand;
@@ -198,6 +199,8 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
                 };
                 fmd.registgpsChangeListener(gpsc);
 
+                friendLocationManage.periodRequiredStart();
+
             }
 
 
@@ -277,6 +280,10 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
     public void onDestroyView() {
         super.onDestroyView();
         Log.d(this.getClass().getSimpleName(), "onDestroyView");
+
+        friendLocationManage.stopRequireGeo();
+
+
         //在activity执行onDestroy时执行mMapView.onDestroy()，实现地图生命周期管理
         overlayMap.clear();
         dataManager.getFrilendList().unRegistFriendMemberChangeListener(fmc);

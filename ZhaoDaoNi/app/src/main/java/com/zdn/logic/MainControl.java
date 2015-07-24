@@ -91,16 +91,7 @@ public class MainControl extends HandlerThread {
         state = newState;
 		Log.d( "MainControl","setState " + newState );
 
-		if( newState == STATE_LOGIN_NORMAL )
-		{
-			friendLocationManage.periodRequiredStart();
 
-		}
-		else
-		{
-			friendLocationManage.stopRequireGeo();
-		}
-        
     }
 	private void restart()
 	{
