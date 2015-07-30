@@ -850,12 +850,24 @@ public class MainControl extends HandlerThread {
 			String	toUserName       = getStringFromJasonObj(json_obj,"mobile");
 			String	toUserAvatar     = "";
 			String	content          = getStringFromJasonObj(json_obj,"message");
+			String	audio_url          = getStringFromJasonObj(json_obj,"audio_url");
+			String	photo_url          = getStringFromJasonObj(json_obj,"photo_url");
 			boolean	isSend           = true;
 			boolean	sendSucces       = true;
 			String	time             = getStringFromJasonObj(json_obj,"create_time");
 
+			if( photo_url !=null )
+			{
+				type = ZdnMessage.MSG_TYPE_PHOTO;
+				content = photo_url;
+			}
+			else if ( audio_url != null )
+			{
+				type = ZdnMessage.MSG_TYPE_AUDIO;
+				content = audio_url;
+			}
 					
-			ZdnMessage zdn_m = new ZdnMessage( fromUserName , 
+			ZdnMessage zdn_m = new ZdnMessage( fromUserName,
 												type,
 												state,
 												fromUserName,

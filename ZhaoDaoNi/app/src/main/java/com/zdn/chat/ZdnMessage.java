@@ -11,6 +11,7 @@ public class ZdnMessage {
 	public static int MSG_TYPE_TEXT 	= 0;
 	public static int MSG_TYPE_PHOTO 	= 1;
 	public static int MSG_TYPE_FACE 	= 2;
+	public static int MSG_TYPE_AUDIO = 3;
 	
 	public static int MSG_STATE_SENDING 	= 0;
 	public static int MSG_STATE_SUCCESS 	= 1;

@@ -74,9 +74,15 @@ public class friendMemberData  {
 	{
 	
 		DBHelper getDbHelper = DBManager.GetDbHelper( ZdnMessage.class );
-		
-		ArrayList<Object> miList = getDbHelper.searchData("belogTag" , basic.tag );
-		
+
+		ArrayList<Object> miList = null;
+		try {
+			miList = getDbHelper.searchData("belogTag", basic.tag);
+		}
+		catch ( Exception e )
+		{
+			Log.d("frindMemberData","e = "+e.getMessage() );
+		}
 		
 		
 		for( int i = 0 ; i < miList.size() ; i++ )

@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.zdn.R;
+import com.zdn.cropimage.ChooseDialog;
+import com.zdn.cropimage.CropHelper;
+import com.zdn.util.OSUtils;
 import com.zdn.view.PagerSlidingTabStrip;
 
 import android.app.Activity;
@@ -28,6 +31,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -46,10 +50,12 @@ public class MessageInputToolBox extends RelativeLayout {
 	private Button faceButton;
 	private Button sendButton;
 	private Button moreTypeButton;
+	private Button selectPictureButton;
 
 	/** face box **/
 	private RelativeLayout bottomHideLayout;
 	private static RelativeLayout faceLayout;
+	private GridLayout MoreLayout;
 	private ViewPager faceCategroyViewPager;
 	private PagerSlidingTabStrip faceCategroyTabs;
 	
@@ -117,6 +123,8 @@ public class MessageInputToolBox extends RelativeLayout {
 			fuctionViewPager = (ViewPager) findViewById(R.id.fuctionViewPager);
 			pagePointLayout = (LinearLayout) findViewById(R.id.pagePointLayout);
 
+			MoreLayout = (GridLayout) findViewById( R.id.MoreLayout);
+			selectPictureButton = ( Button) findViewById( R.id.selectPicture );
 			fuctionViewPager.setOnPageChangeListener(new OnPageChangeListener() {
 	
 				@Override
@@ -166,7 +174,9 @@ public class MessageInputToolBox extends RelativeLayout {
 					}else{
 						showFaceLayout();
 					}
-					
+					MoreLayout.setVisibility(View.GONE);
+
+
 				}
 			});
 			
@@ -217,12 +227,23 @@ public class MessageInputToolBox extends RelativeLayout {
 						@Override
 						public void run() {
 							moreTypeLayout.setVisibility(View.GONE);
-							faceLayout.setVisibility(View.VISIBLE);
-							bottomHideLayout.setVisibility(View.VISIBLE);
+							MoreLayout.setVisibility(View.VISIBLE);
+							faceLayout.setVisibility(View.GONE);
+							bottomHideLayout.setVisibility(View.GONE);
+
 						}
 					}, 50);
 				}
 			});
+
+		//点击增加图片按钮
+		selectPictureButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+
+				onOperationListener.selectPictureReq();
+			}
+		});
 			
 		}
 

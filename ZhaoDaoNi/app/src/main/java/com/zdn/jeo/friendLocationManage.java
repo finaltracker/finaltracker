@@ -41,8 +41,9 @@ public class friendLocationManage {
         public void run() {
             if( stop )
             {
-                handler.getLooper().quit();
                 return;
+                //handler.getLooper().quit();
+
             }
             else
             {

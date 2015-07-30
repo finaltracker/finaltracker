@@ -14,18 +14,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
-import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
-import android.view.Window;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.zdn.R;
-import com.zdn.CommandParser.CommandE;
 import com.zdn.basicStruct.SendMessageRspEvent;
 import com.zdn.basicStruct.friendMemberData;
 import com.zdn.basicStruct.getMessageRspEvent;
@@ -34,12 +32,11 @@ import com.zdn.chat.MessageAdapter;
 import com.zdn.chat.MessageInputToolBox;
 import com.zdn.chat.OnOperationListener;
 import com.zdn.chat.Option;
+import com.zdn.cropimage.ChooseDialog;
+import com.zdn.cropimage.CropHelper;
 import com.zdn.data.dataManager;
-import com.zdn.event.EventDefine;
-import com.zdn.internet.InternetComponent;
 import com.zdn.logic.MainControl;
-import com.zdn.util.ObjectConvertTool;
-import de.greenrobot.event.EventBus;
+import com.zdn.util.FileUtil;
 
 public class chatActivity extends zdnBasicActivity {
 	
@@ -51,6 +48,7 @@ public class chatActivity extends zdnBasicActivity {
 	int teamPosition = 0;
 	int memberPosition = 0;
 	friendMemberData fdm = null;
+	CropHelper mCropHelper = null ;
 	@SuppressLint("UseSparseArrays")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -134,7 +132,12 @@ public class chatActivity extends zdnBasicActivity {
 				Toast.makeText(chatActivity.this, "Do some thing here, index :" +index, 1000).show();
 				
 			}
-			
+
+			@Override
+			public void selectPictureReq( ) {
+				doSelectPicture();
+			}
+
 		});
 		
 		ArrayList<String> faceNameList = new ArrayList<String>();
@@ -172,33 +175,26 @@ public class chatActivity extends zdnBasicActivity {
 		}
 		box.setFunctionData(functionData);
 	}
-	
-	 
+
+
+	public void sendPicture( String bmFilePath ) {
+
+		System.out.println("send a bitmap to server");
+
+		ZdnMessage message = new ZdnMessage( targetTo ,1, 0, "Tom", "avatar", targetTo, "avatar", bmFilePath, true, true, new Date());
+
+		MainControl.sendMessageToServer(message, targetTo);
+		adapter.getData().add(message);
+		listView.setSelection(listView.getBottom());
+
+		//Just demo
+		//createReplayMsg(message);
+	}
 	
 	private void initListView(){
 		listView = (ListView) findViewById(R.id.messageListview);
 		List<ZdnMessage> messages = new ArrayList<ZdnMessage>();
-		
-		/*
-		//create Data
-		ZdnMessage message = new ZdnMessage("Jerry",ZdnMessage.MSG_TYPE_TEXT, ZdnMessage.MSG_STATE_SUCCESS, "Tom", "avatar", "Jerry", "avatar", "Hi", false, true, new Date(System.currentTimeMillis() - (1000 * 60 * 60 * 24) * 8));
-		ZdnMessage message1 = new ZdnMessage("Jerry",ZdnMessage.MSG_TYPE_TEXT, ZdnMessage.MSG_STATE_SUCCESS, "Tom", "avatar", "Jerry", "avatar", "Hello World", true, true, new Date(System.currentTimeMillis() - (1000 * 60 * 60 * 24)* 8));
-		ZdnMessage message2 = new ZdnMessage("Jerry",ZdnMessage.MSG_TYPE_PHOTO, ZdnMessage.MSG_STATE_SUCCESS, "Tom", "avatar", "Jerry", "avatar", "device_2014_08_21_215311", false, true, new Date(System.currentTimeMillis() - (1000 * 60 * 60 * 24) * 7));
-		ZdnMessage message3 = new ZdnMessage("Jerry",ZdnMessage.MSG_TYPE_TEXT, ZdnMessage.MSG_STATE_SUCCESS, "Tom", "avatar", "Jerry", "avatar", "Haha", true, true, new Date(System.currentTimeMillis() - (1000 * 60 * 60 * 24) * 7));
-		ZdnMessage message4 = new ZdnMessage("Jerry",ZdnMessage.MSG_TYPE_FACE, ZdnMessage.MSG_STATE_SUCCESS, "Tom", "avatar", "Jerry", "avatar", "big3", false, true, new Date(System.currentTimeMillis() - (1000 * 60 * 60 * 24) * 7));
-		ZdnMessage message5 = new ZdnMessage("Jerry",ZdnMessage.MSG_TYPE_FACE, ZdnMessage.MSG_STATE_SUCCESS, "Tom", "avatar", "Jerry", "avatar", "big2", true, true, new Date(System.currentTimeMillis() - (1000 * 60 * 60 * 24) * 6));
-		ZdnMessage message6 = new ZdnMessage("Jerry",ZdnMessage.MSG_TYPE_TEXT, ZdnMessage.MSG_STATE_FAIL, "Tom", "avatar", "Jerry", "avatar", "test send fail", true, false, new Date(System.currentTimeMillis() - (1000 * 60 * 60 * 24) * 6));
-		ZdnMessage message7 = new ZdnMessage("Jerry",ZdnMessage.MSG_TYPE_TEXT, ZdnMessage.MSG_STATE_SENDING, "Tom", "avatar", "Jerry", "avatar", "test sending", true, true, new Date(System.currentTimeMillis() - (1000 * 60 * 60 * 24) * 6));
-		
-		messages.add(message);
-		messages.add(message1);
-		messages.add(message2);
-		messages.add(message3);
-		messages.add(message4);
-		messages.add(message5);
-		messages.add(message6);
-		messages.add(message7);
-		*/
+
 		
 		int messageListSize = fdm.getMessageList().size();
 		
@@ -317,5 +313,47 @@ public class chatActivity extends zdnBasicActivity {
 			finish(); 
 		}
 		super.onResume();
+	}
+
+	private void doSelectPicture()
+	{
+		String fileName = FileUtil.generateA_FileNameAccordingTimeInSpecifyPath( getString(R.string.SendPictureTofriends) ); // 产生一个文件名
+		mCropHelper=new CropHelper( null, this,fileName );
+
+		ChooseDialog mDialog = new ChooseDialog( null ,this , mCropHelper );
+		mDialog.popSelectDialog();
+	}
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+		Log.e("onActivityResult", requestCode + "**" + resultCode);
+		if(requestCode==Activity.RESULT_CANCELED){
+			return;
+		}else{
+			switch (requestCode) {
+				case CropHelper.HEAD_FROM_ALBUM: {
+					mCropHelper.getDataFromAlbum(data);
+					Log.e("onActivityResult", "接收到图库图片");
+					break;
+				}
+				case CropHelper.HEAD_FROM_CAMERA: {
+					mCropHelper.getDataFromCamera(data);
+					Log.e("onActivityResult", "接收到拍照图片");
+					break;
+				}
+				case CropHelper.HEAD_SAVE_PHOTO: {
+					if (data != null && data.getParcelableExtra("data") != null) {
+						mCropHelper.savePhoto(data, mCropHelper.getTempPath() );
+						sendPicture(  mCropHelper.getTempPath()  );
+
+					}
+					break;
+				}
+
+				default:
+					break;
+			}
+		}
+		super.onActivityResult(requestCode, resultCode, data);
 	}
 }

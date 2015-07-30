@@ -19,9 +19,11 @@ import android.graphics.drawable.Drawable;
 import android.os.Environment;
 import android.util.Log;
 
+
 public class FileUtil {
 	private static String mainPath="";
     public static final String UTF_8 = "UTF-8";
+
 
     public static final String TAG = FileUtil.class.getSimpleName();
 
@@ -84,7 +86,22 @@ public class FileUtil {
 
         return path1 + File.separator + path2;
     }
-    
+
+
+    public static String getAppRelatePath( String path )
+    {
+        return makePath( mainPath , path);
+    }
+
+    public static String generateA_FileNameAccordingTime()
+    {
+        return (String.valueOf(System.currentTimeMillis()));
+    }
+
+    public static String generateA_FileNameAccordingTimeInSpecifyPath( String path  )
+    {
+        return makePath( makePath( mainPath , path)  , generateA_FileNameAccordingTime() );
+    }
     public static String getBaseDirector()
     {
     	return mainPath;

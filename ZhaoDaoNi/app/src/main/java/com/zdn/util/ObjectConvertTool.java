@@ -6,6 +6,8 @@ import com.zdn.basicStruct.friendMemberDataBasic;
 import com.zdn.chat.ZdnMessage;
 import com.zdn.data.dataManager;
 
+import java.io.File;
+
 public class ObjectConvertTool {
 
 	static public void friendMemberDataPackToCommandE( friendMemberDataBasic in ,CommandE e )
@@ -20,12 +22,33 @@ public class ObjectConvertTool {
 	
 	static public void messagePackToCommandForSendToServer( ZdnMessage in ,CommandE e ,String targetMobile )
 	{
-		e.AddAProperty(new Property("mobile",dataManager.self.preferencesPara.getPhoneNumber() ) );
+		//e.AddAProperty(new Property("mobile",dataManager.self.preferencesPara.getPhoneNumber() ) );
 		e.AddAProperty(new Property("friend_mobile",targetMobile ) );
 		e.AddAProperty(new Property("create_time",in.getTimeString() ) );
-		e.AddAProperty(new Property("message",in.getContent() ) );
-		e.AddAProperty(new Property("audio_url","" ) );
-		e.AddAProperty(new Property("photo_url","") );
+		int type =  in.getType();
+
+
+		if( type == in.MSG_TYPE_TEXT )
+		{
+			e.AddAProperty(new Property("message", in.getContent() ));
+			e.AddAProperty(new Property("audio_url","" ) );
+			e.AddAProperty(new Property("photo_url", ""));
+		}
+		else if ( type  == in.MSG_TYPE_PHOTO )
+		{
+			e.AddAProperty(new Property("message",""));
+			File uFile = new File((String) in.getContent());
+			e.AddAProperty(new Property("photo_url",uFile));
+			e.AddAProperty(new Property("audio_url","" ) );
+		}
+		else // type  ==??
+		{
+			e.AddAProperty(new Property("message",""));
+			e.AddAProperty(new Property("photo_url",""));
+			e.AddAProperty(new Property("audio_url","" ) );
+		}
+
+
 	}
 	
 }

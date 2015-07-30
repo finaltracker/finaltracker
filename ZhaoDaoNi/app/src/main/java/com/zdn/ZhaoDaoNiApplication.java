@@ -18,9 +18,11 @@ public class ZhaoDaoNiApplication extends Application {
          
          //make local dir
          FileUtil.createBasePath();
-         FileUtil.makeFile(getString(R.string.friendsDir) );
-         FileUtil.makeFile(getString(R.string.friendsAvator) );
-         //create db manager
+         FileUtil.makeFile(getString(R.string.friendsDir));
+         FileUtil.makeFile(getString(R.string.friendsAvator));
+         FileUtil.makeFile(getString(R.string.SendPictureTofriends));
+         FileUtil.makeFile(getString(R.string.ReceivedPictureFromfriends));
+        //create db manager
          
          dbManager = new DBManager(this);
          

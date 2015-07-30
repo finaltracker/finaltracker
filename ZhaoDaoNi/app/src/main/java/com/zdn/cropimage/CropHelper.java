@@ -1,5 +1,6 @@
 package com.zdn.cropimage;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -30,12 +31,14 @@ public class CropHelper {
 	public static final String UPLOAD_HEAD = "上传图片";
 
 	private Fragment mFragment = null;
+	private Activity m_ac = null;
 
 	// 照片保存路径
 	private String mTempPhotoPath;
 
-	public CropHelper(Fragment act, String photoPath) {
+	public CropHelper(Fragment act, Activity ac , String photoPath) {
 		mFragment = act;
+		m_ac = ac;
 		mTempPhotoPath = photoPath;
 	}
 
@@ -53,7 +56,13 @@ public class CropHelper {
 	public void startPhotoCrop(Uri uri, String duplicatePath, int reqCode, boolean mBWPhoto) {
 
 		Intent intent = new Intent();
-		intent.setClass(mFragment.getActivity(),CropImage.class);
+		if( mFragment != null ) {
+			intent.setClass(mFragment.getActivity(), CropImage.class);
+		}
+		else
+		{
+			intent.setClass( m_ac ,CropImage.class);
+		}
 		intent.setDataAndType(uri, "image/*");
 
 		intent.putExtra("crop", "true");
@@ -64,7 +73,14 @@ public class CropHelper {
 		intent.putExtra("scale", true);
 		intent.putExtra("scaleUpIfNeeded", true);
 		intent.putExtra("BWPhoto", mBWPhoto);
-		mFragment.startActivityForResult(intent, reqCode);
+		if( mFragment != null )
+		{
+			mFragment.startActivityForResult(intent, reqCode);
+		}
+		else
+		{
+			m_ac.startActivityForResult(intent, reqCode );
+		}
 		
 	}
 
@@ -76,18 +92,38 @@ public class CropHelper {
 			temp.delete();
 		}
 		intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(temp));
-		mFragment.startActivityForResult(intent, HEAD_FROM_CAMERA);
+		if (mFragment != null) {
+			mFragment.startActivityForResult(intent, HEAD_FROM_CAMERA);
+		}
+		else
+		{
+			m_ac.startActivityForResult(intent, HEAD_FROM_CAMERA);
+		}
 	}
 
 	public void startAlbum() {
 		Intent intent = new Intent(Intent.ACTION_PICK, null);
 		intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
 				"image/*");
+		if (mFragment != null) {
 		mFragment.startActivityForResult(intent, HEAD_FROM_ALBUM);
+		}
+		else
+		{
+			m_ac.startActivityForResult(intent, HEAD_FROM_ALBUM);
+		}
 	}
 
 	public void showToast(String msg) {
-		Toast.makeText(mFragment.getActivity(), msg, Toast.LENGTH_SHORT).show();
+		if (mFragment != null) {
+			Toast.makeText(mFragment.getActivity(), msg, Toast.LENGTH_SHORT).show();
+
+		}
+		else
+		{
+			Toast.makeText(m_ac, msg, Toast.LENGTH_SHORT).show();
+		}
+
 	}
 
 	public void getDataFromCamera(Intent data) {

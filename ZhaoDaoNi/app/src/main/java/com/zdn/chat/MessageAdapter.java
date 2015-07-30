@@ -4,10 +4,15 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import com.lidroid.xutils.BitmapUtils;
 import com.zdn.R;
+import com.zdn.internet.InternetComponent;
+import com.zdn.util.FileUtil;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -120,7 +125,7 @@ public class MessageAdapter extends BaseAdapter {
 		
 		switch (message.getType()) {
 		case 0://text
-			viewHolder.textTextView.setText(message.getContent());
+			viewHolder.textTextView.setText( (String)( message.getContent()));
 			viewHolder.textTextView.setVisibility(View.VISIBLE);
 			viewHolder.photoImageView.setVisibility(View.GONE);
 			viewHolder.faceImageView.setVisibility(View.GONE);
@@ -162,10 +167,13 @@ public class MessageAdapter extends BaseAdapter {
 			viewHolder.faceImageView.setVisibility(View.GONE);
 			
 			//TODO set image
-			int id = context.getResources().getIdentifier(message.getContent(), "drawable", context.getPackageName());
-			viewHolder.photoImageView.setImageResource(id);
-			
-			
+			//int id = context.getResources().getIdentifier(message.getContent(), "drawable", context.getPackageName());
+			String ReceivedPicturePath = FileUtil.makePath(FileUtil.getBaseDirector(), context.getString(R.string.ReceivedPictureFromfriends));
+			BitmapUtils bitmapUtils = new BitmapUtils(  context , ReceivedPicturePath );
+
+			bitmapUtils.display( viewHolder.photoImageView ,  message.getContent()  );
+			//viewHolder.photoImageView.setImageBitmap(  BitmapFactory.decodeFile( message.getContent() ) );
+
 			if(message.getIsSend() ){
 				LayoutParams sendTimeTextViewLayoutParams = (LayoutParams) viewHolder.sendTimeTextView.getLayoutParams();
 				sendTimeTextViewLayoutParams.addRule(RelativeLayout.LEFT_OF, R.id.photoImageView);
@@ -203,7 +211,7 @@ public class MessageAdapter extends BaseAdapter {
 			viewHolder.faceImageView.setVisibility(View.VISIBLE);
 			int resId = context.getResources().getIdentifier(message.getContent(), "drawable", context.getPackageName());
 			viewHolder.faceImageView.setImageResource(resId);
-			
+
 			if(message.getIsSend()){
 				LayoutParams sendTimeTextViewLayoutParams = (LayoutParams) viewHolder.sendTimeTextView.getLayoutParams();
 				sendTimeTextViewLayoutParams.addRule(RelativeLayout.LEFT_OF, R.id.faceImageView);

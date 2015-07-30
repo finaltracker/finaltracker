@@ -94,8 +94,8 @@ public class myInfomationFragment extends mainActivityFragmentBase {
         rootView =  inflater.inflate(R.layout.my_information, container, false);
 
         rootView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        mCropHelper=new CropHelper( this, OSUtils.getSdCardDirectory()+"/head.png");
-        mDialog=new ChooseDialog( this, mCropHelper);
+        mCropHelper=new CropHelper( this,null, OSUtils.getSdCardDirectory()+"/head.png");
+        mDialog=new ChooseDialog( this,null, mCropHelper);
         init();
         return rootView;
     }

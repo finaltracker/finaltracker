@@ -1,5 +1,6 @@
 package com.zdn.cropimage;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.view.View;
@@ -16,10 +17,16 @@ public class ChooseDialog implements OnClickListener {
 	public static final String SDCARD_NOT_EXISTS = "SD卡不存在，无法设置头像";
 	private Dialog mDialog = null;
 	private Fragment mFragment = null;
+	private Activity mAc = null;
 	private CropHelper mCropHelper = null;
 
-	public ChooseDialog(Fragment act, CropHelper helper) {
+	public ChooseDialog(Fragment act, Activity ac , CropHelper helper) {
+		mAc = ac;
 		mFragment = act;
+		if( act != null )
+		{
+			mAc = act.getActivity();
+		}
 		mCropHelper = helper;
 	}
 
@@ -36,7 +43,7 @@ public class ChooseDialog implements OnClickListener {
 	private void setDialog() {
 		// 此处直接new一个Dialog对象出来，在实例化的时候传入主题
 		if (mDialog == null) {
-			mDialog = new Dialog(mFragment.getActivity(), R.style.MyDialog);
+			mDialog = new Dialog(mAc, R.style.MyDialog);
 			mDialog.setContentView(R.layout.head_set_choice);
 			mDialog.setCanceledOnTouchOutside(true);
 			TextView takePic = (TextView) mDialog.findViewById(R.id.take_pictures);
@@ -51,7 +58,7 @@ public class ChooseDialog implements OnClickListener {
 	}
 
 	public void showToast(String msg) {
-		Toast.makeText(mFragment.getActivity(), msg, Toast.LENGTH_SHORT).show();
+		Toast.makeText( mAc, msg, Toast.LENGTH_SHORT).show();
 	}
 
 	@Override
