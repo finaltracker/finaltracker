@@ -22,6 +22,7 @@ public class ZhaoDaoNiApplication extends Application {
          FileUtil.makeFile(getString(R.string.friendsAvator));
          FileUtil.makeFile(getString(R.string.SendPictureTofriends));
          FileUtil.makeFile(getString(R.string.ReceivedPictureFromfriends));
+         FileUtil.makeFile(getString(R.string.RecordVoice));
         //create db manager
          
          dbManager = new DBManager(this);

@@ -123,6 +123,7 @@
     <string name="friendsAvator">friends/avator</string>
     <string name="SendPictureTofriends">friends/pictureSend</string>
     <string name="ReceivedPictureFromfriends">friends/pictureReceived</string>
+    <string name="RecordVoice">my/RecordVoice</string>
     <string-array name="plannets_array">
         <item>家庭圈</item>
         <item>朋友圈</item>

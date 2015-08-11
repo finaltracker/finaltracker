@@ -65,7 +65,11 @@ public class MessageInputToolBox extends RelativeLayout {
 	private LinearLayout pagePointLayout;
 	List<View> functionGridViewList;
 	List<ImageView> pointViews;
-	
+
+	private RecordButton recordButton;
+	private Button messageVoiceChangeInputButton;
+	private boolean messageInput =true;
+
 	//...
 	
 	FaceCategroyAdapter faceCategroyAdapter;
@@ -108,12 +112,18 @@ public class MessageInputToolBox extends RelativeLayout {
 	
 	private void initView(){
 			messageEditText 		= (EditText) findViewById(R.id.messageEditText);
-			sendButton 				= (Button) findViewById(R.id.sendButton);
-	
+			sendButton 			= (Button) findViewById(R.id.sendButton);
+
+			recordButton  		= (RecordButton)findViewById(R.id.voiceRecordButton);
+			recordButton.setVisibility(View.GONE);
+
+			messageVoiceChangeInputButton = (Button)findViewById(R.id.messageVoiceChangeInputButton);
+			messageInput = true;
+
 			bottomHideLayout		= (RelativeLayout) findViewById(R.id.bottomHideLayout);
 			faceButton				= (Button) findViewById(R.id.faceButton);
-			moreTypeButton			= (Button) findViewById(R.id.moreTypeButton);
-			moreTypeLayout			= (LinearLayout) findViewById(R.id.moreTypeLayout);
+			moreTypeButton		= (Button) findViewById(R.id.moreTypeButton);
+			moreTypeLayout		= (LinearLayout) findViewById(R.id.moreTypeLayout);
 			
 			faceLayout				= (RelativeLayout) findViewById(R.id.faceLayout);
 			faceCategroyViewPager 	= (ViewPager) findViewById(R.id.faceCategroyViewPager);
@@ -125,8 +135,35 @@ public class MessageInputToolBox extends RelativeLayout {
 
 			MoreLayout = (GridLayout) findViewById( R.id.MoreLayout);
 			selectPictureButton = ( Button) findViewById( R.id.selectPicture );
+
+
+			messageVoiceChangeInputButton.setOnClickListener( new View.OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					if( messageInput )
+					{
+						messageVoiceChangeInputButton.setBackgroundResource(R.drawable.tm);
+						recordButton.setVisibility(View.VISIBLE);
+						messageEditText.setVisibility(View.GONE);
+						hideKeyboard(MessageInputToolBox.this.context);
+
+					}
+					else
+					{
+						messageVoiceChangeInputButton.setBackgroundResource(R.drawable.tn);
+						messageEditText.setVisibility(View.VISIBLE);
+						recordButton.setVisibility(View.GONE);
+						showKeyboard(MessageInputToolBox.this.context);
+
+						;
+					}
+					messageInput = !messageInput;
+				}
+			});
 			fuctionViewPager.setOnPageChangeListener(new OnPageChangeListener() {
-	
+
+
 				@Override
 				public void onPageSelected(int arg0) {
 					for (int i = 0; i < pointViews.size(); i++) {
@@ -278,8 +315,13 @@ public class MessageInputToolBox extends RelativeLayout {
 		Activity activity = (Activity) context;
 		if(activity != null){
 			InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-			if(imm.isActive() && activity.getCurrentFocus() != null){
-				imm.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+			if( imm.isActive() )
+			{
+				imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+			}
+			//if(imm.isActive() && activity.getCurrentFocus() != null){
+			{
+				//imm.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
 			}
 		}
 	}

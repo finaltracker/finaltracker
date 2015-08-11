@@ -5,7 +5,8 @@
     android:layout_height="wrap_content"
     android:orientation="vertical" >
 
-    <LinearLayout
+
+        <LinearLayout
         android:id="@+id/messageToolBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -13,7 +14,15 @@
         android:orientation="horizontal"
         android:padding="4dp" >
 
-        <EditText
+        <Button
+            android:id="@+id/messageVoiceChangeInputButton"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="bottom"
+            android:background="@drawable/tn" />
+
+
+            <EditText
             android:id="@+id/messageEditText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -22,6 +31,16 @@
             android:maxHeight="80dp"
             android:textSize="16sp" >
         </EditText>
+
+        <com.zdn.chat.RecordButton
+            android:id="@+id/voiceRecordButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="recode voice"
+            android:maxHeight="80dp"
+            android:textSize="16sp" >
+        </com.zdn.chat.RecordButton>
 
         <Button
             android:id="@+id/faceButton"

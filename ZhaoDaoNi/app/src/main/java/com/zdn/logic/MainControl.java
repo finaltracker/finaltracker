@@ -856,15 +856,19 @@ public class MainControl extends HandlerThread {
 			boolean	sendSucces       = true;
 			String	time             = getStringFromJasonObj(json_obj,"create_time");
 
-			if( photo_url !=null )
+			if( (photo_url !=null) &&  (!photo_url.isEmpty()))
 			{
 				type = ZdnMessage.MSG_TYPE_PHOTO;
 				content = photo_url;
 			}
-			else if ( audio_url != null )
+			else if ( (audio_url != null)  &&  (!photo_url.isEmpty()))
 			{
 				type = ZdnMessage.MSG_TYPE_AUDIO;
 				content = audio_url;
+			}
+			else
+			{
+
 			}
 					
 			ZdnMessage zdn_m = new ZdnMessage( fromUserName,
