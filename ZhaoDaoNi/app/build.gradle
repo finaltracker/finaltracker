@@ -31,4 +31,5 @@ dependencies {
     compile files('libs/android_api_1.1_forsdk.jar')
     compile files('libs/BaiduLBS_Android.jar')
     compile files('libs/galaxy_mini.jar')
+    compile files('libs/GifView.jar')
 }

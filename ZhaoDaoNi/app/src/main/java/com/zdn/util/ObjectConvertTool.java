@@ -38,8 +38,15 @@ public class ObjectConvertTool {
 		{
 			e.AddAProperty(new Property("message",""));
 			File uFile = new File((String) in.getContent());
-			e.AddAProperty(new Property("photo_url",uFile));
-			e.AddAProperty(new Property("audio_url","" ) );
+			e.AddAProperty(new Property("photo_file",uFile));
+			e.AddAProperty(new Property("audio_file","" ) );
+		}
+		else if( type == in.MSG_TYPE_AUDIO )
+		{
+			e.AddAProperty(new Property("message",""));
+			File uFile = new File((String) in.getContent());
+			e.AddAProperty(new Property("photo_file",""));
+			e.AddAProperty(new Property("audio_file",uFile ) );
 		}
 		else // type  ==??
 		{

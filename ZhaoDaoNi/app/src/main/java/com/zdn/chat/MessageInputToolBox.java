@@ -38,7 +38,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 
-public class MessageInputToolBox extends RelativeLayout {
+public class MessageInputToolBox extends RelativeLayout  implements RecordButton.OnFinishedRecordListener {
 	
 	private OnOperationListener onOperationListener;
 	
@@ -116,6 +116,7 @@ public class MessageInputToolBox extends RelativeLayout {
 
 			recordButton  		= (RecordButton)findViewById(R.id.voiceRecordButton);
 			recordButton.setVisibility(View.GONE);
+			recordButton.setOnFinishedRecordListener(this);
 
 			messageVoiceChangeInputButton = (Button)findViewById(R.id.messageVoiceChangeInputButton);
 			messageInput = true;
@@ -457,8 +458,12 @@ public class MessageInputToolBox extends RelativeLayout {
 		
 	}
 
-	
-	
-	
-	
+
+	@Override
+	public void onFinishedRecord(String audioPath, int recordTime) {
+		if( onOperationListener != null )
+		{
+			onOperationListener.sendAudioReq( audioPath );
+		}
+	}
 }

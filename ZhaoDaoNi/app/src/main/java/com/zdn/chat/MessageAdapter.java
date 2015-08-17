@@ -8,6 +8,7 @@ import com.lidroid.xutils.BitmapUtils;
 import com.zdn.R;
 import com.zdn.internet.InternetComponent;
 import com.zdn.util.FileUtil;
+import com.zdn.view.GifView;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -85,6 +86,7 @@ public class MessageAdapter extends BaseAdapter {
 			viewHolder.userNameTextView = (TextView) convertView.findViewById(R.id.userNameTextView);
 			viewHolder.textTextView = (TextView) convertView.findViewById(R.id.textTextView);
 			viewHolder.photoImageView = (ImageView) convertView.findViewById(R.id.photoImageView);
+			viewHolder.audioView = (GifView)convertView.findViewById(R.id.audioTextView);
 			viewHolder.faceImageView = (ImageView) convertView.findViewById(R.id.faceImageView);
 			viewHolder.failImageView = (ImageView) convertView.findViewById(R.id.failImageView);
 			viewHolder.sendingProgressBar = (ProgressBar) convertView.findViewById(R.id.sendingProgressBar);
@@ -124,91 +126,96 @@ public class MessageAdapter extends BaseAdapter {
 
 		
 		switch (message.getType()) {
-		case 0://text
-			viewHolder.textTextView.setText( (String)( message.getContent()));
-			viewHolder.textTextView.setVisibility(View.VISIBLE);
-			viewHolder.photoImageView.setVisibility(View.GONE);
-			viewHolder.faceImageView.setVisibility(View.GONE);
-			if(message.getIsSend()){
-				LayoutParams sendTimeTextViewLayoutParams = (LayoutParams) viewHolder.sendTimeTextView.getLayoutParams();
-				sendTimeTextViewLayoutParams.addRule(RelativeLayout.LEFT_OF, R.id.textTextView);
-				viewHolder.sendTimeTextView.setLayoutParams(sendTimeTextViewLayoutParams);
-				
-				LayoutParams layoutParams = (LayoutParams) viewHolder.failImageView.getLayoutParams();
-				layoutParams.addRule(RelativeLayout.LEFT_OF, R.id.textTextView);
-				if( message.getSendSucces() != null && message.getSendSucces() == false){
-					viewHolder.failImageView.setVisibility(View.VISIBLE);
-					viewHolder.failImageView.setLayoutParams(layoutParams);
-				}else{
-					viewHolder.failImageView.setVisibility(View.GONE);
-				}
-				
-				if(message.getState() != null && message.getState() == 0){
-					viewHolder.sendingProgressBar.setVisibility(View.VISIBLE);
-					viewHolder.sendingProgressBar.setLayoutParams(layoutParams);
-				}else{
-					viewHolder.sendingProgressBar.setVisibility(View.GONE);
-				}
-				
-			}else{
-				viewHolder.failImageView.setVisibility(View.GONE);
-				viewHolder.sendingProgressBar.setVisibility(View.GONE);
-				
-				LayoutParams sendTimeTextViewLayoutParams = (LayoutParams) viewHolder.sendTimeTextView.getLayoutParams();
-				sendTimeTextViewLayoutParams.addRule(RelativeLayout.RIGHT_OF, R.id.textTextView);
-				viewHolder.sendTimeTextView.setLayoutParams(sendTimeTextViewLayoutParams);
-			}
-			
-			
-			break;
-		case 1://photo
-			viewHolder.textTextView.setVisibility(View.GONE);
-			viewHolder.photoImageView.setVisibility(View.VISIBLE);
-			viewHolder.faceImageView.setVisibility(View.GONE);
-			
-			//TODO set image
-			//int id = context.getResources().getIdentifier(message.getContent(), "drawable", context.getPackageName());
-			String ReceivedPicturePath = FileUtil.makePath(FileUtil.getBaseDirector(), context.getString(R.string.ReceivedPictureFromfriends));
-			BitmapUtils bitmapUtils = new BitmapUtils(  context , ReceivedPicturePath );
+			case 0://text
+				viewHolder.textTextView.setText((String) (message.getContent()));
+				viewHolder.textTextView.setVisibility(View.VISIBLE);
+				viewHolder.photoImageView.setVisibility(View.GONE);
+				viewHolder.faceImageView.setVisibility(View.GONE);
+				viewHolder.audioView.setVisibility(View.GONE);
+				if (message.getIsSend()) {
+					LayoutParams sendTimeTextViewLayoutParams = (LayoutParams) viewHolder.sendTimeTextView.getLayoutParams();
+					sendTimeTextViewLayoutParams.addRule(RelativeLayout.LEFT_OF, R.id.textTextView);
+					viewHolder.sendTimeTextView.setLayoutParams(sendTimeTextViewLayoutParams);
 
-			bitmapUtils.display( viewHolder.photoImageView ,  message.getContent()  );
-			//viewHolder.photoImageView.setImageBitmap(  BitmapFactory.decodeFile( message.getContent() ) );
+					LayoutParams layoutParams = (LayoutParams) viewHolder.failImageView.getLayoutParams();
+					layoutParams.addRule(RelativeLayout.LEFT_OF, R.id.textTextView);
+					if (message.getSendSucces() != null && message.getSendSucces() == false) {
+						viewHolder.failImageView.setVisibility(View.VISIBLE);
+						viewHolder.failImageView.setLayoutParams(layoutParams);
+					} else {
+						viewHolder.failImageView.setVisibility(View.GONE);
+					}
 
-			if(message.getIsSend() ){
-				LayoutParams sendTimeTextViewLayoutParams = (LayoutParams) viewHolder.sendTimeTextView.getLayoutParams();
-				sendTimeTextViewLayoutParams.addRule(RelativeLayout.LEFT_OF, R.id.photoImageView);
-				viewHolder.sendTimeTextView.setLayoutParams(sendTimeTextViewLayoutParams);
-				
-				LayoutParams layoutParams = (LayoutParams) viewHolder.failImageView.getLayoutParams();
-				layoutParams.addRule(RelativeLayout.LEFT_OF, R.id.photoImageView);
-				if(message.getSendSucces() != null && message.getSendSucces() == false){
-					viewHolder.failImageView.setVisibility(View.VISIBLE);
-					viewHolder.failImageView.setLayoutParams(layoutParams);
-				}else{
+					if (message.getState() != null && message.getState() == 0) {
+						viewHolder.sendingProgressBar.setVisibility(View.VISIBLE);
+						viewHolder.sendingProgressBar.setLayoutParams(layoutParams);
+					} else {
+						viewHolder.sendingProgressBar.setVisibility(View.GONE);
+					}
+
+				} else {
 					viewHolder.failImageView.setVisibility(View.GONE);
-				}
-				
-				if(message.getState() != null && message.getState() == 0){
-					viewHolder.sendingProgressBar.setVisibility(View.VISIBLE);
-					viewHolder.sendingProgressBar.setLayoutParams(layoutParams);
-				}else{
 					viewHolder.sendingProgressBar.setVisibility(View.GONE);
+
+					LayoutParams sendTimeTextViewLayoutParams = (LayoutParams) viewHolder.sendTimeTextView.getLayoutParams();
+					sendTimeTextViewLayoutParams.addRule(RelativeLayout.RIGHT_OF, R.id.textTextView);
+					viewHolder.sendTimeTextView.setLayoutParams(sendTimeTextViewLayoutParams);
 				}
-				
-			}else{
-				viewHolder.failImageView.setVisibility(View.GONE);
-				LayoutParams sendTimeTextViewLayoutParams = (LayoutParams) viewHolder.sendTimeTextView.getLayoutParams();
-				sendTimeTextViewLayoutParams.addRule(RelativeLayout.RIGHT_OF, R.id.photoImageView);
-				viewHolder.sendTimeTextView.setLayoutParams(sendTimeTextViewLayoutParams);
+
+
+				break;
+			case 1://photo
+			{
+				viewHolder.textTextView.setVisibility(View.GONE);
+				viewHolder.photoImageView.setVisibility(View.VISIBLE);
+				viewHolder.faceImageView.setVisibility(View.GONE);
+				viewHolder.audioView.setVisibility(View.GONE);
+
+				//TODO set image
+				//int id = context.getResources().getIdentifier(message.getContent(), "drawable", context.getPackageName());
+				String ReceivedPicturePath = FileUtil.makePath(FileUtil.getBaseDirector(), context.getString(R.string.ReceivedPictureFromfriends));
+				BitmapUtils bitmapUtils = new BitmapUtils(context, ReceivedPicturePath);
+
+				bitmapUtils.display(viewHolder.photoImageView, message.getContent());
+				//viewHolder.photoImageView.setImageBitmap(  BitmapFactory.decodeFile( message.getContent() ) );
+
+				if (message.getIsSend()) {
+					LayoutParams sendTimeTextViewLayoutParams = (LayoutParams) viewHolder.sendTimeTextView.getLayoutParams();
+					sendTimeTextViewLayoutParams.addRule(RelativeLayout.LEFT_OF, R.id.photoImageView);
+					viewHolder.sendTimeTextView.setLayoutParams(sendTimeTextViewLayoutParams);
+
+					LayoutParams layoutParams = (LayoutParams) viewHolder.failImageView.getLayoutParams();
+					layoutParams.addRule(RelativeLayout.LEFT_OF, R.id.photoImageView);
+					if (message.getSendSucces() != null && message.getSendSucces() == false) {
+						viewHolder.failImageView.setVisibility(View.VISIBLE);
+						viewHolder.failImageView.setLayoutParams(layoutParams);
+					} else {
+						viewHolder.failImageView.setVisibility(View.GONE);
+					}
+
+					if (message.getState() != null && message.getState() == 0) {
+						viewHolder.sendingProgressBar.setVisibility(View.VISIBLE);
+						viewHolder.sendingProgressBar.setLayoutParams(layoutParams);
+					} else {
+						viewHolder.sendingProgressBar.setVisibility(View.GONE);
+					}
+
+				} else {
+					viewHolder.failImageView.setVisibility(View.GONE);
+					LayoutParams sendTimeTextViewLayoutParams = (LayoutParams) viewHolder.sendTimeTextView.getLayoutParams();
+					sendTimeTextViewLayoutParams.addRule(RelativeLayout.RIGHT_OF, R.id.photoImageView);
+					viewHolder.sendTimeTextView.setLayoutParams(sendTimeTextViewLayoutParams);
+				}
+
 			}
-			
-			
 			break;
-			
+
 		case 2://face
 			viewHolder.photoImageView.setVisibility(View.GONE);
 			viewHolder.textTextView.setVisibility(View.GONE);
 			viewHolder.faceImageView.setVisibility(View.VISIBLE);
+			viewHolder.audioView.setVisibility(View.GONE);
+
 			int resId = context.getResources().getIdentifier(message.getContent(), "drawable", context.getPackageName());
 			viewHolder.faceImageView.setImageResource(resId);
 
@@ -216,7 +223,7 @@ public class MessageAdapter extends BaseAdapter {
 				LayoutParams sendTimeTextViewLayoutParams = (LayoutParams) viewHolder.sendTimeTextView.getLayoutParams();
 				sendTimeTextViewLayoutParams.addRule(RelativeLayout.LEFT_OF, R.id.faceImageView);
 				viewHolder.sendTimeTextView.setLayoutParams(sendTimeTextViewLayoutParams);
-				
+
 				LayoutParams layoutParams = (LayoutParams) viewHolder.failImageView.getLayoutParams();
 				layoutParams.addRule(RelativeLayout.LEFT_OF, R.id.faceImageView);
 				if(message.getSendSucces() != null && message.getSendSucces() == false){
@@ -225,24 +232,62 @@ public class MessageAdapter extends BaseAdapter {
 				}else{
 					viewHolder.failImageView.setVisibility(View.GONE);
 				}
-				
+
 				if(message.getState() != null && message.getState() == 0){
 					viewHolder.sendingProgressBar.setVisibility(View.VISIBLE);
 					viewHolder.sendingProgressBar.setLayoutParams(layoutParams);
 				}else{
 					viewHolder.sendingProgressBar.setVisibility(View.GONE);
 				}
-				
+
 			}else{
 				viewHolder.failImageView.setVisibility(View.GONE);
-				
+
 				LayoutParams sendTimeTextViewLayoutParams = (LayoutParams) viewHolder.sendTimeTextView.getLayoutParams();
 				sendTimeTextViewLayoutParams.addRule(RelativeLayout.RIGHT_OF, R.id.faceImageView);
 				viewHolder.sendTimeTextView.setLayoutParams(sendTimeTextViewLayoutParams);
 			}
-			
-			break;
 
+			break;
+			case 3://audio
+			{
+				viewHolder.textTextView.setVisibility(View.GONE);
+				viewHolder.photoImageView.setVisibility(View.GONE);
+				viewHolder.faceImageView.setVisibility(View.GONE);
+				viewHolder.audioView.setVisibility(View.VISIBLE );
+
+
+
+				if (message.getIsSend()) {
+					LayoutParams sendTimeTextViewLayoutParams = (LayoutParams) viewHolder.sendTimeTextView.getLayoutParams();
+					sendTimeTextViewLayoutParams.addRule(RelativeLayout.LEFT_OF, R.id.audioTextView);
+					viewHolder.sendTimeTextView.setLayoutParams(sendTimeTextViewLayoutParams);
+
+					LayoutParams layoutParams = (LayoutParams) viewHolder.failImageView.getLayoutParams();
+					layoutParams.addRule(RelativeLayout.LEFT_OF, R.id.audioTextView);
+					if (message.getSendSucces() != null && message.getSendSucces() == false) {
+						viewHolder.failImageView.setVisibility(View.VISIBLE);
+						viewHolder.failImageView.setLayoutParams(layoutParams);
+					} else {
+						viewHolder.failImageView.setVisibility(View.GONE);
+					}
+
+					if (message.getState() != null && message.getState() == 0) {
+						viewHolder.sendingProgressBar.setVisibility(View.VISIBLE);
+						viewHolder.sendingProgressBar.setLayoutParams(layoutParams);
+					} else {
+						viewHolder.sendingProgressBar.setVisibility(View.GONE);
+					}
+
+				} else {
+					viewHolder.failImageView.setVisibility(View.GONE);
+					LayoutParams sendTimeTextViewLayoutParams = (LayoutParams) viewHolder.sendTimeTextView.getLayoutParams();
+					sendTimeTextViewLayoutParams.addRule(RelativeLayout.RIGHT_OF, R.id.audioTextView);
+					viewHolder.sendTimeTextView.setLayoutParams(sendTimeTextViewLayoutParams);
+				}
+
+			}
+				break;
 		default:
 			viewHolder.textTextView.setText(message.getContent());
 			viewHolder.photoImageView.setVisibility(View.GONE);
@@ -290,6 +335,7 @@ public class MessageAdapter extends BaseAdapter {
 		
 		public TextView 	textTextView;
 		public ImageView 	photoImageView;
+		public GifView 	audioView;
 		public ImageView 	faceImageView;
 		
 		public ImageView 	failImageView;

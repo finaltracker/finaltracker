@@ -27,6 +27,7 @@ import com.zdn.R;
 import com.zdn.basicStruct.SendMessageRspEvent;
 import com.zdn.basicStruct.friendMemberData;
 import com.zdn.basicStruct.getMessageRspEvent;
+import com.zdn.chat.RecordButton;
 import com.zdn.chat.ZdnMessage;
 import com.zdn.chat.MessageAdapter;
 import com.zdn.chat.MessageInputToolBox;
@@ -38,7 +39,7 @@ import com.zdn.data.dataManager;
 import com.zdn.logic.MainControl;
 import com.zdn.util.FileUtil;
 
-public class chatActivity extends zdnBasicActivity {
+public class chatActivity extends zdnBasicActivity{
 	
 	private int 				INIT_SHOW_MESSAGE_MAX	= 50;
 	private MessageInputToolBox box;
@@ -129,13 +130,25 @@ public class chatActivity extends zdnBasicActivity {
 				default:
 					break;
 				}
-				Toast.makeText(chatActivity.this, "Do some thing here, index :" +index, 1000).show();
+				//Toast.makeText(chatActivity.this, "Do some thing here, index :" +index, 1000).show();
 				
 			}
 
 			@Override
 			public void selectPictureReq( ) {
 				doSelectPicture();
+			}
+
+			@Override
+			public void sendAudioReq(String voiceFileName)
+			{
+				System.out.println("send a voice record to server");
+
+				ZdnMessage message = new ZdnMessage( targetTo ,ZdnMessage.MSG_TYPE_AUDIO, 0, "Tom", "avatar", targetTo, "avatar", voiceFileName, true, true, new Date());
+
+				MainControl.sendMessageToServer(message, targetTo);
+				adapter.getData().add(message);
+				listView.setSelection(listView.getBottom());
 			}
 
 		});
@@ -356,4 +369,6 @@ public class chatActivity extends zdnBasicActivity {
 		}
 		super.onActivityResult(requestCode, resultCode, data);
 	}
+
+
 }

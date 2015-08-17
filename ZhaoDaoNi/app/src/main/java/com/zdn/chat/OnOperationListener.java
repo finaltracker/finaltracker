@@ -13,4 +13,6 @@ public interface OnOperationListener {
 
 	public void selectPictureReq( );
 
+	public void sendAudioReq(String voiceFileName);
+
 }

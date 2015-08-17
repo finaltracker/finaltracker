@@ -1,0 +1,21 @@
+Applications Graphics Acceleration Info:
+Uptime: 53889578 Realtime: 97296588
+
+** Graphics info for pid 12105 [com.zdn] **
+Profile data in ms:
+
+	com.zdn/com.zdn.activity.MainActivity/android.view.ViewRootImpl@43e86b38
+	com.zdn/com.zdn.activity.chatActivity/android.view.ViewRootImpl@442c3e60
+View hierarchy:
+
+  com.zdn/com.zdn.activity.MainActivity/android.view.ViewRootImpl@43e86b38
+  30 views, 0.00 kB of display lists
+
+  com.zdn/com.zdn.activity.chatActivity/android.view.ViewRootImpl@442c3e60
+  64 views, 0.00 kB of display lists
+
+
+Total ViewRootImpl: 2
+Total Views:        94
+Total DisplayList:  0.00 kB
+

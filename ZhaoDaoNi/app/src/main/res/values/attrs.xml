@@ -15,4 +15,9 @@
         <attr name="pstsTextAllCaps" format="boolean" />
     </declare-styleable>
 
+    <declare-styleable name="GifView">
+        <attr name="gif" format="reference" />
+
+    </declare-styleable>
+
 </resources>
