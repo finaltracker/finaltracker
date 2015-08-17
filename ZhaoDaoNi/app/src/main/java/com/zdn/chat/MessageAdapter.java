@@ -6,14 +6,13 @@ import java.util.List;
 
 import com.lidroid.xutils.BitmapUtils;
 import com.zdn.R;
-import com.zdn.internet.InternetComponent;
 import com.zdn.util.FileUtil;
 import com.zdn.view.GifView;
+import com.zdn.view.audioGifView;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.os.Message;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -86,12 +85,29 @@ public class MessageAdapter extends BaseAdapter {
 			viewHolder.userNameTextView = (TextView) convertView.findViewById(R.id.userNameTextView);
 			viewHolder.textTextView = (TextView) convertView.findViewById(R.id.textTextView);
 			viewHolder.photoImageView = (ImageView) convertView.findViewById(R.id.photoImageView);
-			viewHolder.audioView = (GifView)convertView.findViewById(R.id.audioTextView);
+			viewHolder.audioGifView = (audioGifView)convertView.findViewById(R.id.audioTextView);
 			viewHolder.faceImageView = (ImageView) convertView.findViewById(R.id.faceImageView);
 			viewHolder.failImageView = (ImageView) convertView.findViewById(R.id.failImageView);
 			viewHolder.sendingProgressBar = (ProgressBar) convertView.findViewById(R.id.sendingProgressBar);
-			
-			
+
+
+			if( viewHolder.audioGifView != null && ( message.getType() == ZdnMessage.MSG_TYPE_AUDIO ))
+			{
+				viewHolder.audioGifView.setaudioPath( message.getContent() );
+				viewHolder.audioGifView.setOnClickListener( new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						if( ((audioGifView)v).isRunning() )
+						{
+							((audioGifView)v).stop();
+						}
+						else
+						{
+							((audioGifView)v).startAndPlay();
+						}
+					}
+				});
+			}
 			viewHolder.isSend = isSend;
 			convertView.setTag(viewHolder);
 		} else {
@@ -131,7 +147,7 @@ public class MessageAdapter extends BaseAdapter {
 				viewHolder.textTextView.setVisibility(View.VISIBLE);
 				viewHolder.photoImageView.setVisibility(View.GONE);
 				viewHolder.faceImageView.setVisibility(View.GONE);
-				viewHolder.audioView.setVisibility(View.GONE);
+				viewHolder.audioGifView.setVisibility(View.GONE);
 				if (message.getIsSend()) {
 					LayoutParams sendTimeTextViewLayoutParams = (LayoutParams) viewHolder.sendTimeTextView.getLayoutParams();
 					sendTimeTextViewLayoutParams.addRule(RelativeLayout.LEFT_OF, R.id.textTextView);
@@ -169,7 +185,7 @@ public class MessageAdapter extends BaseAdapter {
 				viewHolder.textTextView.setVisibility(View.GONE);
 				viewHolder.photoImageView.setVisibility(View.VISIBLE);
 				viewHolder.faceImageView.setVisibility(View.GONE);
-				viewHolder.audioView.setVisibility(View.GONE);
+				viewHolder.audioGifView.setVisibility(View.GONE);
 
 				//TODO set image
 				//int id = context.getResources().getIdentifier(message.getContent(), "drawable", context.getPackageName());
@@ -214,7 +230,7 @@ public class MessageAdapter extends BaseAdapter {
 			viewHolder.photoImageView.setVisibility(View.GONE);
 			viewHolder.textTextView.setVisibility(View.GONE);
 			viewHolder.faceImageView.setVisibility(View.VISIBLE);
-			viewHolder.audioView.setVisibility(View.GONE);
+			viewHolder.audioGifView.setVisibility(View.GONE);
 
 			int resId = context.getResources().getIdentifier(message.getContent(), "drawable", context.getPackageName());
 			viewHolder.faceImageView.setImageResource(resId);
@@ -254,7 +270,7 @@ public class MessageAdapter extends BaseAdapter {
 				viewHolder.textTextView.setVisibility(View.GONE);
 				viewHolder.photoImageView.setVisibility(View.GONE);
 				viewHolder.faceImageView.setVisibility(View.GONE);
-				viewHolder.audioView.setVisibility(View.VISIBLE );
+				viewHolder.audioGifView.setVisibility(View.VISIBLE);
 
 
 
@@ -335,7 +351,7 @@ public class MessageAdapter extends BaseAdapter {
 		
 		public TextView 	textTextView;
 		public ImageView 	photoImageView;
-		public GifView 	audioView;
+		public audioGifView audioGifView;
 		public ImageView 	faceImageView;
 		
 		public ImageView 	failImageView;

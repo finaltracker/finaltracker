@@ -53,14 +53,13 @@
             android:textColor="#ff000000"
             android:textSize="15sp" />
 
-        <com.zdn.view.GifView
+        <com.zdn.view.audioGifView
             android:id="@+id/audioTextView"
-            myAttrs:gif = "@drawable/music_play"
+            myAttrs:gif = "@drawable/gif_movie"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
             android:layout_toLeftOf="@id/userAvatarImageView"
-            android:background="@drawable/chatto_bg"
             android:clickable="true"
             android:focusable="true"
             android:gravity="left|center"
