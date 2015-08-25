@@ -12,6 +12,7 @@ import java.io.IOException;
 public class audioGifView extends GifView implements MediaPlayer.OnCompletionListener {
     String audioPath = null;
     MediaPlayer mp = null;
+    int index = 0;
 
     public audioGifView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
@@ -24,7 +25,10 @@ public class audioGifView extends GifView implements MediaPlayer.OnCompletionLis
     {
         this.audioPath = audioPath;
     }
-
+    public void setIndex( int position )
+    {
+        index = position;
+    }
     public void startAndPlay()
     {
         if( audioPath != null )

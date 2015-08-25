@@ -28,6 +28,8 @@ public class EventDefine {
 	public static final int LOCATION_UPLOAD_RSP		= LOCATION_UPLOAD_REQ+1;
 	public static final int LOCATION_GET_REQ		= LOCATION_UPLOAD_RSP+1;
 	public static final int LOCATION_GET_RSP		= LOCATION_GET_REQ+1;
+	public static final int DOWNLOAD_AUDIO_REQ		= LOCATION_GET_RSP+1;
+	public static final int DOWNLOAD_AUDIO_RSP		= DOWNLOAD_AUDIO_REQ+1;
 	
 	/*jpush*/
 	

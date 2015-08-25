@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import com.zdn.CommandParser.CommandE;
 import com.zdn.CommandParser.ExpCommandE;
 import com.zdn.CommandParser.Property;
+import com.zdn.R;
 import com.zdn.activity.MainActivity;
 import com.zdn.activity.searchFriendResultForAddActivity;
 import com.zdn.basicStruct.SendMessageRspEvent;
@@ -22,6 +23,7 @@ import com.zdn.event.EventDefine;
 import com.zdn.internet.InternetComponent;
 import com.zdn.jeo.friendLocationManage;
 import com.zdn.receiver.NetworkReceiver;
+import com.zdn.util.FileUtil;
 import com.zdn.util.ObjectConvertTool;
 
 import de.greenrobot.event.EventBus;
@@ -33,7 +35,12 @@ import android.os.Message;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 public class MainControl extends HandlerThread {
 	Context mContext;
@@ -633,7 +640,7 @@ public class MainControl extends HandlerThread {
 		case EventDefine.GET_MESSAGE_RSP:
         {
             Log.d("MainControl", "GET_MESSAGE_RSP: ");
-            getMessageRspHandle(e);
+            getMessageRspHandle(e , null );
         }
         break;
 		case EventDefine.UPLOAD_FILE_REQ:
@@ -690,12 +697,24 @@ public class MainControl extends HandlerThread {
         }
         break;
 
+
         case EventDefine.LOCATION_GET_RSP:
         {
             Log.d("MainControl", "LOCATION_GET_RSP: ");
             locationGetRspHandle(e);
         }
         break;
+		case EventDefine.DOWNLOAD_AUDIO_REQ:{
+			Log.d("MainControl", "DOWNLOAD_AUDIO_REQ: ");
+			mInternetCom.downLoadAudio(e);
+
+		}
+		break;
+		case EventDefine.DOWNLOAD_AUDIO_RSP:{
+			Log.d("MainControl", "DOWNLOAD_AUDIO_RSP: ");
+			downLoadAudioRspHandle(e);
+		}
+		break;
 
         default:
         break;
@@ -826,8 +845,28 @@ public class MainControl extends HandlerThread {
 		}
         dataManager.getFrilendList().updateThelastChatMember(fmd);
 	}
+	/**
+	 * 对象转数组
+	 * @param obj
+	 * @return
+	 */
+	public byte[] toByteArray (Object obj) {
+		byte[] bytes = null;
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		try {
+			ObjectOutputStream oos = new ObjectOutputStream(bos);
+			oos.writeObject(obj);
+			oos.flush();
+			bytes = bos.toByteArray();
+			oos.close();
+			bos.close();
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+		return bytes;
+	}
 	//handle
-	private void getMessageRspHandle(CommandE e)
+	private void getMessageRspHandle(CommandE e , CommandE getAudioFileRsp )
 	{
 		String rep = (String)e.GetPropertyContext("HTTP_REQ_RSP");
 		String status = (String)e.GetPropertyContext("STATUS");
@@ -859,12 +898,29 @@ public class MainControl extends HandlerThread {
 			if( (photo_url !=null) &&  (!photo_url.isEmpty()))
 			{
 				type = ZdnMessage.MSG_TYPE_PHOTO;
-				content = photo_url;
+				content = InternetComponent.WEBSITE_ADDRESS_BASE_NO_SEPARATOR +  photo_url;
 			}
-			else if ( (audio_url != null)  &&  (!photo_url.isEmpty()))
+			else if ( (audio_url != null)  &&  (!audio_url.isEmpty()))
 			{
 				type = ZdnMessage.MSG_TYPE_AUDIO;
-				content = audio_url;
+				if( getAudioFileRsp == null )
+				{
+					DownLoadAudio(  InternetComponent.WEBSITE_ADDRESS_BASE_NO_SEPARATOR + audio_url ,e  );
+					return ; //wait audio file download finished
+				}
+				else
+				{
+					byte[] audioFileByte = (byte[])getAudioFileRsp.GetPropertyContext("HTTP_REQ_RSP");
+
+					String FileName = audio_url.substring(audio_url.lastIndexOf('/') + 1);
+					String path = FileUtil.makePath(FileUtil.getBaseDirector(), mContext.getString(R.string.ReceivedAudioFromfriends));
+
+					String absoultFilePath = path + "/"+ FileName;
+					FileUtil.byte2File( audioFileByte , path, FileName );
+
+
+					content = absoultFilePath;
+				}
 			}
 			else
 			{
@@ -897,6 +953,22 @@ public class MainControl extends HandlerThread {
 			Log.d("MainControl" , "get tip response error: " + e1.getMessage() );
 			e1.printStackTrace();
 		}
+	}
+
+	private void downLoadAudioRspHandle(CommandE e )
+	{
+		//String rep = (String)e.GetPropertyContext("HTTP_REQ_RSP");
+		String status = (String)e.GetPropertyContext("STATUS");
+
+		if(  0 != Integer.parseInt(status))
+		{
+			Log.e(this.getClass().getSimpleName(), "down load audio status  = " + status);
+			return ;
+		}
+
+		CommandE preAudioRspMessage = (CommandE)((ExpCommandE)e).getUserData();
+		getMessageRspHandle( preAudioRspMessage, e );
+
 	}
 
     private void locationGetRspHandle(CommandE e)
@@ -1130,6 +1202,23 @@ public class MainControl extends HandlerThread {
 		{
 			e.AddAProperty(new Property( "require_type" , "all"));
 		}
+
+
+		Message m = MainControl.getInstance().handler.obtainMessage();
+		m.obj = e;   //
+
+		MainControl.getInstance().handler.sendMessage(m);
+
+	}
+
+	static public void DownLoadAudio( String audioFileUrl , CommandE audioRspMessage ) {
+
+		ExpCommandE e = InternetComponent.packA_CommonExpCommandE_ToServer(
+				EventDefine.DOWNLOAD_AUDIO_REQ,
+				InternetComponent.WEBSITE_ADDRESS_DOWNLOAD_AUDIO
+		);
+		e.AddAProperty(new Property("audio_url", audioFileUrl));
+		e.setUserData( audioRspMessage );
 
 
 		Message m = MainControl.getInstance().handler.obtainMessage();

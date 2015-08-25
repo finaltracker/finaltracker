@@ -1,6 +1,7 @@
 package com.zdn.util;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.Closeable;
 import java.io.File;
@@ -458,6 +459,55 @@ public class FileUtil {
         return result;
     }
 
+    public static File byte2File(byte[] buf, String filePath, String fileName)
+    {
+        BufferedOutputStream bos = null;
+        FileOutputStream fos = null;
+        File file = null;
+        try
+        {
+            File dir = new File(filePath);
+            if (!dir.exists() && dir.isDirectory())
+            {
+                dir.mkdirs();
+            }
+            file = new File(filePath + File.separator + fileName);
+            fos = new FileOutputStream(file);
+            bos = new BufferedOutputStream(fos);
+            bos.write(buf);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            if (bos != null)
+            {
+                try
+                {
+                    bos.close();
+                }
+                catch (IOException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+            if (fos != null)
+            {
+                try
+                {
+                    fos.close();
+                }
+                catch (IOException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return file;
+    }
     /**
      * 复制文件
      *

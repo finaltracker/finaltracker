@@ -10,7 +10,7 @@ import com.zdn.logic.MainControl;
  * Created by wanghp1 on 2015/7/22.
  */
 public class friendLocationManage {
-    static private int requiredPeriod = 1000;
+    static private int requiredPeriod = 1000 * 60 ; // 1 MINUTE
     static private boolean stop = false;
     static Handler handler =  new Handler() {
         public void handleMessage(Message msg) {

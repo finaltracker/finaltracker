@@ -5,13 +5,20 @@ import java.util.Date;
 import java.util.List;
 
 import com.lidroid.xutils.BitmapUtils;
+import com.lidroid.xutils.bitmap.BitmapDisplayConfig;
+import com.lidroid.xutils.bitmap.callback.BitmapLoadCallBack;
+import com.lidroid.xutils.bitmap.callback.BitmapLoadFrom;
 import com.zdn.R;
+import com.zdn.basicStruct.friendMemberData;
+import com.zdn.internet.InternetComponent;
 import com.zdn.util.FileUtil;
 import com.zdn.view.GifView;
 import com.zdn.view.audioGifView;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Message;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
@@ -72,6 +79,7 @@ public class MessageAdapter extends BaseAdapter {
 		boolean isSend = message.getIsSend();
 
 		ViewHolder viewHolder = null;
+
 		if (convertView == null) {
 			viewHolder = new ViewHolder();
 			if (isSend) {
@@ -91,29 +99,30 @@ public class MessageAdapter extends BaseAdapter {
 			viewHolder.sendingProgressBar = (ProgressBar) convertView.findViewById(R.id.sendingProgressBar);
 
 
-			if( viewHolder.audioGifView != null && ( message.getType() == ZdnMessage.MSG_TYPE_AUDIO ))
-			{
-				viewHolder.audioGifView.setaudioPath( message.getContent() );
-				viewHolder.audioGifView.setOnClickListener( new View.OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						if( ((audioGifView)v).isRunning() )
-						{
-							((audioGifView)v).stop();
-						}
-						else
-						{
-							((audioGifView)v).startAndPlay();
-						}
-					}
-				});
-			}
+
 			viewHolder.isSend = isSend;
 			convertView.setTag(viewHolder);
 		} else {
 			viewHolder = (ViewHolder) convertView.getTag();
 		}
-		
+
+		if( viewHolder.audioGifView != null && ( message.getType() == ZdnMessage.MSG_TYPE_AUDIO ))
+		{
+			viewHolder.audioGifView.setaudioPath( message.getContent() );
+			viewHolder.audioGifView.setOnClickListener( new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					if( ((audioGifView)v).isRunning() )
+					{
+						((audioGifView)v).stop();
+					}
+					else
+					{
+						((audioGifView)v).startAndPlay();
+					}
+				}
+			});
+		}
 		try {
 			String dateString = DateFormat.format("yyyy-MM-dd h:mm", message.getTime()).toString();
 			String [] t = dateString.split(" ");
@@ -360,6 +369,5 @@ public class MessageAdapter extends BaseAdapter {
 		
 		public boolean 		isSend = true;
 	}
-
 
 }

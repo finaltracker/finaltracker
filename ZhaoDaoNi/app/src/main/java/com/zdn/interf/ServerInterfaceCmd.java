@@ -47,5 +47,6 @@ public interface ServerInterfaceCmd {
     //获取好友的位置信息
 	public void locationGet( CommandE e );
 
+	public void downLoadAudio( CommandE e );
 
 }

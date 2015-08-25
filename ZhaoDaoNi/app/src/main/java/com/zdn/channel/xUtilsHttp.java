@@ -1,7 +1,9 @@
 package com.zdn.channel;
 
+import com.lidroid.xutils.http.ResponseStream;
 import com.zdn.CommandParser.ExpCommandE;
 import com.zdn.CommandParser.Property;
+import com.zdn.event.EventDefine;
 import com.zdn.internet.InternetComponent;
 import com.zdn.logic.MainControl;
 
@@ -95,43 +97,69 @@ final public class xUtilsHttp {
         if(NetworkReceiver.isConnect() ) {
 
 
-            HttpUtils http = new HttpUtils();
-            http.send(HttpRequest.HttpMethod.POST, url, params,
-                    new RequestCallBack<String>() {
+            if(Integer.parseInt((String) ((ExpCommandE) command).GetExpPropertyContext("EventDefine")) == EventDefine.DOWNLOAD_AUDIO_REQ ) {
+                String s = null;
+                try {
+                    // 同步方法，获取服务器端返回的流
+                    HttpUtils http = new HttpUtils();
+                    ResponseStream responseStream = http.sendSync(HttpRequest.HttpMethod.POST, url,
+                            params);
+                    byte out[] = new byte[(int)(responseStream.getContentLength())];
+                    responseStream.read(out);
 
-                        @Override
-                        public void onStart() {
+                    Log.d("HTTP", "httpReqRsp  stream data return  "  );
+                    reponse.AddAProperty(new Property("HTTP_REQ_RSP", out));
+                    reponse.AddAProperty(new Property("STATUS", "0"));
+                    MainControl.getInstance().sendMessage(msg_rsp);
 
-                        }
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                    reponse.AddAProperty(new Property("HTTP_REQ_RSP", "error"));
+                    reponse.AddAProperty(new Property("STATUS", "2"));
+                    MainControl.getInstance().sendMessage(msg_rsp);
+                }
+            }
+            else
+            {
 
-                        @Override
-                        public void onLoading(long total, long current, boolean isUploading) {
-                            if (isUploading) {
+                HttpUtils http = new HttpUtils();
+                http.send(HttpRequest.HttpMethod.POST, url, params,
+                        new RequestCallBack<String>() {
 
-                            } else {
+                            @Override
+                            public void onStart() {
 
                             }
-                        }
 
-                        @Override
-                        public void onSuccess(ResponseInfo<String> responseInfo) {
-                            //ExpCommandE
-                            Log.d("HTTP", "httpReqRsp  result: " + responseInfo.result);
-                            reponse.AddAProperty(new Property("HTTP_REQ_RSP", responseInfo.result));
-                            reponse.AddAProperty(new Property("STATUS", "0"));
-                            MainControl.getInstance().sendMessage(msg_rsp);
+                            @Override
+                            public void onLoading(long total, long current, boolean isUploading) {
+                                if (isUploading) {
+
+                                } else {
+
+                                }
+                            }
+
+                            @Override
+                            public void onSuccess(ResponseInfo<String> responseInfo) {
+                                //ExpCommandE
+                                Log.d("HTTP", "httpReqRsp  result: " + responseInfo.result);
+                                reponse.AddAProperty(new Property("HTTP_REQ_RSP", responseInfo.result));
+                                reponse.AddAProperty(new Property("STATUS", "0"));
+                                MainControl.getInstance().sendMessage(msg_rsp);
 
 
-                        }
+                            }
 
-                        @Override
-                        public void onFailure(HttpException error, String msg) {
-                            Log.d("HTTP", "httpReqRsp : error");
-                            reponse.AddAProperty(new Property("HTTP_REQ_RSP", "error"));
-                            reponse.AddAProperty(new Property("STATUS", "1"));
-                            MainControl.getInstance().sendMessage(msg_rsp);
-                        }
-                    });
+                            @Override
+                            public void onFailure(HttpException error, String msg) {
+                                Log.d("HTTP", "httpReqRsp : error");
+                                reponse.AddAProperty(new Property("HTTP_REQ_RSP", "error"));
+                                reponse.AddAProperty(new Property("STATUS", "1"));
+                                MainControl.getInstance().sendMessage(msg_rsp);
+                            }
+                        });
+            }
         }
         else
         {

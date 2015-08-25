@@ -94,6 +94,7 @@ public class MainActivity extends zdnBasicActivity implements navigationFragment
 		me = this; // 
 	}
 
+	public final int LOCATION_REQ_PERIOD	= 1000*60 ; //1 MINUTE
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -135,7 +136,7 @@ public class MainActivity extends zdnBasicActivity implements navigationFragment
         option.setOpenGps(true); // 打开GPS
         option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);// 设置定位模式
         option.setCoorType("bd09ll"); // 返回的定位结果是百度经纬度,默认值gcj02
-        option.setScanSpan(5000); // 设置发起定位请求的间隔时间为5000ms
+        option.setScanSpan( LOCATION_REQ_PERIOD ); // 设置发起定位请求的间隔时间为5000ms
         option.setIsNeedAddress(true); // 返回的定位结果包含地址信息
         option.setNeedDeviceDirect(true); // 返回的定位结果包含手机机头的方向
 
