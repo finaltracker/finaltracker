@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="satelliteMenu">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/app/libs/satelliteMenu.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

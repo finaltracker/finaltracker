@@ -90,6 +90,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="jpush-sdk-release1.6.4" level="project" />
     <orderEntry type="library" exported="" name="appcompat-v7-22.1.0" level="project" />
+    <orderEntry type="library" exported="" name="satelliteMenu" level="project" />
     <orderEntry type="library" exported="" name="xUtils-2.6.14" level="project" />
     <orderEntry type="library" exported="" name="GifView" level="project" />
     <orderEntry type="library" exported="" name="eventbus" level="project" />

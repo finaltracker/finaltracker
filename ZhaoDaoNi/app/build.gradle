@@ -32,4 +32,6 @@ dependencies {
     compile files('libs/BaiduLBS_Android.jar')
     compile files('libs/galaxy_mini.jar')
     compile files('libs/GifView.jar')
+    compile files('libs/satelliteMenu.jar')
+
 }
