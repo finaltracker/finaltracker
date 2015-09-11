@@ -24,9 +24,9 @@
         android:id="@+id/popMenu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        sat:satelliteDistance="270dp"
+        sat:satelliteDistance="100dp"
         sat:mainImage="@drawable/main"
-        sat:totalSpacingDegree="90"
+        sat:totalSpacingDegree="120"
         sat:closeOnClick="true"
         sat:expandDuration="200"
         android:layout_alignParentBottom="true"/>

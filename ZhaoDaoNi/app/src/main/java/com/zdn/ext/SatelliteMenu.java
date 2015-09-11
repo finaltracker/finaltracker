@@ -556,6 +556,16 @@ public class SatelliteMenu extends FrameLayout {
 			}
 		};
 	}
+
+	public int getMainViewWidth()
+	{
+		return imgMain.getWidth();
+	}
+
+	public int getMainViewHight()
+	{
+		return imgMain.getHeight();
+	}
 /*
 	@Override
 	public boolean dispatchTouchEvent(MotionEvent ev) {

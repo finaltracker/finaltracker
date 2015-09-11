@@ -73,7 +73,6 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
     private recentChatAdapter m_recentChatAdapt;
     MainActivity.MyOnTouchListener myOnTouchListener;
     private GestureDetector mGestureDetector;
-    friendTeamData  recentChatTeamData = null;
     friendTeamDataManager.friendsMemberChange fmc = null;
     friendMemberData.gpsChange gpsc = null;
 
@@ -382,8 +381,8 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
         @Override
         public void onLongPress(MotionEvent ev) {
             ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) m_SatelliteMenu.getLayoutParams();
-            lp.leftMargin = (int)(ev.getRawX());
-            lp.bottomMargin = OSUtils.getScreenHeight() - (int)ev.getRawY();
+            lp.leftMargin = (int)(ev.getRawX()) - m_SatelliteMenu.getMainViewWidth()/2;
+            lp.bottomMargin = OSUtils.getScreenHeight() - (int)ev.getRawY() - m_SatelliteMenu.getMainViewHight()/2;
             m_SatelliteMenu.setLayoutParams(lp);
 
             Log.d("onLongPress",ev.toString());
