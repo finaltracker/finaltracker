@@ -44,6 +44,7 @@ public class SatelliteMenu extends FrameLayout {
 	private Animation mainRotateLeft;
 
 	private ImageView imgMain;
+	private  boolean mainImageHaveAnimation = false;
 	private SateliteClickedListener itemClickedListener;
 	private InternalSatelliteOnClickListener internalItemClickListener;
 
@@ -93,6 +94,8 @@ public class SatelliteMenu extends FrameLayout {
 			totalSpacingDegree = typedArray.getFloat(R.styleable.SatelliteMenu_totalSpacingDegree, DEFAULT_TOTAL_SPACING_DEGREES);
 			closeItemsOnClick = typedArray.getBoolean(R.styleable.SatelliteMenu_closeOnClick, DEFAULT_CLOSE_ON_CLICK);
 			expandDuration = typedArray.getInt(R.styleable.SatelliteMenu_expandDuration, DEFAULT_EXPAND_DURATION);
+			int mainImageId = typedArray.getResourceId(R.styleable.SatelliteMenu_mainImage, R.drawable.axh);
+			this.setMainImage(mContext.getResources().getDrawable(mainImageId));
 			//float satelliteDistance = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 170, getResources().getDisplayMetrics());
 			typedArray.recycle();
 		}
@@ -135,12 +138,18 @@ public class SatelliteMenu extends FrameLayout {
 	private void onClick() {
 		if (plusAnimationActive.compareAndSet(false, true)) {
 			if (!rotated) {
-				imgMain.startAnimation(mainRotateLeft);
+				if( mainImageHaveAnimation )
+				{
+					imgMain.startAnimation(mainRotateLeft);
+				}
 				for (SatelliteMenuItem item : menuItems) {
 					item.getView().startAnimation(item.getOutAnimation());
 				}
 			} else {
-				imgMain.startAnimation(mainRotateRight);
+				if( mainImageHaveAnimation )
+				{
+					imgMain.startAnimation(mainRotateRight);
+				}
 				for (SatelliteMenuItem item : menuItems) {
 					item.getView().startAnimation(item.getInAnimation());
 				}
@@ -557,6 +566,10 @@ public class SatelliteMenu extends FrameLayout {
 		};
 	}
 
+	public void setMainImageHaveAnimation( boolean enable )
+	{
+		this.mainImageHaveAnimation = enable;
+	}
 	public int getMainViewWidth()
 	{
 		return imgMain.getWidth();

@@ -35,6 +35,8 @@ public class InternetComponent implements ServerInterfaceCmd {
 	static public String WEBSITE_ADDRESS_LOCATION_UPDATE = WEBSITE_ADDRESS_BASE + "feed/locate_upload/";
 	static public String WEBSITE_ADDRESS_LOCATION_GET = WEBSITE_ADDRESS_BASE + "feed/locate_get/";
 	static public String WEBSITE_ADDRESS_DOWNLOAD_AUDIO = WEBSITE_ADDRESS_BASE + "tips/dload_audio/";
+	static public String WEBSITE_ADDRESS_START_BALL_GAME = WEBSITE_ADDRESS_BASE + "ball/start/";
+	static public String WEBSITE_ADDRESS_GET_BALL_LOCATION = WEBSITE_ADDRESS_BASE + "ball/locate_get/";
 	
 	public ThreadTaskHandler handler;
 	
@@ -241,6 +243,28 @@ public class InternetComponent implements ServerInterfaceCmd {
 	@Override
 	public void downLoadAudio(CommandE e) {
 		Log.i( this.getClass().getSimpleName() , "call dloadAudio");
+		Message msg = handler.obtainMessage();
+		msg.what = ThreadTaskHandler.SEND_MESSAGE_TO_SERVER;
+
+		msg.obj = e;   //
+
+		handler.sendMessage(msg);
+	}
+
+	@Override
+	public void startBallGame(CommandE e) {
+		Log.i( this.getClass().getSimpleName() , "call startBallGame");
+		Message msg = handler.obtainMessage();
+		msg.what = ThreadTaskHandler.SEND_MESSAGE_TO_SERVER;
+
+		msg.obj = e;   //
+
+		handler.sendMessage(msg);
+	}
+
+	@Override
+	public void getBallLocation(CommandE e) {
+		Log.i( this.getClass().getSimpleName() , "call getBallLocation");
 		Message msg = handler.obtainMessage();
 		msg.what = ThreadTaskHandler.SEND_MESSAGE_TO_SERVER;
 

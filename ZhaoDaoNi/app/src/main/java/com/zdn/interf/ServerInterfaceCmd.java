@@ -49,4 +49,7 @@ public interface ServerInterfaceCmd {
 
 	public void downLoadAudio( CommandE e );
 
+	public void startBallGame( CommandE e );
+
+	public void getBallLocation( CommandE e );
 }

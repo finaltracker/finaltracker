@@ -704,17 +704,30 @@ public class MainControl extends HandlerThread {
             locationGetRspHandle(e);
         }
         break;
-		case EventDefine.DOWNLOAD_AUDIO_REQ:{
-			Log.d("MainControl", "DOWNLOAD_AUDIO_REQ: ");
-			mInternetCom.downLoadAudio(e);
+		case EventDefine.START_BALL_GAME_REQ:{
+			Log.d("MainControl", "START_BALL_GAME_REQ: ");
+			mInternetCom.startBallGame(e);
 
 		}
 		break;
-		case EventDefine.DOWNLOAD_AUDIO_RSP:{
-			Log.d("MainControl", "DOWNLOAD_AUDIO_RSP: ");
-			downLoadAudioRspHandle(e);
+		case EventDefine.START_BALL_GAME_RSP:{
+			Log.d("MainControl", "START_BALL_GAME_RSP: ");
+			startBallGameRspHandle(e);
 		}
 		break;
+
+		case EventDefine.GET_BALL_LOCATION_REQ:{
+			Log.d("MainControl", "GET_BALL_LOCATION_REQ: ");
+			mInternetCom.getBallLocation(e);
+
+		}
+		break;
+		case EventDefine.GET_BALL_LOCATION_RSP:{
+			Log.d("MainControl", "GET_BALL_LOCATION_RSP: ");
+			getBallLocationRspHandle(e);
+		}
+		break;
+
 
         default:
         break;
@@ -1006,6 +1019,16 @@ public class MainControl extends HandlerThread {
             e1.printStackTrace();
         }
     }
+
+	private void startBallGameRspHandle(CommandE e )
+	{
+
+	}
+
+	private void getBallLocationRspHandle(CommandE e )
+	{
+
+	}
 	@Override
 	public boolean quit() {
 
@@ -1227,6 +1250,40 @@ public class MainControl extends HandlerThread {
 		MainControl.getInstance().handler.sendMessage(m);
 
 	}
+
+	static public int  startBallGame( int type , String content ) {
+
+		CommandE e = InternetComponent.packA_CommonExpCommandE_ToServer(
+				EventDefine.START_BALL_GAME_REQ,
+				InternetComponent.WEBSITE_ADDRESS_START_BALL_GAME
+		);
+		//e.AddAProperty(new Property( "lat" , Double.toString(lat)));
+
+
+		Message m = MainControl.getInstance().handler.obtainMessage();
+		m.obj = e;   //
+
+		MainControl.getInstance().handler.sendMessage(m);
+
+		return 0;
+	}
+
+	static public void getBallLocation( int ballId ) {
+
+		CommandE e = InternetComponent.packA_CommonExpCommandE_ToServer(
+				EventDefine.GET_BALL_LOCATION_REQ,
+				InternetComponent.WEBSITE_ADDRESS_GET_BALL_LOCATION
+		);
+		//e.AddAProperty(new Property( "lat" , Double.toString(lat)));
+
+
+		Message m = MainControl.getInstance().handler.obtainMessage();
+		m.obj = e;   //
+
+		MainControl.getInstance().handler.sendMessage(m);
+
+	}
+
 
 	static public void sendMessageToServer( ZdnMessage sendMsg ,String targetTo ) {
 

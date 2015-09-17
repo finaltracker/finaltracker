@@ -24,9 +24,10 @@
         android:id="@+id/popMenu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="invisible"
         sat:satelliteDistance="100dp"
-        sat:mainImage="@drawable/main"
-        sat:totalSpacingDegree="120"
+        sat:mainImage="@drawable/axh"
+        sat:totalSpacingDegree="90"
         sat:closeOnClick="true"
         sat:expandDuration="200"
         android:layout_alignParentBottom="true"/>

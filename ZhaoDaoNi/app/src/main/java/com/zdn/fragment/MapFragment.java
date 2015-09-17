@@ -4,12 +4,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.GestureDetector;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -41,13 +40,13 @@ import com.zdn.activity.chatActivity;
 import com.zdn.adapter.recentChatAdapter;
 import com.zdn.basicStruct.coordinate;
 import com.zdn.basicStruct.friendMemberData;
-import com.zdn.basicStruct.friendTeamData;
 import com.zdn.basicStruct.friendTeamDataManager;
 import com.zdn.com.headerCtrl;
 import com.zdn.data.dataManager;
 import com.zdn.internet.InternetComponent;
 import com.zdn.jeo.friendLocationManage;
 import com.zdn.logic.MainControl;
+import com.zdn.util.CommonUtil;
 import com.zdn.util.OSUtils;
 
 import java.util.ArrayList;
@@ -79,6 +78,7 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
     private WindowManager.LayoutParams mWindowLayoutParams;
     private WindowManager mWindowManager;
     private SatelliteMenu m_SatelliteMenu = null;
+    private final int sateliteMenuOverAnimationPeriod = 500;
 
     private Map< String,Overlay> overlayMap = new HashMap();
 
@@ -238,22 +238,32 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
 
 
         m_SatelliteMenu  = (SatelliteMenu) rootView.findViewById(R.id.popMenu);
-
+        m_SatelliteMenu.setMainImageHaveAnimation(false);
 
 
 
         List<SatelliteMenuItem> items = new ArrayList<SatelliteMenuItem>();
-        items.add(new SatelliteMenuItem(1, R.drawable.ic_5));
-        items.add(new SatelliteMenuItem(2, R.drawable.ic_3));
-        items.add(new SatelliteMenuItem(3, R.drawable.ic_6));
+        items.add(new SatelliteMenuItem(1, R.drawable.time_space_ball));
+        items.add(new SatelliteMenuItem(2, R.drawable.time_space_ball));
+        items.add(new SatelliteMenuItem(3, R.drawable.time_space_ball));
         m_SatelliteMenu.addItems(items);
 
         m_SatelliteMenu.setOnItemClickedListener(new SatelliteMenu.SateliteClickedListener() {
 
             public void eventOccured(int id) {
                 Log.i("sat", "Clicked on " + id);
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        m_SatelliteMenu.setVisibility(View.INVISIBLE);
+                    }
+                }, sateliteMenuOverAnimationPeriod);
+
             }
         });
+
+
 
         super.onCreateView(inflater, container, savedInstanceState);
 
@@ -372,11 +382,13 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
         @Override
         public boolean onSingleTapUp(MotionEvent ev) {
             Log.d("onSingleTapUp", ev.toString());
+
             return false;
         }
+
         @Override
         public void onShowPress(MotionEvent ev) {
-            Log.d("onShowPress",ev.toString());
+            Log.d("onShowPress", ev.toString());
         }
         @Override
         public void onLongPress(MotionEvent ev) {
@@ -384,6 +396,8 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
             lp.leftMargin = (int)(ev.getRawX()) - m_SatelliteMenu.getMainViewWidth()/2;
             lp.bottomMargin = OSUtils.getScreenHeight() - (int)ev.getRawY() - m_SatelliteMenu.getMainViewHight()/2;
             m_SatelliteMenu.setLayoutParams(lp);
+            m_SatelliteMenu.setVisibility(View.VISIBLE);
+            m_SatelliteMenu.click();
 
             Log.d("onLongPress",ev.toString());
         }
@@ -424,44 +438,6 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
 
 
         return super.onTouch(v,event);
-    }
-
-
-    private void createSatelliteImage(  int downX, int downY) {
-        mWindowLayoutParams = new WindowManager.LayoutParams();
-        mWindowLayoutParams.format = PixelFormat.TRANSLUCENT; // 鍥剧墖涔嬪鐨勫叾浠栧湴鏂归�忔槑
-        mWindowLayoutParams.gravity = Gravity.TOP | Gravity.LEFT;
-        mWindowLayoutParams.x = downX  ;
-        mWindowLayoutParams.y = downY ;
-        mWindowLayoutParams.alpha = 0.55f; // 閫忔槑搴�
-        mWindowLayoutParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
-        mWindowLayoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
-        //mWindowLayoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
-
-        final Activity mActivity = getActivity();
-        m_SatelliteMenu = new SatelliteMenu(mActivity);
-
-        m_SatelliteMenu.setMainImage(getActivity().getResources().getDrawable(R.drawable.main));
-
-        m_SatelliteMenu.setSatelliteDistance(400);
-        m_SatelliteMenu.setTotalSpacingDegree(90);
-        List<SatelliteMenuItem> items = new ArrayList<SatelliteMenuItem>();
-        items.add(new SatelliteMenuItem(1, R.drawable.ic_5));
-        items.add(new SatelliteMenuItem(2, R.drawable.ic_3));
-        items.add(new SatelliteMenuItem(3, R.drawable.ic_6));
-        m_SatelliteMenu.addItems(items);
-
-        m_SatelliteMenu.setOnItemClickedListener(new SatelliteMenu.SateliteClickedListener() {
-
-            public void eventOccured(int id) {
-                Log.i("sat", "Clicked on " + id);
-            }
-        });
-
-        mWindowManager.addView(m_SatelliteMenu, mWindowLayoutParams);
-        mWindowManager.updateViewLayout(m_SatelliteMenu, mWindowLayoutParams);
-
-        m_SatelliteMenu.click();
     }
 
     /**
