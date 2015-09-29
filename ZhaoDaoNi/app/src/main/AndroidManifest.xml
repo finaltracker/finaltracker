@@ -66,6 +66,12 @@
 		<activity android:name="com.zdn.activity.CircleActivity"
 		    android:theme="@style/circle_bottom" >
         </activity>
+
+        <activity
+            android:name=".activity.StartTimeBallDialog"
+            android:theme="@style/AcivityDialogStyle" >
+        </activity>
+
         <activity
             android:name="com.zdn.cropimage.CropImage"></activity
             >

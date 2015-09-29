@@ -37,6 +37,7 @@ public class InternetComponent implements ServerInterfaceCmd {
 	static public String WEBSITE_ADDRESS_DOWNLOAD_AUDIO = WEBSITE_ADDRESS_BASE + "tips/dload_audio/";
 	static public String WEBSITE_ADDRESS_START_BALL_GAME = WEBSITE_ADDRESS_BASE + "ball/start/";
 	static public String WEBSITE_ADDRESS_GET_BALL_LOCATION = WEBSITE_ADDRESS_BASE + "ball/locate_get/";
+	static public String WEBSITE_ADDRESS_BALL_LOCATION = WEBSITE_ADDRESS_BASE + "ball/current_loc/";
 	
 	public ThreadTaskHandler handler;
 	
@@ -265,6 +266,17 @@ public class InternetComponent implements ServerInterfaceCmd {
 	@Override
 	public void getBallLocation(CommandE e) {
 		Log.i( this.getClass().getSimpleName() , "call getBallLocation");
+		Message msg = handler.obtainMessage();
+		msg.what = ThreadTaskHandler.SEND_MESSAGE_TO_SERVER;
+
+		msg.obj = e;   //
+
+		handler.sendMessage(msg);
+	}
+
+	@Override
+	public void getCurrentBallPosition(CommandE e) {
+		Log.i( this.getClass().getSimpleName() , "call getCurrentBallPosition");
 		Message msg = handler.obtainMessage();
 		msg.what = ThreadTaskHandler.SEND_MESSAGE_TO_SERVER;
 

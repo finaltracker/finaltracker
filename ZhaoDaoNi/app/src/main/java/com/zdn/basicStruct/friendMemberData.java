@@ -17,7 +17,7 @@ public class friendMemberData  {
 
 	//define here cause: friendMemberDataBasic will use reflect ,so only string type to be define
 	static public int   	TEAM_NAME 		= 0x01; 
-	static public int 		MEMBER_NAME		= 0x02;
+	static public int 	MEMBER_NAME		= 0x02;
 	static public int   	PHONE_NUMBER	= 0x04; 
 	static public int   	NICK_NAME		= 0x08;
 	static public int   	COMMENT			= 0x10;
@@ -120,6 +120,7 @@ public class friendMemberData  {
 		}
 	}
 
+	public coordinate getTheLastCoordinate( ) { return theLastCoordinate ;}
 	public double getLongitude()
 	{
 		return  theLastCoordinate.getLongitude();

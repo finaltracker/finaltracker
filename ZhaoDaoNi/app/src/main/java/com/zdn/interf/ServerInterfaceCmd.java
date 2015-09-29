@@ -52,4 +52,6 @@ public interface ServerInterfaceCmd {
 	public void startBallGame( CommandE e );
 
 	public void getBallLocation( CommandE e );
+
+	public void getCurrentBallPosition( CommandE e );
 }

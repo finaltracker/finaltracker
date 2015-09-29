@@ -8,12 +8,14 @@ import android.content.Context;
 
 import com.zdn.basicStruct.SelfMobileData;
 import com.zdn.basicStruct.friendTeamDataManager;
+import com.zdn.basicStruct.timeSpaceBallManager;
 
 public class dataManager {
 
 	static friendTeamDataManager   allFriend = null;  //friend list
 	static public Context mainContext = null;
 	static public SelfMobileData self = null; // myself info
+	static timeSpaceBallManager allBalls = null;
 	
 	public dataManager() {
 		// TODO Auto-generated constructor stub
@@ -25,6 +27,8 @@ public class dataManager {
 		allFriend = new friendTeamDataManager();
 		allFriend.constructTeamInfoFromDb( context );
 		self = new SelfMobileData();
+		allBalls = new timeSpaceBallManager();
+
 		self.init(context);
 	}
 	
@@ -32,7 +36,9 @@ public class dataManager {
 	{
 		return allFriend;
 	}
-	
+
+	static public timeSpaceBallManager getAllBallsList() { return allBalls; }
+
 	static public void updateFriendListFromServer( int update_type , JSONArray jason_friendList ,Context context )
 	{
 		if( jason_friendList == null ) return;

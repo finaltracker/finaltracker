@@ -17,6 +17,8 @@ import com.zdn.basicStruct.friendMemberData;
 import com.zdn.basicStruct.friendMemberDataBasic;
 import com.zdn.basicStruct.getMessageRspEvent;
 import com.zdn.basicStruct.networkStatusEvent;
+import com.zdn.basicStruct.timeSpaceBall;
+import com.zdn.basicStruct.timeSpaceBallManager;
 import com.zdn.chat.ZdnMessage;
 import com.zdn.data.dataManager;
 import com.zdn.event.EventDefine;
@@ -41,6 +43,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.List;
 
 public class MainControl extends HandlerThread {
 	Context mContext;
@@ -1022,11 +1025,71 @@ public class MainControl extends HandlerThread {
 
 	private void startBallGameRspHandle(CommandE e )
 	{
+		// addToMyBall's List
+		String rep = (String)e.GetPropertyContext("HTTP_REQ_RSP");
+		String status = (String)e.GetPropertyContext("STATUS");
 
+		if(  0 != Integer.parseInt(status))
+		{
+			Log.e(this.getClass().getSimpleName(), "get tip status = " + status);
+			return ;
+		}
+
+		JSONObject  json_obj = null;
+		try {
+			timeSpaceBall tsb = (timeSpaceBall)((ExpCommandE)e).getUserData();
+			json_obj = new JSONObject(rep);
+			String BallId = getStringFromJasonObj( json_obj ,"ball_id");
+			tsb.setBallId( BallId);
+			dataManager.getAllBallsList().addA_TimeSpaceBall(tsb);
+
+
+		}
+		catch (JSONException e1) {
+
+			Log.d("MainControl" , "startBallGameRsp error: " + e1.getMessage() );
+			e1.printStackTrace();
+		}
 	}
 
 	private void getBallLocationRspHandle(CommandE e )
 	{
+		String rep = (String)e.GetPropertyContext("HTTP_REQ_RSP");
+		String status = (String)e.GetPropertyContext("STATUS");
+
+		if(  0 != Integer.parseInt(status))
+		{
+			Log.e(this.getClass().getSimpleName(), "get tip status = " + status);
+			return ;
+		}
+
+		JSONObject  json_obj = null;
+		try {
+			json_obj = new JSONObject(rep);
+
+			JSONArray ballsArray = json_obj.getJSONArray("balls");
+			timeSpaceBallManager allBall = dataManager.getAllBallsList();
+			for( int i = 0 ; i < ballsArray.length() ; i++ ) {
+				JSONObject obj;
+				obj = (JSONObject) ballsArray.get(i);
+
+				String user = getStringFromJasonObj(obj, "user");/* the mobile that register */
+				String ball_id = getStringFromJasonObj(obj, "ball_id");
+				String type = getStringFromJasonObj(obj, "type");
+				String content = getStringFromJasonObj(obj,"content");
+				String current_lat = getStringFromJasonObj(obj, "current_lat");
+				String current_lng = getStringFromJasonObj(obj, "current_lng");
+
+				allBall.addA_TimeSpaceBall(new timeSpaceBall(user, ball_id, current_lat, current_lng, type, content));
+
+			}
+
+		} catch (JSONException e1) {
+
+			Log.d("MainControl" , "locationGetRsp error: " + e1.getMessage() );
+			e1.printStackTrace();
+		}
+
 
 	}
 	@Override
@@ -1251,13 +1314,32 @@ public class MainControl extends HandlerThread {
 
 	}
 
-	static public int  startBallGame( int type , String content ) {
+	static public timeSpaceBall startBallGame( int type , String content , String duration , String endLat , String endLng ) {
 
-		CommandE e = InternetComponent.packA_CommonExpCommandE_ToServer(
+		coordinate coord = dataManager.self.selfInfo.getTheLastCoordinate();
+
+		timeSpaceBall tsb = new timeSpaceBall( Integer.toString(type));
+		tsb.setMobile(dataManager.self.preferencesPara.getPhoneNumber());
+		tsb.setLat(Double.toString(coord.getLatitude()));
+		tsb.setLng(Double.toString(coord.getLongitude()));
+		tsb.setContent(content);
+
+
+
+		ExpCommandE e = InternetComponent.packA_CommonExpCommandE_ToServer(
 				EventDefine.START_BALL_GAME_REQ,
 				InternetComponent.WEBSITE_ADDRESS_START_BALL_GAME
 		);
-		//e.AddAProperty(new Property( "lat" , Double.toString(lat)));
+		e.AddAProperty(new Property( "type" , "0")); // TODO
+		e.AddAProperty(new Property( "content" , content));
+		e.AddAProperty(new Property( "duration" , duration));
+
+		e.AddAProperty(new Property( "begin_lat" , Double.toString(coord.getLatitude())));
+		e.AddAProperty(new Property( "begin_lng" , Double.toString( coord.getLongitude())));
+		e.AddAProperty(new Property("end_lat", endLat));
+		e.AddAProperty(new Property("end_lng", endLng));
+
+		e.setUserData(tsb );
 
 
 		Message m = MainControl.getInstance().handler.obtainMessage();
@@ -1265,17 +1347,26 @@ public class MainControl extends HandlerThread {
 
 		MainControl.getInstance().handler.sendMessage(m);
 
-		return 0;
+
+		return tsb;
 	}
 
-	static public void getBallLocation( int ballId ) {
+	static public void getBallLocationDefault( String musk )
+	{
+
+		MainControl.getBallLocation( musk, Double.toString( dataManager.self.selfInfo.getLatitude()),Double.toString( dataManager.self.selfInfo.getLongitude()), Long.toString(timeSpaceBallManager.ALL_BALL_RANGER));
+	}
+
+	static public void getBallLocation( String mask, String lat , String lng , String distance ) {
 
 		CommandE e = InternetComponent.packA_CommonExpCommandE_ToServer(
 				EventDefine.GET_BALL_LOCATION_REQ,
 				InternetComponent.WEBSITE_ADDRESS_GET_BALL_LOCATION
 		);
-		//e.AddAProperty(new Property( "lat" , Double.toString(lat)));
-
+		e.AddAProperty(new Property("mask",mask));
+		e.AddAProperty(new Property( "lat" , lat));
+		e.AddAProperty(new Property( "lng" , lng));
+		e.AddAProperty(new Property( "distance" , distance));
 
 		Message m = MainControl.getInstance().handler.obtainMessage();
 		m.obj = e;   //
@@ -1284,6 +1375,24 @@ public class MainControl extends HandlerThread {
 
 	}
 
+	static public void getBallPosition( List<String> ballIdList )
+	{
+		CommandE e = InternetComponent.packA_CommonExpCommandE_ToServer(
+				EventDefine.GET_BALL_LOCATION_REQ,
+				InternetComponent.WEBSITE_ADDRESS_BALL_LOCATION
+		);
+		for ( String id: ballIdList	 )
+		{
+			//e.AddAProperty(new Property( "lat" , lat));
+		}
+
+
+
+		Message m = MainControl.getInstance().handler.obtainMessage();
+		m.obj = e;   //
+
+		MainControl.getInstance().handler.sendMessage(m);
+	}
 
 	static public void sendMessageToServer( ZdnMessage sendMsg ,String targetTo ) {
 

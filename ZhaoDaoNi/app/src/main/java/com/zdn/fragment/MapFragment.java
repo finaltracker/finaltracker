@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -36,17 +37,19 @@ import com.lidroid.xutils.bitmap.callback.BitmapLoadCallBack;
 import com.lidroid.xutils.bitmap.callback.BitmapLoadFrom;
 import com.zdn.R;
 import com.zdn.activity.MainActivity;
+import com.zdn.activity.StartTimeBallDialog;
 import com.zdn.activity.chatActivity;
 import com.zdn.adapter.recentChatAdapter;
 import com.zdn.basicStruct.coordinate;
 import com.zdn.basicStruct.friendMemberData;
 import com.zdn.basicStruct.friendTeamDataManager;
+import com.zdn.basicStruct.timeSpaceBall;
+import com.zdn.basicStruct.timeSpaceBallManager;
 import com.zdn.com.headerCtrl;
 import com.zdn.data.dataManager;
 import com.zdn.internet.InternetComponent;
 import com.zdn.jeo.friendLocationManage;
 import com.zdn.logic.MainControl;
-import com.zdn.util.CommonUtil;
 import com.zdn.util.OSUtils;
 
 import java.util.ArrayList;
@@ -79,8 +82,18 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
     private WindowManager mWindowManager;
     private SatelliteMenu m_SatelliteMenu = null;
     private final int sateliteMenuOverAnimationPeriod = 500;
+    private BaiduMap mBaidumap = null;
+    /*              <phone  overlay> */
+    private Map< String,Overlay> friendOverlayMap = new HashMap();
+    /*              <Id    overlay> */
+    private Map<String,Overlay> timeSpaceBallMap = new HashMap<String,Overlay>();
 
-    private Map< String,Overlay> overlayMap = new HashMap();
+    private Point lastLongPressPosition = new Point( 0 , 0 );
+
+    private timeSpaceBallManager.ballStateChanged ballStateChangedListener = null;
+
+
+
 
     public MapFragment()
     {
@@ -107,6 +120,73 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
 
         //在使用SDK各组件之前初始化context信息，传入ApplicationContext
         //注意该方法要再setContentView方法之前实现
+        ballStateChangedListener = new timeSpaceBallManager.ballStateChanged(){
+
+            @Override
+            public void addA_Ball(timeSpaceBall add) {
+
+                BitmapDescriptor mBitMap = BitmapDescriptorFactory.fromResource(R.drawable.timespaceball );
+
+//构建MarkerOption，用于在地图上添加Marker
+                OverlayOptions option = new MarkerOptions()
+                        .position( new LatLng(Double.valueOf(add.getLng()) , Double.valueOf(add.getLat()) ))
+                        .icon(mBitMap);
+//在地图上添加Marker，并显示
+
+                Overlay ov = timeSpaceBallMap.get( add.getBallId() );
+
+                if( ov != null )
+                {
+                    ov.remove();
+                }
+
+                BaiduMap mBaidumap = mMapView.getMap();
+
+                Overlay mOverLay = null;
+                try {
+                    mOverLay = mBaidumap.addOverlay(option);
+                } catch (Exception e) {
+                    Log.d(this.getClass().getSimpleName(), "overlay.put error");
+                }
+
+                timeSpaceBallMap.put( add.getBallId()  , mOverLay );
+
+            }
+
+            @Override
+            public void removeA_Ball(timeSpaceBall add) {
+                Overlay ov = timeSpaceBallMap.get( add.getBallId() );
+
+                if( ov != null )
+                {
+                    ov.remove();
+                }
+                timeSpaceBallMap.remove(  add.getBallId() );
+            }
+
+            @Override
+            public void BallPositionMove(timeSpaceBall ball) {
+                removeA_Ball( ball );
+                addA_Ball( ball );
+            }
+
+            @Override
+            public void removeAll() {
+                for (  String key : timeSpaceBallMap.keySet()
+                     ) {
+                   if( timeSpaceBallMap.get(key) != null )
+                    {
+                        timeSpaceBallMap.get(key).remove();
+                    }
+                    timeSpaceBallMap.remove( key );
+                }
+            }
+
+            @Override
+            public void centerChanged( coordinate newCenter ) {
+            MainControl.getBallLocation( "3", Double.toString( newCenter.getLatitude()),Double.toString( newCenter.getLongitude()), Long.toString(timeSpaceBallManager.ALL_BALL_RANGER));
+            }
+        };
 
     }
 
@@ -129,8 +209,10 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
             back_button.setVisibility(View.INVISIBLE );
         }
 
-        final BaiduMap mBaidumap = mMapView.getMap();
-        mBaidumap.setTrafficEnabled( false );
+        mBaidumap = mMapView.getMap();
+        mBaidumap.setTrafficEnabled(false);
+        dataManager.getAllBallsList().registBallStateChangedListener(ballStateChangedListener);
+
 
 //设定中心点坐标
 
@@ -206,6 +288,7 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
                             //是自己，发送位置信息到server
 
                             MainControl.locationUpdate(ufmd.getLatitude(), ufmd.getLongitude());
+                            dataManager.getAllBallsList().updateCenterOfBalls(gps);
                         }
                         if( MapFragment.this.getActivity() != null )
                         {
@@ -219,6 +302,7 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
                 fmd.registgpsChangeListener(gpsc);
 
                 friendLocationManage.periodRequiredStart();
+                timeSpaceBallManager.periodRequiredStart();
 
             }
 
@@ -226,7 +310,7 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
             @Override
             public void removeA_Friend(friendMemberData fmd) {
 
-                Overlay ov = overlayMap.remove(fmd.basic.getPhoneNumber() );
+                Overlay ov = friendOverlayMap.remove(fmd.basic.getPhoneNumber() );
                 fmd.unRegistgpsChangeListener( gpsc );
                 if(ov!=null)
                 {
@@ -253,13 +337,29 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
             public void eventOccured(int id) {
                 Log.i("sat", "Clicked on " + id);
 
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        m_SatelliteMenu.setVisibility(View.INVISIBLE);
-                    }
-                }, sateliteMenuOverAnimationPeriod);
+                if( id == 3 ) // 退出
+                {
+                    m_SatelliteMenu.setVisibility(View.INVISIBLE);
+                }
+                else
+                {
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            m_SatelliteMenu.setVisibility(View.INVISIBLE);
 
+                            Intent intent=new Intent();
+                            intent.setClass(MapFragment.this.getActivity(), StartTimeBallDialog.class);
+                            Bundle bundle=new Bundle();
+                            LatLng screenPoint = mBaidumap.getProjection().fromScreenLocation(lastLongPressPosition );
+
+                            bundle.putString("TargetLat" , Double.toString(screenPoint.latitude) );
+                            bundle.putString("TargetLng", Double.toString(screenPoint.longitude) );
+                            intent.putExtras(bundle);
+                            MapFragment.this.startActivityForResult(intent, 0);//这里采用startActivityForResult来做跳转，此处的0为一个依据，可以写其他的值，但一定要>=0
+                        }
+                    }, sateliteMenuOverAnimationPeriod);
+                }
             }
         });
 
@@ -333,11 +433,13 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
         Log.d(this.getClass().getSimpleName(), "onDestroyView");
 
         friendLocationManage.stopRequireGeo();
-
+        timeSpaceBallManager.stopRequireTimeSpaceBallPosition();
 
         //在activity执行onDestroy时执行mMapView.onDestroy()，实现地图生命周期管理
-        overlayMap.clear();
+        friendOverlayMap.clear();
+        timeSpaceBallMap.clear();
         dataManager.getFrilendList().unRegistFriendMemberChangeListener(fmc);
+        dataManager.getAllBallsList().ungistBallStateChangedListener(ballStateChangedListener);
         mMapView.onDestroy();
         mMapView = null;
     }
@@ -393,8 +495,12 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
         @Override
         public void onLongPress(MotionEvent ev) {
             ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) m_SatelliteMenu.getLayoutParams();
+            lastLongPressPosition.x = (int)(ev.getRawX()) ;
+            lastLongPressPosition.y = (int)ev.getRawY() ;
             lp.leftMargin = (int)(ev.getRawX()) - m_SatelliteMenu.getMainViewWidth()/2;
             lp.bottomMargin = OSUtils.getScreenHeight() - (int)ev.getRawY() - m_SatelliteMenu.getMainViewHight()/2;
+
+
             m_SatelliteMenu.setLayoutParams(lp);
             m_SatelliteMenu.setVisibility(View.VISIBLE);
             m_SatelliteMenu.click();
@@ -475,7 +581,7 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
                 .icon(mBitMap);
 //在地图上添加Marker，并显示
 
-        Overlay ov = overlayMap.get( localFmd.basic.getPhoneNumber() );
+        Overlay ov = friendOverlayMap.get( localFmd.basic.getPhoneNumber() );
 
         if( ov != null )
         {
@@ -492,7 +598,7 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
             try {
                 mOverLay = mBaidumap.addOverlay(option);
             } catch (Exception e) {
-                Log.d(this.getClass().getSimpleName(), "overlayMap.put error");
+                Log.d(this.getClass().getSimpleName(), "overlay.put error");
             }
             Bundle mBundle = new Bundle();
             mBundle.putString("TeamName", localFmd.basic.getTeamName());
@@ -500,7 +606,7 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
             mOverLay.setExtraInfo(mBundle);
 
 
-            overlayMap.put(localFmd.basic.getPhoneNumber(), mOverLay);
+            friendOverlayMap.put(localFmd.basic.getPhoneNumber(), mOverLay);
 
 
         }
@@ -512,5 +618,23 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
     }
     };
 
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) { //resultCode为回传的标记，我在B中回传的是RESULT_OK
+            case 0: // StartTimeBallDialog return
+                if( resultCode == 1 )
+                { // make a time ball
+                    Bundle targetBundle = data.getExtras();
 
+                     MainControl.startBallGame( 0 , targetBundle.getString("content"),targetBundle.getString("duration"),targetBundle.getString("TargetLat"), targetBundle.getString("TargetLng") );
+
+                }
+                else
+                {
+                    //abort start a time ball
+                }
+                break;
+            default:
+                break;
+        }
+    }
 }
