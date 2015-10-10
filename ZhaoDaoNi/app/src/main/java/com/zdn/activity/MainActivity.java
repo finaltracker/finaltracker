@@ -10,6 +10,7 @@ import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
+import com.baidu.mapapi.model.LatLng;
 import com.qq.test.SDManager;
 import com.zdn.R;
 
@@ -34,6 +35,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -509,4 +511,6 @@ public class MainActivity extends zdnBasicActivity implements navigationFragment
 	public interface MyOnTouchListener {
 		public boolean onTouch(MotionEvent ev);
 	}
+
+
 }

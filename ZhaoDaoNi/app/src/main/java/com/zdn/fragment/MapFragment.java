@@ -82,7 +82,7 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
     private WindowManager mWindowManager;
     private SatelliteMenu m_SatelliteMenu = null;
     private final int sateliteMenuOverAnimationPeriod = 500;
-    private BaiduMap mBaidumap = null;
+    static private BaiduMap mBaidumap = null;
     /*              <phone  overlay> */
     private Map< String,Overlay> friendOverlayMap = new HashMap();
     /*              <Id    overlay> */
@@ -93,7 +93,13 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
     private timeSpaceBallManager.ballStateChanged ballStateChangedListener = null;
 
 
+    private double initLat = 31.10;
+    private double initLng  = 121.006983;
+    private static double centerLat = 0;
+    private static double centerLng = 0;
 
+    private static List<BaiduMap.OnMapStatusChangeListener> msclList = new ArrayList<BaiduMap.OnMapStatusChangeListener>();
+    private static List<BaiduMap.OnMapLoadedCallback> mlcbList = new ArrayList<BaiduMap.OnMapLoadedCallback>();
 
     public MapFragment()
     {
@@ -106,6 +112,7 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
         super(msc, mainActivityFragmentBase.MAP_FRAGMENT);
 
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -129,7 +136,7 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
 
 //构建MarkerOption，用于在地图上添加Marker
                 OverlayOptions option = new MarkerOptions()
-                        .position( new LatLng(Double.valueOf(add.getLng()) , Double.valueOf(add.getLat()) ))
+                        .position( new LatLng(Double.valueOf(add.getLat()) , Double.valueOf(add.getLng()) ))
                         .icon(mBitMap);
 //在地图上添加Marker，并显示
 
@@ -172,14 +179,15 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
 
             @Override
             public void removeAll() {
-                for (  String key : timeSpaceBallMap.keySet()
-                     ) {
-                   if( timeSpaceBallMap.get(key) != null )
+                for ( Overlay ov : timeSpaceBallMap.values() )
+                {
+                    if( ov != null )
                     {
-                        timeSpaceBallMap.get(key).remove();
+                        ov.remove();
                     }
-                    timeSpaceBallMap.remove( key );
                 }
+                timeSpaceBallMap.clear();
+
             }
 
             @Override
@@ -216,10 +224,10 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
 
 //设定中心点坐标
 
-        LatLng cenpt = new LatLng(31.10,121.006983);
+        LatLng initShowCentre = new LatLng(initLat,initLng);
         //定义地图状态
         MapStatus mMapStatus = new MapStatus.Builder()
-                .target(cenpt)
+                .target(initShowCentre)
                 .zoom(10)
                 .build();
         //定义MapStatusUpdate对象，以便描述地图状态将要发生的变化
@@ -302,7 +310,7 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
                 fmd.registgpsChangeListener(gpsc);
 
                 friendLocationManage.periodRequiredStart();
-                timeSpaceBallManager.periodRequiredStart();
+
 
             }
 
@@ -337,24 +345,22 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
             public void eventOccured(int id) {
                 Log.i("sat", "Clicked on " + id);
 
-                if( id == 3 ) // 退出
+                if (id == 3) // 退出
                 {
                     m_SatelliteMenu.setVisibility(View.INVISIBLE);
-                }
-                else
-                {
+                } else {
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
                             m_SatelliteMenu.setVisibility(View.INVISIBLE);
 
-                            Intent intent=new Intent();
+                            Intent intent = new Intent();
                             intent.setClass(MapFragment.this.getActivity(), StartTimeBallDialog.class);
-                            Bundle bundle=new Bundle();
-                            LatLng screenPoint = mBaidumap.getProjection().fromScreenLocation(lastLongPressPosition );
+                            Bundle bundle = new Bundle();
+                            LatLng screenPoint = mBaidumap.getProjection().fromScreenLocation(lastLongPressPosition);
 
-                            bundle.putString("TargetLat" , Double.toString(screenPoint.latitude) );
-                            bundle.putString("TargetLng", Double.toString(screenPoint.longitude) );
+                            bundle.putString("TargetLat", Double.toString(screenPoint.latitude));
+                            bundle.putString("TargetLng", Double.toString(screenPoint.longitude));
                             intent.putExtras(bundle);
                             MapFragment.this.startActivityForResult(intent, 0);//这里采用startActivityForResult来做跳转，此处的0为一个依据，可以写其他的值，但一定要>=0
                         }
@@ -363,7 +369,61 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
             }
         });
 
+        mBaidumap.setOnMapLoadedCallback(new BaiduMap.OnMapLoadedCallback() {
+            @Override
+            public void onMapLoaded() {
+                centerLat = initLat;
+                centerLng = initLng;
 
+                for ( BaiduMap.OnMapLoadedCallback mlcb : mlcbList
+                        )
+                {
+                    mlcb.onMapLoaded();
+                }
+
+            }
+        });
+        mBaidumap.setOnMapStatusChangeListener(new BaiduMap.OnMapStatusChangeListener() {
+            /**
+             * 手势操作地图，设置地图状态等操作导致地图状态开始改变。
+             * @param status 地图状态改变开始时的地图状态
+             */
+            public void onMapStatusChangeStart(MapStatus status) {
+                for ( BaiduMap.OnMapStatusChangeListener msc : msclList
+                     )
+                {
+                    msc.onMapStatusChangeStart( status );
+                }
+            }
+
+            /**
+             * 地图状态变化中
+             * @param status 当前地图状态
+             */
+            public void onMapStatusChange(MapStatus status) {
+                for ( BaiduMap.OnMapStatusChangeListener msc : msclList
+                        )
+                {
+                    msc.onMapStatusChange( status );
+                }
+            }
+
+            /**
+             * 地图状态改变结束
+             * @param status 地图状态改变结束后的地图状态
+             */
+            public void onMapStatusChangeFinish(MapStatus status) {
+                LatLng ll = status.target;
+                centerLat = ll.latitude;
+                centerLng = ll.longitude;
+                for ( BaiduMap.OnMapStatusChangeListener msc : msclList
+                        )
+                {
+                    msc.onMapStatusChangeFinish(status);
+                }
+                Log.d("map change", "sts ch fs:" + centerLat + "," + centerLng + "");
+            }
+        });
 
         super.onCreateView(inflater, container, savedInstanceState);
 
@@ -433,7 +493,7 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
         Log.d(this.getClass().getSimpleName(), "onDestroyView");
 
         friendLocationManage.stopRequireGeo();
-        timeSpaceBallManager.stopRequireTimeSpaceBallPosition();
+        timeSpaceBallManager.periodRequireStop();
 
         //在activity执行onDestroy时执行mMapView.onDestroy()，实现地图生命周期管理
         friendOverlayMap.clear();
@@ -637,4 +697,26 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
                 break;
         }
     }
+    static public LatLng getScreenCentreLatLng() {
+        return new LatLng( centerLat , centerLng );
+    }
+
+    static public void registOnMapStatusChangeListener( BaiduMap.OnMapStatusChangeListener mscl )
+    {
+        msclList.add( mscl );
+    }
+    static public void unregistOnMapStatusChangeListener( BaiduMap.OnMapStatusChangeListener mscl )
+    {
+        msclList.remove(mscl);
+    }
+
+    static public void registOnMapLoadedCallback( BaiduMap.OnMapLoadedCallback mlcb )
+    {
+        mlcbList.add( mlcb );
+    }
+    static public void unregisOnMapLoadedCallback( BaiduMap.OnMapLoadedCallback mlcb )
+    {
+        mlcbList.remove(mlcb);
+    }
+
 }

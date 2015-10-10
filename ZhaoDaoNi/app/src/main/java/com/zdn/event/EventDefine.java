@@ -30,7 +30,7 @@ public class EventDefine {
 	public static final int LOCATION_GET_RSP		= LOCATION_GET_REQ+1;
 	public static final int DOWNLOAD_AUDIO_REQ		= LOCATION_GET_RSP+1;
 	public static final int DOWNLOAD_AUDIO_RSP		= DOWNLOAD_AUDIO_REQ+1;
-	public static final int START_BALL_GAME_REQ		= DOWNLOAD_AUDIO_RSP+1;
+	public static final int START_BALL_GAME_REQ		= DOWNLOAD_AUDIO_RSP+1;//30
 	public static final int START_BALL_GAME_RSP		= START_BALL_GAME_REQ+1;
 	public static final int GET_BALL_LOCATION_REQ		= START_BALL_GAME_RSP+1;
 	public static final int GET_BALL_LOCATION_RSP		= GET_BALL_LOCATION_REQ+1;

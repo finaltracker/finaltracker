@@ -4,6 +4,10 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 
+import com.baidu.mapapi.map.BaiduMap;
+import com.baidu.mapapi.map.MapStatus;
+import com.baidu.mapapi.model.LatLng;
+import com.zdn.fragment.MapFragment;
 import com.zdn.logic.MainControl;
 
 import java.util.ArrayList;
@@ -20,6 +24,8 @@ public class timeSpaceBallManager {
     private List<ballStateChanged> ballStateChangedListener = new ArrayList<ballStateChanged>();
     static public final long  ALL_BALL_RANGER = 100000; //100 KM
     private final long CENTER_OF_BALLS_UPDATE_DISTANCE = 100 ; // 移动超过 CENTER_OF_BALLS_UPDATE_DISTANCE 则需要更新附近的球
+    private BaiduMap.OnMapStatusChangeListener mapStatusChangeListener =null;
+    private BaiduMap.OnMapLoadedCallback mapLoaderCallBack = null;
     static Handler handler =  new Handler() {
         public void handleMessage(Message msg) {
             if( msg.what == 1 )
@@ -27,6 +33,38 @@ public class timeSpaceBallManager {
                 MainControl.getBallLocationDefault("3");
             }
         }};
+      public timeSpaceBallManager()
+    {
+        mapLoaderCallBack = new BaiduMap.OnMapLoadedCallback() {
+            @Override
+            public void onMapLoaded() {
+                periodRequiredStart();
+            }
+        };
+        MapFragment.registOnMapLoadedCallback(mapLoaderCallBack );
+
+        mapStatusChangeListener = new BaiduMap.OnMapStatusChangeListener() {
+
+            @Override
+            public void onMapStatusChangeStart(MapStatus mapStatus) {
+                periodRequireStop();
+
+
+            }
+
+            @Override
+            public void onMapStatusChange(MapStatus mapStatus) {
+
+            }
+
+            @Override
+            public void onMapStatusChangeFinish(MapStatus mapStatus) {
+                periodRequiredStart();
+            }
+        };
+
+        MapFragment.registOnMapStatusChangeListener(mapStatusChangeListener);
+    }
 
     public void addA_TimeSpaceBall( timeSpaceBall add )
     {
@@ -114,7 +152,7 @@ public class timeSpaceBallManager {
             bsc.removeAll();
         }
     }
-    static public void stopRequireTimeSpaceBallPosition()
+    static public void periodRequireStop()
     {
         stop = true;
     }
@@ -126,7 +164,7 @@ public class timeSpaceBallManager {
         {
             Looper.prepare();
         }
-
+        MainControl.getBallLocationDefault("3");
         handler.postDelayed(myRunnable, requiredPeriod);
     }
     static private Runnable myRunnable = new Runnable() {

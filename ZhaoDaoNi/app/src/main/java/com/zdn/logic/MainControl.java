@@ -4,6 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.baidu.mapapi.model.LatLng;
 import com.zdn.CommandParser.CommandE;
 import com.zdn.CommandParser.ExpCommandE;
 import com.zdn.CommandParser.Property;
@@ -22,8 +23,8 @@ import com.zdn.basicStruct.timeSpaceBallManager;
 import com.zdn.chat.ZdnMessage;
 import com.zdn.data.dataManager;
 import com.zdn.event.EventDefine;
+import com.zdn.fragment.MapFragment;
 import com.zdn.internet.InternetComponent;
-import com.zdn.jeo.friendLocationManage;
 import com.zdn.receiver.NetworkReceiver;
 import com.zdn.util.FileUtil;
 import com.zdn.util.ObjectConvertTool;
@@ -37,16 +38,14 @@ import android.os.Message;
 import android.util.Log;
 import android.widget.Toast;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.List;
 
 public class MainControl extends HandlerThread {
-	Context mContext;
+	static MainActivity mMainActivity;
 	
 	InternetComponent mInternetCom = null ;
 	static public  MainControl me = null;
@@ -72,8 +71,8 @@ public class MainControl extends HandlerThread {
 	public MainControl(String name ,Context ma ) {
 		super(name);
 		
-		mContext = ma;
-		dataManager.init(mContext);
+		mMainActivity =(MainActivity) ma;
+		dataManager.init(mMainActivity);
 
 		me = this;
 		networkReceiver=new NetworkReceiver( ma );
@@ -123,7 +122,7 @@ public class MainControl extends HandlerThread {
 			{ // no connect
 				command_e.AddAProperty(new Property("CONNECT", "false"));
 				control(command_e);
-				Toast.makeText( this.mContext , "out of network",Toast.LENGTH_SHORT).show();
+				Toast.makeText( this.mMainActivity, "out of network",Toast.LENGTH_SHORT).show();
 			}
 			else
 			{
@@ -259,8 +258,8 @@ public class MainControl extends HandlerThread {
 
                 dataManager.self.preferencesPara.savePhoneNumber(username);
                 mInternetCom.getFriendList(packGetFriendListCommandE());
-
-                setState(STATE_LOGIN_NORMAL);
+				timeSpaceBallManager.periodRequiredStart();
+				setState(STATE_LOGIN_NORMAL);
                 //TODO
             } else {
                 Log.d("MainControl", "server response error queueRsp =  " + queueRsp);
@@ -339,7 +338,7 @@ public class MainControl extends HandlerThread {
 				{
 					case 0: // success
 						Log.d("MainControl","regist success" );
-						Toast.makeText(mContext, "regist success", Toast.LENGTH_SHORT).show();
+						Toast.makeText(mMainActivity, "regist success", Toast.LENGTH_SHORT).show();
 						setState(STATE_LOGIN_NORMAL);
 						break;
 						
@@ -471,7 +470,7 @@ public class MainControl extends HandlerThread {
 					}
 					dataManager.self.preferencesPara.saveFriendListVersion(json_obj.getInt("server_friend_version"));
 					
-					dataManager.updateFriendListFromServer(json_obj.getInt("update_type"), json_obj.getJSONArray("friends"), mContext);
+					dataManager.updateFriendListFromServer(json_obj.getInt("update_type"), json_obj.getJSONArray("friends"), mMainActivity);
 					//send it to PeopleActivity
 
 					EventBus.getDefault().post(new commonEvent(commonEvent.UPDATE_FRIEND_LIST_VIEW_FROM_REMOT));
@@ -741,7 +740,7 @@ public class MainControl extends HandlerThread {
 	private void stateMachineHandle(CommandE e  )
 	{
 
-		Log.d("MainControl", "stateMachineHandle:RcvCommand " + ((ExpCommandE)e).GetExpPropertyContext("EventDefine") );
+		Log.d("MainControl", "stateMachineHandle:RcvCommand " + ((ExpCommandE)e).GetExpPropertyContext("EventDefine") + " in state :" + state  );
 
 
 		switch(state)
@@ -929,7 +928,7 @@ public class MainControl extends HandlerThread {
 					byte[] audioFileByte = (byte[])getAudioFileRsp.GetPropertyContext("HTTP_REQ_RSP");
 
 					String FileName = audio_url.substring(audio_url.lastIndexOf('/') + 1);
-					String path = FileUtil.makePath(FileUtil.getBaseDirector(), mContext.getString(R.string.ReceivedAudioFromfriends));
+					String path = FileUtil.makePath(FileUtil.getBaseDirector(), mMainActivity.getString(R.string.ReceivedAudioFromfriends));
 
 					String absoultFilePath = path + "/"+ FileName;
 					FileUtil.byte2File( audioFileByte , path, FileName );
@@ -1039,7 +1038,7 @@ public class MainControl extends HandlerThread {
 		try {
 			timeSpaceBall tsb = (timeSpaceBall)((ExpCommandE)e).getUserData();
 			json_obj = new JSONObject(rep);
-			String BallId = getStringFromJasonObj( json_obj ,"ball_id");
+			String BallId = getStringFromJasonObj(json_obj, "ball_id");
 			tsb.setBallId( BallId);
 			dataManager.getAllBallsList().addA_TimeSpaceBall(tsb);
 
@@ -1069,6 +1068,7 @@ public class MainControl extends HandlerThread {
 
 			JSONArray ballsArray = json_obj.getJSONArray("balls");
 			timeSpaceBallManager allBall = dataManager.getAllBallsList();
+			allBall.removeAllBalls();
 			for( int i = 0 ; i < ballsArray.length() ; i++ ) {
 				JSONObject obj;
 				obj = (JSONObject) ballsArray.get(i);
@@ -1126,7 +1126,7 @@ public class MainControl extends HandlerThread {
 		//modify friend list view
 		EventBus.getDefault().post( new commonEvent( commonEvent.UPDATE_FRIEND_LIST_VIEW_FROM_REMOT ));
 		
-		dataManager.getFrilendList().updateDataToDb(mContext);
+		dataManager.getFrilendList().updateDataToDb(mMainActivity);
 		
 
 	}
@@ -1139,7 +1139,7 @@ public class MainControl extends HandlerThread {
 		//modify friend list view
 		EventBus.getDefault().post( new commonEvent(commonEvent.UPDATE_FRIEND_LIST_VIEW_FROM_REMOT));
 		
-		dataManager.getFrilendList().updateDataToDb(mContext);
+		dataManager.getFrilendList().updateDataToDb(mMainActivity);
 
 	}
 	
@@ -1354,7 +1354,13 @@ public class MainControl extends HandlerThread {
 	static public void getBallLocationDefault( String musk )
 	{
 
-		MainControl.getBallLocation( musk, Double.toString( dataManager.self.selfInfo.getLatitude()),Double.toString( dataManager.self.selfInfo.getLongitude()), Long.toString(timeSpaceBallManager.ALL_BALL_RANGER));
+		LatLng latlng = MapFragment.getScreenCentreLatLng();
+
+		if( ( latlng == null) ||( latlng.latitude == 0) || ( latlng.longitude == 0 ))
+		{
+			return ;
+		}
+		MainControl.getBallLocation( musk, Double.toString( latlng.latitude ),Double.toString( latlng.longitude ), Long.toString(timeSpaceBallManager.ALL_BALL_RANGER));
 	}
 
 	static public void getBallLocation( String mask, String lat , String lng , String distance ) {
