@@ -730,7 +730,17 @@ public class MainControl extends HandlerThread {
 		}
 		break;
 
+		case EventDefine.GET_PROFILE_REQ:{
+			Log.d("MainControl", "GET_PROFILE_REQ: ");
+			mInternetCom.getProfile(e);
 
+		}
+
+		case EventDefine.GET_PROFILE_RSP:{
+			Log.d("MainControl", "GET_PROFILE_RSP: ");
+			getProfileRspHandle(e);
+
+		}
         default:
         break;
         }
@@ -1089,9 +1099,12 @@ public class MainControl extends HandlerThread {
 			Log.d("MainControl" , "locationGetRsp error: " + e1.getMessage() );
 			e1.printStackTrace();
 		}
+	}
 
+	private void getProfileRspHandle( CommandE e ) {
 
 	}
+
 	@Override
 	public boolean quit() {
 
@@ -1381,6 +1394,17 @@ public class MainControl extends HandlerThread {
 
 	}
 
+		static public void getProfile( ) {
+
+		CommandE e = InternetComponent.packA_CommonExpCommandE_ToServer(
+				EventDefine.GET_PROFILE_REQ,
+				InternetComponent.WEBSITE_ADDRESS_GET_PROFILE
+		);
+
+		Message m = MainControl.getInstance().handler.obtainMessage();
+		m.obj = e;   //
+		MainControl.getInstance().handler.sendMessage(m);
+	}
 	static public void getBallPosition( List<String> ballIdList )
 	{
 		CommandE e = InternetComponent.packA_CommonExpCommandE_ToServer(

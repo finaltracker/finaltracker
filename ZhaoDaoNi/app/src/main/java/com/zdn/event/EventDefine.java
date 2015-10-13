@@ -36,7 +36,8 @@ public class EventDefine {
 	public static final int GET_BALL_LOCATION_RSP		= GET_BALL_LOCATION_REQ+1;
 	public static final int GET_BALL_POSITION_REQ		= GET_BALL_LOCATION_RSP+1;
 	public static final int GET_BALL_POSITION_RSP		= GET_BALL_POSITION_REQ+1;
-	
+	public static final int GET_PROFILE_REQ		= GET_BALL_POSITION_RSP+1;
+	public static final int GET_PROFILE_RSP		= GET_PROFILE_REQ+1;
 	/*jpush*/
 	
 	public static final int JPUSH_SERVER_COMMAND			= 200;
