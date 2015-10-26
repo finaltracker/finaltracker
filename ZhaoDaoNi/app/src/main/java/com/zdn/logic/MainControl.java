@@ -81,7 +81,19 @@ public class MainControl extends HandlerThread {
 
 	}
 
+	// RcvCommand  command
+	public void control( CommandE e )
+	{
+		ExpCommandE expE = (ExpCommandE)e;
+		Log.d("MainControl", "control:RcvCommand " + expE.GetExpPropertyContext("EventDefine"));
 
+
+		if( !commonStateHandle(e) )
+		{
+			stateMachineHandle(e);
+		}
+
+	}
 
 	static public MainControl getInstance()
 	{
@@ -361,7 +373,7 @@ public class MainControl extends HandlerThread {
 	{
 		ExpCommandE exp_e = (ExpCommandE)e;
 		int RcvCommand = Integer.parseInt((String)exp_e.GetExpPropertyContext("EventDefine"));
-		
+
 
 		switch( RcvCommand )
 		{
@@ -374,7 +386,7 @@ public class MainControl extends HandlerThread {
 		case EventDefine.ADD_A_FRIEND_RSP:
 		{
 			int queueRsp = parseHttpReqRspStatus(e);
-			
+
 			if( queueRsp == 0 )
 			{
 				Log.d("MainControl" , "add a friend ，server accept!" );
@@ -390,45 +402,69 @@ public class MainControl extends HandlerThread {
 			{
 				Log.d("MainControl" , "add a friend ，user do not exist" );
 			}
-			
+
 			break;
 		}
-		
+
 		case EventDefine.JPUSH_SERVER_COMMAND:
 		{
-		
+
 			int cmd =  Integer.parseInt( (String) e.GetPropertyContext("Command"));
-			
+
 			switch (cmd )
 			{
-			case 202:
-				
-				Log.d("MainControl" , "jpush server call me ,update friend " );
-				mInternetCom.getFriendList( packGetFriendListCommandE() );
+			case 202: {
+				Log.d("MainControl", "jpush server call me ,update friend ");
+				mInternetCom.getFriendList(packGetFriendListCommandE());
 				//
 				break;
-			
-			case 302:
-				Log.d("MainControl" , "jpush server call me ,new message comming " );
+			}
+			case 302: {
+				Log.d("MainControl", "jpush server call me ,new message comming ");
 				String Extra = (String) e.GetPropertyContext("Extra");
 				JSONObject json_obj;
-				String from ;
+				String from;
 				String id;
 				try {
-				json_obj = new JSONObject(Extra);
-				from = json_obj.getString("from");
-				id = json_obj.getString("id");
-				
+					json_obj = new JSONObject(Extra);
+					from = json_obj.getString("from");
+					id = json_obj.getString("id");
+
 				} catch (JSONException e1) {
 
-					Log.d("MainControl" , "server response error: " + e1.getMessage() );
+					Log.d("MainControl", "server response error: " + e1.getMessage());
 					e1.printStackTrace();
-					break ;
+					break;
 				}
-				//TO DO 
-				getMessageToServer( from , id );
+				//TO DO
+				getMessageToServer(from, id);
 				break;
-				
+			}
+			case 285: {
+				Log.d("MainControl", "jpush server call me ,cmd = 285 ");
+				String Extra = (String) e.GetPropertyContext("Extra");
+				JSONObject json_obj;
+				String sender;
+				String longitude;
+				String latitude;
+				String ballId;
+				try {
+					json_obj = new JSONObject(Extra);
+					sender = json_obj.getString("from");
+					ballId = json_obj.getString("ballId");
+					longitude = json_obj.getString("longitude");
+					latitude = json_obj.getString("latitude");
+
+					dataManager.getAllBallsList().BallBomb( ballId , Float.valueOf(latitude) ,  Float.valueOf( longitude ) );
+
+				} catch (JSONException e1) {
+
+					Log.d("MainControl", "server response error: " + e1.getMessage());
+					e1.printStackTrace();
+					break;
+				}
+				break;
+			}
 			default:
 				Log.d("MainControl" , "jpush server call me  , but command undefine" );
 				break;
@@ -438,22 +474,22 @@ public class MainControl extends HandlerThread {
 		case EventDefine.GET_FRIEND_LIST_REQ:
 		{
 			Log.d("MainControl" , "invalid GET_FRIEND_LIST_REQ message" );
-		
+
 			assert(false);
 			break;
 		}
 
-			
+
 		case EventDefine.GET_FRIEND_LIST_RSP:
 		{
 			//update UI
 			//获得注册结果
 			String rep = (String)e.GetPropertyContext("HTTP_REQ_RSP");
-			
-			
+
+
 			if( rep == null || ( rep.isEmpty()) )
 			{
-				//no internet connection or server no response 
+				//no internet connection or server no response
 			}
 			else
 			{
@@ -462,20 +498,20 @@ public class MainControl extends HandlerThread {
 				Log.d("MainControl" , "GET_FRIEND_LIST_RSP: " );
 				try {
 					json_obj = new JSONObject(rep);
-					
+
 					int status = json_obj.getInt("status");
 					if( status != 0 )
 					{
 						Log.d("MainControl", "GET_FRIEND_LIST_RSP status = " + status );
 					}
 					dataManager.self.preferencesPara.saveFriendListVersion(json_obj.getInt("server_friend_version"));
-					
+
 					dataManager.updateFriendListFromServer(json_obj.getInt("update_type"), json_obj.getJSONArray("friends"), mMainActivity);
 					//send it to PeopleActivity
 
 					EventBus.getDefault().post(new commonEvent(commonEvent.UPDATE_FRIEND_LIST_VIEW_FROM_REMOT));
 
-					
+
 				} catch (JSONException e1) {
 
 					Log.d("MainControl" , "server response error: " + e1.getMessage() );
@@ -494,11 +530,11 @@ public class MainControl extends HandlerThread {
 				int queueRsp = parseHttpReqRspStatus(e);
 				// 请求好友列表
 				mInternetCom.getFriendList( packGetFriendListCommandE() );
-				
+
 				if( queueRsp == 0 )
 				{
 
-					
+
 					Log.d("MainControl" , "send ADD_A_FRIEND_ANSWER_REQ queueRsp ok" );
 
 				}
@@ -512,12 +548,12 @@ public class MainControl extends HandlerThread {
 			Log.d("MainControl" , "UPDATE_FRIEND_INFORMATION_REQ: " );
 			mInternetCom.updateFriendInfomation(e);
 			break;
-			
+
 		case EventDefine.UPDATE_FRIEND_INFORMATION_RSP:
 			{
 				Log.d("MainControl", "UPDATE_FRIEND_INFORMATION_RSP: ");
 				int queueRsp = parseHttpReqRspStatus(e);
-				
+
 				if( queueRsp == 0 )
 				{
 					Log.d("MainControl" , "send UPDATE_FRIEND_INFORMATION_REQ ok" );
@@ -529,25 +565,25 @@ public class MainControl extends HandlerThread {
 			Log.d("MainControl" , "DELETE_FRIEND_REQ: " );
 			mInternetCom.deleteFriend(e);
 			break;
-			
+
 		case EventDefine.DELETE_FRIEND_RSP:
 			{
 				Log.d("MainControl" , "DELETE_FRIEND_RSP: " );
 				int queueRsp = parseHttpReqRspStatus(e);
-				
+
 				if( queueRsp == 0 )
 				{
 					Log.d("MainControl" , "send DELETE_FRIEND_REQ ok" );
 					int serverVersion = getIntFromJasonObj( parseHttpReqRsp(e) , "server_friend_version" );
 					if( dataManager.self.preferencesPara.getFriendListVersion() +1 == serverVersion )
 					{
-						
+
 					}
 					else
 					{
 						// 请求好友列表
 						mInternetCom.getFriendList( packGetFriendListCommandE() );
-						
+
 					}
 
 				}
@@ -555,14 +591,14 @@ public class MainControl extends HandlerThread {
 				{
 					// 请求好友列表
 					mInternetCom.getFriendList(packGetFriendListCommandE());
-					
+
 				}
 			}
-			break;	
+			break;
 		case EventDefine.SEARCH_FRIEND_OR_CIRCLE_REQ:
 			Log.d("MainControl" , "SEARCH_FRIEND_OR_CIRCLE_REQ: " );
 			mInternetCom.searchFirendOrCircle(e);
-			
+
 			break;
 		case EventDefine.SEARCH_FRIEND_OR_CIRCLE_RSP:
 			{
@@ -570,18 +606,18 @@ public class MainControl extends HandlerThread {
 				//update UI
 				//获得注册结果
 				String rep = (String)e.GetPropertyContext("HTTP_REQ_RSP");
-				
-				
+
+
 				if( rep == null || ( rep.isEmpty()) )
 				{
-					//no internet connection or server no response 
+					//no internet connection or server no response
 				}
 				else
 				{
 					JSONObject  json_obj = null;
 					try {
 						json_obj = new JSONObject(rep);
-						
+
 						//send it to searchFriendResultForAddActivity
 						if( searchFriendResultForAddActivity.getInstance() != null )
 						{
@@ -602,29 +638,29 @@ public class MainControl extends HandlerThread {
 				}
 			}
 			break;
-			
+
 		case EventDefine.SEND_MESSAGE_REQ:
 			Log.d("MainControl" , "SEND_MESSAGE_REQ: " );
 			mInternetCom.searchFirendOrCircle( e );
-			
+
 			break;
 		case EventDefine.SEND_MESSAGE_RSP:
 			{
 				Log.d("MainControl" , "SEND_MESSAGE_RSP: " );
-				
+
 				ExpCommandE Exp_e = (ExpCommandE)(e);
 				String rep = (String)Exp_e.GetPropertyContext("HTTP_REQ_RSP");
 				String status =(String) Exp_e.GetPropertyContext("STATUS");
 				ZdnMessage m = (ZdnMessage) Exp_e.getUserData();
 				if(  0 != Integer.parseInt(status))
 				{
-					//no internet connection or server no response 
+					//no internet connection or server no response
 					m.setState( ZdnMessage.MSG_STATE_FAIL);
 				}
 				else
 				{
 					m.setState( ZdnMessage.MSG_STATE_SUCCESS );
-					
+
 				}
 				SendMessageRspEvent smre = new SendMessageRspEvent();
 				smre.m = m;
@@ -633,11 +669,11 @@ public class MainControl extends HandlerThread {
 				m.SaveToDb();
 			}
 			break;
-		
+
 		case EventDefine.GET_MESSAGE_REQ:
 			Log.d("MainControl" , "SEND_MESSAGE_REQ: " );
 			mInternetCom.getTip(e);
-			
+
 			break;
 		case EventDefine.GET_MESSAGE_RSP:
         {
@@ -744,7 +780,7 @@ public class MainControl extends HandlerThread {
         default:
         break;
         }
-	
+
 	}
 	
 	private void stateMachineHandle(CommandE e  )
@@ -782,19 +818,7 @@ public class MainControl extends HandlerThread {
 	}
 	
 	
-	// RcvCommand  command
-	public void control( CommandE e )
-	{
-		ExpCommandE expE = (ExpCommandE)e;
-		Log.d("MainControl", "control:RcvCommand " + expE.GetExpPropertyContext("EventDefine") );
-		
-		
-		if( !commonStateHandle(e) )
-		{
-			stateMachineHandle(e);
-		}
-	
-	}
+
 	
 	private JSONObject parseHttpReqRsp( CommandE e  )
 	{

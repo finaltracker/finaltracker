@@ -59,6 +59,7 @@ import java.util.Map;
 
 import com.zdn.ext.SatelliteMenu;
 import com.zdn.ext.SatelliteMenuItem;
+import com.zdn.view.AnimationView;
 
 public class MapFragment extends mainActivityFragmentBase implements AdapterView.OnItemClickListener {
     // TODO: Rename parameter arguments, choose names that match
@@ -81,6 +82,7 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
     private WindowManager.LayoutParams mWindowLayoutParams;
     private WindowManager mWindowManager;
     private SatelliteMenu m_SatelliteMenu = null;
+    private AnimationView bombExplodeAnimation = null;
     private final int sateliteMenuOverAnimationPeriod = 500;
     static private BaiduMap mBaidumap = null;
     /*              <phone  overlay> */
@@ -193,6 +195,31 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
             @Override
             public void centerChanged( coordinate newCenter ) {
             MainControl.getBallLocation( "3", Double.toString( newCenter.getLatitude()),Double.toString( newCenter.getLongitude()), Long.toString(timeSpaceBallManager.ALL_BALL_RANGER));
+            }
+
+            @Override
+            public void BallBomb(String ballId, float latitude ,float longtitude ) {
+                Overlay ov = timeSpaceBallMap.get( ballId );
+
+                if( ov != null )
+                {
+                    ov.remove();
+                }
+                timeSpaceBallMap.remove(ballId);
+
+
+                Point point = mBaidumap.getProjection().toScreenLocation( new LatLng(latitude,longtitude ));
+
+                //animate bomb expore
+                bombExplodeAnimation.setVisibility(View.VISIBLE);
+                bombExplodeAnimation.reStart();
+
+                ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) bombExplodeAnimation.getLayoutParams();
+
+                lp.leftMargin = (int)(point.x) - bombExplodeAnimation.getWidth()/2;
+                lp.bottomMargin = OSUtils.getScreenHeight() - (int)point.y - bombExplodeAnimation.getHeight()/2;
+
+                bombExplodeAnimation.setLayoutParams(lp);
             }
         };
 
@@ -332,7 +359,7 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
         m_SatelliteMenu  = (SatelliteMenu) rootView.findViewById(R.id.popMenu);
         m_SatelliteMenu.setMainImageHaveAnimation(false);
 
-
+        bombExplodeAnimation = ( AnimationView ) rootView.findViewById((R.id.bomb_explode ));
 
         List<SatelliteMenuItem> items = new ArrayList<SatelliteMenuItem>();
         items.add(new SatelliteMenuItem(1, R.drawable.time_space_ball));
@@ -564,6 +591,7 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
             m_SatelliteMenu.setLayoutParams(lp);
             m_SatelliteMenu.setVisibility(View.VISIBLE);
             m_SatelliteMenu.click();
+
 
             Log.d("onLongPress",ev.toString());
         }

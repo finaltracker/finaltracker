@@ -112,7 +112,14 @@ public class timeSpaceBallManager {
             }
         }
     }
-
+    public void BallBomb(String ballId, float latitude ,float longtitude )
+    {
+        //removeA_TimeSpaceBall( ballId );
+        for ( ballStateChanged bsc : ballStateChangedListener )
+        {
+            bsc.BallBomb(ballId,latitude,longtitude );
+        }
+    }
 
     public void registBallStateChangedListener(ballStateChanged bsc )
     {
@@ -194,6 +201,7 @@ public class timeSpaceBallManager {
         public void BallPositionMove( timeSpaceBall add );
         public void removeAll();
         public void centerChanged (coordinate newCenter );
+        public void BallBomb( String ballId ,float longtitude , float latitude );
     }
 
 }
