@@ -6,7 +6,6 @@ import android.os.Message;
 
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.MapStatus;
-import com.baidu.mapapi.model.LatLng;
 import com.zdn.fragment.MapFragment;
 import com.zdn.logic.MainControl;
 
@@ -18,7 +17,8 @@ import java.util.List;
  */
 public class timeSpaceBallManager {
     static private int requiredPeriod = 1000 * 60 ; // 1 MINUTE
-    List<timeSpaceBall> tsbList = new ArrayList<timeSpaceBall>();
+
+    private List<timeSpaceBallBase> tsbList = new ArrayList<timeSpaceBallBase>();
     static private boolean stop = false;
     public coordinate centerOfBalls = null;
     private List<ballStateChanged> ballStateChangedListener = new ArrayList<ballStateChanged>();
@@ -66,7 +66,12 @@ public class timeSpaceBallManager {
         MapFragment.registOnMapStatusChangeListener(mapStatusChangeListener);
     }
 
-    public void addA_TimeSpaceBall( timeSpaceBall add )
+    public List<timeSpaceBallBase> getAllTimeSpaceBallList()
+    {
+        return this.tsbList;
+    }
+
+    public void addA_TimeSpaceBall( timeSpaceBallBase add )
     {
         tsbList.add( add );
         for ( ballStateChanged bsc : ballStateChangedListener )
@@ -77,7 +82,7 @@ public class timeSpaceBallManager {
 
     public void ballPositionMove( String BallId , String lat , String lng )
     {
-        for ( timeSpaceBall tsb : tsbList
+        for ( timeSpaceBallBase tsb : tsbList
              ) {
             if(tsb.getBallId().equals( BallId ))
             {
@@ -96,7 +101,7 @@ public class timeSpaceBallManager {
     {
         if( ballId != null && (!ballId.isEmpty()) )
         {
-            for ( timeSpaceBall tsb: tsbList
+            for ( timeSpaceBallBase tsb: tsbList
                  )
             {
                 if( ballId.equals( tsb.getBallId() ))
@@ -125,7 +130,7 @@ public class timeSpaceBallManager {
     {
         ballStateChangedListener.add( bsc ) ;
         //现有的朋友发送给listener
-        for( timeSpaceBall tsb : tsbList )
+        for( timeSpaceBallBase tsb : tsbList )
         {
             bsc.addA_Ball( tsb );
         }
@@ -196,9 +201,9 @@ public class timeSpaceBallManager {
     //球的数目或者位置变化
     public interface ballStateChanged
     {
-        public void addA_Ball( timeSpaceBall add );
-        public void removeA_Ball( timeSpaceBall add );
-        public void BallPositionMove( timeSpaceBall add );
+        public void addA_Ball( timeSpaceBallBase add );
+        public void removeA_Ball( timeSpaceBallBase add );
+        public void BallPositionMove( timeSpaceBallBase add );
         public void removeAll();
         public void centerChanged (coordinate newCenter );
         public void BallBomb( String ballId ,float longtitude , float latitude );

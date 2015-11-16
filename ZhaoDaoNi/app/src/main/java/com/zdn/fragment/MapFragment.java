@@ -8,6 +8,7 @@ import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -16,6 +17,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
@@ -39,11 +42,12 @@ import com.zdn.R;
 import com.zdn.activity.MainActivity;
 import com.zdn.activity.StartTimeBallDialog;
 import com.zdn.activity.chatActivity;
+import com.zdn.adapter.ContainFragmentAdapter;
 import com.zdn.adapter.recentChatAdapter;
 import com.zdn.basicStruct.coordinate;
 import com.zdn.basicStruct.friendMemberData;
 import com.zdn.basicStruct.friendTeamDataManager;
-import com.zdn.basicStruct.timeSpaceBall;
+import com.zdn.basicStruct.timeSpaceBallBase;
 import com.zdn.basicStruct.timeSpaceBallManager;
 import com.zdn.com.headerCtrl;
 import com.zdn.data.dataManager;
@@ -60,6 +64,7 @@ import java.util.Map;
 import com.zdn.ext.SatelliteMenu;
 import com.zdn.ext.SatelliteMenuItem;
 import com.zdn.view.AnimationView;
+import com.zdn.view.PropertieView;
 
 public class MapFragment extends mainActivityFragmentBase implements AdapterView.OnItemClickListener {
     // TODO: Rename parameter arguments, choose names that match
@@ -94,6 +99,10 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
 
     private timeSpaceBallManager.ballStateChanged ballStateChangedListener = null;
 
+    //显示在左面的列表，例如ball 等
+    private ArrayList<String> categoryName = new ArrayList<String>();
+    private ArrayList<Fragment> contentFragment = new ArrayList<Fragment>();
+
 
     private double initLat = 31.10;
     private double initLng  = 121.006983;
@@ -125,6 +134,8 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
         }
         mGestureDetector = new GestureDetector(this.getActivity(), new LearnGestureListener());
 
+        leftBallListInit();
+
         //setHasOptionsMenu(true);
 
         //在使用SDK各组件之前初始化context信息，传入ApplicationContext
@@ -132,7 +143,7 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
         ballStateChangedListener = new timeSpaceBallManager.ballStateChanged(){
 
             @Override
-            public void addA_Ball(timeSpaceBall add) {
+            public void addA_Ball(timeSpaceBallBase add) {
 
                 BitmapDescriptor mBitMap = BitmapDescriptorFactory.fromResource(R.drawable.timespaceball );
 
@@ -163,7 +174,7 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
             }
 
             @Override
-            public void removeA_Ball(timeSpaceBall add) {
+            public void removeA_Ball(timeSpaceBallBase add) {
                 Overlay ov = timeSpaceBallMap.get( add.getBallId() );
 
                 if( ov != null )
@@ -174,7 +185,7 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
             }
 
             @Override
-            public void BallPositionMove(timeSpaceBall ball) {
+            public void BallPositionMove(timeSpaceBallBase ball) {
                 removeA_Ball( ball );
                 addA_Ball( ball );
             }
@@ -246,7 +257,7 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
 
         mBaidumap = mMapView.getMap();
         mBaidumap.setTrafficEnabled(false);
-        dataManager.getAllBallsList().registBallStateChangedListener(ballStateChangedListener);
+        dataManager.getAllBallsListManager().registBallStateChangedListener(ballStateChangedListener);
 
 
 //设定中心点坐标
@@ -323,7 +334,7 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
                             //是自己，发送位置信息到server
 
                             MainControl.locationUpdate(ufmd.getLatitude(), ufmd.getLongitude());
-                            dataManager.getAllBallsList().updateCenterOfBalls(gps);
+                            dataManager.getAllBallsListManager().updateCenterOfBalls(gps);
                         }
                         if( MapFragment.this.getActivity() != null )
                         {
@@ -402,9 +413,8 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
                 centerLat = initLat;
                 centerLng = initLng;
 
-                for ( BaiduMap.OnMapLoadedCallback mlcb : mlcbList
-                        )
-                {
+                for (BaiduMap.OnMapLoadedCallback mlcb : mlcbList
+                        ) {
                     mlcb.onMapLoaded();
                 }
 
@@ -416,10 +426,9 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
              * @param status 地图状态改变开始时的地图状态
              */
             public void onMapStatusChangeStart(MapStatus status) {
-                for ( BaiduMap.OnMapStatusChangeListener msc : msclList
-                     )
-                {
-                    msc.onMapStatusChangeStart( status );
+                for (BaiduMap.OnMapStatusChangeListener msc : msclList
+                        ) {
+                    msc.onMapStatusChangeStart(status);
                 }
             }
 
@@ -428,10 +437,9 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
              * @param status 当前地图状态
              */
             public void onMapStatusChange(MapStatus status) {
-                for ( BaiduMap.OnMapStatusChangeListener msc : msclList
-                        )
-                {
-                    msc.onMapStatusChange( status );
+                for (BaiduMap.OnMapStatusChangeListener msc : msclList
+                        ) {
+                    msc.onMapStatusChange(status);
                 }
             }
 
@@ -443,22 +451,47 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
                 LatLng ll = status.target;
                 centerLat = ll.latitude;
                 centerLng = ll.longitude;
-                for ( BaiduMap.OnMapStatusChangeListener msc : msclList
-                        )
-                {
+                for (BaiduMap.OnMapStatusChangeListener msc : msclList
+                        ) {
                     msc.onMapStatusChangeFinish(status);
                 }
                 Log.d("map change", "sts ch fs:" + centerLat + "," + centerLng + "");
             }
         });
-
+        leftBallListViewonCreate( rootView );
         super.onCreateView(inflater, container, savedInstanceState);
 
 
         return rootView;
     }
 
+    public void leftBallListInit()
+    {
+        categoryName.add("First");
+        BallFragment ballFragment = new BallFragment();
+        Bundle firstBundle = new Bundle();
+        firstBundle.putString("content", "First");
+        ballFragment.setArguments(firstBundle);
+        contentFragment.add(ballFragment);
+    }
 
+    public void leftBallListViewonCreate( View rootView )
+    {
+        ContainFragmentAdapter adapter = new ContainFragmentAdapter(this.getActivity(), categoryName);
+        final PropertieView view = (PropertieView) rootView.findViewById(R.id.main_propertie);
+        view.showData(this.getChildFragmentManager(), adapter, contentFragment);
+
+        LinearLayout layout = (LinearLayout) rootView.findViewById(R.id.main_right);
+        final FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) layout.getLayoutParams();
+        view.post(new Runnable() {
+
+            @Override
+            public void run() {
+                // TODO Auto-generated method stub
+                params.setMargins(view.getWidth(), 0, 0, 0);
+            }
+        });
+    }
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -526,7 +559,9 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
         friendOverlayMap.clear();
         timeSpaceBallMap.clear();
         dataManager.getFrilendList().unRegistFriendMemberChangeListener(fmc);
-        dataManager.getAllBallsList().ungistBallStateChangedListener(ballStateChangedListener);
+        dataManager.getAllBallsListManager().ungistBallStateChangedListener(ballStateChangedListener);
+        categoryName.clear();
+        contentFragment.clear();
         mMapView.onDestroy();
         mMapView = null;
     }

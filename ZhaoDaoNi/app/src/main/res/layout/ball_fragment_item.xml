@@ -1,0 +1,45 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="25dp"
+    android:orientation="horizontal" >
+
+    <TextView
+        android:id="@+id/ball_owner"
+        style="@style/commonStyleTextView"
+        android:layout_height="25dp"
+        android:layout_width="wrap_content"
+        android:text="owner" />
+
+   <TextView
+       android:id="@+id/ball_send_time"
+       style="@style/commonStyleTextView"
+       android:layout_height="25dp"
+       android:layout_width="60dp"
+       android:layout_toRightOf="@id/ball_owner"/>
+   
+   <TextView
+       android:id="@+id/ball_dead_time"
+       style="@style/commonStyleTextView"
+       android:layout_height="25dp"
+       android:layout_width="50dp"
+       android:layout_toRightOf="@id/ball_send_time"/>
+   
+   <!-- 命中，被命中，未命中 -->
+   <TextView
+       android:id="@+id/ball_result"
+       style="@style/commonStyleTextView"
+       android:layout_height="25dp"
+       android:layout_width="50dp"
+       android:layout_toRightOf="@id/ball_dead_time"/>
+
+    <TextView
+        android:id="@+id/detail"
+        android:layout_width="20dp"
+        android:layout_height="25dp"
+        android:layout_toRightOf="@id/ball_result"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/vd"/>
+
+
+</RelativeLayout>

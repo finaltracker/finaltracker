@@ -55,5 +55,7 @@ public interface ServerInterfaceCmd {
 
 	public void getCurrentBallPosition( CommandE e );
 
+	public void getBallAll( CommandE e );
+
 	public void getProfile( CommandE e );
 }

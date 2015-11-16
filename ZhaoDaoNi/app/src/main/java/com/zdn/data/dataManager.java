@@ -8,7 +8,10 @@ import android.content.Context;
 
 import com.zdn.basicStruct.SelfMobileData;
 import com.zdn.basicStruct.friendTeamDataManager;
+import com.zdn.basicStruct.timeSpaceBallBase;
 import com.zdn.basicStruct.timeSpaceBallManager;
+
+import java.util.List;
 
 public class dataManager {
 
@@ -37,7 +40,9 @@ public class dataManager {
 		return allFriend;
 	}
 
-	static public timeSpaceBallManager getAllBallsList() { return allBalls; }
+	static public timeSpaceBallManager getAllBallsListManager() { return allBalls; }
+
+	static public List<timeSpaceBallBase> getAllBallsList() { return allBalls.getAllTimeSpaceBallList(); }
 
 	static public void updateFriendListFromServer( int update_type , JSONArray jason_friendList ,Context context )
 	{

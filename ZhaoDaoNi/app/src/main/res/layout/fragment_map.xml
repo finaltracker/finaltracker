@@ -25,6 +25,20 @@
             android:layout_height="fill_parent"
             android:clickable="true"
         />
+        <LinearLayout
+            android:id="@+id/main_right"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+
+        </LinearLayout>
+        <com.zdn.view.PropertieView
+            android:id="@+id/main_propertie"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+        </com.zdn.view.PropertieView>
     </FrameLayout>
 
 

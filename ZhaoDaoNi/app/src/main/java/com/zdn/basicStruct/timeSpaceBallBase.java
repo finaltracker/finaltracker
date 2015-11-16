@@ -3,7 +3,7 @@ package com.zdn.basicStruct;
 /**
  * Created by wanghp1 on 2015/9/28.
  */
-public class timeSpaceBall
+public class timeSpaceBallBase
 {
     private String mobile; /* the mobile that register */
     private String ballId;
@@ -12,12 +12,12 @@ public class timeSpaceBall
     private String type;
     private String content;
 
-    public timeSpaceBall( String type )
+    public timeSpaceBallBase(String type)
     {
         this.type = type;
     }
 
-    public timeSpaceBall(  String mobile ,String ballId ,String lat ,String lng ,String type ,String content )
+    public timeSpaceBallBase(String mobile, String ballId, String lat, String lng, String type, String content )
     {
         this.mobile = mobile;
         this.ballId = ballId;

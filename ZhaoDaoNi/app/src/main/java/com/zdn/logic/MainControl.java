@@ -18,7 +18,8 @@ import com.zdn.basicStruct.friendMemberData;
 import com.zdn.basicStruct.friendMemberDataBasic;
 import com.zdn.basicStruct.getMessageRspEvent;
 import com.zdn.basicStruct.networkStatusEvent;
-import com.zdn.basicStruct.timeSpaceBall;
+import com.zdn.basicStruct.timeSpaceBallBase;
+import com.zdn.basicStruct.timeSpaceBallDetail;
 import com.zdn.basicStruct.timeSpaceBallManager;
 import com.zdn.chat.ZdnMessage;
 import com.zdn.data.dataManager;
@@ -42,6 +43,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainControl extends HandlerThread {
@@ -444,18 +446,18 @@ public class MainControl extends HandlerThread {
 				Log.d("MainControl", "jpush server call me ,cmd = 285 ");
 				String Extra = (String) e.GetPropertyContext("Extra");
 				JSONObject json_obj;
-				String sender;
+				String receiver;
 				String longitude;
 				String latitude;
 				String ballId;
 				try {
 					json_obj = new JSONObject(Extra);
-					sender = json_obj.getString("from");
-					ballId = json_obj.getString("ballId");
-					longitude = json_obj.getString("longitude");
-					latitude = json_obj.getString("latitude");
+					receiver = json_obj.getString("receiver");
+					ballId = json_obj.getString("ball_id");
+					longitude = json_obj.getString("end_lng");
+					latitude = json_obj.getString("end_lat");
 
-					dataManager.getAllBallsList().BallBomb( ballId , Float.valueOf(latitude) ,  Float.valueOf( longitude ) );
+					dataManager.getAllBallsListManager().BallBomb( ballId , Float.valueOf(latitude) ,  Float.valueOf( longitude ) );
 
 				} catch (JSONException e1) {
 
@@ -766,6 +768,18 @@ public class MainControl extends HandlerThread {
 		}
 		break;
 
+			case EventDefine.GET_BALL_ALL_REQ:{
+				Log.d("MainControl", "GET_BALL_ALL_REQ: ");
+				mInternetCom.getBallAll(e);
+
+			}
+			break;
+			case EventDefine.GET_BALL_ALL_RSP:{
+				Log.d("MainControl", "GET_BALL_ALL_RSP: ");
+				getBallAllRspHandle(e);
+			}
+			break;
+
 		case EventDefine.GET_PROFILE_REQ:{
 			Log.d("MainControl", "GET_PROFILE_REQ: ");
 			mInternetCom.getProfile(e);
@@ -1070,11 +1084,11 @@ public class MainControl extends HandlerThread {
 
 		JSONObject  json_obj = null;
 		try {
-			timeSpaceBall tsb = (timeSpaceBall)((ExpCommandE)e).getUserData();
+			timeSpaceBallBase tsb = (timeSpaceBallBase)((ExpCommandE)e).getUserData();
 			json_obj = new JSONObject(rep);
 			String BallId = getStringFromJasonObj(json_obj, "ball_id");
 			tsb.setBallId( BallId);
-			dataManager.getAllBallsList().addA_TimeSpaceBall(tsb);
+			dataManager.getAllBallsListManager().addA_TimeSpaceBall(tsb);
 
 
 		}
@@ -1101,7 +1115,7 @@ public class MainControl extends HandlerThread {
 			json_obj = new JSONObject(rep);
 
 			JSONArray ballsArray = json_obj.getJSONArray("balls");
-			timeSpaceBallManager allBall = dataManager.getAllBallsList();
+			timeSpaceBallManager allBall = dataManager.getAllBallsListManager();
 			allBall.removeAllBalls();
 			for( int i = 0 ; i < ballsArray.length() ; i++ ) {
 				JSONObject obj;
@@ -1113,8 +1127,9 @@ public class MainControl extends HandlerThread {
 				String content = getStringFromJasonObj(obj,"content");
 				String current_lat = getStringFromJasonObj(obj, "current_lat");
 				String current_lng = getStringFromJasonObj(obj, "current_lng");
+				//String ball_status = getStringFromJasonObj( obj , "ball_status");
 
-				allBall.addA_TimeSpaceBall(new timeSpaceBall(user, ball_id, current_lat, current_lng, type, content));
+				allBall.addA_TimeSpaceBall( new timeSpaceBallBase(user, ball_id, current_lat, current_lng, type, content) );
 
 			}
 
@@ -1125,6 +1140,51 @@ public class MainControl extends HandlerThread {
 		}
 	}
 
+	private void getBallAllRspHandle( CommandE e )
+	{
+		int status = parseHttpReqRspStatus(e);
+
+		if( status == 0 ) {
+			List<timeSpaceBallDetail> tsbList = new ArrayList<timeSpaceBallDetail>();
+			JSONObject json_obj = null;
+			try {
+				String rep = (String)e.GetPropertyContext("HTTP_REQ_RSP");
+				json_obj = new JSONObject(rep);
+
+				JSONArray ballsArray = json_obj.getJSONArray("balls");
+
+				for( int i = 0 ; i < ballsArray.length() ; i++ ) {
+					JSONObject obj;
+					obj = (JSONObject) ballsArray.get(i);
+
+					String ball_id = getStringFromJasonObj(obj, "ball_id");
+					String type = getStringFromJasonObj(obj, "type");
+					String content = getStringFromJasonObj(obj,"content");
+					String current_lat = getStringFromJasonObj(obj, "current_lat");
+					String current_lng = getStringFromJasonObj(obj, "current_lng");
+					String ball_status = getStringFromJasonObj( obj , "ball_status");
+
+					String sender = getStringFromJasonObj(obj,"sender");
+					String catcher = getStringFromJasonObj(obj,"catcher");
+					String startTime = getStringFromJasonObj(obj,"begin_date");
+					String endTime = getStringFromJasonObj(obj,"end_date");
+
+					tsbList.add( new timeSpaceBallDetail( sender, ball_id, current_lat, current_lng, type, content ,startTime,endTime,ball_status,catcher ) );
+
+				}
+
+				EventBus.getDefault().post(tsbList); // sned to listener
+
+			}
+			catch (JSONException e1) {
+
+				Log.d("MainControl" , "getBallAllRsp error: " + e1.getMessage() );
+				e1.printStackTrace();
+			}
+
+
+		}
+	}
 	private void getProfileRspHandle( CommandE e ) {
 
 	}
@@ -1186,9 +1246,9 @@ public class MainControl extends HandlerThread {
 	static public void addA_Friend( String phoneNumner ,String attachMentContext )
 	{
 		CommandE e = InternetComponent.packA_CommonExpCommandE_ToServer(
-				EventDefine.ADD_A_FRIEND_REQ,
-				InternetComponent.WEBSITE_ADDRESS_ADD_A_FRIEND_REQ
-		);
+                EventDefine.ADD_A_FRIEND_REQ,
+                InternetComponent.WEBSITE_ADDRESS_ADD_A_FRIEND_REQ
+        );
 		e.AddAProperty(new Property("friend_mobile",phoneNumner ) );
 		e.AddAProperty(new Property("attament",attachMentContext ) );
 		
@@ -1351,11 +1411,11 @@ public class MainControl extends HandlerThread {
 
 	}
 
-	static public timeSpaceBall startBallGame( int type , String content , String duration , String endLat , String endLng ) {
+	static public timeSpaceBallBase startBallGame( int type , String content , String duration , String endLat , String endLng ) {
 
 		coordinate coord = dataManager.self.selfInfo.getTheLastCoordinate();
 
-		timeSpaceBall tsb = new timeSpaceBall( Integer.toString(type));
+		timeSpaceBallBase tsb = new timeSpaceBallBase( Integer.toString(type));
 		tsb.setMobile(dataManager.self.preferencesPara.getPhoneNumber());
 		tsb.setLat(Double.toString(coord.getLatitude()));
 		tsb.setLng(Double.toString(coord.getLongitude()));
@@ -1397,7 +1457,7 @@ public class MainControl extends HandlerThread {
 		{
 			return ;
 		}
-		MainControl.getBallLocation( musk, Double.toString( latlng.latitude ),Double.toString( latlng.longitude ), Long.toString(timeSpaceBallManager.ALL_BALL_RANGER));
+		MainControl.getBallLocation(musk, Double.toString(latlng.latitude), Double.toString(latlng.longitude), Long.toString(timeSpaceBallManager.ALL_BALL_RANGER));
 	}
 
 	static public void getBallLocation( String mask, String lat , String lng , String distance ) {
@@ -1438,6 +1498,28 @@ public class MainControl extends HandlerThread {
 		for ( String id: ballIdList	 )
 		{
 			//e.AddAProperty(new Property( "lat" , lat));
+		}
+
+
+
+		Message m = MainControl.getInstance().handler.obtainMessage();
+		m.obj = e;   //
+
+		MainControl.getInstance().handler.sendMessage(m);
+	}
+
+	/* require type: 1, sender;2,receiver;3, sender+receiver */
+	static public void getBallAll( String requireType ,String since )
+	{
+		CommandE e = InternetComponent.packA_CommonExpCommandE_ToServer(
+				EventDefine.GET_BALL_ALL_REQ,
+				InternetComponent.WEBSITE_ADDRESS_BALL_GET_ALL
+		);
+		e.AddAProperty(new Property("requireType", requireType));
+
+		if( since != null )
+		{
+			e.AddAProperty(new Property("since_date", since));
 		}
 
 

@@ -2,7 +2,7 @@ package com.zdn.cropimage;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;

@@ -62,7 +62,7 @@ public class zdnBasicActivity extends FragmentActivity implements headerCtrl.men
 
 			}
 				//Toast.makeText(this,"无网络连接",Toast.LENGTH_SHORT).show();
-			}
+		}
 
 
 	}

@@ -10,7 +10,6 @@ import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
-import com.baidu.mapapi.model.LatLng;
 import com.qq.test.SDManager;
 import com.zdn.R;
 
@@ -28,28 +27,24 @@ import com.zdn.jpush.ExampleUtil;
 import com.zdn.logic.MainControl;
 import com.zdn.util.OSUtils;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
 import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
-import de.greenrobot.event.EventBus;
 
 public class MainActivity extends zdnBasicActivity implements navigationFragment.navigationChanged ,headerCtrl.menuStateChange {
 
@@ -197,7 +192,7 @@ public class MainActivity extends zdnBasicActivity implements navigationFragment
 
 	public void showNavigation()
 	{
-		FragmentManager fragmentManager = getFragmentManager();
+		FragmentManager fragmentManager = this.getSupportFragmentManager();
 		FragmentTransaction ft = fragmentManager.beginTransaction();
 		ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 		if( navigationf == null ) {
@@ -212,7 +207,7 @@ public class MainActivity extends zdnBasicActivity implements navigationFragment
 	{
 		if( navigationf != null  && navigationf.isVisible() )
 		{
-			FragmentManager fragmentManager = getFragmentManager();
+			FragmentManager fragmentManager = this.getSupportFragmentManager();
 			FragmentTransaction ft = fragmentManager.beginTransaction();
 
 			ft.remove(navigationf).commit();
@@ -228,7 +223,7 @@ public class MainActivity extends zdnBasicActivity implements navigationFragment
 	public void onItemClickNavigation(int position ) {
 		//Toast.makeText(this, "onItemClickNavigation", Toast.LENGTH_SHORT).show();
 		selectFragmentIndex = position;
-		FragmentManager fragmentManager = getFragmentManager();
+		FragmentManager fragmentManager = getSupportFragmentManager();
 		hideNavigation();
 		switch( position )
 		{
@@ -443,7 +438,7 @@ public class MainActivity extends zdnBasicActivity implements navigationFragment
 	@Override
 	public void onBackPressed()
 	{
-		FragmentManager fragmentManager = this.getFragmentManager();
+		FragmentManager fragmentManager = this.getSupportFragmentManager();
 		FragmentTransaction ft = fragmentManager.beginTransaction();
 		if( hideNavigation() )
 		{	//试图先隐藏导航栏
