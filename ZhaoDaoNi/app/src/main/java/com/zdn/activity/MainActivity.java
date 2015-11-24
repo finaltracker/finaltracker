@@ -18,6 +18,7 @@ import com.zdn.basicStruct.coordinate;
 import com.zdn.basicStruct.networkStatusEvent;
 import com.zdn.com.headerCtrl;
 import com.zdn.data.dataManager;
+import com.zdn.fragment.BallFragment;
 import com.zdn.fragment.MapFragment;
 import com.zdn.fragment.PeopleFragment;
 import com.zdn.fragment.mainActivityFragmentBase;
@@ -62,10 +63,10 @@ public class MainActivity extends zdnBasicActivity implements navigationFragment
 	public static final int MSG_SET_TAGS				=  EVENT_UI_REGIST_RESULT +1 ;
 
 
-	private static final int INBOX	=	0;
-	private static final int STARRED	=	INBOX+1;
-	private static final int SENT_MAIL	=	STARRED+1;
-	private static final int DRAFTS	=	SENT_MAIL+1;
+	private static final int TIME_SPACE_BALL	=	0;
+	private static final int STARRED	=	TIME_SPACE_BALL+1;
+	private static final int SEND_EMAIL	=	STARRED+1;
+	private static final int DRAFTS	=	SEND_EMAIL+1;
 	private static final int MORE_MARKERS	=	DRAFTS+1;
 	private static final int TRASH	=	MORE_MARKERS+1;
 	private static final int SPAM	=	TRASH+1;
@@ -81,6 +82,7 @@ public class MainActivity extends zdnBasicActivity implements navigationFragment
 	private ArrayList<MyOnTouchListener> onTouchListeners = new ArrayList<MyOnTouchListener>();
 
     private myInfomationFragment m_myInfomationFragment = null;
+	private BallFragment m_BallFragment = null;
     private MapFragment m_MapFragment = null;
     private PeopleFragment m_PeopleFragment = null;
 
@@ -101,7 +103,7 @@ public class MainActivity extends zdnBasicActivity implements navigationFragment
 		super.onCreate(savedInstanceState);
 
 		nlch = new ArrayList<navigationListDrawerItemAdapter.navigationListContextHolder>();
-		nlch.add(new navigationListDrawerItemAdapter.navigationListContextHolder("inbox", R.drawable.ic_inbox_black_24dp));
+		nlch.add(new navigationListDrawerItemAdapter.navigationListContextHolder("时光球", R.drawable.timespaceball));
 		nlch.add(new navigationListDrawerItemAdapter.navigationListContextHolder("starred", R.drawable.ic_star_black_24dp));
 		nlch.add(new navigationListDrawerItemAdapter.navigationListContextHolder("sent_mail", R.drawable.ic_send_black_24dp));
 		nlch.add(new navigationListDrawerItemAdapter.navigationListContextHolder("drafts", R.drawable.ic_drafts_black_24dp));
@@ -228,6 +230,15 @@ public class MainActivity extends zdnBasicActivity implements navigationFragment
 		switch( position )
 		{
 
+			case MainActivity.TIME_SPACE_BALL:
+				if( MainActivity.this.m_BallFragment == null  )
+				{
+					m_BallFragment = new BallFragment();
+				}
+				fragmentManager
+						.beginTransaction()
+						.replace(R.id.simple_fragment,m_BallFragment ).commit();
+				break;
 			case MainActivity.PERSONAL_INFORMATION:
                 if( MainActivity.this.m_myInfomationFragment == null  )
                 {
@@ -294,6 +305,10 @@ public class MainActivity extends zdnBasicActivity implements navigationFragment
 	
 	private void setTag( String tag ){
 
+		if( tag == null || tag.isEmpty() )
+		{
+			return;
+		}
 		String[] sArray = tag.split(",");
 		Set<String> tagSet = new LinkedHashSet<String>();
 		for (String sTagItme : sArray) {

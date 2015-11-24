@@ -58,7 +58,8 @@
 	<style  name="commonMarginTop">
 	    <item name="android:layout_marginTop">5dp</item>
 	 </style>
-	  
+
+
 	<style  name="commonMarginLeftAndTop"  parent="commonMarginLeft">   
 	    <item name="android:layout_marginTop">5dp</item>
 	</style>

@@ -16,6 +16,7 @@ import com.zdn.basicStruct.commonEvent;
 import com.zdn.basicStruct.coordinate;
 import com.zdn.basicStruct.friendMemberData;
 import com.zdn.basicStruct.friendMemberDataBasic;
+import com.zdn.basicStruct.getBallAllRspEvent;
 import com.zdn.basicStruct.getMessageRspEvent;
 import com.zdn.basicStruct.networkStatusEvent;
 import com.zdn.basicStruct.timeSpaceBallBase;
@@ -216,7 +217,7 @@ public class MainControl extends HandlerThread {
 
 	private void stateNull( CommandE e  )
 	{
-		if ( NetworkReceiver.isConnect() )
+		if ( NetworkReceiver.isConnect() && (dataManager.self.getImsi() != null )&&( !dataManager.self.getImsi().isEmpty()))
 		{
 			mInternetCom.isRegist(dataManager.self.getImsi());
 			setState(STATE_WAIT_QUEUE_REGSIT_RESULT);
@@ -442,7 +443,7 @@ public class MainControl extends HandlerThread {
 				getMessageToServer(from, id);
 				break;
 			}
-			case 285: {
+			case 285: { //BallBomb
 				Log.d("MainControl", "jpush server call me ,cmd = 285 ");
 				String Extra = (String) e.GetPropertyContext("Extra");
 				JSONObject json_obj;
@@ -1173,7 +1174,8 @@ public class MainControl extends HandlerThread {
 
 				}
 
-				EventBus.getDefault().post(tsbList); // sned to listener
+				getBallAllRspEvent gbAr = new getBallAllRspEvent(tsbList);
+				EventBus.getDefault().post(gbAr); // sned to listener
 
 			}
 			catch (JSONException e1) {
@@ -1445,6 +1447,7 @@ public class MainControl extends HandlerThread {
 		MainControl.getInstance().handler.sendMessage(m);
 
 
+
 		return tsb;
 	}
 
@@ -1515,7 +1518,7 @@ public class MainControl extends HandlerThread {
 				EventDefine.GET_BALL_ALL_REQ,
 				InternetComponent.WEBSITE_ADDRESS_BALL_GET_ALL
 		);
-		e.AddAProperty(new Property("requireType", requireType));
+		e.AddAProperty(new Property("require_type", requireType));
 
 		if( since != null )
 		{

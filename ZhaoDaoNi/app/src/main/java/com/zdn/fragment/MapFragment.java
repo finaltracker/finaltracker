@@ -64,7 +64,7 @@ import java.util.Map;
 import com.zdn.ext.SatelliteMenu;
 import com.zdn.ext.SatelliteMenuItem;
 import com.zdn.view.AnimationView;
-import com.zdn.view.PropertieView;
+
 
 public class MapFragment extends mainActivityFragmentBase implements AdapterView.OnItemClickListener {
     // TODO: Rename parameter arguments, choose names that match
@@ -99,9 +99,6 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
 
     private timeSpaceBallManager.ballStateChanged ballStateChangedListener = null;
 
-    //显示在左面的列表，例如ball 等
-    private ArrayList<String> categoryName = new ArrayList<String>();
-    private ArrayList<Fragment> contentFragment = new ArrayList<Fragment>();
 
 
     private double initLat = 31.10;
@@ -133,8 +130,6 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         mGestureDetector = new GestureDetector(this.getActivity(), new LearnGestureListener());
-
-        leftBallListInit();
 
         //setHasOptionsMenu(true);
 
@@ -465,32 +460,11 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
         return rootView;
     }
 
-    public void leftBallListInit()
-    {
-        categoryName.add("First");
-        BallFragment ballFragment = new BallFragment();
-        Bundle firstBundle = new Bundle();
-        firstBundle.putString("content", "First");
-        ballFragment.setArguments(firstBundle);
-        contentFragment.add(ballFragment);
-    }
 
     public void leftBallListViewonCreate( View rootView )
     {
-        ContainFragmentAdapter adapter = new ContainFragmentAdapter(this.getActivity(), categoryName);
-        final PropertieView view = (PropertieView) rootView.findViewById(R.id.main_propertie);
-        view.showData(this.getChildFragmentManager(), adapter, contentFragment);
 
-        LinearLayout layout = (LinearLayout) rootView.findViewById(R.id.main_right);
-        final FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) layout.getLayoutParams();
-        view.post(new Runnable() {
 
-            @Override
-            public void run() {
-                // TODO Auto-generated method stub
-                params.setMargins(view.getWidth(), 0, 0, 0);
-            }
-        });
     }
     @Override
     public void onAttach(Activity activity) {
@@ -560,8 +534,7 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
         timeSpaceBallMap.clear();
         dataManager.getFrilendList().unRegistFriendMemberChangeListener(fmc);
         dataManager.getAllBallsListManager().ungistBallStateChangedListener(ballStateChangedListener);
-        categoryName.clear();
-        contentFragment.clear();
+
         mMapView.onDestroy();
         mMapView = null;
     }

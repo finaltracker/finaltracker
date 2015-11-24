@@ -12,17 +12,22 @@ import android.widget.TextView;
 import com.zdn.R;
 import com.zdn.basicStruct.timeSpaceBallDetail;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
 public class BallFragmentAdapter extends BaseAdapter{
 	List<timeSpaceBallDetail> tsbList;
 	private Context mContext;
-	
+
 	
 	public BallFragmentAdapter(Context mContext ,List<timeSpaceBallDetail> tsbdList ) {
 		this.mContext = mContext;
 		this.tsbList =  tsbdList;
+		if( tsbList == null )
+		{
+			tsbList = new ArrayList<timeSpaceBallDetail>();
+		}
 
 	}
 	
@@ -75,7 +80,7 @@ public class BallFragmentAdapter extends BaseAdapter{
 			viewHolder.ball_send_time = (TextView) view.findViewById(R.id.ball_send_time);
 			viewHolder.ball_dead_time= (TextView) view.findViewById(R.id.ball_dead_time);
 			viewHolder.ball_result = (TextView) view.findViewById(R.id.ball_result);
-			viewHolder.detail = (TextView) view.findViewById(R.id.detail);
+			//viewHolder.detail = (TextView) view.findViewById(R.id.detail);
 			view.setTag(viewHolder);
 		}
 		else {
@@ -88,7 +93,7 @@ public class BallFragmentAdapter extends BaseAdapter{
 			viewHolder.ball_send_time.setText("启动时间");
 			viewHolder.ball_dead_time.setText("结束时间");
 			viewHolder.ball_result.setText("状态");
-			viewHolder.detail.setText("详情");
+			//viewHolder.detail.setText("详情");
 		}
 		else
 		{
@@ -117,7 +122,7 @@ public class BallFragmentAdapter extends BaseAdapter{
 		TextView ball_send_time;
 		TextView ball_dead_time;
 		TextView ball_result;
-		TextView detail;
+		//TextView detail;
 		
 	}
 

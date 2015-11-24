@@ -12,6 +12,8 @@ import com.zdn.logic.MainControl;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.greenrobot.event.EventBus;
+
 /**
  * Created by wanghp1 on 2015/9/28.
  */
@@ -124,6 +126,8 @@ public class timeSpaceBallManager {
         {
             bsc.BallBomb(ballId,latitude,longtitude );
         }
+
+
     }
 
     public void registBallStateChangedListener(ballStateChanged bsc )
