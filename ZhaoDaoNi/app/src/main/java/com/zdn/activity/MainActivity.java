@@ -64,8 +64,8 @@ public class MainActivity extends zdnBasicActivity implements navigationFragment
 
 
 	private static final int TIME_SPACE_BALL	=	0;
-	private static final int STARRED	=	TIME_SPACE_BALL+1;
-	private static final int SEND_EMAIL	=	STARRED+1;
+	private static final int TASK_LIST	=	TIME_SPACE_BALL+1;
+	private static final int SEND_EMAIL	=	TASK_LIST+1;
 	private static final int DRAFTS	=	SEND_EMAIL+1;
 	private static final int MORE_MARKERS	=	DRAFTS+1;
 	private static final int TRASH	=	MORE_MARKERS+1;
@@ -104,7 +104,7 @@ public class MainActivity extends zdnBasicActivity implements navigationFragment
 
 		nlch = new ArrayList<navigationListDrawerItemAdapter.navigationListContextHolder>();
 		nlch.add(new navigationListDrawerItemAdapter.navigationListContextHolder("时光球", R.drawable.timespaceball));
-		nlch.add(new navigationListDrawerItemAdapter.navigationListContextHolder("starred", R.drawable.ic_star_black_24dp));
+		nlch.add(new navigationListDrawerItemAdapter.navigationListContextHolder("任务列表", R.drawable.ic_star_black_24dp));
 		nlch.add(new navigationListDrawerItemAdapter.navigationListContextHolder("sent_mail", R.drawable.ic_send_black_24dp));
 		nlch.add(new navigationListDrawerItemAdapter.navigationListContextHolder("drafts", R.drawable.ic_drafts_black_24dp));
 		nlch.add(new navigationListDrawerItemAdapter.navigationListContextHolder("trash", R.drawable.ic_delete_black_24dp));
@@ -238,6 +238,10 @@ public class MainActivity extends zdnBasicActivity implements navigationFragment
 				fragmentManager
 						.beginTransaction()
 						.replace(R.id.simple_fragment,m_BallFragment ).commit();
+				break;
+			case MainActivity.TASK_LIST:
+				Intent intent = new Intent(this, webActivity.class);
+				startActivity(intent);
 				break;
 			case MainActivity.PERSONAL_INFORMATION:
                 if( MainActivity.this.m_myInfomationFragment == null  )

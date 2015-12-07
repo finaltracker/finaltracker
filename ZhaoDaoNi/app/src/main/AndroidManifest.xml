@@ -66,7 +66,8 @@
 		<activity android:name="com.zdn.activity.CircleActivity"
 		    android:theme="@style/circle_bottom" >
         </activity>
-
+        <activity android:name="com.zdn.activity.webActivity" >
+        </activity>
         <activity
             android:name=".activity.StartTimeBallDialog"
             android:theme="@style/AcivityDialogStyle" >

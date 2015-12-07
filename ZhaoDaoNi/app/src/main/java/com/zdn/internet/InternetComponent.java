@@ -40,6 +40,7 @@ public class InternetComponent implements ServerInterfaceCmd {
 	static public String WEBSITE_ADDRESS_BALL_LOCATION = WEBSITE_ADDRESS_BASE + "ball/current_loc/";
 	static public String WEBSITE_ADDRESS_BALL_GET_ALL = WEBSITE_ADDRESS_BASE + "ball/get_all/";
 	static public String WEBSITE_ADDRESS_GET_PROFILE = WEBSITE_ADDRESS_BASE + "profile/get/";
+	static public String WEBSITE_ADDRESS_TASK_LIST = WEBSITE_ADDRESS_BASE + "task/list/";
 	
 	public ThreadTaskHandler handler;
 	
