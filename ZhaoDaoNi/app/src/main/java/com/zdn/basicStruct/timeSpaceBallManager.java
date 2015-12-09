@@ -33,6 +33,8 @@ public class timeSpaceBallManager {
             if( msg.what == 1 )
             {
                 MainControl.getBallLocationDefault("3");
+                //也需要取root的位置如果需要的话
+                MainControl.areaScan();
             }
         }};
       public timeSpaceBallManager()

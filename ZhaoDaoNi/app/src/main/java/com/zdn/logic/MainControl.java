@@ -12,6 +12,7 @@ import com.zdn.R;
 import com.zdn.activity.MainActivity;
 import com.zdn.activity.searchFriendResultForAddActivity;
 import com.zdn.basicStruct.SendMessageRspEvent;
+import com.zdn.basicStruct.areaScanRspEvent;
 import com.zdn.basicStruct.commonEvent;
 import com.zdn.basicStruct.coordinate;
 import com.zdn.basicStruct.friendMemberData;
@@ -19,6 +20,7 @@ import com.zdn.basicStruct.friendMemberDataBasic;
 import com.zdn.basicStruct.getBallAllRspEvent;
 import com.zdn.basicStruct.getMessageRspEvent;
 import com.zdn.basicStruct.networkStatusEvent;
+import com.zdn.basicStruct.robot;
 import com.zdn.basicStruct.timeSpaceBallBase;
 import com.zdn.basicStruct.timeSpaceBallDetail;
 import com.zdn.basicStruct.timeSpaceBallManager;
@@ -736,16 +738,31 @@ public class MainControl extends HandlerThread {
             Log.d("MainControl", "LOCATION_GET_REQ: ");
             mInternetCom.locationGet(e);
         }
-        break;
+		break;
 
-
-        case EventDefine.LOCATION_GET_RSP:
+		case EventDefine.LOCATION_GET_RSP:
         {
             Log.d("MainControl", "LOCATION_GET_RSP: ");
             locationGetRspHandle(e);
         }
         break;
-		case EventDefine.START_BALL_GAME_REQ:{
+
+		case EventDefine.AREA_SCAN_REQ:
+		{
+			Log.d("MainControl", "AREA_SCAN_REQ: ");
+			mInternetCom.areaScan(e);
+		}
+		break;
+
+		case EventDefine.AREA_SCAN_RSP:
+		{
+			Log.d("MainControl", "AREA_SCAN_RSP: ");
+			areaScanRspHandle(e);
+		}
+		break;
+
+		case EventDefine.START_BALL_GAME_REQ:
+		{
 			Log.d("MainControl", "START_BALL_GAME_REQ: ");
 			mInternetCom.startBallGame(e);
 
@@ -1071,6 +1088,49 @@ public class MainControl extends HandlerThread {
         }
     }
 
+
+	private void areaScanRspHandle(CommandE e)
+	{
+		int status = parseHttpReqRspStatus(e);
+
+		if( status == 0 ) {
+			List<robot> robotList = new ArrayList<robot>();
+			JSONObject json_obj = null;
+			try {
+				String rep = (String)e.GetPropertyContext("HTTP_REQ_RSP");
+				json_obj = new JSONObject(rep);
+
+				JSONArray robotsArray = json_obj.getJSONArray("robots");
+
+				for( int i = 0 ; i < robotsArray.length() ; i++ ) {
+					JSONObject obj;
+					obj = (JSONObject) robotsArray.get(i);
+
+					String user = getStringFromJasonObj(obj, "user");
+					String pictureUrl = getStringFromJasonObj(obj, "URL");
+					String current_lat = getStringFromJasonObj(obj, "current_lat");
+					String current_lng = getStringFromJasonObj(obj, "current_lng");
+
+					robotList.add( new robot( user , pictureUrl , Double.parseDouble(current_lat) , Double.parseDouble(current_lng )) );
+
+				}
+
+				areaScanRspEvent asr = new areaScanRspEvent(robotList);
+				EventBus.getDefault().post( asr ); // sned to listener
+
+			}
+			catch (JSONException e1) {
+
+				Log.d("MainControl" , "getBallAllRsp error: " + e1.getMessage() );
+				e1.printStackTrace();
+			}
+
+
+		}
+
+	}
+
+
 	private void startBallGameRspHandle(CommandE e )
 	{
 		// addToMyBall's List
@@ -1388,6 +1448,26 @@ public class MainControl extends HandlerThread {
 			e.AddAProperty(new Property( "require_type" , "all"));
 		}
 
+
+		Message m = MainControl.getInstance().handler.obtainMessage();
+		m.obj = e;   //
+
+		MainControl.getInstance().handler.sendMessage(m);
+
+	}
+
+	static public void areaScan( ) {
+
+		CommandE e = InternetComponent.packA_CommonExpCommandE_ToServer(
+				EventDefine.AREA_SCAN_REQ,
+				InternetComponent.WEBSITE_ADDRESS_AREA_SCAN
+		);
+
+		double lat = dataManager.self.selfInfo.getLatitude();
+		double lng = dataManager.self.selfInfo.getLongitude();
+
+		e.AddAProperty(new Property( "lng" , Double.toString(lng) ));
+		e.AddAProperty(new Property( "lat" , Double.toString(lat) ));
 
 		Message m = MainControl.getInstance().handler.obtainMessage();
 		m.obj = e;   //

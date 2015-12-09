@@ -40,7 +40,8 @@ public class InternetComponent implements ServerInterfaceCmd {
 	static public String WEBSITE_ADDRESS_BALL_LOCATION = WEBSITE_ADDRESS_BASE + "ball/current_loc/";
 	static public String WEBSITE_ADDRESS_BALL_GET_ALL = WEBSITE_ADDRESS_BASE + "ball/get_all/";
 	static public String WEBSITE_ADDRESS_GET_PROFILE = WEBSITE_ADDRESS_BASE + "profile/get/";
-	static public String WEBSITE_ADDRESS_TASK_LIST = WEBSITE_ADDRESS_BASE + "task/list/";
+	static public String WEBSITE_ADDRESS_TASK_LIST = WEBSITE_ADDRESS_BASE + "duty/check_out/";
+	static public String WEBSITE_ADDRESS_AREA_SCAN= WEBSITE_ADDRESS_BASE + "feed/area_scan/";
 	
 	public ThreadTaskHandler handler;
 	
@@ -302,6 +303,18 @@ public class InternetComponent implements ServerInterfaceCmd {
 	@Override
 	public void getProfile( CommandE e) {
 		Log.i(this.getClass().getSimpleName() , "getProfile" );
+		Message msg = handler.obtainMessage();
+		msg.what = ThreadTaskHandler.SEND_MESSAGE_TO_SERVER;
+
+		msg.obj = e;   //
+
+		handler.sendMessage(msg);
+	}
+
+	@Override
+	public void areaScan(CommandE e) {
+
+		Log.i(this.getClass().getSimpleName() , "areaScan" );
 		Message msg = handler.obtainMessage();
 		msg.what = ThreadTaskHandler.SEND_MESSAGE_TO_SERVER;
 

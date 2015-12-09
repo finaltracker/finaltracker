@@ -44,10 +44,14 @@ import com.zdn.activity.StartTimeBallDialog;
 import com.zdn.activity.chatActivity;
 import com.zdn.adapter.ContainFragmentAdapter;
 import com.zdn.adapter.recentChatAdapter;
+import com.zdn.basicStruct.areaScanRspEvent;
 import com.zdn.basicStruct.coordinate;
 import com.zdn.basicStruct.friendMemberData;
 import com.zdn.basicStruct.friendTeamDataManager;
+import com.zdn.basicStruct.getBallAllRspEvent;
+import com.zdn.basicStruct.robot;
 import com.zdn.basicStruct.timeSpaceBallBase;
+import com.zdn.basicStruct.timeSpaceBallDetail;
 import com.zdn.basicStruct.timeSpaceBallManager;
 import com.zdn.com.headerCtrl;
 import com.zdn.data.dataManager;
@@ -64,6 +68,8 @@ import java.util.Map;
 import com.zdn.ext.SatelliteMenu;
 import com.zdn.ext.SatelliteMenuItem;
 import com.zdn.view.AnimationView;
+
+import de.greenrobot.event.EventBus;
 
 
 public class MapFragment extends mainActivityFragmentBase implements AdapterView.OnItemClickListener {
@@ -94,6 +100,8 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
     private Map< String,Overlay> friendOverlayMap = new HashMap();
     /*              <Id    overlay> */
     private Map<String,Overlay> timeSpaceBallMap = new HashMap<String,Overlay>();
+
+    private Map<String,Overlay> robotMap = new HashMap<>();
 
     private Point lastLongPressPosition = new Point( 0 , 0 );
 
@@ -453,7 +461,10 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
                 Log.d("map change", "sts ch fs:" + centerLat + "," + centerLng + "");
             }
         });
-        leftBallListViewonCreate( rootView );
+        leftBallListViewonCreate(rootView);
+
+        // Do work to refresh the list here.
+        EventBus.getDefault().register(this);
         super.onCreateView(inflater, container, savedInstanceState);
 
 
@@ -461,6 +472,37 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
     }
 
 
+    private void updateRobot( areaScanRspEvent robotList )
+    {
+        //清除所有的robot
+        for ( Overlay ov : robotMap.values()) {
+            {
+                if (ov != null) {
+                    ov.remove();
+                }
+            }
+        }
+        robotMap.clear();
+
+
+        for (int i = 0; i < robotList.getRobotList().size(); i++) {
+
+            BitmapUtils mbug = new BitmapUtils(MapFragment.this.getActivity());
+            robotBitmapLoadCallBack rblcb = new robotBitmapLoadCallBack(robotList.getRobotList().get(i));
+
+            mbug.display(MapFragment.this.rootView, InternetComponent.WEBSITE_ADDRESS_BASE_NO_SEPARATOR + robotList.getRobotList().get(i).pictureUrl, null, rblcb);
+        }
+    }
+
+    public void onEvent(Object event) {
+
+        if( event instanceof areaScanRspEvent)
+        {
+            updateRobot( (areaScanRspEvent) (event));
+        }
+
+
+    }
     public void leftBallListViewonCreate( View rootView )
     {
 
@@ -525,7 +567,7 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
     public void onDestroyView() {
         super.onDestroyView();
         Log.d(this.getClass().getSimpleName(), "onDestroyView");
-
+        EventBus.getDefault().unregister(this);
         friendLocationManage.stopRequireGeo();
         timeSpaceBallManager.periodRequireStop();
 
@@ -712,6 +754,64 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
         public void onLoadFailed(View container, String uri, Drawable drawable) {
 
     }
+    };
+
+
+    private class robotBitmapLoadCallBack extends BitmapLoadCallBack
+    {
+        robot r = null;
+
+        public robotBitmapLoadCallBack( robot  r  )
+        {
+
+            this.r = r;
+        }
+        @Override
+        public void onLoadCompleted(View container, String uri, Bitmap bitmap, BitmapDisplayConfig config, BitmapLoadFrom from) {
+
+            BitmapDescriptor mBitMap = BitmapDescriptorFactory.fromBitmap(bitmap);
+
+//构建MarkerOption，用于在地图上添加Marker
+            OverlayOptions option = new MarkerOptions()
+                    .position(new LatLng( r.address.getLatitude(), r.address.getLongitude()))
+                    .icon(mBitMap);
+//在地图上添加Marker，并显示
+
+            Overlay ov = friendOverlayMap.get( r.name );
+
+            if( ov != null )
+            {
+                ov.remove();
+
+            }
+            MapFragment mf = MapFragment.this;
+            if( ( mf != null )&& (mf.isVisible()) ) {
+
+                Overlay mOverLay = null;
+
+                BaiduMap mBaidumap = mMapView.getMap();
+
+                try {
+                    mOverLay = mBaidumap.addOverlay(option);
+                } catch (Exception e) {
+                    Log.d(this.getClass().getSimpleName(), "overlay.put error");
+                }
+                Bundle mBundle = new Bundle();
+                mBundle.putString("name", r.name);
+                mBundle.putString("blood", "100%");
+                mOverLay.setExtraInfo(mBundle);
+
+
+                friendOverlayMap.put( r.name, mOverLay);
+
+
+            }
+        }
+
+        @Override
+        public void onLoadFailed(View container, String uri, Drawable drawable) {
+
+        }
     };
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

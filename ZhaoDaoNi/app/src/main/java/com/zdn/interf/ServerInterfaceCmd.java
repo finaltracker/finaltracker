@@ -58,4 +58,6 @@ public interface ServerInterfaceCmd {
 	public void getBallAll( CommandE e );
 
 	public void getProfile( CommandE e );
+
+	public void areaScan( CommandE e );
 }
