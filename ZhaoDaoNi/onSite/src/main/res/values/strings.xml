@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">OnSite</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="image_back">imageBack</string>
+    <string name="home_tel_img">中国  ( +86 )</string>
+    <string name="image_clear">msgClear</string>
+    
+    
+    <!-- SlidingMenu -->
+    <string name="check_update">检查更新</string>
+    <string name="use_mean">使用说明</string>
+    <string name="exit_avaition">退出激活</string>
+    
+    <!-- PullRefresh -->
+    <string name="head">这里是HeadView</string>
+    <string name="pull_to_refresh">下拉刷新</string>
+    <string name="release_to_refresh">释放立即刷新</string>
+    <string name="refreshing">正在刷新...</string>
+    <string name="refresh_succeed">刷新成功</string>
+    <string name="refresh_fail">刷新失败</string>
+    <string name="pullup_to_load">上拉加载更多</string>
+    <string name="release_to_load">释放立即加载</string>
+    <string name="loading">正在加载...</string>
+    <string name="load_succeed">加载成功</string>
+    <string name="load_fail">加载失败</string>
+    <string name="more">查看更多</string>
+    
+    <!-- Rob_Item -->
+    <string name="project_number">项目编号 :</string>
+	<string name="construct_address">施工地址 :</string>
+	<string name="last_time">施工最后完成时间 :</string>
+	
+	<!-- Detail_Task -->
+	<string name="task_detail">工单详情</string>
+	<string name="detail_dialog_message">确定要抢该工单吗？</string>
+	<string name="ensure">是</string>
+	<string name="cancle">否</string>
+	
+	<!-- Send_RG -->
+	<string name="no_begin_task">还未施工</string>
+	<string name="task_over">已经完成</string>
+	<string name="task_fail">未能完成</string>
+	<string name="task_abondon">已经撤销</string>
+	
+	<string name="remain_time">剩余时间</string>
+	<string name="day">天</string>
+	
+	<!-- NoBegin_Detail -->
+	<string name="upload">上传</string>
+	<string name="upload_pre_img">上传施工前照片</string>
+	<string name="upload_end_img">上传施工后照片</string>
+	<string name="get_img">获取照片</string>
+	<string name="nobegin_task">还未施工任务</string>
+	<string name="task_finish">施工完成</string>
+	<string name="task_nofinish">未能完成</string>
+	<string name="finish_task_dialog_message">确定该工单完成了吗？</string>
+	<string name="ensure_construct_finish">确认施工已完成？</string>
+	<string name="ensure_finish">确认完成</string>
+	<string name="waiting">稍候再说</string>
+	<string name="ensure_construct_nofinish">确认施工无法完成？</string>
+	<string name="cannot_finish">无法完成</string>	
+	<string name="try_again">再试试看</string>
+	<string name="audio_hint">请用户靠近手机后开始录音</string>
+	<string name="audio_time">00:00</string>
+	<string name="check_reason">查看原因</string>
+	<string name="cancle_audio">暂不录音</string>
+	<string name="upload_audio">上传录音</string>
+	<string name="re_audio">重新录音</string>
+	<string name="upload_record_success">录音上传成功</string>
+	
+	<!-- Login -->
+	<string name="login_title">商务通</string>
+	<string name="login">登录</string>
+	<string name="hint_user">输入用户名</string>
+	<string name="hint_password">输入密码</string>
+	
+	<!-- UploadImg -->
+	<string name="upload_message">确认这是要上传的施工图片吗?</string>
+	<string name="ensure_upload">确认上传</string>
+	<string name="wait_upload">稍后再说</string>
+	
+	<!-- cannot_finish_reason -->
+	<string name="edit_reason_hint">请输入未能完成该工单的理由......</string>
+	<string name="ensure_send_reason">确定发送该理由吗？</string>
+	<string name="ensure_send">确定</string>
+	<string name="cancel_send">取消</string>
+	
+</resources>

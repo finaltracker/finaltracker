@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/slidingmenu_bg"
+    android:orientation="vertical" >
+    
+    <TextView 
+        android:id="@+id/en_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Jimmy Lin"
+        android:textSize="20sp"
+        android:textColor="@color/white"
+        android:layout_marginTop="@dimen/en_name_margin_top"
+        android:layout_marginLeft="@dimen/view_margin_left"
+        />
+    
+    <TextView 
+        android:id="@+id/ch_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="刘华强"
+        android:textSize="20sp"
+        android:textColor="@color/white"
+        android:layout_marginTop="@dimen/ch_name_margin_top"
+        android:layout_marginLeft="@dimen/view_margin_left"
+        />
+	
+    <View 
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/sliding_underline"
+        android:layout_marginTop="@dimen/underline_margin_top"
+        android:layout_marginLeft="@dimen/view_margin_left"
+        android:layout_marginRight="@dimen/view_margin_left"/>
+    
+    <LinearLayout 
+        android:id="@+id/update_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginLeft="@dimen/view_margin_left"
+        android:layout_marginRight="@dimen/view_margin_left"
+        android:paddingTop="@dimen/layout_padding"
+        android:paddingBottom="@dimen/layout_padding">
+        
+        <FrameLayout 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            
+            <ImageView 
+	            android:layout_width="30dp"
+	            android:layout_height="30dp"
+	            android:src="@drawable/update"
+	            android:layout_gravity="center_vertical"/>
+            
+            <!-- 在FrameLayout中才可以用 android:layout_gravity="right|top" 属性 -->
+            <ImageView 
+                android:id="@+id/red_tips"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/red_tips"
+                android:layout_gravity="right|top"
+                android:visibility="gone"/>
+            
+        </FrameLayout>
+        
+        <TextView 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/view_margin_left"
+            android:text="@string/check_update"
+            android:textColor="@color/white"
+            android:textSize="17sp"/>
+        
+    </LinearLayout>
+    
+    
+    <View 
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/sliding_underline"
+        android:layout_marginLeft="@dimen/view_margin_left"
+        android:layout_marginRight="@dimen/view_margin_left"/>
+    
+    <LinearLayout 
+        android:id="@+id/use_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginLeft="@dimen/view_margin_left"
+        android:layout_marginRight="@dimen/view_margin_left"
+        android:paddingTop="@dimen/layout_padding"
+        android:paddingBottom="@dimen/layout_padding">
+        
+        <ImageView 
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/shuoming"
+            android:layout_gravity="center_vertical"/>
+        
+        <TextView 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/view_margin_left"
+            android:text="@string/use_mean"
+            android:textColor="@color/white"
+            android:textSize="17sp"/>
+        
+    </LinearLayout>
+    
+    
+    <View 
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/sliding_underline"
+        android:layout_marginLeft="@dimen/view_margin_left"
+        android:layout_marginRight="@dimen/view_margin_left"/>
+    
+    <LinearLayout 
+        android:id="@+id/exit_avai"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginLeft="@dimen/view_margin_left"
+        android:layout_marginRight="@dimen/view_margin_left"
+        android:paddingTop="@dimen/layout_padding"
+        android:paddingBottom="@dimen/layout_padding">
+        
+        <ImageView 
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/exit"
+            android:layout_gravity="center_vertical"/>
+        
+        <TextView 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/view_margin_left"
+            android:text="@string/exit_avaition"
+            android:textColor="@color/white"
+            android:textSize="17sp"/>
+        
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+	<RadioGroup
+	    android:id="@+id/send_rg" 
+	    android:layout_width="match_parent"
+	    android:layout_height="@dimen/send_rg_height"
+        android:background="@color/send_rg_bg"
+	    android:orientation="horizontal">
+	    
+	    <RadioButton 
+			android:id="@+id/no_begin_task"
+			style="@style/send_rb_style"
+	        android:checked="true"
+	        android:drawableBottom="@drawable/rb_shape"
+	        android:text="@string/no_begin_task"
+        	/>
+	    
+	    <RadioButton 
+			android:id="@+id/task_over"
+			style="@style/send_rb_style"
+	        android:text="@string/task_over"
+        	/>
+	    
+	    <RadioButton 
+			android:id="@+id/task_fail"
+			style="@style/send_rb_style"
+	        android:text="@string/task_fail"
+        	/>
+	    
+	    <RadioButton 
+			android:id="@+id/task_abondon"
+			style="@style/send_rb_style"
+	        android:text="@string/task_abondon"
+        	/>
+	    
+	</RadioGroup>
+	
+    <FrameLayout
+        android:id="@+id/fl_send_task"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        
+    </FrameLayout>
+	
+</LinearLayout>

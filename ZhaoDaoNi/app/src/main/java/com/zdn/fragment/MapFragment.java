@@ -464,7 +464,7 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
         leftBallListViewonCreate(rootView);
 
         // Do work to refresh the list here.
-        EventBus.getDefault().register(this);
+
         super.onCreateView(inflater, container, savedInstanceState);
 
 
@@ -567,7 +567,6 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
     public void onDestroyView() {
         super.onDestroyView();
         Log.d(this.getClass().getSimpleName(), "onDestroyView");
-        EventBus.getDefault().unregister(this);
         friendLocationManage.stopRequireGeo();
         timeSpaceBallManager.periodRequireStop();
 
@@ -777,7 +776,7 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
                     .icon(mBitMap);
 //在地图上添加Marker，并显示
 
-            Overlay ov = friendOverlayMap.get( r.name );
+            Overlay ov = robotMap.get( r.name );
 
             if( ov != null )
             {
@@ -802,7 +801,7 @@ public class MapFragment extends mainActivityFragmentBase implements AdapterView
                 mOverLay.setExtraInfo(mBundle);
 
 
-                friendOverlayMap.put( r.name, mOverLay);
+                robotMap.put( r.name, mOverLay);
 
 
             }

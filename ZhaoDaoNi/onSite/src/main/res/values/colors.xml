@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <color name="white">#ffffff</color>
+    <color name="red">#ff0000</color>
+    <color name="black">#000000</color>
+    
+    <color name="main_viewpager_bg">#EDEDED</color>
+    <color name="slidingmenu_bg">#212429</color>
+    <color name="sliding_underline">#46494E</color>
+    
+    <color name="layout_title_bg">#505664</color>
+    <color name="layout_bottom_menu_bg">#F5F5F5</color>
+    <color name="layout_bottom_menu_text_press">#427CA6</color>
+    <color name="layout_bottom_menu_text_normal">#BDBDBD</color>
+    
+    <color name="light_blue">#6593cb</color>
+    <color name="load_more_gray">#585858</color>
+    
+    <color name="rob_item_text">#969696</color>
+    
+    <color name="send_rg_bg">#F5F5F5</color>
+    <color name="nobegin_text_type">#F73809</color>
+    
+    <color name="layout_detail_background">#F5F5F5</color>
+    <color name="upload_pre_construct_btn">#FF7200</color>
+ 	<color name="task_nofinish_btn">#00558E</color>
+ 	<color name="upload_end_construct_btn">#005492</color>   
+ 	<color name="audio_hint_text">#9F9F9F</color>
+ 	<color name="audio_underline">#EBEBEB</color>
+ 	<color name="audio_bottom_btn_press">#666666</color>
+ 	
+ 	<color name="underline">#50566444</color>
+ 	<color name="login_btn_normal">#AFAFAF</color>
+ 	<color name="login_btn_unpress">#0078D7</color>
+ 	<color name="login_btn_press">#00558E</color>
+    
+    
+</resources>

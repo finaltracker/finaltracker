@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" 
+    android:background="@color/layout_detail_background">
+    
+    
+    <RelativeLayout 
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:background="@color/layout_title_bg"
+		android:padding="10dp"
+        >
+        
+        <ImageView 
+            android:id="@+id/cannot_finish_iv_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/back_white"
+            android:layout_centerVertical="true"/>
+        
+        <ImageView 
+            android:id="@+id/cannot_finish_send"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:src="@drawable/share"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"/>
+        
+        
+    </RelativeLayout>
+    
+    <RelativeLayout 
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:padding="10dp"
+        android:background="@color/white">
+        
+        <EditText 
+	        android:id="@+id/edit_reason"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:background="@null"
+	        android:hint="@string/edit_reason_hint"/>
+        
+        <TextView 
+            android:id="@+id/tv_show_reason"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:visibility="gone"/>
+        
+    </RelativeLayout>
+    
+    
+    
+
+</LinearLayout>

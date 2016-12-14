@@ -12,8 +12,6 @@ import com.zdn.logic.MainControl;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.greenrobot.event.EventBus;
-
 /**
  * Created by wanghp1 on 2015/9/28.
  */
@@ -34,7 +32,7 @@ public class timeSpaceBallManager {
             {
                 MainControl.getBallLocationDefault("3");
                 //也需要取root的位置如果需要的话
-                MainControl.areaScan();
+                MainControl.robot_scan();
             }
         }};
       public timeSpaceBallManager()

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#666666"
+    android:orientation="vertical"
+    >
+    <!-- android:clipToPadding="true"
+	android:fitsSystemWindows="true"  -->
+    <LinearLayout 
+	    android:id="@+id/home_back"
+	    android:layout_width="90dp"
+	    android:layout_height="wrap_content"
+	    android:orientation="vertical" >
+	    <ImageButton
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_margin="15dp"
+	        android:background="@drawable/back_white"
+	        android:contentDescription="@string/image_back" />
+	</LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/home_tel_img"
+        android:textColor="#fff"
+        android:textSize="18sp" />
+	<RelativeLayout 
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_margin="30dp">
+	    <com.tmac.onsite.view.PhoneEditText
+	        android:id="@+id/home_phone"
+	        android:layout_width="fill_parent"
+	        android:layout_height="45dp"
+	        android:layout_gravity="center_vertical"
+	        android:background="#666666"
+	        android:cursorVisible="true"
+	        android:hint="请输入手机号码"
+	        android:inputType="phone"
+	        android:maxLength="11"
+	        android:textColor="#fff" 
+	        android:textSize="18sp" />
+	
+	    <ImageView
+	        android:id="@+id/home_clear"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentRight="true"
+	        android:layout_centerVertical="true"
+	        android:src="@drawable/clear" 
+	        android:contentDescription="@string/image_clear"
+	        android:visibility="gone"/>
+	    
+	</RelativeLayout>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical" >
+
+        <Button
+            android:id="@+id/home_activate"
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:background="@drawable/btn_gray_bg"
+            android:gravity="center"
+            android:text="激活"
+            android:textColor="#fff" 
+            android:enabled="false"/>
+    </LinearLayout>
+	<LinearLayout
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:gravity="center"
+	        android:orientation="horizontal"
+	        android:layout_marginTop="20dp" >
+	
+	    <TextView
+	        android:id="@+id/textView1"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="激活即表示同意" />
+	    <TextView
+	        android:id="@+id/textView2"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="抢单使用协议"
+	        android:textColor="#DD7608" />
+	</LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#666666"
+    android:orientation="vertical" >
+    
+	<LinearLayout 
+	    android:id="@+id/identify_back"
+	    android:layout_width="90dp"
+	    android:layout_height="wrap_content"
+	    android:orientation="vertical" >
+    
+	    <ImageButton
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_margin="15dp"
+	        android:background="@drawable/back_white"
+	        android:contentDescription="@string/image_back" />
+	    
+	</LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="10dp"
+        android:text="收到短信后请输入验证码"
+        android:textColor="#fff"
+        android:textSize="18sp" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <RelativeLayout
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="30dp" >
+
+            <com.tmac.onsite.view.PhoneEditText
+                android:id="@+id/identify_code"
+                android:layout_width="fill_parent"
+                android:layout_height="45dp"
+                android:layout_gravity="center_vertical"
+                android:background="#666666"
+                android:cursorVisible="true"
+                android:hint="输入验证码"
+                android:inputType="number"
+                android:maxLength="6"
+                android:textColor="#fff"
+                android:textSize="18sp" />
+
+            <ImageView
+                android:id="@+id/identify_clear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:contentDescription="@string/image_clear"
+                android:src="@drawable/clear"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="30dp"
+            android:gravity="center"
+            android:orientation="vertical" >
+
+            <Button
+                android:id="@+id/identify_agin"
+                android:layout_width="fill_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/code_bg"
+                android:enabled="false"
+                android:gravity="center"
+                android:text="重新获取"
+                android:textColor="#FF6633" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical" >
+
+        <Button
+            android:id="@+id/identify_primit"
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:background="@drawable/btn_gray_bg"
+            android:enabled="false"
+            android:gravity="center"
+            android:text="发送验证码"
+            android:textColor="#fff" />
+    </LinearLayout>    
+    
+</LinearLayout>

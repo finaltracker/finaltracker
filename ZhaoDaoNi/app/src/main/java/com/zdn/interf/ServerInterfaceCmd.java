@@ -59,5 +59,5 @@ public interface ServerInterfaceCmd {
 
 	public void getProfile( CommandE e );
 
-	public void areaScan( CommandE e );
+	public void robot_scan(CommandE e);
 }

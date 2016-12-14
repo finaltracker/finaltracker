@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/bottom_menu_height"
+	android:orientation="horizontal"
+    android:background="@color/layout_bottom_menu_bg">
+    
+    <RadioGroup
+        android:id="@+id/rg" 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        
+        <!-- app:badge_dragable 是否可以拖拽删除徽章 -->
+        <!-- app:badge_isResumeTravel 拖拽徽章超出轨迹范围后，再次放回到轨迹范围时，是否恢复轨迹 -->
+        <!-- app:badge_padding 徽章文本边缘与徽章背景边缘间的距离 -->
+        <!-- app:badge_horizontalMargin 徽章背景与宿主控件左右边缘间距离 -->
+        <cn.bingoogolapple.badgeview.BGABadgeRadioButton
+            android:id="@+id/rb_get_task" 
+            style="@style/rb_style"
+            android:text="抢任务"
+            android:checked="true"
+            android:drawableTop="@drawable/get_task"
+            app:badge_dragable="true"
+            app:badge_isResumeTravel="true"
+            app:badge_padding="@dimen/badge_padding"
+            app:badge_horizontalMargin="@dimen/badge_horizontalMargin"
+            />
+        
+        <cn.bingoogolapple.badgeview.BGABadgeRadioButton
+            android:id="@+id/rb_send_task"
+            style="@style/rb_style"
+            android:text="派任务"
+            android:drawableTop="@drawable/send_task"
+            app:badge_dragable="true"
+            app:badge_isResumeTravel="true"
+            app:badge_padding="@dimen/badge_padding"
+            app:badge_horizontalMargin="@dimen/badge_horizontalMargin"
+            />
+        
+    </RadioGroup>
+    
+        
+</LinearLayout>

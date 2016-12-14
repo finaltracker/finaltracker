@@ -41,7 +41,7 @@ public class InternetComponent implements ServerInterfaceCmd {
 	static public String WEBSITE_ADDRESS_BALL_GET_ALL = WEBSITE_ADDRESS_BASE + "ball/get_all/";
 	static public String WEBSITE_ADDRESS_GET_PROFILE = WEBSITE_ADDRESS_BASE + "profile/get/";
 	static public String WEBSITE_ADDRESS_TASK_LIST = WEBSITE_ADDRESS_BASE + "duty/check_out/";
-	static public String WEBSITE_ADDRESS_AREA_SCAN= WEBSITE_ADDRESS_BASE + "feed/area_scan/";
+	static public String WEBSITE_ADDRESS_ROBOT_SCAN = WEBSITE_ADDRESS_BASE + "feed/robot_scan/";
 	
 	public ThreadTaskHandler handler;
 	
@@ -312,9 +312,9 @@ public class InternetComponent implements ServerInterfaceCmd {
 	}
 
 	@Override
-	public void areaScan(CommandE e) {
+	public void robot_scan(CommandE e) {
 
-		Log.i(this.getClass().getSimpleName() , "areaScan" );
+		Log.i(this.getClass().getSimpleName() , "robot_scan" );
 		Message msg = handler.obtainMessage();
 		msg.what = ThreadTaskHandler.SEND_MESSAGE_TO_SERVER;
 

@@ -1,24 +1,12 @@
 package com.zdn.activity;
 
+import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.widget.LinearLayout;
+
 import com.zdn.R;
 import com.zdn.basicStruct.networkStatusEvent;
 import com.zdn.com.headerCtrl;
-import com.zdn.receiver.NetworkReceiver;
-
-import android.app.Activity;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.content.Intent;
-import android.graphics.Color;
-import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.Window;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import de.greenrobot.event.EventBus;
 

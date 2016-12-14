@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/audio_popup_height"
+    android:orientation="vertical" 
+    android:gravity="center_horizontal"
+    android:background="@color/layout_detail_background">
+    
+    <RelativeLayout 
+        android:id="@+id/popup_layout_top"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        >
+        
+        <TextView 
+            android:id="@+id/tv_hint"
+	        android:layout_width="wrap_content"
+	        android:layout_height="match_parent"
+	        android:gravity="center"
+	        android:layout_centerHorizontal="true"
+	        android:text="@string/audio_hint"
+			android:textColor="@color/audio_hint_text"
+			android:textSize="@dimen/audio_hint_text"        
+	        />
+        
+        <Chronometer 
+            android:id="@+id/chronometer"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_centerHorizontal="true"
+            android:visibility="gone"
+            android:text="Chronometer"
+            android:textColor="@color/audio_hint_text"
+            android:textSize="@dimen/audio_hint_text"/>
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_centerHorizontal="true"
+            android:text="@string/audio_time"
+            android:textColor="@color/audio_hint_text"
+            android:textSize="@dimen/audio_hint_text" 
+            android:visibility="invisible"/>
+        
+    </RelativeLayout>
+    
+    <RelativeLayout 
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        android:gravity="center"
+        >
+        
+        <ImageView 
+            android:id="@+id/iv_nobegin_audio"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/nobegin_audio"/>
+        
+        <ImageView 
+            android:id="@+id/iv_begin_audio"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:visibility="invisible"
+            android:src="@drawable/begin_audio"/>
+        
+        <ImageView 
+            android:id="@+id/iv_play_audio"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:visibility="invisible"
+            android:src="@drawable/finish_audio"/>
+        
+        <ImageView 
+            android:id="@+id/iv_pause_audio"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:visibility="invisible"
+            android:src="@drawable/play_audio"/>
+        	
+    </RelativeLayout>
+    
+    <View 
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/audio_underline"/>
+
+    <RelativeLayout 
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        >
+        
+        <TextView 
+            android:id="@+id/cancle_audio"
+            android:layout_width="wrap_content"	
+           	android:layout_height="match_parent"
+           	android:gravity="center"
+           	android:text="@string/cancle_audio"
+           	android:textColor="@drawable/cancle_audio_selector"/>
+        
+        
+        <LinearLayout
+            android:id="@+id/popup_layout_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            >
+            
+            <Button 
+                android:id="@+id/upload_audio_btn"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:text="@string/upload_audio"
+                android:background="@color/layout_detail_background"/>
+            
+            <View 
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/audio_underline"/>
+            
+            <Button 
+                android:id="@+id/re_audio_btn"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:text="@string/re_audio"
+                android:background="@color/layout_detail_background"/>
+            
+        </LinearLayout>
+        
+    </RelativeLayout>
+    
+</LinearLayout>

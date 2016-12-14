@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+     android:id="@+id/detail_layout"
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content"
+     android:background="@color/layout_title_bg"
+     android:padding="@dimen/detail_task_title_padding"
+     >
+    
+    <!-- android:clipToPadding="true"
+    android:fitsSystemWindows="true" -->
+    
+     <ImageView 
+         android:id="@+id/iv_back_detail"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:src="@drawable/back_white"
+         android:layout_centerVertical="true"
+         android:padding="@dimen/detail_task_iv_padding"/>
+     
+     <TextView 
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:text="@string/task_detail"
+         android:textSize="@dimen/detail_task_text"
+         android:textColor="@color/white"
+         android:layout_centerInParent="true"/>
+        
+</RelativeLayout>
+    
+     
+

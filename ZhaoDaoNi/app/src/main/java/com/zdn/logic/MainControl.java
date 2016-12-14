@@ -747,17 +747,17 @@ public class MainControl extends HandlerThread {
         }
         break;
 
-		case EventDefine.AREA_SCAN_REQ:
+		case EventDefine.ROBOT_SCAN_REQ:
 		{
-			Log.d("MainControl", "AREA_SCAN_REQ: ");
-			mInternetCom.areaScan(e);
+			Log.d("MainControl", "ROBOT_SCAN_REQ: ");
+			mInternetCom.robot_scan(e);
 		}
 		break;
 
-		case EventDefine.AREA_SCAN_RSP:
+		case EventDefine.ROBOT_SCAN_RSP:
 		{
-			Log.d("MainControl", "AREA_SCAN_RSP: ");
-			areaScanRspHandle(e);
+			Log.d("MainControl", "ROBOT_SCAN_RSP: ");
+			robotScanRspHandle(e);
 		}
 		break;
 
@@ -1089,7 +1089,7 @@ public class MainControl extends HandlerThread {
     }
 
 
-	private void areaScanRspHandle(CommandE e)
+	private void robotScanRspHandle(CommandE e)
 	{
 		int status = parseHttpReqRspStatus(e);
 
@@ -1107,7 +1107,7 @@ public class MainControl extends HandlerThread {
 					obj = (JSONObject) robotsArray.get(i);
 
 					String user = getStringFromJasonObj(obj, "user");
-					String pictureUrl = getStringFromJasonObj(obj, "URL");
+					String pictureUrl = getStringFromJasonObj(obj, "avatar_url");
 					String current_lat = getStringFromJasonObj(obj, "current_lat");
 					String current_lng = getStringFromJasonObj(obj, "current_lng");
 
@@ -1456,11 +1456,11 @@ public class MainControl extends HandlerThread {
 
 	}
 
-	static public void areaScan( ) {
+	static public void robot_scan() {
 
 		CommandE e = InternetComponent.packA_CommonExpCommandE_ToServer(
-				EventDefine.AREA_SCAN_REQ,
-				InternetComponent.WEBSITE_ADDRESS_AREA_SCAN
+				EventDefine.ROBOT_SCAN_REQ,
+				InternetComponent.WEBSITE_ADDRESS_ROBOT_SCAN
 		);
 
 		double lat = dataManager.self.selfInfo.getLatitude();
